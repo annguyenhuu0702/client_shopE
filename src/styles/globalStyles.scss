@@ -1,0 +1,225 @@
+@import "./variable.module.scss";
+.w-1200 {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+// hover header language and account
+.arrow-up {
+  margin-left: 50px;
+  width: 0;
+  height: 0;
+  border-left: 10px solid transparent;
+  border-right: 10px solid transparent;
+  border-bottom: 10px solid $white-color;
+}
+
+.block-hover {
+  background: $white-color;
+  width: 180px;
+  padding: 10px 0 10px 10px;
+
+  .block-child {
+    margin: 0 0 6px 0;
+    position: relative;
+
+    &:hover {
+      opacity: 1;
+      color: $green-color;
+    }
+
+    display: flex;
+    align-items: center;
+    font-size: 1.3rem;
+    opacity: 0.8;
+    cursor: pointer;
+    .text-block {
+      margin-left: 10px;
+      color: $black-color;
+
+      &:hover {
+        opacity: 1;
+        color: $green-color;
+      }
+
+      .icon {
+        margin-left: 6px;
+        font-size: 1rem;
+      }
+    }
+
+    .text {
+      &:hover {
+        opacity: 1;
+        color: $green-color;
+      }
+    }
+  }
+}
+
+//hover btn text
+.btn-common {
+  display: flex;
+  align-items: center;
+  height: 100%;
+  padding: 0 20px;
+  background: $white-color;
+  font-size: 1.4rem;
+
+  a {
+    color: $text-color;
+  }
+
+  &:hover {
+    background: $hover-color;
+
+    .text,
+    .icon {
+      color: $white-color;
+      transition: 0.1s;
+    }
+  }
+
+  .icon {
+    font-size: 2rem;
+    margin-right: 6px;
+  }
+}
+
+// custom input search header
+.custom-input {
+  .ant-input-affix-wrapper-focused {
+    outline: none;
+    box-shadow: none;
+    border-color: transparent;
+  }
+
+  .ant-input-affix-wrapper {
+    outline: none;
+
+    &:hover {
+      border-color: transparent;
+    }
+  }
+
+  .ant-input-group-addon {
+    left: 0 !important;
+    width: 80px;
+    button {
+      position: relative;
+      font-weight: 600;
+      background: $green-color;
+      border: none;
+      outline: none;
+      width: 100%;
+      color: $black-color;
+
+      &:hover {
+        background: $hover-color;
+        color: $white-color;
+      }
+    }
+  }
+}
+
+// brand home page
+
+.brand-custom {
+  display: block;
+  height: 120px;
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+}
+
+// slide show home page
+.slide-show-custom {
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+}
+
+// nút view all product
+
+.view-all {
+  display: flex;
+  justify-content: center;
+
+  .text {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 220px;
+    background: $black-color;
+    padding: 8px 34px;
+    color: $white-color;
+    text-transform: uppercase;
+    font-size: 1.4rem;
+    line-height: 2.2;
+    font-weight: 600;
+
+    &:hover {
+      background: $green-color;
+    }
+  }
+}
+
+// tiêu đề ở trang chủ mỗi section
+.subject-line {
+  display: flex;
+  justify-content: center;
+  margin: 20px 0;
+  font-weight: 700;
+  font-size: 3rem;
+}
+
+// modal product
+
+.ant-modal-wrap {
+  .modal-product {
+    top: 0;
+    width: 900px !important;
+  }
+}
+
+.form-custom {
+  .ant-form-item {
+    display: flex;
+    flex-direction: column;
+
+    .ant-form-item-label {
+      text-align: left;
+    }
+  }
+}
+
+// nút login register
+
+.btn-auth {
+  width: 100%;
+  height: 100%;
+  border: none;
+  outline: none;
+  text-transform: uppercase;
+  font-size: 2rem;
+  background: #13283f;
+  color: $white-color;
+  margin-top: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+
+  span {
+    padding: 10px 0;
+  }
+
+  &:hover {
+    background: #254d7a;
+  }
+}

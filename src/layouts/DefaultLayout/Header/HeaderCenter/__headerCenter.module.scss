@@ -1,0 +1,21 @@
+@import "../../../../styles/variable.module.scss";
+@import "../../../../styles/mixin.module.scss";
+
+.header-center {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px 0;
+  .left {
+    .logo {
+      display: block;
+    }
+  }
+
+  .right {
+    display: flex;
+    .input-search {
+      width: 415px;
+      margin-right: 16px;
+    }
+  }
+}

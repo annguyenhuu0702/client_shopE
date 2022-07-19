@@ -1,0 +1,147 @@
+@import "../../../styles/variable.module.scss";
+@import "../../../styles/mixin.module.scss";
+
+.footer {
+  .footer-top {
+    background: #181938;
+
+    .wrap {
+      width: 100%;
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+
+      .left {
+        display: flex;
+        align-items: center;
+        .text {
+          span {
+            padding: 0 30px 0 0;
+            font-size: 1.4rem;
+            color: $white-color;
+            margin-bottom: 0;
+            text-transform: uppercase;
+          }
+        }
+        .icons {
+          display: flex;
+          a {
+            display: block;
+            width: 24px;
+            height: 24px;
+            margin: 0 8px;
+            transition: ease-in-out 0.4s;
+            &:hover {
+              transform: rotate(45deg);
+            }
+            img {
+              width: 100%;
+              height: 100%;
+              object-fit: cover;
+            }
+          }
+        }
+      }
+      .right {
+        .register {
+          display: flex;
+          height: 100%;
+          width: 460px;
+          input {
+            width: 340px;
+            height: 100%;
+            font-size: 1.4rem;
+            background: #393a54;
+            color: $white-color;
+            border: none;
+            outline: none;
+            padding: 20px 10px;
+          }
+          button {
+            width: 120px;
+            border: none;
+            outline: none;
+            background: $green-color;
+            color: $text-category;
+            font-weight: 700;
+            cursor: pointer;
+            font-size: 1.4rem;
+            padding: 0 16px;
+
+            &:hover {
+              color: $white-color;
+              background: $hover-color;
+            }
+          }
+        }
+      }
+    }
+  }
+  .footer-center {
+    margin: 20px 0;
+    .content {
+      width: 100%;
+      max-width: 1200px;
+      margin: 0 auto;
+      border-bottom: 1px solid #ccc;
+      padding-bottom: 40px;
+
+      .item {
+        h4 {
+          margin: 0;
+          font-size: 1.2rem;
+          line-height: 20px;
+          margin-bottom: 24px;
+          font-weight: 700;
+          text-transform: uppercase;
+        }
+        p {
+          text-align: center;
+          width: 200px;
+          margin: 0;
+          padding: 10px 0;
+          color: $white-color;
+          background: $text-category;
+        }
+        ul {
+          padding: 0;
+          margin: 0;
+          list-style: none;
+
+          li {
+            padding: 10px 0;
+            a {
+              color: $text-color;
+
+              &:hover {
+                color: $green-color;
+              }
+            }
+          }
+        }
+
+        .deliveries {
+          display: flex;
+
+          li {
+            padding: 10px 16px 0 0;
+            svg {
+              height: 34px;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  .footer-bottom {
+    .wrap {
+      display: flex;
+      justify-content: space-between;
+      width: 100%;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+  }
+}

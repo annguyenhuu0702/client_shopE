@@ -1,23 +1,9 @@
-import { PayloadAction } from '@reduxjs/toolkit';
-import { call, put, takeEvery } from 'redux-saga/effects';
-import { authApi } from '../../apis/authApi';
-import { STATUS_CODE } from '../../constants';
-import { typeRegister } from '../../types/auth';
-import { authActions } from '../slice/authSlice';
+import { takeEvery } from 'redux-saga/effects';
 
-function* registerSaga({ payload }: PayloadAction<typeRegister>): any {
+function* registerSaga(): any {
   try {
-    const {navigate} : any = payload
-    const res : any = yield call(() => {
-      return authApi.register(payload);
-    });
-    const { data, status } = res;
-    if(status === STATUS_CODE.SUCCESS) {
-      yield put(authActions.registerSuccess(data))
-      navigate("/")
-    }
+    yield console.log("hello")   
   } catch (error : any) {
-    yield put(authActions.registerFailed(error.response.data.message))
     console.log(error);
   }
 }

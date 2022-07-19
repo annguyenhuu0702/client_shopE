@@ -18,15 +18,12 @@ const CategorySlice = createSlice({
   initialState: initialState,
   reducers: {
     fetchCategory: (state) => {
-      state.isLoading = true
     },
     fetchCategorySuccess: (state, action : PayloadAction<typeCategory[]>) => {
-      state.isLoading = false
-      state.category = action.payload;
+      
     },
     fetchCategoryFailed: (state) => {
-      state.isLoading = false
-      state.error = true
+      
     }
   }
 });

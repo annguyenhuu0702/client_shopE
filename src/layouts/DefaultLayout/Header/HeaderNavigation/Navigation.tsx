@@ -13,13 +13,6 @@ const cx = classNames.bind(styles);
 
 const HeaderNavigation: React.FC = () => {
   const dispatch = useDispatch();
-  const category: typeCategory[] = useSelector(
-    (state: any) => state.category.category.items
-  );
-
-  useEffect(() => {
-    dispatch(categoryActions.fetchCategory());
-  }, [dispatch]);
 
   return (
     <div className={cx('navigation')}>
@@ -35,63 +28,36 @@ const HeaderNavigation: React.FC = () => {
               Sản phẩm mới
             </Link>
           </li>
-          {category &&
-            category.map((categories: any, index: number) => {
-              return (
-                <li className={cx('item')} key={index}>
-                  <Link to={categories.slug} className={cx('group-category')}>
-                    {categories.name}
+          <li className={cx('item')}>
+            <Link to="" className={cx('group-category')}>
+              aaa
+            </Link>
+            <FontAwesomeIcon icon={faAngleDown} className={cx('icon')} />
+            <div className={cx('block-category')}>
+              <div style={{ display: 'flex', width: '60%' }}>
+                <div className={cx('wrap-children')}>
+                  <Link to="" className={cx('category')}>
+                    aaa
                   </Link>
-                  <FontAwesomeIcon icon={faAngleDown} className={cx('icon')} />
-                  <div className={cx('block-category')}>
-                    <div style={{ display: 'flex', width: '60%' }}>
-                      {categories.children.map((item: any, index: number) => {
-                        return (
-                          <div className={cx('wrap-children')} key={index}>
-                            <Link
-                              to={item.slug}
-                              key={index}
-                              className={cx('category')}
-                            >
-                              {
-                                item.name
-                                  .toLowerCase()
-                                  .split(item?.parent?.name.toLowerCase())[0]
-                              }
-                            </Link>
-                            <ul className={cx('child-category')}>
-                              {item.children.map((data: any, index: number) => {
-                                return (
-                                  <li key={index}>
-                                    <Link to={data.slug}>
-                                      {
-                                        data.name.split(
-                                          item?.parent?.name.toLowerCase()
-                                        )[0]
-                                      }
-                                    </Link>
-                                  </li>
-                                );
-                              })}
-                            </ul>
-                          </div>
-                        );
-                      })}
-                    </div>
-                    <div className={cx('banner')}>
-                      <img
-                        src="https://res.cloudinary.com/diot4imoq/image/upload/v1657609158/supersports/490x185-M_720x_gcrmgv.jpg"
-                        alt=""
-                      />
-                      <img
-                        src="https://res.cloudinary.com/diot4imoq/image/upload/v1657609313/supersports/Banner_Hoka_menu_banner_720x_iidfc1.jpg"
-                        alt=""
-                      />
-                    </div>
-                  </div>
-                </li>
-              );
-            })}
+                  <ul className={cx('child-category')}>
+                    <li>
+                      <Link to="">aa</Link>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+              <div className={cx('banner')}>
+                <img
+                  src="https://res.cloudinary.com/diot4imoq/image/upload/v1657609158/supersports/490x185-M_720x_gcrmgv.jpg"
+                  alt=""
+                />
+                <img
+                  src="https://res.cloudinary.com/diot4imoq/image/upload/v1657609313/supersports/Banner_Hoka_menu_banner_720x_iidfc1.jpg"
+                  alt=""
+                />
+              </div>
+            </div>
+          </li>
         </ul>
         <div className={cx('endow')}>
           <Link to="/uu-dai">Ưu đãi</Link>

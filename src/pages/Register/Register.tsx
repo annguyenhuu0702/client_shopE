@@ -13,9 +13,7 @@ const cx = classNames.bind(styles);
 const Register: React.FC = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const onFinish = (values: any) => {
-    dispatch(authActions.register({ ...values, navigate }));
-  };
+  const onFinish = (values: any) => {};
 
   const onFinishFailed = (errorInfo: any) => {
     console.log('Failed:', errorInfo);

@@ -22,24 +22,15 @@ const authSlice = createSlice({
   initialState: initialState,
   reducers: {
     register: (state,action : PayloadAction<typeRegister>) => {
-      state.isLoading = true
     },
     registerSuccess: (state,action : PayloadAction<typeUser>) => {
-      state.isLoading = false
-      state.error = false
-      state.currentUser = action.payload
-      localStorage.setItem("mickey:user", JSON.stringify(state.currentUser))
+      
     },
     registerFailed: (state,action: PayloadAction<string>) => {
-      state.isLoading = false
-      state.error = true
-      state.message = action.payload
+     
     },
     logOut: (state) => {
-      state.error = false
-      state.isLoading = false
-      state.currentUser = null
-      localStorage.setItem("mickey:user", JSON.stringify(state.currentUser))
+      
     }
   }
 })

@@ -13,7 +13,10 @@ const cx = classNames.bind(styles);
 const Register: React.FC = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const onFinish = (values: any) => {};
+
+  const onFinish = (values: any) => {
+    dispatch(authActions.register({ ...values, navigate }));
+  };
 
   const onFinishFailed = (errorInfo: any) => {
     console.log('Failed:', errorInfo);
@@ -36,7 +39,7 @@ const Register: React.FC = () => {
             >
               <Form.Item
                 label="Họ và tên"
-                name="full_name"
+                name="fullname"
                 rules={[
                   {
                     required: true,
@@ -52,6 +55,7 @@ const Register: React.FC = () => {
                   {
                     required: true,
                     type: 'email',
+                    message: 'Please enter a valid email address',
                   },
                 ]}
               >
@@ -64,7 +68,11 @@ const Register: React.FC = () => {
                 rules={[
                   {
                     required: true,
+                    message: 'Please enter a password',
+                  },
+                  {
                     min: 6,
+                    message: 'Password must be at least 6 characters',
                   },
                 ]}
               >

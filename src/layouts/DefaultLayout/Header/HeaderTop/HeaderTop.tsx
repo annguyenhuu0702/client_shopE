@@ -15,7 +15,7 @@ const cx = classNames.bind(styles);
 const HeaderTop: React.FC = () => {
   const dispatch = useDispatch();
   const user: typeUser = useSelector(
-    (state: any) => state.auth?.currentUser?.user
+    (state: any) => state.auth?.currentUser?.data?.user
   );
 
   const handleLogout = () => {
@@ -73,7 +73,7 @@ const HeaderTop: React.FC = () => {
               <div className="block-hover">
                 <div className="block-child">
                   <Link to="" className="text">
-                    Xin chào <b>{user.full_name}</b>
+                    Xin chào <b>{user.fullname}</b>
                   </Link>
                 </div>
                 <div className="block-child">

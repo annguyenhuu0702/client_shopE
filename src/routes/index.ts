@@ -1,21 +1,23 @@
-import { DefaultLayout } from "../layouts";
-import HomePage from "../pages/HomePage";
-import Register from "../pages/Register";
-import { typeRoute } from "../types/route";
+import { DefaultLayout } from '../layouts';
+import HomePage from '../pages/HomePage';
+import Login from '../pages/Login';
+import Register from '../pages/Register';
+import { typeRoute } from '../types/route';
 
-
-export const publicRoute : typeRoute[] = [
+export const publicRoute: typeRoute[] = [
   {
-    path: "/",
+    path: '/',
     element: HomePage,
-    layout: DefaultLayout
+    layout: DefaultLayout,
   },
   {
-    path: "/register",
+    path: '/register',
     element: Register,
-    layout: DefaultLayout
+    layout: DefaultLayout,
   },
-]
-
-
-
+  {
+    path: '/login',
+    element: Login,
+    layout: DefaultLayout,
+  },
+];

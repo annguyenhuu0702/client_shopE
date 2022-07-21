@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { typeRegister } from '../../types/auth';
+import { typeLogin, typeRegister } from '../../types/auth';
 import { typeUser } from '../../types/user';
 
 export interface typeAuthState {
@@ -23,7 +23,6 @@ const authSlice = createSlice({
       state.isError = false;
     },
     registerSuccess: (state, action: PayloadAction<typeUser>) => {
-      console.log(action.payload);
       state.isLoading = false;
       state.isError = false;
       state.currentUser = action.payload;
@@ -33,7 +32,24 @@ const authSlice = createSlice({
       state.isLoading = false;
       state.isError = true;
     },
-    logOut: (state) => {},
+    login: (state, action: PayloadAction<typeLogin>) => {
+      state.isLoading = true;
+      state.isError = false;
+    },
+    loginSuccess: (state, action: PayloadAction<typeUser>) => {
+      state.isLoading = false;
+      state.isError = false;
+      state.currentUser = action.payload;
+      localStorage.setItem('mickey:user', JSON.stringify(state.currentUser));
+    },
+    loginFailed: (state) => {
+      state.isLoading = false;
+      state.isError = true;
+    },
+    logoutSuccess: (state) => {
+      state.currentUser = null;
+      localStorage.setItem('mickey:user', JSON.stringify(state.currentUser));
+    },
   },
 });
 

@@ -4,6 +4,7 @@ import { authApi } from '../../apis/authApi';
 import { authActions } from '../slice/authSlice';
 import { typeLogin, typeRegister } from '../../types/auth';
 import { STATUS_CODE } from '../../constants';
+import jwtDecoded from 'jwt-decode';
 
 function* registerSaga({ payload }: PayloadAction<typeRegister>): any {
   try {
@@ -29,29 +30,18 @@ function* loginSaga({ payload }: PayloadAction<typeLogin>): any {
       return authApi.login(payload);
     });
     const { data, status } = res;
+    const role = (jwtDecoded(data.data.access_token) as any).role;
+    console.log(role);
+
     if (status === STATUS_CODE.CREATED) {
       yield put(authActions.loginSuccess(data));
-      navigate('/');
+      navigate(role === 'admin' ? '/admin' : '/');
     }
   } catch (error: any) {
     yield put(authActions.loginFailed());
     console.log(error);
   }
 }
-
-// function* logoutSaga({ payload }: any): any {
-//   try {
-//     const { navigate }: any = payload;
-//     yield call(() => {
-//       return authApi.logout();
-//     });
-//     yield put(authActions.logoutSuccess());
-//     navigate('/');
-//   } catch (error: any) {
-//     yield put(authActions.logoutFailed());
-//     console.log(error);
-//   }
-// }
 
 function* authSaga() {
   yield takeEvery('auth/register', registerSaga);

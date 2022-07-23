@@ -8,3 +8,7 @@ export interface typeLogin {
   email: string;
   password: string;
 }
+
+// export interface typeToken {
+//   token: string;
+// }

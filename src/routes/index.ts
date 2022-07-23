@@ -1,8 +1,11 @@
-import { DefaultLayout } from '../layouts';
-import HomePage from '../pages/HomePage';
-import Login from '../pages/Login';
-import Register from '../pages/Register';
+import { lazy } from 'react';
+import { DashboardLayout, DefaultLayout } from '../layouts';
 import { typeRoute } from '../types/route';
+
+const HomePage = lazy(() => import('../pages/HomePage'));
+const Login = lazy(() => import('../pages/Login'));
+const Register = lazy(() => import('../pages/Register'));
+const User = lazy(() => import('../dashboard/page/User'));
 
 export const publicRoute: typeRoute[] = [
   {
@@ -19,5 +22,13 @@ export const publicRoute: typeRoute[] = [
     path: '/login',
     element: Login,
     layout: DefaultLayout,
+  },
+];
+
+export const privateRoute: typeRoute[] = [
+  {
+    path: '/admin',
+    element: User,
+    layout: DashboardLayout,
   },
 ];

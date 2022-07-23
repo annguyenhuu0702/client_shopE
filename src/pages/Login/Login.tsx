@@ -26,7 +26,7 @@ const Login: React.FC = () => {
       <div className="w-1200">
         <div className="container-auth">
           <div className="title">
-            <span>Đănh nhập</span>
+            <span>Đăng nhập</span>
           </div>
           <div className={cx('group-input')}>
             <Form

@@ -1,7 +1,7 @@
 import React from 'react';
 import Sidebar from './Sidebar';
 
-const DashboardLayout = ({ children }: any) => {
+const DashboardLayout: React.FC = ({ children }: any) => {
   return (
     <div style={{ display: 'flex' }}>
       <Sidebar />

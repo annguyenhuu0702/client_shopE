@@ -10,7 +10,7 @@ import {
   UserOutlined,
   BarChartOutlined,
 } from '@ant-design/icons';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 const { Sider } = Layout;
 
 const cx = classNames.bind(styles);
@@ -41,6 +41,7 @@ const getItems = (pathname: string): typeMenu[] => {
 
 const Sidebar: React.FC = () => {
   const location = useLocation();
+  const navagate = useNavigate();
   const [collapsed, setCollapsed] = useState<boolean>(false);
   const [items, setItems] = useState<typeMenu[]>(() => {
     return getItems(location.pathname);
@@ -81,6 +82,9 @@ const Sidebar: React.FC = () => {
                     className={cx('item', {
                       active: item.isActive,
                     })}
+                    onClick={() => {
+                      navagate(`${item.path}`);
+                    }}
                   >
                     {item.icon}
                     <Link

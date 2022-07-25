@@ -27,9 +27,7 @@ const App = () => {
   function showRoutes(routes: typeRoute[]): React.ReactElement {
     return (
       <React.Fragment>
-        {/* <Routes> */}
         {routes.map((route: typeRoute, index: number): React.ReactElement => {
-          console.log(route.path);
           let Layout = route.layout;
           const Page = route.element;
           return (
@@ -44,7 +42,6 @@ const App = () => {
             />
           );
         })}
-        {/* </Routes> */}
       </React.Fragment>
     );
   }

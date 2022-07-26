@@ -1,8 +1,7 @@
-import React, { useState } from 'react';
+import React, { useEffect } from 'react';
 import styles from './__user.module.scss';
 
-import classNames from 'classnames/bind';
-import HeaderTitle from '../../components/HeaderTitle';
+import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
 import {
   Button,
   Col,
@@ -10,17 +9,24 @@ import {
   Input,
   Layout,
   Pagination,
-  PaginationProps,
+  Popconfirm,
   Row,
   Select,
+  Space,
   Table,
 } from 'antd';
+import classNames from 'classnames/bind';
+import { useDispatch, useSelector } from 'react-redux';
+import { userActions } from '../../../redux/slice/userSlice';
+import { typeUser } from '../../../types/user';
+import HeaderTitle from '../../components/HeaderTitle';
 
 const cx = classNames.bind(styles);
 const { Content } = Layout;
 
 const User: React.FC = () => {
-  const [dataSource, setDataSource] = useState([]);
+  const dispatch = useDispatch();
+  const users: typeUser[] = useSelector((state: any) => state.user.users.data);
 
   const handleChange = (value: string) => {
     console.log(`selected ${value}`);
@@ -33,6 +39,10 @@ const User: React.FC = () => {
   const onFinishFailed = (errorInfo: any) => {
     console.log('Failed:', errorInfo);
   };
+
+  function confirm() {
+    console.log('hello');
+  }
 
   const columns = [
     {
@@ -61,7 +71,7 @@ const User: React.FC = () => {
       key: 'phone',
     },
     {
-      title: 'Created',
+      title: 'Created Date',
       dataIndex: 'create',
       key: 'create',
     },
@@ -69,8 +79,30 @@ const User: React.FC = () => {
       title: 'Action',
       dataIndex: 'action',
       key: 'action',
+      render: () => {
+        return (
+          <Space size="middle">
+            <EditOutlined className={cx('icon-edit')} />
+            <Popconfirm
+              placement="topLeft"
+              title={`Are you sure to delete user ?`}
+              onConfirm={() => {
+                confirm();
+              }}
+              okText="Yes"
+              cancelText="No"
+            >
+              <DeleteOutlined className={cx('icon-delete')} />
+            </Popconfirm>
+          </Space>
+        );
+      },
     },
   ];
+
+  useEffect(() => {
+    dispatch(userActions.getAllUser());
+  }, [dispatch]);
 
   return (
     <section className={cx('user')}>
@@ -124,7 +156,7 @@ const User: React.FC = () => {
                   textAlign: 'center',
                 }}
               >
-                <Button type="primary">Export to execl</Button>
+                <Button type="primary">Export to Excel</Button>
               </Col>
               <Col
                 xl={2}
@@ -138,7 +170,15 @@ const User: React.FC = () => {
             <Row className={cx('content-table')}>
               <Col xl={24} md={24} xs={24}>
                 <Table
-                  dataSource={dataSource}
+                  dataSource={
+                    users &&
+                    users.map((item: typeUser) => {
+                      return {
+                        ...item,
+                        key: item.id,
+                      };
+                    })
+                  }
                   columns={columns}
                   pagination={false}
                 />

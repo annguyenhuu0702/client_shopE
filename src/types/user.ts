@@ -13,7 +13,7 @@ export interface typeUser {
   avatar: string;
   phone: string;
   isDeleted: boolean;
-  key: React.Key | string | number;
+  key?: React.Key | string | number;
   // votes
   // repVotes
   // productUsers

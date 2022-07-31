@@ -22,6 +22,8 @@ import {
   RadioChangeEvent,
   Upload,
 } from 'antd';
+import { useDispatch } from 'react-redux';
+import { userActions } from '../../../../redux/slice/userSlice';
 
 const cx = classNames.bind(styles);
 
@@ -48,7 +50,20 @@ interface Props {
   setVisible: any;
 }
 
+const initialValues = {
+  remember: true,
+  email: '',
+  fullname: '',
+  gender: true,
+  password: '',
+  phone: '',
+  city: '',
+  avatar: '',
+};
+
 const ModalUser: React.FC<Props> = ({ visible, setVisible }) => {
+  const dispatch = useDispatch();
+  const [form] = Form.useForm();
   const [gender, setGender] = useState(1);
 
   const [loading, setLoading] = useState(false);
@@ -78,7 +93,6 @@ const ModalUser: React.FC<Props> = ({ visible, setVisible }) => {
   );
 
   const onChange = (e: RadioChangeEvent) => {
-    console.log('radio checked', e.target.value);
     setGender(e.target.value);
   };
 
@@ -87,29 +101,33 @@ const ModalUser: React.FC<Props> = ({ visible, setVisible }) => {
   };
 
   const onFinishModal = (values: any) => {
-    console.log('Success:', values);
+    dispatch(userActions.createUser({ ...values }));
+    setVisible(false);
+    form.setFieldsValue(initialValues);
   };
 
   const onFinishFailedModal = (errorInfo: any) => {
     console.log('Failed:', errorInfo);
   };
+
   return (
     <React.Fragment>
       <Modal
+        title="Add User"
         destroyOnClose
         centered
-        title="Add User"
         visible={visible}
-        onOk={hideModal}
+        onOk={form.submit}
         onCancel={hideModal}
         okText="Save"
         cancelText="Back"
         width={1000}
       >
         <Form
+          form={form}
           labelCol={{ span: 6 }}
           wrapperCol={{ span: 14 }}
-          initialValues={{ remember: true, gender: 1 }}
+          initialValues={initialValues}
           onFinish={onFinishModal}
           onFinishFailed={onFinishFailedModal}
           autoComplete="off"
@@ -117,10 +135,29 @@ const ModalUser: React.FC<Props> = ({ visible, setVisible }) => {
         >
           <div className={cx('wrap-form-modal')}>
             <Col xl={12} md={12}>
-              <Form.Item label="Email" name="email">
+              <Form.Item
+                label="Email"
+                name="email"
+                rules={[
+                  {
+                    required: true,
+                    type: 'email',
+                    message: 'Please fill in this field!',
+                  },
+                ]}
+              >
                 <Input />
               </Form.Item>
-              <Form.Item label="Password" name="password">
+              <Form.Item
+                label="Password"
+                name="password"
+                rules={[
+                  {
+                    required: true,
+                    message: 'Please fill in this field!',
+                  },
+                ]}
+              >
                 <Input.Password />
               </Form.Item>
 
@@ -147,20 +184,47 @@ const ModalUser: React.FC<Props> = ({ visible, setVisible }) => {
               </Form.Item>
             </Col>
             <Col xl={12} md={12}>
-              <Form.Item label="Fullname" name="fullname">
+              <Form.Item
+                label="Fullname"
+                name="fullname"
+                rules={[
+                  {
+                    required: true,
+                    message: 'Please fill in this field!',
+                  },
+                ]}
+              >
                 <Input />
               </Form.Item>
-              <Form.Item label="Phone" name="phone">
+              <Form.Item
+                label="Phone"
+                name="phone"
+                rules={[
+                  {
+                    required: true,
+                    message: 'Please fill in this field!',
+                  },
+                ]}
+              >
                 <Input />
               </Form.Item>
 
-              <Form.Item label="Ward" name="ward">
-                <Input.Password />
+              <Form.Item
+                label="City"
+                name="city"
+                rules={[
+                  {
+                    required: true,
+                    message: 'Please fill in this field!',
+                  },
+                ]}
+              >
+                <Input />
               </Form.Item>
               <Form.Item label="Gender" name="gender">
                 <Radio.Group onChange={onChange} value={gender}>
-                  <Radio value={1}>Male</Radio>
-                  <Radio value={2}>Female</Radio>
+                  <Radio value={true}>Male</Radio>
+                  <Radio value={false}>Female</Radio>
                 </Radio.Group>
               </Form.Item>
             </Col>

@@ -12,6 +12,7 @@ export interface typeUser {
   street: string;
   avatar: string;
   phone: string;
+  gender: boolean;
   isDeleted: boolean;
   key?: React.Key | string | number;
   // votes
@@ -20,4 +21,14 @@ export interface typeUser {
   // comments
   // repComments
   // userRoles
+}
+
+export interface typeCreateUser {
+  email: string;
+  password: string;
+  avatar?: string;
+  fullname: string;
+  phone: string;
+  ward: string;
+  gender: boolean;
 }

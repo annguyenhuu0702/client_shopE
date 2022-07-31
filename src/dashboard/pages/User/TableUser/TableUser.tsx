@@ -9,7 +9,6 @@ import {
   Col,
   Form,
   Input,
-  Pagination,
   Popconfirm,
   Row,
   Select,
@@ -32,6 +31,24 @@ const TableUser: React.FC = () => {
       title: 'Avatar',
       dataIndex: 'avatar',
       key: 'avatar',
+      render: (text: string, record: typeUser) => {
+        return (
+          <React.Fragment>
+            {record.avatar === '' ? (
+              <img
+                style={{
+                  width: '30px',
+                  height: '30px',
+                }}
+                src="https://res.cloudinary.com/diot4imoq/image/upload/v1659164349/supersports/1200px-Breezeicons-actions-22-im-user.svg_ophigj.png"
+                alt=""
+              />
+            ) : (
+              <img src={record.avatar} alt="" />
+            )}
+          </React.Fragment>
+        );
+      },
     },
     {
       title: 'FullName',
@@ -47,6 +64,18 @@ const TableUser: React.FC = () => {
       title: 'Phone',
       dataIndex: 'phone',
       key: 'phone',
+    },
+    {
+      title: 'Gender',
+      dataIndex: 'gender',
+      key: 'gender',
+      render: (text: string, record: typeUser) => {
+        return (
+          <React.Fragment>
+            {record.gender === true ? <span>Male</span> : <span>Female</span>}
+          </React.Fragment>
+        );
+      },
     },
     {
       title: 'Created Date',
@@ -84,7 +113,10 @@ const TableUser: React.FC = () => {
     },
   ];
 
-  const users: typeUser[] = useSelector((state: any) => state.user.users.data);
+  const users: typeUser[] = useSelector(
+    (state: any) => state.user.users?.data?.rows
+  );
+  const isLoading: boolean = useSelector((state: any) => state.user.isLoading);
 
   const onFinish = (values: any) => {
     console.log('Success:', values);
@@ -109,9 +141,9 @@ const TableUser: React.FC = () => {
     <React.Fragment>
       <ModalUser visible={visible} setVisible={setVisible} />
       <Row className={cx('row-cus')}>
-        <Col xl={18} style={{ paddingInline: '5px', flex: '1 1 auto' }}>
+        <Col xl={18} style={{ paddingInline: '5px' }}>
           <Form
-            initialValues={{ remember: true, fullname: 'Fullname' }}
+            initialValues={{ remember: true, select: 'Fullname' }}
             onFinish={onFinish}
             onFinishFailed={onFinishFailed}
             autoComplete="off"
@@ -119,7 +151,7 @@ const TableUser: React.FC = () => {
           >
             <div style={{ display: 'flex' }}>
               <Form.Item
-                name="fullname"
+                name="select"
                 style={{
                   paddingRight: '10px',
                 }}
@@ -181,13 +213,11 @@ const TableUser: React.FC = () => {
                 };
               })
             }
+            loading={isLoading}
             columns={columns}
             pagination={false}
           />
         </Col>
-      </Row>
-      <Row className={cx('pagination-cus')}>
-        <Pagination />
       </Row>
     </React.Fragment>
   );

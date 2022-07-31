@@ -1,32 +1,32 @@
 import React from 'react';
 import 'antd/dist/antd.css';
-import styles from './__register.module.scss';
+import styles from './__login.module.scss';
 
 import classNames from 'classnames/bind';
 import { Button, Form, Input } from 'antd';
+import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { authActions } from '../../redux/slice/authSlice';
-import { useNavigate } from 'react-router-dom';
 
 const cx = classNames.bind(styles);
 
-const Register: React.FC = () => {
+const Login: React.FC = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-
   const onFinish = (values: any) => {
-    dispatch(authActions.register({ ...values, navigate }));
+    dispatch(authActions.login({ ...values, navigate }));
   };
 
   const onFinishFailed = (errorInfo: any) => {
     console.log('Failed:', errorInfo);
   };
+
   return (
     <div className={cx('register')}>
       <div className="w-1200">
         <div className="container-auth">
           <div className="title">
-            <span>Tạo tài khoản</span>
+            <span>Đăng nhập</span>
           </div>
           <div className={cx('group-input')}>
             <Form
@@ -37,17 +37,6 @@ const Register: React.FC = () => {
               autoComplete="off"
               className="form-custom"
             >
-              <Form.Item
-                label="Họ và tên"
-                name="fullname"
-                rules={[
-                  {
-                    required: true,
-                  },
-                ]}
-              >
-                <Input size="large" />
-              </Form.Item>
               <Form.Item
                 label="Email"
                 name="email"
@@ -78,7 +67,6 @@ const Register: React.FC = () => {
               >
                 <Input.Password size="large" />
               </Form.Item>
-
               <Form.Item
                 rules={[
                   {
@@ -87,10 +75,19 @@ const Register: React.FC = () => {
                 ]}
               >
                 <Button type="primary" htmlType="submit" className="btn-auth">
-                  Đăng ký
+                  Đăng nhập
                 </Button>
               </Form.Item>
             </Form>
+          </div>
+          <div className={cx('text-register')}>
+            <span>
+              Bằng cách tạo một tài khoản với cửa hàng của chúng tôi, bạn có thể
+              thao tác quy trình thanh toán nhanh hơn, lưu trữ nhiều địa chỉ
+              giao hàng, xem và theo dõi các đơn hàng của bạn trong phần tài
+              khoản của bạn và hơn thế nữa.
+            </span>
+            <Link to="/register">Đăng ký</Link>
           </div>
         </div>
       </div>
@@ -98,4 +95,4 @@ const Register: React.FC = () => {
   );
 };
 
-export default Register;
+export default Login;

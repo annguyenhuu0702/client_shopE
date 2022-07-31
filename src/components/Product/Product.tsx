@@ -168,8 +168,10 @@ const Product: React.FC = () => {
           </div>
           <div className={cx('name')}>
             <Link to="">
-              Giày chạy bộ nam hoka march
-              5aaaaaaaaaaaaaaaaaaaaaaaáddddddđsadddđádddddđsaddddddddddddddddd
+              <span>
+                Giày chạy bộ nam hoka march
+                5aaaaaaaaaaaaaaaaaaaaaaaáddddddđsadddđádddddđsaddddddddddddddddd
+              </span>
             </Link>
           </div>
           <div className={cx('price')}>

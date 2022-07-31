@@ -1,0 +1,53 @@
+@import "../../../styles/variable.module.scss";
+
+.wrap {
+  .logo {
+    height: 65px;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    text-align: center;
+    border-bottom: 1px solid $blue-color;
+
+    span {
+      color: $white-color;
+      font-size: 2rem;
+      cursor: pointer;
+    }
+  }
+
+  .menu {
+    ul {
+      margin: 0;
+      padding: 0;
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+
+      .item {
+        padding: 16px 0;
+        display: flex;
+        align-items: center;
+        color: $white-color;
+        cursor: pointer;
+
+        .icon {
+          margin-right: 10px;
+        }
+        a {
+          color: $white-color;
+          opacity: 0.8;
+        }
+      }
+
+      .active {
+        color: $blue-color;
+
+        a {
+          color: $blue-color;
+        }
+      }
+    }
+  }
+}

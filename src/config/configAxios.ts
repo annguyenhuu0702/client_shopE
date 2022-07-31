@@ -1,13 +1,13 @@
-import axios from 'axios'
-import { URL_API } from '../constants'
+import axios from 'axios';
+import { URL_API } from '../constants';
 
 const instance = axios.create({
   baseURL: URL_API,
-  withCredentials: true
-})
+  withCredentials: true,
+});
 
-instance.interceptors.response.use((response) => {
-  return response.data
-})
+// instance.interceptors.response.use((response) => {
+//   return response.data
+// })
 
-export default instance
+export default instance;

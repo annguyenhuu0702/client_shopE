@@ -5,21 +5,25 @@ import { DownOutlined } from '@ant-design/icons';
 import { faLocationDot } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import classNames from 'classnames/bind';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { typeUser } from '../../../../types/user';
 import { authActions } from '../../../../redux/slice/authSlice';
+import { authApi } from '../../../../apis/authApi';
 
 const cx = classNames.bind(styles);
 
 const HeaderTop: React.FC = () => {
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   const user: typeUser = useSelector(
-    (state: any) => state.auth?.currentUser?.user
+    (state: any) => state.auth?.currentUser?.data?.user
   );
 
   const handleLogout = () => {
-    dispatch(authActions.logOut());
+    authApi.logout();
+    dispatch(authActions.logoutSuccess());
+    navigate('/');
   };
 
   return (
@@ -73,7 +77,7 @@ const HeaderTop: React.FC = () => {
               <div className="block-hover">
                 <div className="block-child">
                   <Link to="" className="text">
-                    Xin chào <b>{user.full_name}</b>
+                    Xin chào <b>{user.fullname}</b>
                   </Link>
                 </div>
                 <div className="block-child">
@@ -90,7 +94,7 @@ const HeaderTop: React.FC = () => {
             ) : (
               <div className="block-hover">
                 <div className="block-child">
-                  <Link to="" className="text">
+                  <Link to="/login" className="text">
                     Đăng nhập
                   </Link>
                 </div>

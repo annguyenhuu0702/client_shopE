@@ -1,5 +1,5 @@
 import 'antd/dist/antd.css';
-import React, { useState } from 'react';
+import React from 'react';
 
 import styles from './__tableUser.module.scss';
 
@@ -17,14 +17,23 @@ import {
 } from 'antd';
 
 import classNames from 'classnames/bind';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { modalActions } from '../../../../redux/slice/modalSlice';
+import { userActions } from '../../../../redux/slice/userSlice';
 import { typeUser } from '../../../../types/user';
 import ModalUser from '../ModalUser';
 
 const cx = classNames.bind(styles);
 
 const TableUser: React.FC = () => {
-  const [visible, setVisible] = useState<boolean>(false);
+  const dispatch = useDispatch();
+
+  const { isModal } = useSelector((state: any) => state.modal);
+
+  const handleEditUser = (record: typeUser) => {
+    dispatch(modalActions.showModal('Edit user'));
+    dispatch(userActions.setUserEditing(record));
+  };
 
   const columns = [
     {
@@ -92,13 +101,18 @@ const TableUser: React.FC = () => {
       title: 'Action',
       dataIndex: 'action',
       key: 'action',
-      render: () => {
+      render: (text: string, record: typeUser) => {
         return (
           <Space size="middle">
-            <EditOutlined className={cx('icon-edit')} />
+            <EditOutlined
+              className={cx('icon-edit')}
+              onClick={() => {
+                handleEditUser(record);
+              }}
+            />
             <Popconfirm
               placement="topLeft"
-              title={`Are you sure to delete user ?`}
+              title={`Do you want to delete this?`}
               onConfirm={() => {
                 confirm();
               }}
@@ -135,15 +149,17 @@ const TableUser: React.FC = () => {
   }
 
   const handleAddNewUser = () => {
-    setVisible(true);
+    dispatch(modalActions.showModal('Add user'));
+    dispatch(userActions.setUserEditing(null));
   };
   return (
     <React.Fragment>
-      <ModalUser visible={visible} setVisible={setVisible} />
+      {isModal && <ModalUser />}
+
       <Row className={cx('row-cus')}>
         <Col xl={18} style={{ paddingInline: '5px' }}>
           <Form
-            initialValues={{ remember: true, select: 'Fullname' }}
+            initialValues={{ remember: true, select: 'Fullname', search: '' }}
             onFinish={onFinish}
             onFinishFailed={onFinishFailed}
             autoComplete="off"

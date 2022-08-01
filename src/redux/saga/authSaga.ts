@@ -5,6 +5,7 @@ import { authActions } from '../slice/authSlice';
 import { typeLogin, typeRegister } from '../../types/auth';
 import { STATUS_CODE } from '../../constants';
 import jwtDecoded from 'jwt-decode';
+import { message } from 'antd';
 
 function* registerSaga({ payload }: PayloadAction<typeRegister>): any {
   try {
@@ -19,6 +20,7 @@ function* registerSaga({ payload }: PayloadAction<typeRegister>): any {
     }
   } catch (error: any) {
     yield put(authActions.registerFailed());
+    message.error('Email already is exists', 2);
     console.log(error);
   }
 }
@@ -38,6 +40,22 @@ function* loginSaga({ payload }: PayloadAction<typeLogin>): any {
     }
   } catch (error: any) {
     yield put(authActions.loginFailed());
+    message.error('Email or password wrong!', 2);
+    console.log(error);
+  }
+}
+
+function* getProfileSaga({ payload }: PayloadAction<number>): any {
+  try {
+    const res = yield call(() => {
+      return authApi.getProfile(payload);
+    });
+    const { data, status } = res;
+    if (status === STATUS_CODE.CREATED) {
+      yield put(authActions.getProfileSuccess(data));
+    }
+  } catch (error: any) {
+    yield put(authActions.getProfileFailed());
     console.log(error);
   }
 }
@@ -45,7 +63,7 @@ function* loginSaga({ payload }: PayloadAction<typeLogin>): any {
 function* authSaga() {
   yield takeEvery('auth/register', registerSaga);
   yield takeEvery('auth/login', loginSaga);
-  // yield takeEvery('auth/logout', logoutSaga);
+  yield takeEvery('auth/getProfile', getProfileSaga);
 }
 
 export default authSaga;

@@ -21,6 +21,10 @@ const User: React.FC = () => {
     dispatch(userActions.getAllUser({}));
   }, [dispatch]);
 
+  useEffect(() => {
+    setPage(1);
+  }, [count]);
+
   return (
     <section className={cx('user')}>
       <HeaderTitle title="User" />

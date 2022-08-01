@@ -59,10 +59,6 @@ const Login: React.FC = () => {
                     required: true,
                     message: 'Please enter a password',
                   },
-                  {
-                    min: 6,
-                    message: 'Password must be at least 6 characters',
-                  },
                 ]}
               >
                 <Input.Password size="large" />

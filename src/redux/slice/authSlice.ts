@@ -50,6 +50,18 @@ const authSlice = createSlice({
       state.currentUser = null;
       localStorage.setItem('mickey:user', JSON.stringify(state.currentUser));
     },
+    getProfile: (state, action: PayloadAction<number>) => {
+      state.isLoading = true;
+    },
+    getProfileSuccess: (state, action: PayloadAction<typeUser>) => {
+      state.isError = false;
+      state.isLoading = false;
+      state.currentUser = action.payload;
+    },
+    getProfileFailed: (state) => {
+      state.isLoading = false;
+      state.isError = true;
+    },
   },
 });
 

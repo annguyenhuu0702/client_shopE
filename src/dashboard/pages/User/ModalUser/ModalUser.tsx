@@ -22,8 +22,9 @@ import {
   RadioChangeEvent,
   Upload,
 } from 'antd';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { userActions } from '../../../../redux/slice/userSlice';
+import { modalActions } from '../../../../redux/slice/modalSlice';
 
 const cx = classNames.bind(styles);
 
@@ -45,24 +46,22 @@ const beforeUpload = (file: RcFile) => {
   return isJpgOrPng && isLt2M;
 };
 
-interface Props {
-  visible: boolean;
-  setVisible: any;
-}
-
-const initialValues = {
-  remember: true,
-  email: '',
-  fullname: '',
-  gender: true,
-  password: '',
-  phone: '',
-  city: '',
-  avatar: '',
-};
-
-const ModalUser: React.FC<Props> = ({ visible, setVisible }) => {
+const ModalUser: React.FC = () => {
   const dispatch = useDispatch();
+  const currentUser = useSelector((state: any) => state.user.currentUser);
+  const { isModal, title } = useSelector((state: any) => state.modal);
+
+  const initialValues = {
+    remember: true,
+    email: currentUser ? currentUser.email : '',
+    fullname: currentUser ? currentUser.fullname : '',
+    gender: currentUser ? currentUser.gender : true,
+    password: '',
+    phone: currentUser ? currentUser.phone : '',
+    city: currentUser ? currentUser.city : '',
+    avatar: currentUser ? currentUser.avatar : '',
+  };
+
   const [form] = Form.useForm();
   const [gender, setGender] = useState(1);
 
@@ -97,12 +96,12 @@ const ModalUser: React.FC<Props> = ({ visible, setVisible }) => {
   };
 
   const hideModal = () => {
-    setVisible(false);
+    dispatch(modalActions.hideModal());
   };
 
   const onFinishModal = (values: any) => {
     dispatch(userActions.createUser({ ...values }));
-    setVisible(false);
+    dispatch(modalActions.hideModal());
     form.setFieldsValue(initialValues);
   };
 
@@ -113,10 +112,10 @@ const ModalUser: React.FC<Props> = ({ visible, setVisible }) => {
   return (
     <React.Fragment>
       <Modal
-        title="Add User"
+        title={title}
         destroyOnClose
         centered
-        visible={visible}
+        visible={isModal}
         onOk={form.submit}
         onCancel={hideModal}
         okText="Save"
@@ -141,25 +140,34 @@ const ModalUser: React.FC<Props> = ({ visible, setVisible }) => {
                 rules={[
                   {
                     required: true,
-                    type: 'email',
                     message: 'Please fill in this field!',
+                  },
+                  {
+                    type: 'email',
+                    message: 'Please enter a valid email!',
                   },
                 ]}
               >
                 <Input />
               </Form.Item>
-              <Form.Item
-                label="Password"
-                name="password"
-                rules={[
-                  {
-                    required: true,
-                    message: 'Please fill in this field!',
-                  },
-                ]}
-              >
-                <Input.Password />
-              </Form.Item>
+              {!currentUser && (
+                <Form.Item
+                  label="Password"
+                  name="password"
+                  rules={[
+                    {
+                      required: true,
+                      message: 'Please fill in this field!',
+                    },
+                    {
+                      min: 6,
+                      message: 'Password must be at least 6 characters',
+                    },
+                  ]}
+                >
+                  <Input.Password />
+                </Form.Item>
+              )}
 
               <Form.Item label="Avatar">
                 <Upload
@@ -209,7 +217,7 @@ const ModalUser: React.FC<Props> = ({ visible, setVisible }) => {
                 <Input />
               </Form.Item>
 
-              <Form.Item
+              {/* <Form.Item
                 label="City"
                 name="city"
                 rules={[
@@ -220,7 +228,7 @@ const ModalUser: React.FC<Props> = ({ visible, setVisible }) => {
                 ]}
               >
                 <Input />
-              </Form.Item>
+              </Form.Item> */}
               <Form.Item label="Gender" name="gender">
                 <Radio.Group onChange={onChange} value={gender}>
                   <Radio value={true}>Male</Radio>

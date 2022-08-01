@@ -44,6 +44,9 @@ const userSlice = createSlice({
       state.isLoading = false;
       state.isError = true;
     },
+    setUserEditing: (state, action: PayloadAction<typeUser | null>) => {
+      state.currentUser = action.payload;
+    },
   },
 });
 

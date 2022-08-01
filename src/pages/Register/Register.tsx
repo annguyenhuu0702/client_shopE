@@ -43,6 +43,7 @@ const Register: React.FC = () => {
                 rules={[
                   {
                     required: true,
+                    message: 'Please fill in this field!',
                   },
                 ]}
               >
@@ -54,14 +55,16 @@ const Register: React.FC = () => {
                 rules={[
                   {
                     required: true,
+                    message: 'Please fill in this field!',
+                  },
+                  {
                     type: 'email',
-                    message: 'Please enter a valid email address',
+                    message: 'Please enter a valid email!',
                   },
                 ]}
               >
                 <Input size="large" />
               </Form.Item>
-
               <Form.Item
                 label="Password"
                 name="password"
@@ -80,11 +83,11 @@ const Register: React.FC = () => {
               </Form.Item>
 
               <Form.Item
-                rules={[
-                  {
-                    required: true,
-                  },
-                ]}
+              // rules={[
+              //   {
+              //     required: true,
+              //   },
+              // ]}
               >
                 <Button type="primary" htmlType="submit" className="btn-auth">
                   Đăng ký

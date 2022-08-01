@@ -13,8 +13,14 @@ const login = (user: typeLogin) => {
 export const logout = () => {
   return instance.post(`${URL_API}/auth/logout`);
 };
+
+const getProfile = (id: number) => {
+  return instance.get(`${URL_API}/user/getById/${id}`);
+};
+
 export const authApi = {
   register,
   login,
   logout,
+  getProfile,
 };

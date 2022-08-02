@@ -1,13 +1,14 @@
 @import "../../../styles/variable.module.scss";
 
 .wrap {
+  background: #038fde;
   .logo {
     height: 65px;
     display: flex;
     align-items: center;
     justify-content: space-around;
     text-align: center;
-    border-bottom: 1px solid $blue-color;
+    background: #036;
 
     span {
       color: $white-color;
@@ -16,7 +17,39 @@
     }
   }
 
+  .account {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    padding: 20px 0;
+    margin: 0 20px;
+    border-bottom: 1px solid $blue-color;
+    cursor: pointer;
+
+    .avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      border: 1px solid #fff;
+      img {
+        width: 100%;
+        height: 100%;
+        border-radius: 50%;
+        object-fit: cover;
+      }
+    }
+
+    .info {
+      .name {
+        color: $white-color;
+        font-size: 1.6rem;
+        text-transform: capitalize;
+      }
+    }
+  }
+
   .menu {
+    height: calc(100vh - 65px - 81px - 44px);
     ul {
       margin: 0;
       padding: 0;
@@ -37,7 +70,6 @@
         }
         a {
           color: $white-color;
-          opacity: 0.8;
         }
       }
 
@@ -48,6 +80,23 @@
           color: $blue-color;
         }
       }
+    }
+  }
+
+  .logout {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 44px;
+    background: #036;
+    padding: 10px 0;
+    color: $white-color;
+
+    span {
+      font-size: 1.6rem;
+      text-transform: uppercase;
+      color: $white-color;
+      margin-left: 10px;
     }
   }
 }

@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-
 import 'antd/dist/antd.css';
 import styles from './__modalUser.module.scss';
 import classNames from 'classnames/bind';
@@ -25,6 +24,7 @@ import {
 import { useDispatch, useSelector } from 'react-redux';
 import { userActions } from '../../../../redux/slice/userSlice';
 import { modalActions } from '../../../../redux/slice/modalSlice';
+import { typeUser } from '../../../../types/user';
 
 const cx = classNames.bind(styles);
 
@@ -48,7 +48,10 @@ const beforeUpload = (file: RcFile) => {
 
 const ModalUser: React.FC = () => {
   const dispatch = useDispatch();
-  const currentUser = useSelector((state: any) => state.user.currentUser);
+  const currentUser: typeUser = useSelector(
+    (state: any) => state.user.currentUser
+  );
+
   const { isModal, title } = useSelector((state: any) => state.modal);
 
   const initialValues = {
@@ -100,9 +103,14 @@ const ModalUser: React.FC = () => {
   };
 
   const onFinishModal = (values: any) => {
-    dispatch(userActions.createUser({ ...values }));
-    dispatch(modalActions.hideModal());
-    form.setFieldsValue(initialValues);
+    const data = { ...currentUser, ...values };
+    const { key, ...others } = data;
+    if (currentUser === null) {
+      dispatch(userActions.createUser({ ...values }));
+      form.setFieldsValue(initialValues);
+    } else {
+      dispatch(userActions.editUser(others));
+    }
   };
 
   const onFinishFailedModal = (errorInfo: any) => {
@@ -216,19 +224,6 @@ const ModalUser: React.FC = () => {
               >
                 <Input />
               </Form.Item>
-
-              {/* <Form.Item
-                label="City"
-                name="city"
-                rules={[
-                  {
-                    required: true,
-                    message: 'Please fill in this field!',
-                  },
-                ]}
-              >
-                <Input />
-              </Form.Item> */}
               <Form.Item label="Gender" name="gender">
                 <Radio.Group onChange={onChange} value={gender}>
                   <Radio value={true}>Male</Radio>

@@ -28,7 +28,12 @@ const cx = classNames.bind(styles);
 const TableUser: React.FC = () => {
   const dispatch = useDispatch();
 
-  const { isModal } = useSelector((state: any) => state.modal);
+  const isModal: boolean = useSelector((state: any) => state.modal);
+
+  const users: typeUser[] = useSelector(
+    (state: any) => state.user.users?.data?.rows
+  );
+  const isLoading: boolean = useSelector((state: any) => state.user.isLoading);
 
   const handleEditUser = (record: typeUser) => {
     dispatch(modalActions.showModal('Edit user'));
@@ -127,11 +132,6 @@ const TableUser: React.FC = () => {
     },
   ];
 
-  const users: typeUser[] = useSelector(
-    (state: any) => state.user.users?.data?.rows
-  );
-  const isLoading: boolean = useSelector((state: any) => state.user.isLoading);
-
   const onFinish = (values: any) => {
     console.log('Success:', values);
   };
@@ -155,7 +155,6 @@ const TableUser: React.FC = () => {
   return (
     <React.Fragment>
       {isModal && <ModalUser />}
-
       <Row className={cx('row-cus')}>
         <Col xl={18} style={{ paddingInline: '5px' }}>
           <Form
@@ -230,6 +229,7 @@ const TableUser: React.FC = () => {
               })
             }
             loading={isLoading}
+            // loading={true}
             columns={columns}
             pagination={false}
           />

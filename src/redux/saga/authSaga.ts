@@ -33,7 +33,6 @@ function* loginSaga({ payload }: PayloadAction<typeLogin>): any {
     });
     const { data, status } = res;
     const role = (jwtDecoded(data.data.access_token) as any).role;
-
     if (status === STATUS_CODE.CREATED) {
       yield put(authActions.loginSuccess(data));
       navigate(role === 'admin' ? '/admin' : '/');

@@ -47,6 +47,18 @@ const userSlice = createSlice({
     setUserEditing: (state, action: PayloadAction<typeUser | null>) => {
       state.currentUser = action.payload;
     },
+    editUser: (state, action: PayloadAction<typeUser>) => {
+      state.isLoading = true;
+    },
+    editUserSuccess: (state, action: PayloadAction<typeUser>) => {
+      state.isLoading = false;
+      state.isError = false;
+      state.currentUser = action.payload;
+    },
+    editUserFailed: (state) => {
+      state.isLoading = false;
+      state.isError = false;
+    },
   },
 });
 

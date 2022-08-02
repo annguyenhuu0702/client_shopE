@@ -1,9 +1,11 @@
 import { PayloadAction } from '@reduxjs/toolkit';
+import { message } from 'antd';
 import { call, put, takeEvery } from 'redux-saga/effects';
 import { userApi } from '../../apis/userApi';
 import { STATUS_CODE } from '../../constants';
 import { QueryParams } from '../../types/common';
-import { typeCreateUser } from '../../types/user';
+import { typeCreateUser, typeUser } from '../../types/user';
+import { modalActions } from '../slice/modalSlice';
 import { userActions } from '../slice/userSlice';
 
 function* getAllUserSaga({ payload }: PayloadAction<QueryParams>): any {
@@ -29,17 +31,37 @@ function* createUserSaga({ payload }: PayloadAction<typeCreateUser>): any {
     const { data, status } = res;
     if (status === STATUS_CODE.SUCCESS) {
       yield put(userActions.createUserSuccess(data));
+      yield put(modalActions.hideModal());
       yield put(userActions.getAllUser({}));
     }
   } catch (err) {
     console.log(err);
     yield put(userActions.createUserFailed());
+    message.error('Email is already exists');
+  }
+}
+
+function* editUserSaga({ payload }: PayloadAction<typeUser>): any {
+  try {
+    const res = yield call(() => {
+      return userApi.update(payload, payload.id);
+    });
+    const { data, status } = res;
+    if (status === STATUS_CODE.SUCCESS) {
+      yield put(userActions.editUserSuccess(data));
+      yield put(modalActions.hideModal());
+      yield put(userActions.getAllUser({}));
+    }
+  } catch (err) {
+    console.log(err);
+    yield put(userActions.editUserFailed());
   }
 }
 
 function* userSaga() {
   yield takeEvery('user/getAllUser', getAllUserSaga);
   yield takeEvery('user/createUser', createUserSaga);
+  yield takeEvery('user/editUser', editUserSaga);
 }
 
 export default userSaga;

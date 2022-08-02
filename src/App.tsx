@@ -46,7 +46,19 @@ const App = () => {
     );
   }
   return (
-    <Suspense fallback={<Spin />}>
+    <Suspense
+      fallback={
+        <div
+          style={{
+            position: 'absolute',
+            top: '50%',
+            left: '50%',
+          }}
+        >
+          <Spin />
+        </div>
+      }
+    >
       <div className="App">
         <Routes>
           {showPrivateRoter()}

@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import styles from './__sidebar.module.scss';
-// import 'antd/dist/antd.css';
 
 import classNames from 'classnames/bind';
 import { Layout } from 'antd';
@@ -11,6 +10,12 @@ import {
   BarChartOutlined,
 } from '@ant-design/icons';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { faPowerOff } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { useDispatch, useSelector } from 'react-redux';
+import { typeUser } from '../../../types/user';
+import { authApi } from '../../../apis/authApi';
+import { authActions } from '../../../redux/slice/authSlice';
 const { Sider } = Layout;
 
 const cx = classNames.bind(styles);
@@ -40,12 +45,21 @@ const getItems = (pathname: string): typeMenu[] => {
 };
 
 const Sidebar: React.FC = () => {
+  const dispatch = useDispatch();
+  const user: typeUser = useSelector(
+    (state: any) => state.auth.currentUser.data.user
+  );
   const location = useLocation();
   const navagate = useNavigate();
   const [collapsed, setCollapsed] = useState<boolean>(false);
   const [items, setItems] = useState<typeMenu[]>(() => {
     return getItems(location.pathname);
   });
+
+  const handleLogout = () => {
+    authApi.logout();
+    dispatch(authActions.logoutSuccess());
+  };
 
   useEffect(() => {
     setItems(getItems(location.pathname));
@@ -71,6 +85,25 @@ const Sidebar: React.FC = () => {
                 : { width: '140px', height: '35px' }
             }
           />
+        </div>
+        <div className={cx('account')}>
+          <div className={cx('avatar')}>
+            <img
+              src={
+                user.avatar === ''
+                  ? 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT65CXLkEWFDlHIHnU1hDnHHVn0GdfzBR7Ejg&usqp=CAU'
+                  : `${user.avatar}`
+              }
+              alt=""
+            />
+          </div>
+          <div className={cx('info')}>
+            {!collapsed && (
+              <Link to="/admin/profile" className={cx('name')}>
+                {user.fullname}
+              </Link>
+            )}
+          </div>
         </div>
         <div className={cx('menu')}>
           <ul>
@@ -98,6 +131,10 @@ const Sidebar: React.FC = () => {
               })}
           </ul>
         </div>
+        <Link to="/" className={cx('logout')} onClick={handleLogout}>
+          <FontAwesomeIcon icon={faPowerOff} />
+          {!collapsed && <span>Log out</span>}
+        </Link>
       </Sider>
     </Layout>
   );

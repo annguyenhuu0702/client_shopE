@@ -1,5 +1,5 @@
 import { PayloadAction } from '@reduxjs/toolkit';
-import { message } from 'antd';
+import { notification } from 'antd';
 import { call, put, takeEvery } from 'redux-saga/effects';
 import { userApi } from '../../apis/userApi';
 import { STATUS_CODE } from '../../constants';
@@ -31,13 +31,21 @@ function* createUserSaga({ payload }: PayloadAction<typeCreateUser>): any {
     const { data, status } = res;
     if (status === STATUS_CODE.SUCCESS) {
       yield put(userActions.createUserSuccess(data));
+      if (payload.resetValues) {
+        payload.resetValues();
+      }
       yield put(modalActions.hideModal());
       yield put(userActions.getAllUser({}));
     }
   } catch (err) {
     console.log(err);
     yield put(userActions.createUserFailed());
-    message.error('Email is already exists');
+    notification.error({
+      message: 'Error',
+      description: 'Email is already exists',
+      placement: 'bottomRight',
+      duration: 2,
+    });
   }
 }
 
@@ -49,12 +57,20 @@ function* editUserSaga({ payload }: PayloadAction<typeUser>): any {
     const { data, status } = res;
     if (status === STATUS_CODE.SUCCESS) {
       yield put(userActions.editUserSuccess(data));
+      if (payload.resetValues) {
+        payload.resetValues();
+      }
       yield put(modalActions.hideModal());
-      yield put(userActions.getAllUser({}));
     }
   } catch (err) {
     console.log(err);
     yield put(userActions.editUserFailed());
+    notification.error({
+      message: 'Error',
+      description: 'Email is already exists',
+      placement: 'bottomRight',
+      duration: 2,
+    });
   }
 }
 

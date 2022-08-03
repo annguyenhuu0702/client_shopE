@@ -1,11 +1,11 @@
 import { PayloadAction } from '@reduxjs/toolkit';
+import { notification } from 'antd';
+import jwtDecoded from 'jwt-decode';
 import { call, put, takeEvery } from 'redux-saga/effects';
 import { authApi } from '../../apis/authApi';
-import { authActions } from '../slice/authSlice';
-import { typeLogin, typeRegister } from '../../types/auth';
 import { STATUS_CODE } from '../../constants';
-import jwtDecoded from 'jwt-decode';
-import { message } from 'antd';
+import { typeLogin, typeRegister } from '../../types/auth';
+import { authActions } from '../slice/authSlice';
 
 function* registerSaga({ payload }: PayloadAction<typeRegister>): any {
   try {
@@ -16,11 +16,23 @@ function* registerSaga({ payload }: PayloadAction<typeRegister>): any {
     const { data, status } = res;
     if (status === STATUS_CODE.CREATED) {
       yield put(authActions.registerSuccess(data));
+      notification.success({
+        message: 'Success',
+        description: 'Create account success',
+        placement: 'bottomRight',
+        duration: 2,
+      });
       navigate('/');
     }
   } catch (error: any) {
     yield put(authActions.registerFailed());
-    message.error('Email already is exists', 2);
+    notification.error({
+      message: 'Error',
+      description: 'Email is already exists',
+      placement: 'bottomRight',
+      duration: 2,
+    });
+
     console.log(error);
   }
 }
@@ -39,7 +51,13 @@ function* loginSaga({ payload }: PayloadAction<typeLogin>): any {
     }
   } catch (error: any) {
     yield put(authActions.loginFailed());
-    message.error('Email or password wrong!', 2);
+    notification.error({
+      message: 'Error',
+      description: 'Email or password wrong!',
+      placement: 'bottomRight',
+      duration: 2,
+    });
+    console.log(error);
     console.log(error);
   }
 }

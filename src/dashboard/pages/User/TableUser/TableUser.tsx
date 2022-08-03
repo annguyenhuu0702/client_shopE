@@ -158,7 +158,7 @@ const TableUser: React.FC = () => {
       <Row className={cx('row-cus')}>
         <Col xl={18} style={{ paddingInline: '5px' }}>
           <Form
-            initialValues={{ remember: true, select: 'Fullname', search: '' }}
+            initialValues={{ select: 'Fullname', search: '' }}
             onFinish={onFinish}
             onFinishFailed={onFinishFailed}
             autoComplete="off"
@@ -229,7 +229,6 @@ const TableUser: React.FC = () => {
               })
             }
             loading={isLoading}
-            // loading={true}
             columns={columns}
             pagination={false}
           />

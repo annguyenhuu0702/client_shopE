@@ -31,7 +31,7 @@ const Register: React.FC = () => {
           <div className={cx('group-input')}>
             <Form
               name="basic"
-              initialValues={{ remember: true }}
+              initialValues={{ fullname: '', email: '', password: '' }}
               onFinish={onFinish}
               onFinishFailed={onFinishFailed}
               autoComplete="off"

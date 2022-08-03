@@ -31,7 +31,7 @@ const Login: React.FC = () => {
           <div className={cx('group-input')}>
             <Form
               name="basic"
-              initialValues={{ remember: true }}
+              initialValues={{ email: '', password: '' }}
               onFinish={onFinish}
               onFinishFailed={onFinishFailed}
               autoComplete="off"

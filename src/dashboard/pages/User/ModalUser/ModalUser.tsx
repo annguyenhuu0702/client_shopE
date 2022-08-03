@@ -55,7 +55,6 @@ const ModalUser: React.FC = () => {
   const { isModal, title } = useSelector((state: any) => state.modal);
 
   const initialValues = {
-    remember: true,
     email: currentUser ? currentUser.email : '',
     fullname: currentUser ? currentUser.fullname : '',
     gender: currentUser ? currentUser.gender : true,
@@ -102,14 +101,17 @@ const ModalUser: React.FC = () => {
     dispatch(modalActions.hideModal());
   };
 
+  const resetValues = () => {
+    form.setFieldsValue(initialValues);
+  };
+
   const onFinishModal = (values: any) => {
     const data = { ...currentUser, ...values };
     const { key, ...others } = data;
     if (currentUser === null) {
-      dispatch(userActions.createUser({ ...values }));
-      form.setFieldsValue(initialValues);
+      dispatch(userActions.createUser({ ...values, resetValues }));
     } else {
-      dispatch(userActions.editUser(others));
+      dispatch(userActions.editUser({ ...others, resetValues }));
     }
   };
 

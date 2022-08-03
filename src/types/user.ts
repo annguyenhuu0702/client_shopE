@@ -15,6 +15,7 @@ export interface typeUser {
   gender: boolean;
   isDeleted: boolean;
   key?: React.Key | string | number;
+  resetValues?: Function;
   // votes
   // repVotes
   // productUsers
@@ -31,4 +32,5 @@ export interface typeCreateUser {
   phone: string;
   ward: string;
   gender: boolean;
+  resetValues?: Function;
 }

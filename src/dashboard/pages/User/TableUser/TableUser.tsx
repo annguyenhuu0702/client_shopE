@@ -35,11 +35,6 @@ const TableUser: React.FC = () => {
   );
   const isLoading: boolean = useSelector((state: any) => state.user.isLoading);
 
-  const handleEditUser = (record: typeUser) => {
-    dispatch(modalActions.showModal('Edit user'));
-    dispatch(userActions.setUserEditing(record));
-  };
-
   const columns = [
     {
       title: 'Avatar',
@@ -131,6 +126,11 @@ const TableUser: React.FC = () => {
       },
     },
   ];
+
+  const handleEditUser = (record: typeUser) => {
+    dispatch(modalActions.showModal('Edit user'));
+    dispatch(userActions.setUserEditing(record));
+  };
 
   const onFinish = (values: any) => {
     console.log('Success:', values);

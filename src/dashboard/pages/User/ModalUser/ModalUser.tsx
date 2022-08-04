@@ -105,17 +105,17 @@ const ModalUser: React.FC = () => {
     form.setFieldsValue(initialValues);
   };
 
-  const onFinishModal = (values: any) => {
+  const onFinish = (values: any) => {
     const data = { ...currentUser, ...values };
     const { key, ...others } = data;
     if (currentUser === null) {
       dispatch(userActions.createUser({ ...values, resetValues }));
+      form.setFieldsValue(initialValues);
     } else {
       dispatch(userActions.editUser({ ...others, resetValues }));
     }
   };
-
-  const onFinishFailedModal = (errorInfo: any) => {
+  const onFinishFailed = (errorInfo: any) => {
     console.log('Failed:', errorInfo);
   };
 
@@ -133,12 +133,12 @@ const ModalUser: React.FC = () => {
         width={1000}
       >
         <Form
+          initialValues={initialValues}
           form={form}
           labelCol={{ span: 6 }}
           wrapperCol={{ span: 14 }}
-          initialValues={initialValues}
-          onFinish={onFinishModal}
-          onFinishFailed={onFinishFailedModal}
+          onFinish={onFinish}
+          onFinishFailed={onFinishFailed}
           autoComplete="off"
           labelAlign="left"
         >

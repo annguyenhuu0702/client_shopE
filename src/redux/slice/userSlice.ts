@@ -28,6 +28,7 @@ const initialState: typeUserState = {
       rows: [],
       count: 0,
     },
+    message: '',
   },
   isLoading: false,
   isError: false,
@@ -53,10 +54,10 @@ const userSlice = createSlice({
     createUser: (state, action: PayloadAction<typeCreateUser>) => {
       state.isLoading = true;
     },
-    createUserSuccess: (state, action: PayloadAction<typeUser>) => {
+    createUserSuccess: (state, action: PayloadAction<responseUser>) => {
       state.isLoading = false;
       state.isError = false;
-      state.currentUser = action.payload;
+      state.currentUser = action.payload.data;
     },
     createUserFailed: (state) => {
       state.isLoading = false;

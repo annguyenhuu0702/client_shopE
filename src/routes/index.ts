@@ -8,8 +8,8 @@ const Register = lazy(() => import('../pages/Register'));
 
 const User = lazy(() => import('../dashboard/pages/User'));
 const Statistical = lazy(() => import('../dashboard/pages/Statistical'));
+const Profile = lazy(() => import('../dashboard/pages/Profile'));
 
-//user
 export const publicRoute: typeRoute[] = [
   {
     path: '/',
@@ -38,6 +38,11 @@ export const privateRoute: typeRoute[] = [
   {
     path: '/admin/user',
     element: User,
+    layout: DashboardLayout,
+  },
+  {
+    path: '/admin/profile',
+    element: Profile,
     layout: DashboardLayout,
   },
 ];

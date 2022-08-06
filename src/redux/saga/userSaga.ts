@@ -44,7 +44,7 @@ function* createUserSaga({ payload }: PayloadAction<typeCreateUser>): any {
       message: 'Error',
       description: 'Email is already exists',
       placement: 'bottomRight',
-      duration: 2,
+      duration: 3,
     });
   }
 }
@@ -52,7 +52,7 @@ function* createUserSaga({ payload }: PayloadAction<typeCreateUser>): any {
 function* editUserSaga({ payload }: PayloadAction<typeUser>): any {
   try {
     const res = yield call(() => {
-      return userApi.update(payload, payload.id);
+      return userApi.update(payload);
     });
     const { data, status } = res;
     if (status === STATUS_CODE.SUCCESS) {
@@ -69,7 +69,7 @@ function* editUserSaga({ payload }: PayloadAction<typeUser>): any {
       message: 'Error',
       description: 'Email is already exists',
       placement: 'bottomRight',
-      duration: 2,
+      duration: 3,
     });
   }
 }

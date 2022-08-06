@@ -20,7 +20,7 @@ function* registerSaga({ payload }: PayloadAction<typeRegister>): any {
         message: 'Success',
         description: 'Create account success',
         placement: 'bottomRight',
-        duration: 2,
+        duration: 3,
       });
       navigate('/');
     }
@@ -30,7 +30,7 @@ function* registerSaga({ payload }: PayloadAction<typeRegister>): any {
       message: 'Error',
       description: 'Email is already exists',
       placement: 'bottomRight',
-      duration: 2,
+      duration: 3,
     });
 
     console.log(error);
@@ -55,7 +55,7 @@ function* loginSaga({ payload }: PayloadAction<typeLogin>): any {
       message: 'Error',
       description: 'Email or password wrong!',
       placement: 'bottomRight',
-      duration: 2,
+      duration: 3,
     });
     console.log(error);
     console.log(error);

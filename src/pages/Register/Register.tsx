@@ -82,13 +82,7 @@ const Register: React.FC = () => {
                 <Input.Password size="large" />
               </Form.Item>
 
-              <Form.Item
-              // rules={[
-              //   {
-              //     required: true,
-              //   },
-              // ]}
-              >
+              <Form.Item>
                 <Button type="primary" htmlType="submit" className="btn-auth">
                   Đăng ký
                 </Button>

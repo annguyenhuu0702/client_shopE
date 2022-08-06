@@ -11,8 +11,8 @@ const create = (user: typeCreateUser) => {
   return instance.post(`${URL_API}/user/create`, user);
 };
 
-const update = (user: typeUser, id: number | undefined) => {
-  return instance.post(`${URL_API}/user/update/${id}`, user);
+const update = (user: typeUser) => {
+  return instance.post(`${URL_API}/user/update/${user.id}`, user);
 };
 
 export const userApi = {

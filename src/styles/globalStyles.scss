@@ -257,3 +257,25 @@
   left: 50%;
   transform: translate(-50%, -50%);
 }
+
+.ant-tabs-tab {
+  font-size: 1.6rem;
+}
+
+.ant-picker {
+  width: 100%;
+  border-radius: 6px;
+}
+
+.ant-btn-primary[disabled] {
+  background-color: #038fde !important;
+  border-color: #038fde !important;
+  color: $white-color;
+  opacity: 0.8;
+
+  &:hover {
+    background-color: #038fde !important;
+    border-color: #038fde !important;
+    color: $white-color;
+  }
+}

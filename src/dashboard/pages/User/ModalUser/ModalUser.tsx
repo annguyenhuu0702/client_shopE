@@ -48,7 +48,7 @@ const beforeUpload = (file: RcFile) => {
 
 const ModalUser: React.FC = () => {
   const dispatch = useDispatch();
-  const currentUser: typeUser = useSelector(
+  const currentUser: typeUser | null = useSelector(
     (state: any) => state.user.currentUser
   );
 
@@ -66,6 +66,13 @@ const ModalUser: React.FC = () => {
 
   const [form] = Form.useForm();
   const [gender, setGender] = useState(1);
+
+  const [disabledSave, setDisabledSave] = useState(true);
+
+  const handleFormChange = () => {
+    const hasErrors = form.getFieldsError().some(({ errors }) => errors.length);
+    setDisabledSave(hasErrors);
+  };
 
   const [loading, setLoading] = useState(false);
   const [imageUrl, setImageUrl] = useState<string>();
@@ -93,10 +100,6 @@ const ModalUser: React.FC = () => {
     </div>
   );
 
-  const onChange = (e: RadioChangeEvent) => {
-    setGender(e.target.value);
-  };
-
   const hideModal = () => {
     dispatch(modalActions.hideModal());
   };
@@ -123,18 +126,20 @@ const ModalUser: React.FC = () => {
     <React.Fragment>
       <Modal
         title={title}
+        visible={isModal}
         destroyOnClose
         centered
-        visible={isModal}
         onOk={form.submit}
         onCancel={hideModal}
         okText="Save"
         cancelText="Back"
         width={1000}
+        okButtonProps={{ disabled: disabledSave }}
       >
         <Form
           initialValues={initialValues}
           form={form}
+          onFieldsChange={handleFormChange}
           labelCol={{ span: 6 }}
           wrapperCol={{ span: 14 }}
           onFinish={onFinish}
@@ -227,7 +232,12 @@ const ModalUser: React.FC = () => {
                 <Input />
               </Form.Item>
               <Form.Item label="Gender" name="gender">
-                <Radio.Group onChange={onChange} value={gender}>
+                <Radio.Group
+                  onChange={(e: RadioChangeEvent) => {
+                    setGender(e.target.value);
+                  }}
+                  value={gender}
+                >
                   <Radio value={true}>Male</Radio>
                   <Radio value={false}>Female</Radio>
                 </Radio.Group>

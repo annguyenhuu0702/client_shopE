@@ -28,7 +28,7 @@ const cx = classNames.bind(styles);
 const TableUser: React.FC = () => {
   const dispatch = useDispatch();
 
-  const isModal: boolean = useSelector((state: any) => state.modal);
+  const isModal: boolean = useSelector((state: any) => state.modal.isModal);
 
   const users: typeUser[] = useSelector(
     (state: any) => state.user.users?.data?.rows
@@ -91,7 +91,7 @@ const TableUser: React.FC = () => {
       dataIndex: 'createdAt',
       key: 'createAt',
       render: (text: string, record: typeUser) => {
-        let date = new Date(record.createdAt).toLocaleDateString('vi-VN');
+        let date = new Date(record.createdAt).toLocaleDateString('en-EN');
 
         return <React.Fragment>{date}</React.Fragment>;
       },

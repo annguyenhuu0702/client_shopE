@@ -10,6 +10,7 @@ export interface typeUser {
   ward: string;
   district: string;
   street: string;
+  birthday: Date;
   avatar: string;
   phone: string;
   gender: boolean;

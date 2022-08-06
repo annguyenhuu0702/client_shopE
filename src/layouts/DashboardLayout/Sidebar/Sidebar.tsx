@@ -50,7 +50,7 @@ const Sidebar: React.FC = () => {
     (state: any) => state.auth.currentUser.data.user
   );
   const location = useLocation();
-  const navagate = useNavigate();
+  const navigate = useNavigate();
   const [collapsed, setCollapsed] = useState<boolean>(false);
   const [items, setItems] = useState<typeMenu[]>(() => {
     return getItems(location.pathname);
@@ -86,7 +86,12 @@ const Sidebar: React.FC = () => {
             }
           />
         </div>
-        <div className={cx('account')}>
+        <div
+          className={cx('account')}
+          onClick={() => {
+            navigate('/admin/profile');
+          }}
+        >
           <div className={cx('avatar')}>
             <img
               src={
@@ -116,7 +121,7 @@ const Sidebar: React.FC = () => {
                       active: item.isActive,
                     })}
                     onClick={() => {
-                      navagate(`${item.path}`);
+                      navigate(`${item.path}`);
                     }}
                   >
                     {item.icon}

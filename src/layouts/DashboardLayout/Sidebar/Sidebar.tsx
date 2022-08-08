@@ -46,8 +46,8 @@ const getItems = (pathname: string): typeMenu[] => {
 
 const Sidebar: React.FC = () => {
   const dispatch = useDispatch();
-  const user: typeUser = useSelector(
-    (state: any) => state.auth.currentUser.data.user
+  const user: typeUser | null = useSelector(
+    (state: any) => state.auth.currentUser.user
   );
   const location = useLocation();
   const navigate = useNavigate();
@@ -95,9 +95,9 @@ const Sidebar: React.FC = () => {
           <div className={cx('avatar')}>
             <img
               src={
-                user.avatar === ''
+                user?.avatar === ''
                   ? 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT65CXLkEWFDlHIHnU1hDnHHVn0GdfzBR7Ejg&usqp=CAU'
-                  : `${user.avatar}`
+                  : `${user?.avatar}`
               }
               alt=""
             />
@@ -105,7 +105,7 @@ const Sidebar: React.FC = () => {
           <div className={cx('info')}>
             {!collapsed && (
               <Link to="/admin/profile" className={cx('name')}>
-                {user.fullname}
+                {user && user.fullname}
               </Link>
             )}
           </div>

@@ -15,9 +15,7 @@ const User: React.FC = () => {
   const dispatch = useDispatch();
 
   const [page, setPage] = useState<number>(1);
-  const count: number = useSelector(
-    (state: any) => state.user.users?.data?.count
-  );
+  const count: number = useSelector((state: any) => state.user.users?.count);
 
   useEffect(() => {
     dispatch(userActions.getAllUser({}));

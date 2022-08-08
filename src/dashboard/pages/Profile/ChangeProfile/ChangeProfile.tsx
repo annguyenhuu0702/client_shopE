@@ -1,32 +1,47 @@
 import React, { useState } from 'react';
 import moment from 'moment';
 import { Button, DatePicker, Form, Input, Radio, RadioChangeEvent } from 'antd';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { typeUser } from '../../../../types/user';
+import { authActions } from '../../../../redux/slice/authSlice';
+import { useNavigate } from 'react-router-dom';
 
 const ChangeProfile: React.FC = () => {
+  const token: string | null = useSelector(
+    (state: any) => state.auth.currentUser.accessToken
+  );
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
   const [form] = Form.useForm();
   const [gender, setGender] = useState(1);
 
+  const currentUser: typeUser | null = useSelector(
+    (state: any) => state.auth.currentUser.user
+  );
   const onFinish = (values: any) => {
-    console.log('Success:', {
+    const data = {
       ...values,
-      birthday: moment(values.birthday).format("YYYY/MM/DD'"),
-    });
+      birthday: new Date(moment(values.birthday).format('YYYY/MM/DD')),
+    };
+    if (token) {
+      dispatch(
+        authActions.changeProfile({
+          token,
+          dispatch,
+          data,
+        })
+      );
+    }
   };
 
   const onFinishFailed = (errorInfo: any) => {
     console.log('Failed:', errorInfo);
   };
 
-  const currentUser: typeUser = useSelector(
-    (state: any) => state.auth.currentUser.data.user
-  );
-
   const initialValues = {
-    fullname: currentUser.fullname,
-    birthday: moment(currentUser.birthday),
-    gender: currentUser.gender,
+    fullname: currentUser && currentUser.fullname,
+    birthday: currentUser && moment(currentUser.birthday),
+    gender: currentUser && currentUser.gender,
   };
 
   const dateFormat = 'YYYY/MM/DD';

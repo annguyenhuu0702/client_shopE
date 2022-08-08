@@ -1,15 +1,28 @@
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { Routes, Route } from 'react-router-dom';
 import { publicRoute, privateRoute } from './routes';
 import { typeRoute } from './types/route';
 import jwtDecoded from 'jwt-decode';
-import React, { Suspense } from 'react';
+import React, { Suspense, useEffect } from 'react';
 import { Spin } from 'antd';
+import { authActions } from './redux/slice/authSlice';
+import { authApi } from './apis/authApi';
 
 const App = () => {
-  const token: string = useSelector(
-    (state: any) => state.auth.currentUser?.data.access_token
+  const dispatch = useDispatch();
+  const token: string | null = useSelector(
+    (state: any) => state.auth?.currentUser?.accessToken
   );
+
+  useEffect(() => {
+    const getProfile = async () => {
+      if (token) {
+        const data = await authApi.getProfile(token, dispatch);
+        dispatch(authActions.getProfile(data.data.data));
+      }
+    };
+    getProfile();
+  }, [dispatch, token]);
 
   const showPrivateRoter = () => {
     try {

@@ -9,6 +9,12 @@ export interface typeLogin {
   password: string;
 }
 
+export interface typeChangProfile {
+  fullname: string;
+  birthday: Date;
+  gender: boolean;
+}
+
 // export interface typeToken {
 //   token: string;
 // }

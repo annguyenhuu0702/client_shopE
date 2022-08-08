@@ -1,17 +1,26 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { typeLogin, typeRegister } from '../../types/auth';
+import { typeChangProfile, typeLogin, typeRegister } from '../../types/auth';
+import { tokenPayload } from '../../types/common';
 import { typeUser } from '../../types/user';
 
 export interface typeAuthState {
   isLoading: boolean;
   isError: boolean;
-  currentUser: typeUser | null;
+  currentUser: typeUserResponse;
+}
+
+export interface typeUserResponse {
+  user: typeUser | null;
+  accessToken: string;
 }
 
 const initialState: typeAuthState = {
   isLoading: false,
   isError: false,
-  currentUser: JSON.parse(localStorage.getItem('mickey:user') || 'null'),
+  currentUser: {
+    user: null,
+    accessToken: JSON.parse(localStorage.getItem('mickey:AT') || 'null'),
+  },
 };
 
 const authSlice = createSlice({
@@ -22,11 +31,15 @@ const authSlice = createSlice({
       state.isLoading = true;
       state.isError = false;
     },
-    registerSuccess: (state, action: PayloadAction<typeUser>) => {
+    registerSuccess: (state, action: PayloadAction<typeUserResponse>) => {
       state.isLoading = false;
       state.isError = false;
-      state.currentUser = action.payload;
-      localStorage.setItem('mickey:user', JSON.stringify(state.currentUser));
+      state.currentUser.user = action.payload.user;
+      state.currentUser.accessToken = action.payload.accessToken;
+      localStorage.setItem(
+        'mickey:AT',
+        JSON.stringify(state.currentUser.accessToken)
+      );
     },
     registerFailed: (state) => {
       state.isLoading = false;
@@ -36,29 +49,56 @@ const authSlice = createSlice({
       state.isLoading = true;
       state.isError = false;
     },
-    loginSuccess: (state, action: PayloadAction<typeUser>) => {
+    loginSuccess: (state, action: PayloadAction<typeUserResponse>) => {
       state.isLoading = false;
       state.isError = false;
-      state.currentUser = action.payload;
-      localStorage.setItem('mickey:user', JSON.stringify(state.currentUser));
+      state.currentUser.user = action.payload.user;
+      state.currentUser.accessToken = action.payload.accessToken;
+      localStorage.setItem(
+        'mickey:AT',
+        JSON.stringify(state.currentUser.accessToken)
+      );
     },
     loginFailed: (state) => {
       state.isLoading = false;
       state.isError = true;
     },
     logoutSuccess: (state) => {
-      state.currentUser = null;
-      localStorage.setItem('mickey:user', JSON.stringify(state.currentUser));
+      state.currentUser.user = null;
+      localStorage.setItem(
+        'mickey:user',
+        JSON.stringify(state.currentUser.user)
+      );
     },
-    getProfile: (state, action: PayloadAction<number>) => {
-      state.isLoading = true;
-    },
-    getProfileSuccess: (state, action: PayloadAction<typeUser>) => {
+    getProfile: (state, action: PayloadAction<typeUser>) => {
       state.isError = false;
       state.isLoading = false;
-      state.currentUser = action.payload;
+      state.currentUser.user = action.payload;
     },
-    getProfileFailed: (state) => {
+    getNewAccessToken: (state, action: PayloadAction<string>) => {
+      state.currentUser.accessToken = action.payload;
+      localStorage.setItem(
+        'mickey:AT',
+        JSON.stringify(state.currentUser.accessToken)
+      );
+    },
+    changeProfile: (
+      state,
+      action: PayloadAction<tokenPayload<typeChangProfile>>
+    ) => {
+      state.isLoading = true;
+    },
+    changeProfileSuccess: (state, action: PayloadAction<typeChangProfile>) => {
+      state.isLoading = false;
+      state.isError = false;
+      if (state.currentUser.user) {
+        state.currentUser.user = {
+          ...state.currentUser.user,
+          ...action.payload,
+        };
+      }
+    },
+    changeProfileFailed: (state) => {
       state.isLoading = false;
       state.isError = true;
     },

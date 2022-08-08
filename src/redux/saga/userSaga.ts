@@ -15,7 +15,7 @@ function* getAllUserSaga({ payload }: PayloadAction<QueryParams>): any {
     });
     const { data, status } = res;
     if (status === STATUS_CODE.SUCCESS) {
-      yield put(userActions.getAllUserSuccess(data));
+      yield put(userActions.getAllUserSuccess(data.data));
     }
   } catch (err) {
     console.log(err);
@@ -30,7 +30,7 @@ function* createUserSaga({ payload }: PayloadAction<typeCreateUser>): any {
     });
     const { data, status } = res;
     if (status === STATUS_CODE.SUCCESS) {
-      yield put(userActions.createUserSuccess(data));
+      yield put(userActions.createUserSuccess(data.data));
       if (payload.resetValues) {
         payload.resetValues();
       }
@@ -56,7 +56,7 @@ function* editUserSaga({ payload }: PayloadAction<typeUser>): any {
     });
     const { data, status } = res;
     if (status === STATUS_CODE.SUCCESS) {
-      yield put(userActions.editUserSuccess(data));
+      yield put(userActions.editUserSuccess(data.data));
       if (payload.resetValues) {
         payload.resetValues();
       }

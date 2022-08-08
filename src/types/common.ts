@@ -4,3 +4,9 @@ export interface QueryParams {
   sortBy?: string;
   sortType?: string;
 }
+
+export interface tokenPayload<T> {
+  token: string;
+  dispatch: any;
+  data: T;
+}

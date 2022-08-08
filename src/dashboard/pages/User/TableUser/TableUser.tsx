@@ -30,9 +30,7 @@ const TableUser: React.FC = () => {
 
   const isModal: boolean = useSelector((state: any) => state.modal.isModal);
 
-  const users: typeUser[] = useSelector(
-    (state: any) => state.user.users?.data?.rows
-  );
+  const users: typeUser[] = useSelector((state: any) => state.user.users?.rows);
   const isLoading: boolean = useSelector((state: any) => state.user.isLoading);
 
   const columns = [
@@ -129,7 +127,7 @@ const TableUser: React.FC = () => {
 
   const handleEditUser = (record: typeUser) => {
     dispatch(modalActions.showModal('Edit user'));
-    dispatch(userActions.setUserEditing(record));
+    dispatch(userActions.setUser(record));
   };
 
   const onFinish = (values: any) => {
@@ -150,7 +148,7 @@ const TableUser: React.FC = () => {
 
   const handleAddNewUser = () => {
     dispatch(modalActions.showModal('Add user'));
-    dispatch(userActions.setUserEditing(null));
+    dispatch(userActions.setUser(null));
   };
   return (
     <React.Fragment>

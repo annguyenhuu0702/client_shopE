@@ -3,32 +3,21 @@ import { QueryParams } from '../../types/common';
 import { typeCreateUser, typeUser } from '../../types/user';
 
 export interface typeUserState {
-  users: typeUsers;
+  users: ResponseUsers;
   isLoading: boolean;
   isError: boolean;
   currentUser: typeUser | null;
 }
 
-export interface responseUser {
-  data: typeUser;
-  message?: string;
-}
-
-export interface typeUsers {
-  data: {
-    rows: typeUser[];
-    count: number;
-  };
-  message?: string;
+export interface ResponseUsers {
+  rows: typeUser[];
+  count: number;
 }
 
 const initialState: typeUserState = {
   users: {
-    data: {
-      rows: [],
-      count: 0,
-    },
-    message: '',
+    rows: [],
+    count: 0,
   },
   isLoading: false,
   isError: false,
@@ -42,10 +31,11 @@ const userSlice = createSlice({
     getAllUser: (state, action: PayloadAction<QueryParams>) => {
       state.isLoading = true;
     },
-    getAllUserSuccess: (state, action: PayloadAction<typeUsers>) => {
+    getAllUserSuccess: (state, action: PayloadAction<ResponseUsers>) => {
       state.isLoading = false;
       state.isError = false;
-      state.users = action.payload;
+      state.users.rows = action.payload.rows;
+      state.users.count = action.payload.count;
     },
     getAllUserFailed: (state) => {
       state.isLoading = false;
@@ -54,27 +44,27 @@ const userSlice = createSlice({
     createUser: (state, action: PayloadAction<typeCreateUser>) => {
       state.isLoading = true;
     },
-    createUserSuccess: (state, action: PayloadAction<responseUser>) => {
+    createUserSuccess: (state, action: PayloadAction<typeUser>) => {
       state.isLoading = false;
       state.isError = false;
-      state.currentUser = action.payload.data;
+      state.currentUser = action.payload;
     },
     createUserFailed: (state) => {
       state.isLoading = false;
       state.isError = true;
     },
-    setUserEditing: (state, action: PayloadAction<typeUser | null>) => {
+    setUser: (state, action: PayloadAction<typeUser | null>) => {
       state.currentUser = action.payload;
     },
     editUser: (state, action: PayloadAction<typeUser>) => {
       state.isLoading = true;
     },
-    editUserSuccess: (state, action: PayloadAction<responseUser>) => {
-      const index = state.users.data.rows.findIndex(
-        (item) => item.id === action.payload.data.id
+    editUserSuccess: (state, action: PayloadAction<typeUser>) => {
+      const index = state.users.rows.findIndex(
+        (item) => item.id === action.payload.id
       );
       if (index !== -1) {
-        state.users.data.rows[index] = action.payload.data;
+        state.users.rows[index] = action.payload;
       }
       state.isLoading = false;
       state.isError = false;

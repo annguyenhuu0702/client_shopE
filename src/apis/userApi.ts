@@ -12,7 +12,7 @@ const create = (user: typeCreateUser) => {
 };
 
 const update = (user: typeUser) => {
-  return instance.post(`${URL_API}/user/update/${user.id}`, user);
+  return instance.put(`${URL_API}/user/update/${user.id}`, user);
 };
 
 export const userApi = {

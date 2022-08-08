@@ -4,7 +4,8 @@ import jwtDecoded from 'jwt-decode';
 import { call, put, takeEvery } from 'redux-saga/effects';
 import { authApi } from '../../apis/authApi';
 import { STATUS_CODE } from '../../constants';
-import { typeLogin, typeRegister } from '../../types/auth';
+import { typeChangProfile, typeLogin, typeRegister } from '../../types/auth';
+import { tokenPayload } from '../../types/common';
 import { authActions } from '../slice/authSlice';
 
 function* registerSaga({ payload }: PayloadAction<typeRegister>): any {
@@ -15,7 +16,7 @@ function* registerSaga({ payload }: PayloadAction<typeRegister>): any {
     });
     const { data, status } = res;
     if (status === STATUS_CODE.CREATED) {
-      yield put(authActions.registerSuccess(data));
+      yield put(authActions.registerSuccess(data.data));
       notification.success({
         message: 'Success',
         description: 'Create account success',
@@ -44,9 +45,9 @@ function* loginSaga({ payload }: PayloadAction<typeLogin>): any {
       return authApi.login(payload);
     });
     const { data, status } = res;
-    const role = (jwtDecoded(data.data.access_token) as any).role;
+    const role = (jwtDecoded(data.data.accessToken) as any).role;
     if (status === STATUS_CODE.CREATED) {
-      yield put(authActions.loginSuccess(data));
+      yield put(authActions.loginSuccess(data.data));
       navigate(role === 'admin' ? '/admin' : '/');
     }
   } catch (error: any) {
@@ -58,21 +59,23 @@ function* loginSaga({ payload }: PayloadAction<typeLogin>): any {
       duration: 3,
     });
     console.log(error);
-    console.log(error);
   }
 }
 
-function* getProfileSaga({ payload }: PayloadAction<number>): any {
+function* changeProfileSaga({
+  payload,
+}: PayloadAction<tokenPayload<typeChangProfile>>): any {
   try {
+    const { token, dispatch, data } = payload;
     const res = yield call(() => {
-      return authApi.getProfile(payload);
+      return authApi.changeProfile(token, dispatch, data);
     });
-    const { data, status } = res;
-    if (status === STATUS_CODE.CREATED) {
-      yield put(authActions.getProfileSuccess(data));
+    const { status } = res;
+    if (status === STATUS_CODE.SUCCESS) {
+      yield put(authActions.changeProfileSuccess(data));
     }
   } catch (error: any) {
-    yield put(authActions.getProfileFailed());
+    yield put(authActions.changeProfileFailed());
     console.log(error);
   }
 }
@@ -80,7 +83,7 @@ function* getProfileSaga({ payload }: PayloadAction<number>): any {
 function* authSaga() {
   yield takeEvery('auth/register', registerSaga);
   yield takeEvery('auth/login', loginSaga);
-  yield takeEvery('auth/getProfile', getProfileSaga);
+  yield takeEvery('auth/changeProfile', changeProfileSaga);
 }
 
 export default authSaga;

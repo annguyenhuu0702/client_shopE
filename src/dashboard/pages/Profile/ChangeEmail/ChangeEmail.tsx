@@ -6,7 +6,7 @@ import { useSelector } from 'react-redux';
 
 const ChangeEmail: React.FC = () => {
   const currentUser: typeUser = useSelector(
-    (state: any) => state.auth.currentUser.data.user
+    (state: any) => state.auth.currentUser.user
   );
   const [form] = Form.useForm();
 

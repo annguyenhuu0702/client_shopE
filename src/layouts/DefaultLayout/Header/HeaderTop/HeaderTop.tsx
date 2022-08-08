@@ -16,7 +16,7 @@ const cx = classNames.bind(styles);
 const HeaderTop: React.FC = () => {
   const dispatch = useDispatch();
   const user: typeUser = useSelector(
-    (state: any) => state.auth?.currentUser?.data?.user
+    (state: any) => state.auth?.currentUser?.user
   );
 
   const handleLogout = () => {

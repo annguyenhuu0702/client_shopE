@@ -1,6 +1,6 @@
-import instance from '../config/configAxios';
+import instance, { apiCallerWithToken } from '../config/configAxios';
 import { URL_API } from '../constants';
-import { typeLogin, typeRegister } from '../types/auth';
+import { typeChangProfile, typeLogin, typeRegister } from '../types/auth';
 
 const register = (user: typeRegister) => {
   return instance.post(`${URL_API}/auth/register`, user);
@@ -14,8 +14,23 @@ export const logout = () => {
   return instance.post(`${URL_API}/auth/logout`);
 };
 
-const getProfile = (id: number) => {
-  return instance.get(`${URL_API}/user/getById/${id}`);
+export const refreshToken = () => {
+  return instance.post(`${URL_API}/auth/refreshToken`);
+};
+
+export const getProfile = (token: string, dispatch: any) => {
+  return apiCallerWithToken(token, dispatch).get(`${URL_API}/auth/getProfile`);
+};
+
+export const changeProfile = (
+  token: string,
+  dispatch: any,
+  data: typeChangProfile
+) => {
+  return apiCallerWithToken(token, dispatch).put(
+    `${URL_API}/auth/changeProfile`,
+    data
+  );
 };
 
 export const authApi = {
@@ -23,4 +38,6 @@ export const authApi = {
   login,
   logout,
   getProfile,
+  refreshToken,
+  changeProfile,
 };

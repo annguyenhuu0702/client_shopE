@@ -48,7 +48,7 @@ const Profile: React.FC = () => {
   }, [position]);
 
   const currentUser: typeUser = useSelector(
-    (state: any) => state.auth.currentUser.data.user
+    (state: any) => state.auth.currentUser.user
   );
 
   return (
@@ -59,15 +59,17 @@ const Profile: React.FC = () => {
           <div className={cx('avatar')}>
             <img
               src={
-                currentUser.avatar === ''
+                currentUser?.avatar === ''
                   ? 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT65CXLkEWFDlHIHnU1hDnHHVn0GdfzBR7Ejg&usqp=CAU'
-                  : `${currentUser.avatar}`
+                  : `${currentUser?.avatar}`
               }
               alt=""
             />
           </div>
           <div className={cx('info')}>
-            <h3 className={cx('name')}>{currentUser.fullname}</h3>
+            <h3 className={cx('name')}>
+              {currentUser && currentUser.fullname}
+            </h3>
           </div>
         </div>
         <div className={cx('content')}>

@@ -65,10 +65,8 @@ const authSlice = createSlice({
     },
     logoutSuccess: (state) => {
       state.currentUser.user = null;
-      localStorage.setItem(
-        'mickey:user',
-        JSON.stringify(state.currentUser.user)
-      );
+      state.currentUser.accessToken = '';
+      localStorage.removeItem('mickey:AT');
     },
     getProfile: (state, action: PayloadAction<typeUser>) => {
       state.isError = false;

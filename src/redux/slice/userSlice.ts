@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { QueryParams } from '../../types/common';
+import { tokenPayload, tokenPayloadNoData } from '../../types/common';
 import { typeCreateUser, typeUser } from '../../types/user';
 
 export interface typeUserState {
@@ -28,7 +28,7 @@ const userSlice = createSlice({
   name: 'user',
   initialState: initialState,
   reducers: {
-    getAllUser: (state, action: PayloadAction<QueryParams>) => {
+    getAllUser: (state, action: PayloadAction<tokenPayloadNoData>) => {
       state.isLoading = true;
     },
     getAllUserSuccess: (state, action: PayloadAction<ResponseUsers>) => {
@@ -41,7 +41,10 @@ const userSlice = createSlice({
       state.isLoading = false;
       state.isError = true;
     },
-    createUser: (state, action: PayloadAction<typeCreateUser>) => {
+    createUser: (
+      state,
+      action: PayloadAction<tokenPayload<typeCreateUser>>
+    ) => {
       state.isLoading = true;
     },
     createUserSuccess: (state, action: PayloadAction<typeUser>) => {
@@ -56,7 +59,7 @@ const userSlice = createSlice({
     setUser: (state, action: PayloadAction<typeUser | null>) => {
       state.currentUser = action.payload;
     },
-    editUser: (state, action: PayloadAction<typeUser>) => {
+    editUser: (state, action: PayloadAction<tokenPayload<typeUser>>) => {
       state.isLoading = true;
     },
     editUserSuccess: (state, action: PayloadAction<typeUser>) => {

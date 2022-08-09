@@ -52,6 +52,10 @@ const ModalUser: React.FC = () => {
     (state: any) => state.user.currentUser
   );
 
+  const token: string | null = useSelector(
+    (state: any) => state.auth.currentUser.accessToken
+  );
+
   const { isModal, title } = useSelector((state: any) => state.modal);
 
   const initialValues = {
@@ -67,8 +71,8 @@ const ModalUser: React.FC = () => {
   const [form] = Form.useForm();
   const [gender, setGender] = useState(1);
 
+  // disable button when not input data
   const [disabledSave, setDisabledSave] = useState(true);
-
   const handleFormChange = () => {
     const hasErrors = form.getFieldsError().some(({ errors }) => errors.length);
     setDisabledSave(hasErrors);
@@ -112,10 +116,21 @@ const ModalUser: React.FC = () => {
     const data = { ...currentUser, ...values };
     const { key, ...others } = data;
     if (currentUser === null) {
-      dispatch(userActions.createUser({ ...values, resetValues }));
-      form.setFieldsValue(initialValues);
+      dispatch(
+        userActions.createUser({
+          token,
+          dispatch,
+          data: { ...values, resetValues },
+        })
+      );
     } else {
-      dispatch(userActions.editUser({ ...others, resetValues }));
+      dispatch(
+        userActions.editUser({
+          token,
+          dispatch,
+          data: { ...others, resetValues },
+        })
+      );
     }
   };
   const onFinishFailed = (errorInfo: any) => {

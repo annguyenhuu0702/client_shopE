@@ -29,6 +29,7 @@ const ChangeProfile: React.FC = () => {
           token,
           dispatch,
           data,
+          navigate,
         })
       );
     }

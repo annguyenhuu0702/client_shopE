@@ -13,13 +13,16 @@ const { Content } = Layout;
 
 const User: React.FC = () => {
   const dispatch = useDispatch();
+  const token: string | null = useSelector(
+    (state: any) => state.auth.currentUser.accessToken
+  );
 
   const [page, setPage] = useState<number>(1);
   const count: number = useSelector((state: any) => state.user.users?.count);
 
   useEffect(() => {
-    dispatch(userActions.getAllUser({}));
-  }, [dispatch]);
+    dispatch(userActions.getAllUser({ params: {}, token, dispatch }));
+  }, [dispatch, token]);
 
   useEffect(() => {
     setPage(1);
@@ -42,7 +45,13 @@ const User: React.FC = () => {
           total={count}
           onChange={(p: number, pageSize: number) => {
             setPage(p);
-            dispatch(userActions.getAllUser({ p, limit: pageSize }));
+            dispatch(
+              userActions.getAllUser({
+                token,
+                dispatch,
+                params: { p, limit: pageSize },
+              })
+            );
           }}
         />
       </div>

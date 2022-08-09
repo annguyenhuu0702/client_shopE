@@ -18,12 +18,12 @@ export const refreshToken = () => {
   return instance.post(`${URL_API}/auth/refreshToken`);
 };
 
-export const getProfile = (token: string, dispatch: any) => {
+export const getProfile = (token: string | null, dispatch: any) => {
   return apiCallerWithToken(token, dispatch).get(`${URL_API}/auth/getProfile`);
 };
 
 export const changeProfile = (
-  token: string,
+  token: string | null,
   dispatch: any,
   data: typeChangProfile
 ) => {

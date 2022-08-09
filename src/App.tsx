@@ -16,10 +16,8 @@ const App = () => {
 
   useEffect(() => {
     const getProfile = async () => {
-      if (token) {
-        const data = await authApi.getProfile(token, dispatch);
-        dispatch(authActions.getProfile(data.data.data));
-      }
+      const data = await authApi.getProfile(token, dispatch);
+      dispatch(authActions.getProfile(data.data.data));
     };
     getProfile();
   }, [dispatch, token]);

@@ -66,13 +66,22 @@ function* changeProfileSaga({
   payload,
 }: PayloadAction<tokenPayload<typeChangProfile>>): any {
   try {
-    const { token, dispatch, data } = payload;
+    const { token, dispatch, data, navigate } = payload;
     const res = yield call(() => {
       return authApi.changeProfile(token, dispatch, data);
     });
     const { status } = res;
     if (status === STATUS_CODE.SUCCESS) {
       yield put(authActions.changeProfileSuccess(data));
+      if (navigate) {
+        navigate('/admin');
+      }
+      notification.success({
+        message: 'Success',
+        description: 'Change profile success',
+        placement: 'bottomRight',
+        duration: 3,
+      });
     }
   } catch (error: any) {
     yield put(authActions.changeProfileFailed());

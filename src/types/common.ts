@@ -6,7 +6,14 @@ export interface QueryParams {
 }
 
 export interface tokenPayload<T> {
-  token: string;
+  token: string | null;
   dispatch: any;
   data: T;
+  navigate?: any;
+}
+
+export interface tokenPayloadNoData {
+  token: string | null;
+  dispatch: any;
+  params?: QueryParams;
 }

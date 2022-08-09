@@ -3,15 +3,16 @@ import { notification } from 'antd';
 import { call, put, takeEvery } from 'redux-saga/effects';
 import { userApi } from '../../apis/userApi';
 import { STATUS_CODE } from '../../constants';
-import { QueryParams } from '../../types/common';
+import { tokenPayload, tokenPayloadNoData } from '../../types/common';
 import { typeCreateUser, typeUser } from '../../types/user';
 import { modalActions } from '../slice/modalSlice';
 import { userActions } from '../slice/userSlice';
 
-function* getAllUserSaga({ payload }: PayloadAction<QueryParams>): any {
+function* getAllUserSaga({ payload }: PayloadAction<tokenPayloadNoData>): any {
   try {
+    const { token, dispatch, params } = payload;
     const res = yield call(() => {
-      return userApi.getAll(payload);
+      return userApi.getAll(token, dispatch, params);
     });
     const { data, status } = res;
     if (status === STATUS_CODE.SUCCESS) {
@@ -23,19 +24,22 @@ function* getAllUserSaga({ payload }: PayloadAction<QueryParams>): any {
   }
 }
 
-function* createUserSaga({ payload }: PayloadAction<typeCreateUser>): any {
+function* createUserSaga({
+  payload,
+}: PayloadAction<tokenPayload<typeCreateUser>>): any {
   try {
+    const { token, dispatch, data } = payload;
     const res = yield call(() => {
-      return userApi.create(payload);
+      return userApi.create(token, dispatch, data);
     });
-    const { data, status } = res;
+    const { data: newData, status } = res;
     if (status === STATUS_CODE.SUCCESS) {
-      yield put(userActions.createUserSuccess(data.data));
-      if (payload.resetValues) {
-        payload.resetValues();
+      yield put(userActions.createUserSuccess(newData.data));
+      if (data.resetValues) {
+        data.resetValues();
       }
       yield put(modalActions.hideModal());
-      yield put(userActions.getAllUser({}));
+      yield put(userActions.getAllUser({ token, dispatch, params: {} }));
     }
   } catch (err) {
     console.log(err);
@@ -49,16 +53,20 @@ function* createUserSaga({ payload }: PayloadAction<typeCreateUser>): any {
   }
 }
 
-function* editUserSaga({ payload }: PayloadAction<typeUser>): any {
+function* editUserSaga({
+  payload,
+}: PayloadAction<tokenPayload<typeUser>>): any {
   try {
+    const { token, dispatch, data } = payload;
+
     const res = yield call(() => {
-      return userApi.update(payload);
+      return userApi.update(token, dispatch, data);
     });
-    const { data, status } = res;
+    const { data: newData, status } = res;
     if (status === STATUS_CODE.SUCCESS) {
-      yield put(userActions.editUserSuccess(data.data));
-      if (payload.resetValues) {
-        payload.resetValues();
+      yield put(userActions.editUserSuccess(newData.data));
+      if (data.resetValues) {
+        data.resetValues();
       }
       yield put(modalActions.hideModal());
     }

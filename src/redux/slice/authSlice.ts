@@ -1,5 +1,11 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { typeChangProfile, typeLogin, typeRegister } from '../../types/auth';
+import {
+  typeChangeEmail,
+  typeChangePassword,
+  typeChangeProfile,
+  typeLogin,
+  typeRegister,
+} from '../../types/auth';
 import { tokenPayload } from '../../types/common';
 import { typeUser } from '../../types/user';
 
@@ -82,11 +88,11 @@ const authSlice = createSlice({
     },
     changeProfile: (
       state,
-      action: PayloadAction<tokenPayload<typeChangProfile>>
+      action: PayloadAction<tokenPayload<typeChangeProfile>>
     ) => {
       state.isLoading = true;
     },
-    changeProfileSuccess: (state, action: PayloadAction<typeChangProfile>) => {
+    changeProfileSuccess: (state, action: PayloadAction<typeChangeProfile>) => {
       state.isLoading = false;
       state.isError = false;
       if (state.currentUser.user) {
@@ -97,6 +103,40 @@ const authSlice = createSlice({
       }
     },
     changeProfileFailed: (state) => {
+      state.isLoading = false;
+      state.isError = true;
+    },
+    changePassword: (
+      state,
+      action: PayloadAction<tokenPayload<typeChangePassword>>
+    ) => {
+      state.isLoading = true;
+    },
+    changePasswordSuccess: (state) => {
+      state.isLoading = false;
+      state.isError = false;
+    },
+    changePasswordFailed: (state) => {
+      state.isLoading = false;
+      state.isError = true;
+    },
+    changeEmail: (
+      state,
+      action: PayloadAction<tokenPayload<typeChangeEmail>>
+    ) => {
+      state.isLoading = true;
+    },
+    changeEmailSuccess: (state, action: PayloadAction<typeChangeEmail>) => {
+      if (state.currentUser.user) {
+        state.currentUser.user = {
+          ...state.currentUser.user,
+          ...action.payload,
+        };
+      }
+      state.isLoading = false;
+      state.isError = false;
+    },
+    changeEmailFailed: (state) => {
       state.isLoading = false;
       state.isError = true;
     },

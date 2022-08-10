@@ -25,7 +25,7 @@ const HeaderTop: React.FC = () => {
   };
 
   return (
-    <div className={cx('header-top')}>
+    <section className={cx('header-top')}>
       <div className={cx('left')}>
         <div className={cx('language')}>
           <img
@@ -112,7 +112,7 @@ const HeaderTop: React.FC = () => {
           </span>
         </div>
       </div>
-    </div>
+    </section>
   );
 };
 

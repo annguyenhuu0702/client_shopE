@@ -47,7 +47,7 @@ const Profile: React.FC = () => {
     );
   }, [position]);
 
-  const currentUser: typeUser = useSelector(
+  const currentUser: typeUser | null = useSelector(
     (state: any) => state.auth.currentUser.user
   );
 
@@ -94,14 +94,14 @@ const Profile: React.FC = () => {
                   <FontAwesomeIcon icon={faEnvelope} />
                   <div className={cx('item')}>
                     <span>Email</span>
-                    <p>{currentUser.email}</p>
+                    <p>{currentUser && currentUser.email}</p>
                   </div>
                 </div>
                 <div className={cx('phone')}>
                   <FontAwesomeIcon icon={faPhone} />
                   <div className={cx('item')}>
                     <span>Phone</span>
-                    <p>{currentUser.phone}</p>
+                    <p>{currentUser && currentUser.phone}</p>
                   </div>
                 </div>
                 <div className={cx('birthday')}>
@@ -109,7 +109,9 @@ const Profile: React.FC = () => {
                   <div className={cx('item')}>
                     <span>Birthday</span>
                     <p className={cx('birthday')}>
-                      {moment(currentUser.birthday).format('YYYY/MM/DD')}
+                      {moment(currentUser && currentUser.birthday).format(
+                        'YYYY/MM/DD'
+                      )}
                     </p>
                   </div>
                 </div>

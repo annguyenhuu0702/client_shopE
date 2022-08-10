@@ -4,7 +4,13 @@ import jwtDecoded from 'jwt-decode';
 import { call, put, takeEvery } from 'redux-saga/effects';
 import { authApi } from '../../apis/authApi';
 import { STATUS_CODE } from '../../constants';
-import { typeChangProfile, typeLogin, typeRegister } from '../../types/auth';
+import {
+  typeChangeEmail,
+  typeChangePassword,
+  typeChangeProfile,
+  typeLogin,
+  typeRegister,
+} from '../../types/auth';
 import { tokenPayload } from '../../types/common';
 import { authActions } from '../slice/authSlice';
 
@@ -64,7 +70,7 @@ function* loginSaga({ payload }: PayloadAction<typeLogin>): any {
 
 function* changeProfileSaga({
   payload,
-}: PayloadAction<tokenPayload<typeChangProfile>>): any {
+}: PayloadAction<tokenPayload<typeChangeProfile>>): any {
   try {
     const { token, dispatch, data, navigate } = payload;
     const res = yield call(() => {
@@ -89,10 +95,66 @@ function* changeProfileSaga({
   }
 }
 
+function* changePasswordSaga({
+  payload,
+}: PayloadAction<tokenPayload<typeChangePassword>>): any {
+  try {
+    const { token, dispatch, data, navigate } = payload;
+    const res = yield call(() => {
+      return authApi.changePassword(token, dispatch, data);
+    });
+    const { status } = res;
+    if (status === STATUS_CODE.SUCCESS) {
+      yield put(authActions.changePasswordSuccess());
+      if (navigate) {
+        navigate('/admin');
+      }
+      notification.success({
+        message: 'Success',
+        description: 'Change password success',
+        placement: 'bottomRight',
+        duration: 3,
+      });
+    }
+  } catch (error: any) {
+    yield put(authActions.changePasswordFailed());
+    console.log(error);
+  }
+}
+
+function* changeEmailSaga({
+  payload,
+}: PayloadAction<tokenPayload<typeChangeEmail>>): any {
+  try {
+    const { token, dispatch, data, navigate } = payload;
+    const res = yield call(() => {
+      return authApi.changeEmail(token, dispatch, data);
+    });
+    const { status } = res;
+    if (status === STATUS_CODE.SUCCESS) {
+      yield put(authActions.changeEmailSuccess(data));
+      if (navigate) {
+        navigate('/admin');
+      }
+      notification.success({
+        message: 'Success',
+        description: 'Change email success',
+        placement: 'bottomRight',
+        duration: 3,
+      });
+    }
+  } catch (error: any) {
+    yield put(authActions.changeEmailFailed());
+    console.log(error);
+  }
+}
+
 function* authSaga() {
   yield takeEvery('auth/register', registerSaga);
   yield takeEvery('auth/login', loginSaga);
   yield takeEvery('auth/changeProfile', changeProfileSaga);
+  yield takeEvery('auth/changePassword', changePasswordSaga);
+  yield takeEvery('auth/changeEmail', changeEmailSaga);
 }
 
 export default authSaga;

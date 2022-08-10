@@ -1,6 +1,12 @@
 import instance, { apiCallerWithToken } from '../config/configAxios';
 import { URL_API } from '../constants';
-import { typeChangProfile, typeLogin, typeRegister } from '../types/auth';
+import {
+  typeChangeEmail,
+  typeChangePassword,
+  typeChangeProfile,
+  typeLogin,
+  typeRegister,
+} from '../types/auth';
 
 const register = (user: typeRegister) => {
   return instance.post(`${URL_API}/auth/register`, user);
@@ -25,10 +31,32 @@ export const getProfile = (token: string | null, dispatch: any) => {
 export const changeProfile = (
   token: string | null,
   dispatch: any,
-  data: typeChangProfile
+  data: typeChangeProfile
 ) => {
   return apiCallerWithToken(token, dispatch).put(
     `${URL_API}/auth/changeProfile`,
+    data
+  );
+};
+
+export const changePassword = (
+  token: string | null,
+  dispatch: any,
+  data: typeChangePassword
+) => {
+  return apiCallerWithToken(token, dispatch).put(
+    `${URL_API}/auth/changePassword`,
+    data
+  );
+};
+
+export const changeEmail = (
+  token: string | null,
+  dispatch: any,
+  data: typeChangeEmail
+) => {
+  return apiCallerWithToken(token, dispatch).put(
+    `${URL_API}/auth/changeEmail`,
     data
   );
 };
@@ -40,4 +68,6 @@ export const authApi = {
   getProfile,
   refreshToken,
   changeProfile,
+  changePassword,
+  changeEmail,
 };

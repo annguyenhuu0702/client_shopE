@@ -23,16 +23,14 @@ const ChangeProfile: React.FC = () => {
       ...values,
       birthday: new Date(moment(values.birthday).format('YYYY/MM/DD')),
     };
-    if (token) {
-      dispatch(
-        authActions.changeProfile({
-          token,
-          dispatch,
-          data,
-          navigate,
-        })
-      );
-    }
+    dispatch(
+      authActions.changeProfile({
+        token,
+        dispatch,
+        data,
+        navigate,
+      })
+    );
   };
 
   const onFinishFailed = (errorInfo: any) => {

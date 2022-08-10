@@ -1,15 +1,34 @@
 import React from 'react';
 
 import { Button, Form, Input } from 'antd';
+import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
+import { authActions } from '../../../../redux/slice/authSlice';
 
 const ChangePassword: React.FC = () => {
+  const token: string | null = useSelector(
+    (state: any) => state.auth.currentUser.accessToken
+  );
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
   const initialValues = {
     currentpassword: '',
     newpassword: '',
     confirmpassword: '',
   };
   const onFinish = (values: any) => {
-    console.log('Success:', values);
+    dispatch(
+      authActions.changePassword({
+        token,
+        dispatch,
+        data: {
+          currentpassword: values.currentpassword,
+          newpassword: values.newpassword,
+        },
+        navigate,
+      })
+    );
   };
 
   const onFinishFailed = (errorInfo: any) => {

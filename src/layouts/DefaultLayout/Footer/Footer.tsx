@@ -18,7 +18,7 @@ const cx = classNames.bind(styles);
 const Footer: React.FC = () => {
   return (
     <section className={cx('footer')}>
-      <div className={cx('footer-top')}>
+      <section className={cx('footer-top')}>
         <div className={cx('wrap')}>
           <div className={cx('left')}>
             <div className={cx('text')}>
@@ -55,8 +55,8 @@ const Footer: React.FC = () => {
             </div>
           </div>
         </div>
-      </div>
-      <div className={cx('footer-center')}>
+      </section>
+      <section className={cx('footer-center')}>
         <div className={cx('content')}>
           <Row>
             <Col xl={6} md={6} xs={12}>
@@ -147,8 +147,8 @@ const Footer: React.FC = () => {
             </Col>
           </Row>
         </div>
-      </div>
-      <div className={cx('footer-bottom')}>
+      </section>
+      <section className={cx('footer-bottom')}>
         <div className={cx('wrap')}>
           <div className={cx('left')}>
             <p>
@@ -174,7 +174,7 @@ const Footer: React.FC = () => {
             />
           </div>
         </div>
-      </div>
+      </section>
     </section>
   );
 };

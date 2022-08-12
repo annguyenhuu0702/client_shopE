@@ -1,104 +1,28 @@
 @import "../../../styles/variable.module.scss";
 
 .wrap {
-  background: #038fde;
+  background: #001529;
+  min-height: 100vh;
+  .menu {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    li {
+      margin-top: 0;
+    }
+  }
   .logo {
-    height: 65px;
     display: flex;
     align-items: center;
-    justify-content: space-around;
-    text-align: center;
-    background: #036;
+    justify-content: center;
+    padding: 10px 0;
+    border-bottom: 1px solid $blue-color;
 
     span {
       color: $white-color;
       font-size: 2rem;
-      cursor: pointer;
     }
-  }
-
-  .account {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 20px 0;
-    margin: 0 10px;
-    border-bottom: 1px solid $blue-color;
-    cursor: pointer;
-
-    .avatar {
-      width: 40px;
-      height: 40px;
-      border-radius: 50%;
-      border: 1px solid #fff;
-      margin-right: 10px;
-      img {
-        width: 100%;
-        height: 100%;
-        border-radius: 50%;
-        object-fit: cover;
-      }
-    }
-
-    .info {
-      .name {
-        color: $white-color;
-        font-size: 1.6rem;
-        text-transform: capitalize;
-      }
-    }
-  }
-
-  .menu {
-    height: calc(100vh - 65px - 81px - 44px);
-    ul {
-      margin: 0;
-      padding: 0;
-      list-style: none;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-
-      .item {
-        width: 100%;
-        padding: 12px 0;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        color: $white-color;
-        cursor: pointer;
-
-        .icon {
-          margin-right: 10px;
-        }
-        a {
-          color: $white-color;
-        }
-      }
-
-      .active {
-        color: $blue-color;
-
-        a {
-          color: $blue-color;
-        }
-      }
-    }
-  }
-
-  .logout {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    height: 44px;
-    background: #036;
-    padding: 10px 0;
-    color: $white-color;
-
-    span {
-      font-size: 1.6rem;
-      text-transform: uppercase;
-      color: $white-color;
+    img {
       margin-left: 10px;
     }
   }

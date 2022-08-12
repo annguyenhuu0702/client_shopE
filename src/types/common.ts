@@ -17,3 +17,10 @@ export interface tokenPayloadNoData {
   dispatch: any;
   params?: QueryParams;
 }
+
+export interface tokenPayloadDelete {
+  token: string | null;
+  dispatch: any;
+  id: number;
+  params?: QueryParams;
+}

@@ -1,9 +1,14 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { tokenPayload, tokenPayloadNoData } from '../../types/common';
+import {
+  tokenPayload,
+  tokenPayloadDelete,
+  tokenPayloadNoData,
+} from '../../types/common';
 import { typeCreateUser, typeUser } from '../../types/user';
 
 export interface typeUserState {
   users: ResponseUsers;
+  page: number;
   isLoading: boolean;
   isError: boolean;
   currentUser: typeUser | null;
@@ -19,6 +24,7 @@ const initialState: typeUserState = {
     rows: [],
     count: 0,
   },
+  page: 1,
   isLoading: false,
   isError: false,
   currentUser: null,
@@ -41,6 +47,9 @@ const userSlice = createSlice({
       state.isLoading = false;
       state.isError = true;
     },
+    setPage: (state, action: PayloadAction<number>) => {
+      state.page = action.payload;
+    },
     createUser: (
       state,
       action: PayloadAction<tokenPayload<typeCreateUser>>
@@ -50,7 +59,13 @@ const userSlice = createSlice({
     createUserSuccess: (state, action: PayloadAction<typeUser>) => {
       state.isLoading = false;
       state.isError = false;
-      state.currentUser = action.payload;
+      state.currentUser = null;
+      state.page = 1;
+      state.users.rows.unshift(action.payload);
+      state.users.count += 1;
+      if (state.users.rows.length > 7) {
+        state.users.rows.splice(state.users.rows.length - 1, 1);
+      }
     },
     createUserFailed: (state) => {
       state.isLoading = false;
@@ -63,18 +78,38 @@ const userSlice = createSlice({
       state.isLoading = true;
     },
     editUserSuccess: (state, action: PayloadAction<typeUser>) => {
+      state.currentUser = null;
+      state.isLoading = false;
+      state.isError = false;
       const index = state.users.rows.findIndex(
         (item) => item.id === action.payload.id
       );
       if (index !== -1) {
         state.users.rows[index] = action.payload;
       }
-      state.isLoading = false;
-      state.isError = false;
     },
     editUserFailed: (state) => {
       state.isLoading = false;
       state.isError = false;
+    },
+    deleteUser: (state, action: PayloadAction<tokenPayloadDelete>) => {
+      state.isLoading = true;
+    },
+    deleteUserSuccess: (state, action: PayloadAction<number>) => {
+      state.isError = false;
+      state.isLoading = false;
+      state.currentUser = null;
+      state.users.rows = state.users.rows.filter(
+        (item) => item.id !== action.payload
+      );
+      state.users.count -= 1;
+      if (state.users.rows.length === 0) {
+        state.page = state.page - 1;
+      }
+    },
+    deleteUserFailed: (state) => {
+      state.isLoading = false;
+      state.isError = true;
     },
   },
 });

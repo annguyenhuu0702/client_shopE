@@ -3,7 +3,11 @@ import { notification } from 'antd';
 import { call, put, takeEvery } from 'redux-saga/effects';
 import { userApi } from '../../apis/userApi';
 import { STATUS_CODE } from '../../constants';
-import { tokenPayload, tokenPayloadNoData } from '../../types/common';
+import {
+  tokenPayload,
+  tokenPayloadDelete,
+  tokenPayloadNoData,
+} from '../../types/common';
 import { typeCreateUser, typeUser } from '../../types/user';
 import { modalActions } from '../slice/modalSlice';
 import { userActions } from '../slice/userSlice';
@@ -39,7 +43,6 @@ function* createUserSaga({
         data.resetValues();
       }
       yield put(modalActions.hideModal());
-      yield put(userActions.getAllUser({ token, dispatch, params: {} }));
     }
   } catch (err) {
     console.log(err);
@@ -58,7 +61,6 @@ function* editUserSaga({
 }: PayloadAction<tokenPayload<typeUser>>): any {
   try {
     const { token, dispatch, data } = payload;
-
     const res = yield call(() => {
       return userApi.update(token, dispatch, data);
     });
@@ -82,10 +84,34 @@ function* editUserSaga({
   }
 }
 
+function* deleteUserSaga({ payload }: PayloadAction<tokenPayloadDelete>): any {
+  try {
+    const { token, dispatch, id, params } = payload;
+    const res = yield call(() => {
+      return userApi.deleteUser(token, dispatch, id);
+    });
+    const { status } = res;
+    if (status === STATUS_CODE.SUCCESS) {
+      yield put(userActions.deleteUserSuccess(id));
+      yield put(userActions.getAllUser({ token, dispatch, params }));
+    }
+  } catch (err) {
+    console.log(err);
+    yield put(userActions.deleteUserFailed());
+    notification.error({
+      message: 'Error',
+      description: 'Error',
+      placement: 'bottomRight',
+      duration: 3,
+    });
+  }
+}
+
 function* userSaga() {
   yield takeEvery('user/getAllUser', getAllUserSaga);
   yield takeEvery('user/createUser', createUserSaga);
   yield takeEvery('user/editUser', editUserSaga);
+  yield takeEvery('user/deleteUser', deleteUserSaga);
 }
 
 export default userSaga;

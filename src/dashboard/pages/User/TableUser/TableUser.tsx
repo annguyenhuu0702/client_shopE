@@ -32,7 +32,10 @@ const TableUser: React.FC = () => {
 
   const users: typeUser[] = useSelector((state: any) => state.user.users?.rows);
   const isLoading: boolean = useSelector((state: any) => state.user.isLoading);
-
+  const page: number = useSelector((state: any) => state.user.page);
+  const token: string | null = useSelector(
+    (state: any) => state.auth.currentUser.accessToken
+  );
   const columns = [
     {
       title: 'Avatar',
@@ -90,11 +93,9 @@ const TableUser: React.FC = () => {
       key: 'createAt',
       render: (text: string, record: typeUser) => {
         let date = new Date(record.createdAt).toLocaleDateString('en-EN');
-
         return <React.Fragment>{date}</React.Fragment>;
       },
     },
-
     {
       title: 'Action',
       dataIndex: 'action',
@@ -112,7 +113,7 @@ const TableUser: React.FC = () => {
               placement="topLeft"
               title={`Do you want to delete this?`}
               onConfirm={() => {
-                confirm();
+                confirm(record);
               }}
               okText="Yes"
               cancelText="No"
@@ -142,8 +143,18 @@ const TableUser: React.FC = () => {
     console.log(`selected ${value}`);
   };
 
-  function confirm() {
-    console.log('hello');
+  function confirm(record: any) {
+    dispatch(
+      userActions.deleteUser({
+        token,
+        dispatch,
+        id: record.id,
+        params: {
+          p: page,
+          limit: 7,
+        },
+      })
+    );
   }
 
   const handleAddNewUser = () => {

@@ -1,147 +1,104 @@
-import React, { useEffect, useState } from 'react';
-import styles from './__sidebar.module.scss';
-
-import classNames from 'classnames/bind';
-import { Layout } from 'antd';
 import {
+  AppstoreOutlined,
+  BarChartOutlined,
+  ContainerOutlined,
+  MailOutlined,
   MenuFoldOutlined,
   MenuUnfoldOutlined,
   UserOutlined,
-  BarChartOutlined,
 } from '@ant-design/icons';
-import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { faPowerOff } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { useDispatch, useSelector } from 'react-redux';
-import { typeUser } from '../../../types/user';
-import { authApi } from '../../../apis/authApi';
-import { authActions } from '../../../redux/slice/authSlice';
-const { Sider } = Layout;
+import { Menu, MenuProps } from 'antd';
+import classNames from 'classnames/bind';
+import React, { useState } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
+import styles from './__sidebar.module.scss';
 
 const cx = classNames.bind(styles);
 
-interface typeMenu {
-  icon: any;
-  name: string;
-  path: string;
-  isActive: boolean;
+type MenuItem = Required<MenuProps>['items'][number];
+
+function getItem(
+  label: React.ReactNode,
+  key: React.Key,
+  icon?: React.ReactNode,
+  children?: MenuItem[],
+  type?: 'group'
+): MenuItem {
+  return {
+    key,
+    icon,
+    children,
+    label,
+    type,
+  } as MenuItem;
 }
 
-const getItems = (pathname: string): typeMenu[] => {
-  return [
-    {
-      icon: <BarChartOutlined className={cx('icon')} />,
-      name: 'Statistical',
-      path: '/admin',
-      isActive: '/admin' === pathname,
-    },
-    {
-      icon: <UserOutlined className={cx('icon')} />,
-      name: 'User',
-      path: '/admin/user',
-      isActive: '/admin/user' === pathname,
-    },
-  ];
-};
+const items: MenuItem[] = [
+  getItem('Statistical', '/admin', <BarChartOutlined />),
+  getItem('User', '/admin/user', <UserOutlined />),
+  getItem('Category', '/admin/category', <ContainerOutlined />),
+  getItem('Navigation One', 'sub1', <MailOutlined />, [
+    getItem('Option 5', '5'),
+    getItem('Option 6', '6'),
+    getItem('Option 7', '7'),
+    getItem('Option 8', '8'),
+  ]),
+  getItem('Navigation Two', 'sub2', <AppstoreOutlined />, [
+    getItem('Option 9', '9'),
+    getItem('Option 10', '10'),
+    getItem('Submenu', 'sub3', null, [
+      getItem('Option 11', '11'),
+      getItem('Option 12', '12'),
+    ]),
+  ]),
+];
 
 const Sidebar: React.FC = () => {
-  const dispatch = useDispatch();
-  const user: typeUser | null = useSelector(
-    (state: any) => state.auth.currentUser.user
-  );
-  const location = useLocation();
+  const [collapsed, setCollapsed] = useState(false);
   const navigate = useNavigate();
-  const [collapsed, setCollapsed] = useState<boolean>(false);
-  const [items, setItems] = useState<typeMenu[]>(() => {
-    return getItems(location.pathname);
-  });
+  const location = useLocation();
 
-  const handleLogout = () => {
-    authApi.logout();
-    dispatch(authActions.logoutSuccess());
+  const handleContent = (item: any) => {
+    navigate(item.key);
   };
 
-  useEffect(() => {
-    setItems(getItems(location.pathname));
-  }, [location.pathname]);
+  const toggleCollapsed = () => {
+    setCollapsed(!collapsed);
+  };
 
   return (
-    <Layout style={{ minHeight: '100vh' }} className={cx('wrap')}>
-      <Sider collapsed={collapsed} onCollapse={(value) => setCollapsed(value)}>
-        <div className={cx('logo')}>
-          {React.createElement(
-            collapsed ? MenuUnfoldOutlined : MenuFoldOutlined,
-            {
-              className: 'trigger',
-              onClick: () => setCollapsed(!collapsed),
-            }
-          )}
+    <div
+      style={collapsed ? { width: '80px' } : { width: '256px' }}
+      className={cx('wrap')}
+    >
+      <div className={cx('logo')}>
+        {collapsed ? (
+          <MenuUnfoldOutlined onClick={toggleCollapsed} />
+        ) : (
+          <MenuFoldOutlined onClick={toggleCollapsed} />
+        )}
+        {!collapsed && (
           <img
             src="https://res.cloudinary.com/diot4imoq/image/upload/v1656990500/supersports/logo_360x_xpnpoo.png"
             alt=""
-            style={
-              collapsed
-                ? { display: 'none' }
-                : { width: '140px', height: '35px' }
-            }
+            style={{
+              width: '150px',
+              height: '35px',
+            }}
           />
-        </div>
-        <div
-          className={cx('account')}
-          onClick={() => {
-            navigate('/admin/profile');
-          }}
-        >
-          <div className={cx('avatar')}>
-            <img
-              src={
-                user?.avatar === ''
-                  ? 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT65CXLkEWFDlHIHnU1hDnHHVn0GdfzBR7Ejg&usqp=CAU'
-                  : `${user?.avatar}`
-              }
-              alt=""
-            />
-          </div>
-          <div className={cx('info')}>
-            {!collapsed && (
-              <Link to="/admin/profile" className={cx('name')}>
-                {user && user.fullname}
-              </Link>
-            )}
-          </div>
-        </div>
-        <div className={cx('menu')}>
-          <ul>
-            {items &&
-              items.map((item: typeMenu, index: number) => {
-                return (
-                  <li
-                    key={index}
-                    className={cx('item', {
-                      active: item.isActive,
-                    })}
-                    onClick={() => {
-                      navigate(`${item.path}`);
-                    }}
-                  >
-                    {item.icon}
-                    <Link
-                      to={item.path}
-                      style={collapsed ? { display: 'none' } : {}}
-                    >
-                      {item.name}
-                    </Link>
-                  </li>
-                );
-              })}
-          </ul>
-        </div>
-        <Link to="/" className={cx('logout')} onClick={handleLogout}>
-          <FontAwesomeIcon icon={faPowerOff} />
-          {!collapsed && <span>Log out</span>}
-        </Link>
-      </Sider>
-    </Layout>
+        )}
+      </div>
+      <Menu
+        className={cx('menu')}
+        style={collapsed ? { width: '80px' } : { width: '256px' }}
+        mode="inline"
+        theme="dark"
+        inlineCollapsed={collapsed}
+        items={items}
+        onClick={handleContent}
+        selectedKeys={[location.pathname]}
+      />
+    </div>
   );
 };
 

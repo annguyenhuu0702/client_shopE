@@ -23,8 +23,15 @@ const update = (token: string | null, dispatch: any, user: typeUser) => {
   );
 };
 
+const deleteUser = (token: string | null, dispatch: any, id: number) => {
+  return apiCallerWithToken(token, dispatch).delete(
+    `${URL_API}/user/delete/${id}`
+  );
+};
+
 export const userApi = {
   getAll,
   create,
   update,
+  deleteUser,
 };

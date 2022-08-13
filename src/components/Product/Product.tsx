@@ -4,7 +4,7 @@ import 'antd/dist/antd.css';
 import styles from './__product.module.scss';
 
 import classNames from 'classnames/bind';
-import { Col, Modal, Rate } from 'antd';
+import { Col, Image, Modal, Rate } from 'antd';
 import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';

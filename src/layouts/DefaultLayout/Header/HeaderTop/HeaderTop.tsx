@@ -5,29 +5,27 @@ import { DownOutlined } from '@ant-design/icons';
 import { faLocationDot } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import classNames from 'classnames/bind';
-import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { typeUser } from '../../../../types/user';
-import { authActions } from '../../../../redux/slice/authSlice';
+import { Link } from 'react-router-dom';
 import { authApi } from '../../../../apis/authApi';
+import { authActions } from '../../../../redux/slice/authSlice';
+import { typeUser } from '../../../../types/user';
 
 const cx = classNames.bind(styles);
 
 const HeaderTop: React.FC = () => {
-  const navigate = useNavigate();
   const dispatch = useDispatch();
   const user: typeUser = useSelector(
-    (state: any) => state.auth?.currentUser?.data?.user
+    (state: any) => state.auth?.currentUser?.user
   );
 
   const handleLogout = () => {
     authApi.logout();
     dispatch(authActions.logoutSuccess());
-    navigate('/');
   };
 
   return (
-    <div className={cx('header-top')}>
+    <section className={cx('header-top')}>
       <div className={cx('left')}>
         <div className={cx('language')}>
           <img
@@ -114,7 +112,7 @@ const HeaderTop: React.FC = () => {
           </span>
         </div>
       </div>
-    </div>
+    </section>
   );
 };
 

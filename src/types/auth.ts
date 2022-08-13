@@ -9,6 +9,17 @@ export interface typeLogin {
   password: string;
 }
 
-// export interface typeToken {
-//   token: string;
-// }
+export interface typeChangeProfile {
+  fullname: string;
+  birthday: Date;
+  gender: boolean;
+}
+
+export interface typeChangePassword {
+  currentpassword: string;
+  newpassword: string;
+}
+
+export interface typeChangeEmail {
+  email: string;
+}

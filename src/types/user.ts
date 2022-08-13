@@ -1,4 +1,5 @@
 import React from 'react';
+import { QueryParams } from './common';
 
 export interface typeUser {
   id?: number;
@@ -10,11 +11,13 @@ export interface typeUser {
   ward: string;
   district: string;
   street: string;
+  birthday: Date;
   avatar: string;
   phone: string;
   gender: boolean;
   isDeleted: boolean;
   key?: React.Key | string | number;
+  resetValues?: Function;
   // votes
   // repVotes
   // productUsers
@@ -31,4 +34,17 @@ export interface typeCreateUser {
   phone: string;
   ward: string;
   gender: boolean;
+  resetValues?: Function;
+}
+
+export interface getAllUserTokenPayload {
+  token: string | null;
+  dispatch: any;
+  params?: getAllUserParams;
+}
+
+export interface getAllUserParams extends QueryParams {
+  fullname?: string;
+  email?: string;
+  phone?: string;
 }

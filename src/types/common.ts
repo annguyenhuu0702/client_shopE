@@ -4,3 +4,17 @@ export interface QueryParams {
   sortBy?: string;
   sortType?: string;
 }
+
+export interface tokenPayload<T> {
+  token: string | null;
+  dispatch: any;
+  data: T;
+  navigate?: any;
+}
+
+export interface tokenPayloadDelete {
+  token: string | null;
+  dispatch: any;
+  id: number;
+  params?: QueryParams;
+}

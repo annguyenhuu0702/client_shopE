@@ -125,7 +125,9 @@ const Category: React.FC = () => {
     <div className={cx('tabs-categories')}>
       <div className={cx('tabs-header')}>
         <h2
-          className={isActive ? `${cx('active')}` : `${cx('title')}`}
+          className={cx('title', {
+            active: isActive,
+          })}
           onClick={() => {
             setIsActive(true);
           }}
@@ -133,7 +135,9 @@ const Category: React.FC = () => {
           NAM
         </h2>
         <h2
-          className={!isActive ? `${cx('active')}` : `${cx('title')}`}
+          className={cx('title', {
+            active: !isActive,
+          })}
           onClick={() => {
             setIsActive(false);
           }}

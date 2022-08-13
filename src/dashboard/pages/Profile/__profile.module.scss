@@ -1,0 +1,87 @@
+@import "../../../styles/variable.module.scss";
+
+.profile {
+  width: 100%;
+  background: $bg-dashboard;
+
+  .layout-content {
+    .banner {
+      display: flex;
+      align-items: center;
+      background: #036;
+      height: 250px;
+      padding-left: 40px;
+      .avatar {
+        width: 90px;
+        height: 90px;
+        margin-right: 20px;
+        img {
+          width: 100%;
+          height: 100%;
+          border-radius: 50%;
+          object-fit: cover;
+        }
+      }
+      .info {
+        h3 {
+          font-size: 2rem;
+          text-transform: capitalize;
+          color: $white-color;
+        }
+      }
+    }
+    .content {
+      .settings {
+        background: $white-color;
+        border: 1px solid transparent;
+        border-radius: 10px;
+        margin: -50px 30px;
+      }
+
+      .contact {
+        background: $white-color;
+        border: 1px solid transparent;
+        border-radius: 10px;
+        margin-top: -50px;
+
+        .content {
+          padding: 0 10px;
+          .title {
+            text-transform: uppercase;
+            font-size: 14px;
+            color: #535353;
+            margin: 0;
+            padding: 16px 0 14px 0;
+          }
+          .email,
+          .phone,
+          .birthday {
+            display: flex;
+
+            svg {
+              color: #8c8c8c;
+              margin-top: 10px;
+            }
+
+            .item {
+              margin-left: 10px;
+              span {
+                font-size: 1.2rem;
+                line-height: 1.5;
+                color: #8c8c8c;
+              }
+              p {
+                font-size: 1.4rem;
+                margin: 0;
+                color: #038fde;
+              }
+              .birthday {
+                color: #545454;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

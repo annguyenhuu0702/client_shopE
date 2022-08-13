@@ -1,7 +1,27 @@
 import React from 'react';
+import styles from './__statistical.module.scss';
+
+import HeaderTitle from '../../components/HeaderTitle';
+import classNames from 'classnames/bind';
+import { Layout, Pagination } from 'antd';
+
+const cx = classNames.bind(styles);
+const { Content } = Layout;
 
 const Statistical: React.FC = () => {
-  return <div>Đây là trang thống kê</div>;
+  return (
+    <section className={cx('statistical')}>
+      <HeaderTitle title="Statistical" />
+      <Content className={cx('layout-content-cus')}>
+        <div className={cx('content-wrap')}>
+          <div className={cx('content')}></div>
+        </div>
+      </Content>
+      <div className={cx('pagination-cus')}>
+        <Pagination />
+      </div>
+    </section>
+  );
 };
 
 export default Statistical;

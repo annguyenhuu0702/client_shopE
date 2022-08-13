@@ -16,15 +16,29 @@ import {
   Table,
 } from 'antd';
 
+import { utils, writeFileXLSX } from 'xlsx';
 import classNames from 'classnames/bind';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { modalActions } from '../../../../redux/slice/modalSlice';
+import { userActions } from '../../../../redux/slice/userSlice';
 import { typeUser } from '../../../../types/user';
 import ModalUser from '../ModalUser';
+import { userApi } from '../../../../apis/userApi';
+import moment from 'moment';
 
 const cx = classNames.bind(styles);
 
 const TableUser: React.FC = () => {
-  const [visible, setVisible] = useState<boolean>(false);
+  const dispatch = useDispatch();
+
+  const isModal: boolean = useSelector((state: any) => state.modal.isModal);
+  const users: typeUser[] = useSelector((state: any) => state.user.users?.rows);
+  const isLoading: boolean = useSelector((state: any) => state.user.isLoading);
+  const page: number = useSelector((state: any) => state.user.page);
+  const token: string | null = useSelector(
+    (state: any) => state.auth.currentUser.accessToken
+  );
+  const [form] = Form.useForm();
 
   const columns = [
     {
@@ -82,25 +96,28 @@ const TableUser: React.FC = () => {
       dataIndex: 'createdAt',
       key: 'createAt',
       render: (text: string, record: typeUser) => {
-        let date = new Date(record.createdAt).toLocaleDateString('vi-VN');
-
+        let date = new Date(record.createdAt).toLocaleDateString('en-EN');
         return <React.Fragment>{date}</React.Fragment>;
       },
     },
-
     {
       title: 'Action',
       dataIndex: 'action',
       key: 'action',
-      render: () => {
+      render: (text: string, record: typeUser) => {
         return (
           <Space size="middle">
-            <EditOutlined className={cx('icon-edit')} />
+            <EditOutlined
+              className={cx('icon-edit')}
+              onClick={() => {
+                handleEditUser(record);
+              }}
+            />
             <Popconfirm
               placement="topLeft"
-              title={`Are you sure to delete user ?`}
+              title={`Do you want to delete this?`}
               onConfirm={() => {
-                confirm();
+                confirm(record);
               }}
               okText="Yes"
               cancelText="No"
@@ -113,37 +130,80 @@ const TableUser: React.FC = () => {
     },
   ];
 
-  const users: typeUser[] = useSelector(
-    (state: any) => state.user.users?.data?.rows
-  );
-  const isLoading: boolean = useSelector((state: any) => state.user.isLoading);
+  const handleEditUser = (record: typeUser) => {
+    dispatch(modalActions.showModal('Edit user'));
+    dispatch(userActions.setUser(record));
+  };
 
   const onFinish = (values: any) => {
-    console.log('Success:', values);
+    dispatch(
+      userActions.getAllUser({
+        token,
+        dispatch,
+        params: {
+          p: page,
+          limit: 7,
+          [values.option]: values.search,
+        },
+      })
+    );
   };
 
   const onFinishFailed = (errorInfo: any) => {
     console.log('Failed:', errorInfo);
   };
 
-  const handleChange = (value: string) => {
-    console.log(`selected ${value}`);
-  };
-
-  function confirm() {
-    console.log('hello');
+  function confirm(record: any) {
+    dispatch(
+      userActions.deleteUser({
+        token,
+        dispatch,
+        id: record.id,
+        params: {
+          p: page,
+          limit: 7,
+        },
+      })
+    );
   }
 
   const handleAddNewUser = () => {
-    setVisible(true);
+    dispatch(modalActions.showModal('Add user'));
+    dispatch(userActions.setUser(null));
+  };
+
+  const handleExportExcel = () => {
+    try {
+      const getAllUser = async () => {
+        const data = await userApi.getAll(token, dispatch);
+        let wb = utils.book_new();
+        let ws = utils.json_to_sheet(
+          data.data.data.rows.map((item: typeUser) => ({
+            fullname: item.fullname,
+            email: item.email,
+            phone: item.phone,
+            city: item.city,
+            birthday: item.birthday,
+            gender: item.gender === true ? 'Nam' : 'Nữ',
+            createdAt: moment(item.createdAt).format('MM/DD/YYYY'),
+          }))
+        );
+        utils.book_append_sheet(wb, ws, 'User');
+        writeFileXLSX(wb, 'User.xlsx');
+      };
+      getAllUser();
+    } catch (error) {
+      console.log(error);
+    }
   };
   return (
     <React.Fragment>
-      <ModalUser visible={visible} setVisible={setVisible} />
+      {isModal && <ModalUser />}
       <Row className={cx('row-cus')}>
         <Col xl={18} style={{ paddingInline: '5px' }}>
           <Form
-            initialValues={{ remember: true, select: 'Fullname' }}
+            form={form}
+            initialValues={{ option: 'fullname', search: '' }}
             onFinish={onFinish}
             onFinishFailed={onFinishFailed}
             autoComplete="off"
@@ -151,15 +211,12 @@ const TableUser: React.FC = () => {
           >
             <div style={{ display: 'flex' }}>
               <Form.Item
-                name="select"
+                name="option"
                 style={{
                   paddingRight: '10px',
                 }}
               >
-                <Select
-                  style={{ width: 120, borderRadius: '5px' }}
-                  onChange={handleChange}
-                >
+                <Select style={{ width: 120, borderRadius: '5px' }}>
                   <Select.Option value="fullname">Fullname</Select.Option>
                   <Select.Option value="email">Email</Select.Option>
                   <Select.Option value="phone">Phone</Select.Option>
@@ -169,11 +226,20 @@ const TableUser: React.FC = () => {
                 <Input placeholder="Search" />
               </Form.Item>
             </div>
-
-            <Form.Item>
-              <Button type="primary" htmlType="submit">
-                Search
-              </Button>
+            <Form.Item shouldUpdate>
+              {() => (
+                <Button
+                  type="primary"
+                  htmlType="submit"
+                  disabled={
+                    !form.isFieldsTouched(false) ||
+                    form.getFieldsError().filter(({ errors }) => errors.length)
+                      .length > 0
+                  }
+                >
+                  Search
+                </Button>
+              )}
             </Form.Item>
           </Form>
         </Col>
@@ -183,7 +249,9 @@ const TableUser: React.FC = () => {
             textAlign: 'center',
           }}
         >
-          <Button type="primary">Export to Excel</Button>
+          <Button type="primary" onClick={handleExportExcel}>
+            Export to Excel
+          </Button>
         </Col>
         <Col
           xl={2}

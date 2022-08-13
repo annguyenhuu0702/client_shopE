@@ -31,7 +31,7 @@ const Register: React.FC = () => {
           <div className={cx('group-input')}>
             <Form
               name="basic"
-              initialValues={{ remember: true }}
+              initialValues={{ fullname: '', email: '', password: '' }}
               onFinish={onFinish}
               onFinishFailed={onFinishFailed}
               autoComplete="off"
@@ -43,6 +43,7 @@ const Register: React.FC = () => {
                 rules={[
                   {
                     required: true,
+                    message: 'Please fill in this field!',
                   },
                 ]}
               >
@@ -54,14 +55,16 @@ const Register: React.FC = () => {
                 rules={[
                   {
                     required: true,
+                    message: 'Please fill in this field!',
+                  },
+                  {
                     type: 'email',
-                    message: 'Please enter a valid email address',
+                    message: 'Please enter a valid email!',
                   },
                 ]}
               >
                 <Input size="large" />
               </Form.Item>
-
               <Form.Item
                 label="Password"
                 name="password"
@@ -79,13 +82,7 @@ const Register: React.FC = () => {
                 <Input.Password size="large" />
               </Form.Item>
 
-              <Form.Item
-                rules={[
-                  {
-                    required: true,
-                  },
-                ]}
-              >
+              <Form.Item>
                 <Button type="primary" htmlType="submit" className="btn-auth">
                   Đăng ký
                 </Button>

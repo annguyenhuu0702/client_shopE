@@ -1,13 +1,11 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import styles from './__navigation.module.scss';
 
 import { faAngleDown } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import classNames from 'classnames/bind';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
-import { categoryActions } from '../../../../redux/slice/categorySlice';
-import { typeCategory } from '../../../../types/category';
 
 const cx = classNames.bind(styles);
 
@@ -15,7 +13,7 @@ const HeaderNavigation: React.FC = () => {
   const dispatch = useDispatch();
 
   return (
-    <div className={cx('navigation')}>
+    <section className={cx('navigation')}>
       <div className={cx('menu')}>
         <ul className={cx('list-item')}>
           <li className={cx('item')}>
@@ -63,7 +61,7 @@ const HeaderNavigation: React.FC = () => {
           <Link to="/uu-dai">Ưu đãi</Link>
         </div>
       </div>
-    </div>
+    </section>
   );
 };
 

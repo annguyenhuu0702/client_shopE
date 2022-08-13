@@ -13,7 +13,7 @@ const cx = classNames.bind(styles);
 const HeaderCenter: React.FC = () => {
   const onSearch = (value: string) => console.log(value);
   return (
-    <div className={cx('header-center')}>
+    <section className={cx('header-center')}>
       <div className={cx('left')}>
         <Link to="/" className={cx('logo')}>
           <img
@@ -40,7 +40,7 @@ const HeaderCenter: React.FC = () => {
           </Link>
         </div>
       </div>
-    </div>
+    </section>
   );
 };
 

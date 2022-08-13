@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-
 import 'antd/dist/antd.css';
 import styles from './__modalUser.module.scss';
 import classNames from 'classnames/bind';
@@ -22,8 +21,10 @@ import {
   RadioChangeEvent,
   Upload,
 } from 'antd';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { userActions } from '../../../../redux/slice/userSlice';
+import { modalActions } from '../../../../redux/slice/modalSlice';
+import { typeUser } from '../../../../types/user';
 
 const cx = classNames.bind(styles);
 
@@ -45,26 +46,37 @@ const beforeUpload = (file: RcFile) => {
   return isJpgOrPng && isLt2M;
 };
 
-interface Props {
-  visible: boolean;
-  setVisible: any;
-}
-
-const initialValues = {
-  remember: true,
-  email: '',
-  fullname: '',
-  gender: true,
-  password: '',
-  phone: '',
-  city: '',
-  avatar: '',
-};
-
-const ModalUser: React.FC<Props> = ({ visible, setVisible }) => {
+const ModalUser: React.FC = () => {
   const dispatch = useDispatch();
+  const currentUser: typeUser | null = useSelector(
+    (state: any) => state.user.currentUser
+  );
+
+  const token: string | null = useSelector(
+    (state: any) => state.auth.currentUser.accessToken
+  );
+
+  const { isModal, title } = useSelector((state: any) => state.modal);
+
+  const initialValues = {
+    email: currentUser ? currentUser.email : '',
+    fullname: currentUser ? currentUser.fullname : '',
+    gender: currentUser ? currentUser.gender : true,
+    password: '',
+    phone: currentUser ? currentUser.phone : '',
+    city: currentUser ? currentUser.city : '',
+    avatar: currentUser ? currentUser.avatar : '',
+  };
+
   const [form] = Form.useForm();
   const [gender, setGender] = useState(1);
+
+  // disable button when not input data
+  const [disabledSave, setDisabledSave] = useState(true);
+  const handleFormChange = () => {
+    const hasErrors = form.getFieldsError().some(({ errors }) => errors.length);
+    setDisabledSave(hasErrors);
+  };
 
   const [loading, setLoading] = useState(false);
   const [imageUrl, setImageUrl] = useState<string>();
@@ -92,44 +104,61 @@ const ModalUser: React.FC<Props> = ({ visible, setVisible }) => {
     </div>
   );
 
-  const onChange = (e: RadioChangeEvent) => {
-    setGender(e.target.value);
-  };
-
   const hideModal = () => {
-    setVisible(false);
+    dispatch(modalActions.hideModal());
   };
 
-  const onFinishModal = (values: any) => {
-    dispatch(userActions.createUser({ ...values }));
-    setVisible(false);
+  const resetValues = () => {
     form.setFieldsValue(initialValues);
   };
 
-  const onFinishFailedModal = (errorInfo: any) => {
+  const onFinish = (values: any) => {
+    const data = { ...currentUser, ...values };
+    const { key, ...others } = data;
+    if (currentUser === null) {
+      dispatch(
+        userActions.createUser({
+          token,
+          dispatch,
+          data: { ...values, resetValues },
+        })
+      );
+    } else {
+      dispatch(
+        userActions.editUser({
+          token,
+          dispatch,
+          data: { ...others, resetValues },
+        })
+      );
+    }
+  };
+  const onFinishFailed = (errorInfo: any) => {
     console.log('Failed:', errorInfo);
   };
 
   return (
     <React.Fragment>
       <Modal
-        title="Add User"
+        title={title}
+        visible={isModal}
         destroyOnClose
         centered
-        visible={visible}
         onOk={form.submit}
         onCancel={hideModal}
         okText="Save"
         cancelText="Back"
         width={1000}
+        okButtonProps={{ disabled: disabledSave }}
       >
         <Form
+          initialValues={initialValues}
           form={form}
+          onFieldsChange={handleFormChange}
           labelCol={{ span: 6 }}
           wrapperCol={{ span: 14 }}
-          initialValues={initialValues}
-          onFinish={onFinishModal}
-          onFinishFailed={onFinishFailedModal}
+          onFinish={onFinish}
+          onFinishFailed={onFinishFailed}
           autoComplete="off"
           labelAlign="left"
         >
@@ -141,25 +170,34 @@ const ModalUser: React.FC<Props> = ({ visible, setVisible }) => {
                 rules={[
                   {
                     required: true,
-                    type: 'email',
                     message: 'Please fill in this field!',
+                  },
+                  {
+                    type: 'email',
+                    message: 'Please enter a valid email!',
                   },
                 ]}
               >
                 <Input />
               </Form.Item>
-              <Form.Item
-                label="Password"
-                name="password"
-                rules={[
-                  {
-                    required: true,
-                    message: 'Please fill in this field!',
-                  },
-                ]}
-              >
-                <Input.Password />
-              </Form.Item>
+              {!currentUser && (
+                <Form.Item
+                  label="Password"
+                  name="password"
+                  rules={[
+                    {
+                      required: true,
+                      message: 'Please fill in this field!',
+                    },
+                    {
+                      min: 6,
+                      message: 'Password must be at least 6 characters',
+                    },
+                  ]}
+                >
+                  <Input.Password />
+                </Form.Item>
+              )}
 
               <Form.Item label="Avatar">
                 <Upload
@@ -208,21 +246,13 @@ const ModalUser: React.FC<Props> = ({ visible, setVisible }) => {
               >
                 <Input />
               </Form.Item>
-
-              <Form.Item
-                label="City"
-                name="city"
-                rules={[
-                  {
-                    required: true,
-                    message: 'Please fill in this field!',
-                  },
-                ]}
-              >
-                <Input />
-              </Form.Item>
               <Form.Item label="Gender" name="gender">
-                <Radio.Group onChange={onChange} value={gender}>
+                <Radio.Group
+                  onChange={(e: RadioChangeEvent) => {
+                    setGender(e.target.value);
+                  }}
+                  value={gender}
+                >
                   <Radio value={true}>Male</Radio>
                   <Radio value={false}>Female</Radio>
                 </Radio.Group>

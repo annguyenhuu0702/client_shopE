@@ -1,7 +1,7 @@
 import React, { useMemo, useState } from 'react';
 import styles from './__profile.module.scss';
 
-import { Col, Row, Tabs } from 'antd';
+import { Col, Image, Row, Tabs } from 'antd';
 import classNames from 'classnames/bind';
 import { useSelector } from 'react-redux';
 import { typeUser } from '../../../types/user';
@@ -57,13 +57,12 @@ const Profile: React.FC = () => {
       <div className={cx('layout-content')}>
         <div className={cx('banner')}>
           <div className={cx('avatar')}>
-            <img
+            <Image
               src={
                 currentUser?.avatar === ''
                   ? 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT65CXLkEWFDlHIHnU1hDnHHVn0GdfzBR7Ejg&usqp=CAU'
                   : `${currentUser?.avatar}`
               }
-              alt=""
             />
           </div>
           <div className={cx('info')}>

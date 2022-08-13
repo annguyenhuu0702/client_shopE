@@ -3,16 +3,18 @@ import { notification } from 'antd';
 import { call, put, takeEvery } from 'redux-saga/effects';
 import { userApi } from '../../apis/userApi';
 import { STATUS_CODE } from '../../constants';
+import { tokenPayload, tokenPayloadDelete } from '../../types/common';
 import {
-  tokenPayload,
-  tokenPayloadDelete,
-  tokenPayloadNoData,
-} from '../../types/common';
-import { typeCreateUser, typeUser } from '../../types/user';
+  getAllUserTokenPayload,
+  typeCreateUser,
+  typeUser,
+} from '../../types/user';
 import { modalActions } from '../slice/modalSlice';
 import { userActions } from '../slice/userSlice';
 
-function* getAllUserSaga({ payload }: PayloadAction<tokenPayloadNoData>): any {
+function* getAllUserSaga({
+  payload,
+}: PayloadAction<getAllUserTokenPayload>): any {
   try {
     const { token, dispatch, params } = payload;
     const res = yield call(() => {

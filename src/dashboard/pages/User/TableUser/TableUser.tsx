@@ -132,15 +132,21 @@ const TableUser: React.FC = () => {
   };
 
   const onFinish = (values: any) => {
-    console.log('Success:', values);
+    dispatch(
+      userActions.getAllUser({
+        token,
+        dispatch,
+        params: {
+          p: page,
+          limit: 7,
+          [values.option]: values.search,
+        },
+      })
+    );
   };
 
   const onFinishFailed = (errorInfo: any) => {
     console.log('Failed:', errorInfo);
-  };
-
-  const handleChange = (value: string) => {
-    console.log(`selected ${value}`);
   };
 
   function confirm(record: any) {
@@ -167,7 +173,7 @@ const TableUser: React.FC = () => {
       <Row className={cx('row-cus')}>
         <Col xl={18} style={{ paddingInline: '5px' }}>
           <Form
-            initialValues={{ select: 'Fullname', search: '' }}
+            initialValues={{ option: 'fullname', search: '' }}
             onFinish={onFinish}
             onFinishFailed={onFinishFailed}
             autoComplete="off"
@@ -175,15 +181,12 @@ const TableUser: React.FC = () => {
           >
             <div style={{ display: 'flex' }}>
               <Form.Item
-                name="select"
+                name="option"
                 style={{
                   paddingRight: '10px',
                 }}
               >
-                <Select
-                  style={{ width: 120, borderRadius: '5px' }}
-                  onChange={handleChange}
-                >
+                <Select style={{ width: 120, borderRadius: '5px' }}>
                   <Select.Option value="fullname">Fullname</Select.Option>
                   <Select.Option value="email">Email</Select.Option>
                   <Select.Option value="phone">Phone</Select.Option>

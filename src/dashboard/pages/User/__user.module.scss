@@ -13,6 +13,7 @@
 
   .layout-content-cus {
     height: calc(100vh - 65px - 65px);
+    overflow-y: auto;
 
     .content-wrap {
       .content {

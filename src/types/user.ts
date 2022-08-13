@@ -1,4 +1,5 @@
 import React from 'react';
+import { QueryParams } from './common';
 
 export interface typeUser {
   id?: number;
@@ -34,4 +35,16 @@ export interface typeCreateUser {
   ward: string;
   gender: boolean;
   resetValues?: Function;
+}
+
+export interface getAllUserTokenPayload {
+  token: string | null;
+  dispatch: any;
+  params?: getAllUserParams;
+}
+
+export interface getAllUserParams extends QueryParams {
+  fullname?: string;
+  email?: string;
+  phone?: string;
 }

@@ -23,7 +23,3 @@ export interface typeChangePassword {
 export interface typeChangeEmail {
   email: string;
 }
-
-// export interface typeToken {
-//   token: string;
-// }

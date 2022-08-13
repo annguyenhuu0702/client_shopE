@@ -12,12 +12,6 @@ export interface tokenPayload<T> {
   navigate?: any;
 }
 
-export interface tokenPayloadNoData {
-  token: string | null;
-  dispatch: any;
-  params?: QueryParams;
-}
-
 export interface tokenPayloadDelete {
   token: string | null;
   dispatch: any;

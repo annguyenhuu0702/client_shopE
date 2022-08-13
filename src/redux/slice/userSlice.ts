@@ -1,10 +1,10 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { tokenPayload, tokenPayloadDelete } from '../../types/common';
 import {
-  tokenPayload,
-  tokenPayloadDelete,
-  tokenPayloadNoData,
-} from '../../types/common';
-import { typeCreateUser, typeUser } from '../../types/user';
+  getAllUserTokenPayload,
+  typeCreateUser,
+  typeUser,
+} from '../../types/user';
 
 export interface typeUserState {
   users: ResponseUsers;
@@ -34,7 +34,7 @@ const userSlice = createSlice({
   name: 'user',
   initialState: initialState,
   reducers: {
-    getAllUser: (state, action: PayloadAction<tokenPayloadNoData>) => {
+    getAllUser: (state, action: PayloadAction<getAllUserTokenPayload>) => {
       state.isLoading = true;
     },
     getAllUserSuccess: (state, action: PayloadAction<ResponseUsers>) => {

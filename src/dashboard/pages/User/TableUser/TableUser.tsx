@@ -1,5 +1,5 @@
 import 'antd/dist/antd.css';
-import React from 'react';
+import React, { useState } from 'react';
 
 import styles from './__tableUser.module.scss';
 
@@ -16,12 +16,15 @@ import {
   Table,
 } from 'antd';
 
+import { utils, writeFileXLSX } from 'xlsx';
 import classNames from 'classnames/bind';
 import { useDispatch, useSelector } from 'react-redux';
 import { modalActions } from '../../../../redux/slice/modalSlice';
 import { userActions } from '../../../../redux/slice/userSlice';
 import { typeUser } from '../../../../types/user';
 import ModalUser from '../ModalUser';
+import { userApi } from '../../../../apis/userApi';
+import moment from 'moment';
 
 const cx = classNames.bind(styles);
 
@@ -29,13 +32,14 @@ const TableUser: React.FC = () => {
   const dispatch = useDispatch();
 
   const isModal: boolean = useSelector((state: any) => state.modal.isModal);
-
   const users: typeUser[] = useSelector((state: any) => state.user.users?.rows);
   const isLoading: boolean = useSelector((state: any) => state.user.isLoading);
   const page: number = useSelector((state: any) => state.user.page);
   const token: string | null = useSelector(
     (state: any) => state.auth.currentUser.accessToken
   );
+  const [form] = Form.useForm();
+
   const columns = [
     {
       title: 'Avatar',
@@ -167,12 +171,38 @@ const TableUser: React.FC = () => {
     dispatch(modalActions.showModal('Add user'));
     dispatch(userActions.setUser(null));
   };
+
+  const handleExportExcel = () => {
+    try {
+      const getAllUser = async () => {
+        const data = await userApi.getAll(token, dispatch);
+        let wb = utils.book_new();
+        let ws = utils.json_to_sheet(
+          data.data.data.rows.map((item: typeUser) => ({
+            fullname: item.fullname,
+            email: item.email,
+            phone: item.phone,
+            city: item.city,
+            birthday: item.birthday,
+            gender: item.gender === true ? 'Nam' : 'Nữ',
+            createdAt: moment(item.createdAt).format('MM/DD/YYYY'),
+          }))
+        );
+        utils.book_append_sheet(wb, ws, 'User');
+        writeFileXLSX(wb, 'User.xlsx');
+      };
+      getAllUser();
+    } catch (error) {
+      console.log(error);
+    }
+  };
   return (
     <React.Fragment>
       {isModal && <ModalUser />}
       <Row className={cx('row-cus')}>
         <Col xl={18} style={{ paddingInline: '5px' }}>
           <Form
+            form={form}
             initialValues={{ option: 'fullname', search: '' }}
             onFinish={onFinish}
             onFinishFailed={onFinishFailed}
@@ -196,11 +226,20 @@ const TableUser: React.FC = () => {
                 <Input placeholder="Search" />
               </Form.Item>
             </div>
-
-            <Form.Item>
-              <Button type="primary" htmlType="submit">
-                Search
-              </Button>
+            <Form.Item shouldUpdate>
+              {() => (
+                <Button
+                  type="primary"
+                  htmlType="submit"
+                  disabled={
+                    !form.isFieldsTouched(false) ||
+                    form.getFieldsError().filter(({ errors }) => errors.length)
+                      .length > 0
+                  }
+                >
+                  Search
+                </Button>
+              )}
             </Form.Item>
           </Form>
         </Col>
@@ -210,7 +249,9 @@ const TableUser: React.FC = () => {
             textAlign: 'center',
           }}
         >
-          <Button type="primary">Export to Excel</Button>
+          <Button type="primary" onClick={handleExportExcel}>
+            Export to Excel
+          </Button>
         </Col>
         <Col
           xl={2}

@@ -109,7 +109,7 @@ const Profile: React.FC = () => {
                     <span>Birthday</span>
                     <p className={cx('birthday')}>
                       {moment(currentUser && currentUser.birthday).format(
-                        'YYYY/MM/DD'
+                        'MM/DD/YYYY'
                       )}
                     </p>
                   </div>

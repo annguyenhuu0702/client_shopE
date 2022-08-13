@@ -21,7 +21,7 @@ const ChangeProfile: React.FC = () => {
   const onFinish = (values: any) => {
     const data = {
       ...values,
-      birthday: new Date(moment(values.birthday).format('YYYY/MM/DD')),
+      birthday: new Date(moment(values.birthday).format('MM/DD/YYYY')),
     };
     dispatch(
       authActions.changeProfile({
@@ -42,8 +42,6 @@ const ChangeProfile: React.FC = () => {
     birthday: currentUser && moment(currentUser.birthday),
     gender: currentUser && currentUser.gender,
   };
-
-  const dateFormat = 'YYYY/MM/DD';
 
   return (
     <Form
@@ -78,7 +76,7 @@ const ChangeProfile: React.FC = () => {
           },
         ]}
       >
-        <DatePicker format={dateFormat} allowClear={false} />
+        <DatePicker format={'MM/DD/YYYY'} allowClear={false} />
       </Form.Item>
 
       <Form.Item label="Gender" name="gender">

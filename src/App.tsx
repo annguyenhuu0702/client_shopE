@@ -15,11 +15,15 @@ const App = () => {
   );
 
   useEffect(() => {
-    const getProfile = async () => {
-      const data = await authApi.getProfile(token, dispatch);
-      dispatch(authActions.getProfile(data.data.data));
-    };
-    getProfile();
+    try {
+      const getProfile = async () => {
+        const data = await authApi.getProfile(token, dispatch);
+        dispatch(authActions.getProfile(data.data.data));
+      };
+      getProfile();
+    } catch (error) {
+      console.log(error);
+    }
   }, [dispatch, token]);
 
   const showPrivateRoter = () => {

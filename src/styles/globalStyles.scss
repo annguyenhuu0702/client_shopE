@@ -5,7 +5,7 @@
   margin: 0 auto;
 }
 
-// hover header language and account
+// hover header language and account home page
 .arrow-up {
   margin-left: 50px;
   width: 0;
@@ -58,7 +58,7 @@
   }
 }
 
-//hover btn text
+//hover btn text home page
 .btn-common {
   display: flex;
   align-items: center;
@@ -87,7 +87,7 @@
   }
 }
 
-// custom input search header
+// custom input search header home page
 .custom-input {
   .ant-input-affix-wrapper-focused {
     outline: none;
@@ -277,5 +277,47 @@
     background-color: #038fde !important;
     border-color: #038fde !important;
     color: $white-color;
+  }
+}
+
+//admin common
+.section-common {
+  width: 100%;
+  background: $bg-dashboard;
+
+  .common-pagination-cus {
+    height: 65px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .common-layout-content-cus {
+    height: calc(100vh - 65px - 65px);
+    overflow-y: auto;
+
+    .common-content-wrap {
+      .common-content {
+        padding: 32px 32px 0 32px;
+      }
+    }
+  }
+}
+
+.common-row-cus {
+  display: flex;
+  .common-form-cus {
+    display: flex;
+    justify-content: space-between;
+  }
+}
+
+.common-content-table {
+  .common-icon-edit {
+    cursor: pointer;
+    color: $blue-color;
+  }
+  .common-icon-delete {
+    color: rgb(255, 77, 79);
   }
 }

@@ -1,7 +1,5 @@
 import 'antd/dist/antd.css';
-import React, { useState } from 'react';
-
-import styles from './__tableUser.module.scss';
+import React from 'react';
 
 import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
 import {
@@ -16,17 +14,14 @@ import {
   Table,
 } from 'antd';
 
-import { utils, writeFileXLSX } from 'xlsx';
-import classNames from 'classnames/bind';
+import moment from 'moment';
 import { useDispatch, useSelector } from 'react-redux';
+import { utils, writeFileXLSX } from 'xlsx';
+import { userApi } from '../../../../apis/userApi';
 import { modalActions } from '../../../../redux/slice/modalSlice';
 import { userActions } from '../../../../redux/slice/userSlice';
 import { typeUser } from '../../../../types/user';
 import ModalUser from '../ModalUser';
-import { userApi } from '../../../../apis/userApi';
-import moment from 'moment';
-
-const cx = classNames.bind(styles);
 
 const TableUser: React.FC = () => {
   const dispatch = useDispatch();
@@ -108,7 +103,7 @@ const TableUser: React.FC = () => {
         return (
           <Space size="middle">
             <EditOutlined
-              className={cx('icon-edit')}
+              className="common-icon-edit"
               onClick={() => {
                 handleEditUser(record);
               }}
@@ -122,7 +117,7 @@ const TableUser: React.FC = () => {
               okText="Yes"
               cancelText="No"
             >
-              <DeleteOutlined className={cx('icon-delete')} />
+              <DeleteOutlined className="common-icon-delete" />
             </Popconfirm>
           </Space>
         );
@@ -199,7 +194,7 @@ const TableUser: React.FC = () => {
   return (
     <React.Fragment>
       {isModal && <ModalUser />}
-      <Row className={cx('row-cus')}>
+      <Row className="common-row-cus">
         <Col xl={18} style={{ paddingInline: '5px' }}>
           <Form
             form={form}
@@ -207,7 +202,7 @@ const TableUser: React.FC = () => {
             onFinish={onFinish}
             onFinishFailed={onFinishFailed}
             autoComplete="off"
-            className={cx('form-cus')}
+            className="common-form-cus"
           >
             <div style={{ display: 'flex' }}>
               <Form.Item
@@ -269,7 +264,7 @@ const TableUser: React.FC = () => {
           </Button>
         </Col>
       </Row>
-      <Row className={cx('content-table')}>
+      <Row className="common-content-table">
         <Col xl={24} md={24} xs={24}>
           <Table
             dataSource={

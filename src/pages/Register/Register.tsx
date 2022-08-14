@@ -22,7 +22,7 @@ const Register: React.FC = () => {
     console.log('Failed:', errorInfo);
   };
   return (
-    <div className={cx('register')}>
+    <section className={cx('register')}>
       <div className="w-1200">
         <div className="container-auth">
           <div className="title">
@@ -30,7 +30,7 @@ const Register: React.FC = () => {
           </div>
           <div className={cx('group-input')}>
             <Form
-              name="basic"
+              name="Register"
               initialValues={{ fullname: '', email: '', password: '' }}
               onFinish={onFinish}
               onFinishFailed={onFinishFailed}
@@ -91,7 +91,7 @@ const Register: React.FC = () => {
           </div>
         </div>
       </div>
-    </div>
+    </section>
   );
 };
 

@@ -22,7 +22,7 @@ const Login: React.FC = () => {
   };
 
   return (
-    <div className={cx('register')}>
+    <section className={cx('login')}>
       <div className="w-1200">
         <div className="container-auth">
           <div className="title">
@@ -30,7 +30,7 @@ const Login: React.FC = () => {
           </div>
           <div className={cx('group-input')}>
             <Form
-              name="basic"
+              name="Login"
               initialValues={{ email: '', password: '' }}
               onFinish={onFinish}
               onFinishFailed={onFinishFailed}
@@ -87,7 +87,7 @@ const Login: React.FC = () => {
           </div>
         </div>
       </div>
-    </div>
+    </section>
   );
 };
 

@@ -66,14 +66,14 @@ const Product: React.FC = () => {
                     pagination={{ clickable: true }}
                   >
                     <SwiperSlide>
-                      <img
+                      <Image
                         src="https://cdn.shopify.com/s/files/1/0456/5070/6581/products/UXC72WA-2_x450.jpg?v=1657686129"
                         alt=""
                         className={cx('img')}
                       />
                     </SwiperSlide>
                     <SwiperSlide>
-                      <img
+                      <Image
                         src="https://cdn.shopify.com/s/files/1/0456/5070/6581/products/UXC72WA-3_x450.jpg?v=1657686130"
                         alt=""
                         className={cx('img')}

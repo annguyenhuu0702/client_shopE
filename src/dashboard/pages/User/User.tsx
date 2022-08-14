@@ -1,14 +1,11 @@
 import React, { useEffect } from 'react';
-import styles from './__user.module.scss';
 
 import { Layout, Pagination } from 'antd';
-import classNames from 'classnames/bind';
 import { useDispatch, useSelector } from 'react-redux';
 import { userActions } from '../../../redux/slice/userSlice';
 import HeaderTitle from '../../components/HeaderTitle';
 import TableUser from './TableUser';
 
-const cx = classNames.bind(styles);
 const { Content } = Layout;
 
 const User: React.FC = () => {
@@ -30,17 +27,17 @@ const User: React.FC = () => {
   }, [dispatch, page, token]);
 
   return (
-    <section className={cx('user')}>
+    <section className="section-common">
       <HeaderTitle title="User" />
-      <Content className={cx('layout-content-cus')}>
-        <div className={cx('content-wrap')}>
-          <div className={cx('content')}>
+      <Content className="common-layout-content-cus">
+        <div className="common-content-wrap">
+          <div className="common-content">
             <TableUser />
           </div>
         </div>
       </Content>
       {page >= 1 && (
-        <div className={cx('pagination-cus')}>
+        <div className="common-pagination-cus">
           <Pagination
             pageSize={7}
             current={page}

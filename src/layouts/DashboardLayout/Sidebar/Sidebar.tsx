@@ -7,6 +7,8 @@ import {
   MenuUnfoldOutlined,
   UserOutlined,
 } from '@ant-design/icons';
+import { faList } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Menu, MenuProps } from 'antd';
 import classNames from 'classnames/bind';
 import React, { useState } from 'react';
@@ -36,13 +38,13 @@ function getItem(
 const items: MenuItem[] = [
   getItem('Statistical', '/admin', <BarChartOutlined />),
   getItem('User', '/admin/user', <UserOutlined />),
-  getItem('Category', '/admin/category', <ContainerOutlined />),
-  getItem('Navigation One', 'sub1', <MailOutlined />, [
-    getItem('Option 5', '5'),
-    getItem('Option 6', '6'),
-    getItem('Option 7', '7'),
-    getItem('Option 8', '8'),
-  ]),
+  getItem(
+    'Navigate Category',
+    'sub-category',
+    <FontAwesomeIcon icon={faList} />,
+    [getItem('Category', '/admin/category')]
+  ),
+
   getItem('Navigation Two', 'sub2', <AppstoreOutlined />, [
     getItem('Option 9', '9'),
     getItem('Option 10', '10'),

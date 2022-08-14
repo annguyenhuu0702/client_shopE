@@ -21,7 +21,6 @@ import {
 import { useDispatch, useSelector } from 'react-redux';
 import { userActions } from '../../../../redux/slice/userSlice';
 import { modalActions } from '../../../../redux/slice/modalSlice';
-import { typeUser } from '../../../../types/user';
 
 const getBase64 = (img: RcFile, callback: (url: string) => void) => {
   const reader = new FileReader();
@@ -41,11 +40,8 @@ const beforeUpload = (file: RcFile) => {
   return isJpgOrPng && isLt2M;
 };
 
-const ModalUser: React.FC = () => {
+const ModalCategory: React.FC = () => {
   const dispatch = useDispatch();
-  const currentUser: typeUser | null = useSelector(
-    (state: any) => state.user.currentUser
-  );
 
   const token: string | null = useSelector(
     (state: any) => state.auth.currentUser.accessToken
@@ -53,15 +49,7 @@ const ModalUser: React.FC = () => {
 
   const { isModal, title } = useSelector((state: any) => state.modal);
 
-  const initialValues = {
-    email: currentUser ? currentUser.email : '',
-    fullname: currentUser ? currentUser.fullname : '',
-    gender: currentUser ? currentUser.gender : true,
-    password: '',
-    phone: currentUser ? currentUser.phone : '',
-    city: currentUser ? currentUser.city : '',
-    avatar: currentUser ? currentUser.avatar : '',
-  };
+  const initialValues = {};
 
   const [form] = Form.useForm();
   const [gender, setGender] = useState(1);
@@ -108,25 +96,7 @@ const ModalUser: React.FC = () => {
   };
 
   const onFinish = (values: any) => {
-    const data = { ...currentUser, ...values };
-    const { key, ...others } = data;
-    if (currentUser === null) {
-      dispatch(
-        userActions.createUser({
-          token,
-          dispatch,
-          data: { ...values, resetValues },
-        })
-      );
-    } else {
-      dispatch(
-        userActions.editUser({
-          token,
-          dispatch,
-          data: { ...others, resetValues },
-        })
-      );
-    }
+    console.log(values);
   };
   const onFinishFailed = (errorInfo: any) => {
     console.log('Failed:', errorInfo);
@@ -163,41 +133,6 @@ const ModalUser: React.FC = () => {
             }}
           >
             <Col xl={12} md={12}>
-              <Form.Item
-                label="Email"
-                name="email"
-                rules={[
-                  {
-                    required: true,
-                    message: 'Please fill in this field!',
-                  },
-                  {
-                    type: 'email',
-                    message: 'Please enter a valid email!',
-                  },
-                ]}
-              >
-                <Input />
-              </Form.Item>
-              {!currentUser && (
-                <Form.Item
-                  label="Password"
-                  name="password"
-                  rules={[
-                    {
-                      required: true,
-                      message: 'Please fill in this field!',
-                    },
-                    {
-                      min: 6,
-                      message: 'Password must be at least 6 characters',
-                    },
-                  ]}
-                >
-                  <Input.Password />
-                </Form.Item>
-              )}
-
               <Form.Item label="Avatar">
                 <Upload
                   name="avatar"
@@ -222,8 +157,8 @@ const ModalUser: React.FC = () => {
             </Col>
             <Col xl={12} md={12}>
               <Form.Item
-                label="Fullname"
-                name="fullname"
+                label="Name"
+                name="name"
                 rules={[
                   {
                     required: true,
@@ -232,29 +167,6 @@ const ModalUser: React.FC = () => {
                 ]}
               >
                 <Input />
-              </Form.Item>
-              <Form.Item
-                label="Phone"
-                name="phone"
-                rules={[
-                  {
-                    required: true,
-                    message: 'Please fill in this field!',
-                  },
-                ]}
-              >
-                <Input />
-              </Form.Item>
-              <Form.Item label="Gender" name="gender">
-                <Radio.Group
-                  onChange={(e: RadioChangeEvent) => {
-                    setGender(e.target.value);
-                  }}
-                  value={gender}
-                >
-                  <Radio value={true}>Male</Radio>
-                  <Radio value={false}>Female</Radio>
-                </Radio.Group>
               </Form.Item>
             </Col>
           </div>
@@ -264,4 +176,4 @@ const ModalUser: React.FC = () => {
   );
 };
 
-export default ModalUser;
+export default ModalCategory;

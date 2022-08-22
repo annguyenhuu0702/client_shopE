@@ -8,16 +8,18 @@ import classNames from 'classnames/bind';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { authApi } from '../../../../apis/authApi';
-import { authActions } from '../../../../redux/slice/authSlice';
-import { typeUser } from '../../../../types/user';
+import {
+  authActions,
+  authSelector,
+  typeAuthState,
+} from '../../../../redux/slice/authSlice';
 
 const cx = classNames.bind(styles);
 
 const HeaderTop: React.FC = () => {
   const dispatch = useDispatch();
-  const user: typeUser = useSelector(
-    (state: any) => state.auth?.currentUser?.user
-  );
+
+  const { currentUser }: typeAuthState = useSelector(authSelector);
 
   const handleLogout = () => {
     authApi.logout();
@@ -71,11 +73,11 @@ const HeaderTop: React.FC = () => {
           </span>
           <div className={cx('wrap-account')}>
             <div className={`${'arrow-up'} ${cx('arrow-custom')}`}></div>
-            {user ? (
+            {currentUser.user ? (
               <div className="block-hover">
                 <div className="block-child">
                   <Link to="" className="text">
-                    Xin chào <b>{user.fullname}</b>
+                    Xin chào <b>{currentUser.user.fullname}</b>
                   </Link>
                 </div>
                 <div className="block-child">

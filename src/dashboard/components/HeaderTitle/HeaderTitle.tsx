@@ -3,9 +3,12 @@ import styles from './__headerTitle.module.scss';
 
 import classNames from 'classnames/bind';
 import { useDispatch, useSelector } from 'react-redux';
-import { typeUser } from '../../../types/user';
 import { authApi } from '../../../apis/authApi';
-import { authActions } from '../../../redux/slice/authSlice';
+import {
+  authActions,
+  authSelector,
+  typeAuthState,
+} from '../../../redux/slice/authSlice';
 import { Link } from 'react-router-dom';
 
 const cx = classNames.bind(styles);
@@ -16,9 +19,8 @@ interface Props {
 
 const HeaderTitle: React.FC<Props> = ({ title }: Props) => {
   const dispatch = useDispatch();
-  const currentUser: typeUser | null = useSelector(
-    (state: any) => state.auth.currentUser.user
-  );
+
+  const { currentUser }: typeAuthState = useSelector(authSelector);
 
   const handleLogout = () => {
     authApi.logout();
@@ -29,7 +31,7 @@ const HeaderTitle: React.FC<Props> = ({ title }: Props) => {
       <span>{title}</span>
       <div className={cx('account')}>
         <h3>
-          Hi, <b>{currentUser && currentUser.fullname}</b>
+          Hi, <b>{currentUser && currentUser.user?.fullname}</b>
         </h3>
         <div className={cx('profile')}>
           <Link to="/admin/profile">My Account</Link>

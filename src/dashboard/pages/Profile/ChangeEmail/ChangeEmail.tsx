@@ -1,29 +1,28 @@
 import React from 'react';
 
 import { Button, Form, Input } from 'antd';
-import { typeUser } from '../../../../types/user';
 import { useDispatch, useSelector } from 'react-redux';
-import { authActions } from '../../../../redux/slice/authSlice';
 import { useNavigate } from 'react-router-dom';
+import {
+  authActions,
+  authSelector,
+  typeAuthState,
+} from '../../../../redux/slice/authSlice';
 
 const ChangeEmail: React.FC = () => {
-  const currentUser: typeUser = useSelector(
-    (state: any) => state.auth.currentUser.user
-  );
-  const token: string | null = useSelector(
-    (state: any) => state.auth.currentUser.accessToken
-  );
+  const { currentUser }: typeAuthState = useSelector(authSelector);
+
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [form] = Form.useForm();
 
   const initialValues = {
-    email: currentUser.email,
+    email: currentUser.user?.email,
   };
   const onFinish = (values: any) => {
     dispatch(
       authActions.changeEmail({
-        token,
+        token: currentUser.accessToken,
         dispatch,
         data: { ...values },
         navigate,

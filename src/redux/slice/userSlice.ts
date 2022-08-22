@@ -5,6 +5,7 @@ import {
   typeCreateUser,
   typeUser,
 } from '../../types/user';
+import { RootState } from '../store';
 
 export interface typeUserState {
   users: ResponseUsers;
@@ -115,4 +116,6 @@ const userSlice = createSlice({
 });
 
 export const userActions = userSlice.actions;
+export const userSelector = (state: RootState) => state.user;
+
 export default userSlice.reducer;

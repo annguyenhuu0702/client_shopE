@@ -18,21 +18,27 @@ import moment from 'moment';
 import { useDispatch, useSelector } from 'react-redux';
 import { utils, writeFileXLSX } from 'xlsx';
 import { userApi } from '../../../../apis/userApi';
-import { modalActions } from '../../../../redux/slice/modalSlice';
-import { userActions } from '../../../../redux/slice/userSlice';
+import {
+  modalActions,
+  modalSelector,
+  modalState,
+} from '../../../../redux/slice/modalSlice';
+import {
+  typeUserState,
+  userActions,
+  userSelector,
+} from '../../../../redux/slice/userSlice';
 import { typeUser } from '../../../../types/user';
 import ModalUser from '../ModalUser';
+import { authSelector, typeAuthState } from '../../../../redux/slice/authSlice';
 
 const TableUser: React.FC = () => {
   const dispatch = useDispatch();
 
-  const isModal: boolean = useSelector((state: any) => state.modal.isModal);
-  const users: typeUser[] = useSelector((state: any) => state.user.users?.rows);
-  const isLoading: boolean = useSelector((state: any) => state.user.isLoading);
-  const page: number = useSelector((state: any) => state.user.page);
-  const token: string | null = useSelector(
-    (state: any) => state.auth.currentUser.accessToken
-  );
+  const { isModal }: modalState = useSelector(modalSelector);
+  const { users, isLoading, page }: typeUserState = useSelector(userSelector);
+  const { currentUser }: typeAuthState = useSelector(authSelector);
+
   const [form] = Form.useForm();
 
   const columns = [
@@ -63,6 +69,9 @@ const TableUser: React.FC = () => {
       title: 'FullName',
       dataIndex: 'fullname',
       key: 'fullname',
+      sorter: (a: typeUser, b: typeUser) => {
+        return a.fullname.localeCompare(b.fullname);
+      },
     },
     {
       title: 'Email',
@@ -133,7 +142,7 @@ const TableUser: React.FC = () => {
   const onFinish = (values: any) => {
     dispatch(
       userActions.getAllUser({
-        token,
+        token: currentUser.accessToken,
         dispatch,
         params: {
           p: page,
@@ -151,7 +160,7 @@ const TableUser: React.FC = () => {
   function confirm(record: any) {
     dispatch(
       userActions.deleteUser({
-        token,
+        token: currentUser.accessToken,
         dispatch,
         id: record.id,
         params: {
@@ -170,7 +179,7 @@ const TableUser: React.FC = () => {
   const handleExportExcel = () => {
     try {
       const getAllUser = async () => {
-        const data = await userApi.getAll(token, dispatch);
+        const data = await userApi.getAll(currentUser.accessToken, dispatch);
         let wb = utils.book_new();
         let ws = utils.json_to_sheet(
           data.data.data.rows.map((item: typeUser) => ({
@@ -269,7 +278,7 @@ const TableUser: React.FC = () => {
           <Table
             dataSource={
               users &&
-              users.map((item: typeUser) => {
+              users.rows.map((item: typeUser) => {
                 return {
                   ...item,
                   key: item.id,

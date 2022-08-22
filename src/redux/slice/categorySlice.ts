@@ -1,5 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { typeCategory } from '../../types/category';
+import { RootState } from '../store';
 
 export interface categoryState {
   category: typeCategory[];
@@ -24,4 +25,6 @@ const CategorySlice = createSlice({
 });
 
 export const categoryActions = CategorySlice.actions;
+export const cateogorySelector = (state: RootState) => state.category;
+
 export default CategorySlice.reducer;

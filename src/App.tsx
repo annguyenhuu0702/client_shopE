@@ -7,30 +7,33 @@ import React, { Suspense, useEffect } from 'react';
 import { Spin } from 'antd';
 import { authActions } from './redux/slice/authSlice';
 import { authApi } from './apis/authApi';
+import { typeAuthState, authSelector } from './redux/slice/authSlice';
 
 const App = () => {
   const dispatch = useDispatch();
-  const token: string | null = useSelector(
-    (state: any) => state.auth?.currentUser?.accessToken
-  );
+
+  const { currentUser }: typeAuthState = useSelector(authSelector);
 
   useEffect(() => {
     try {
       const getProfile = async () => {
-        const data = await authApi.getProfile(token, dispatch);
+        const data = await authApi.getProfile(
+          currentUser.accessToken,
+          dispatch
+        );
         dispatch(authActions.getProfile(data.data.data));
       };
       getProfile();
     } catch (error) {
       console.log(error);
     }
-  }, [dispatch, token]);
+  }, [dispatch, currentUser.accessToken]);
 
   const showPrivateRoter = () => {
     try {
       return (
-        token &&
-        (jwtDecoded(token) as any).role === 'admin' &&
+        currentUser.accessToken &&
+        (jwtDecoded(currentUser.accessToken) as any).role === 'admin' &&
         showRoutes(privateRoute)
       );
     } catch (error) {

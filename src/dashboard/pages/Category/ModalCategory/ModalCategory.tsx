@@ -133,9 +133,33 @@ const ModalCategory: React.FC = () => {
             }}
           >
             <Col xl={12} md={12}>
-              <Form.Item label="Avatar">
+              <Form.Item
+                label="Name"
+                name="name"
+                rules={[
+                  {
+                    required: true,
+                    message: 'Please fill in this field!',
+                  },
+                ]}
+              >
+                <Input />
+              </Form.Item>
+              <Form.Item
+                label="Slug"
+                name="slug"
+                rules={[
+                  {
+                    required: true,
+                    message: 'Please fill in this field!',
+                  },
+                ]}
+              >
+                <Input />
+              </Form.Item>
+              <Form.Item label="Thumbnail">
                 <Upload
-                  name="avatar"
+                  name="thumbnail"
                   listType="picture-card"
                   className="avatar-uploader"
                   showUploadList={false}
@@ -157,8 +181,20 @@ const ModalCategory: React.FC = () => {
             </Col>
             <Col xl={12} md={12}>
               <Form.Item
-                label="Name"
-                name="name"
+                label="Title"
+                name="title"
+                rules={[
+                  {
+                    required: true,
+                    message: 'Please fill in this field!',
+                  },
+                ]}
+              >
+                <Input />
+              </Form.Item>
+              <Form.Item
+                label="Description"
+                name="description"
                 rules={[
                   {
                     required: true,

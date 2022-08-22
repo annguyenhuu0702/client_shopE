@@ -19,8 +19,11 @@ import {
   Upload,
 } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
+import {
+  modalActions,
+  modalSelector,
+} from '../../../../redux/slice/modalSlice';
 import { userActions } from '../../../../redux/slice/userSlice';
-import { modalActions } from '../../../../redux/slice/modalSlice';
 import { typeUser } from '../../../../types/user';
 
 const getBase64 = (img: RcFile, callback: (url: string) => void) => {
@@ -51,7 +54,7 @@ const ModalUser: React.FC = () => {
     (state: any) => state.auth.currentUser.accessToken
   );
 
-  const { isModal, title } = useSelector((state: any) => state.modal);
+  const { isModal, title } = useSelector(modalSelector);
 
   const initialValues = {
     email: currentUser ? currentUser.email : '',

@@ -2,7 +2,12 @@ import React, { useEffect } from 'react';
 
 import { Layout, Pagination } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
-import { userActions } from '../../../redux/slice/userSlice';
+import { authSelector, typeAuthState } from '../../../redux/slice/authSlice';
+import {
+  typeUserState,
+  userActions,
+  userSelector,
+} from '../../../redux/slice/userSlice';
 import HeaderTitle from '../../components/HeaderTitle';
 import TableUser from './TableUser';
 
@@ -10,21 +15,18 @@ const { Content } = Layout;
 
 const User: React.FC = () => {
   const dispatch = useDispatch();
-  const token: string | null = useSelector(
-    (state: any) => state.auth.currentUser.accessToken
-  );
-  const page: number = useSelector((state: any) => state.user.page);
-  const count: number = useSelector((state: any) => state.user.users?.count);
+  const { currentUser }: typeAuthState = useSelector(authSelector);
+  const { users, page }: typeUserState = useSelector(userSelector);
 
   useEffect(() => {
     dispatch(
       userActions.getAllUser({
-        token,
+        token: currentUser.accessToken,
         dispatch,
         params: { p: page, limit: 7 },
       })
     );
-  }, [dispatch, page, token]);
+  }, [dispatch, page, currentUser.accessToken]);
 
   return (
     <section className="section-common">
@@ -41,7 +43,7 @@ const User: React.FC = () => {
           <Pagination
             pageSize={7}
             current={page}
-            total={count}
+            total={users.count}
             onChange={(page: number) => {
               dispatch(userActions.setPage(page));
             }}

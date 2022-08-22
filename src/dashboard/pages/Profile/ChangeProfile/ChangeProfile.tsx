@@ -1,23 +1,22 @@
-import React, { useState } from 'react';
-import moment from 'moment';
 import { Button, DatePicker, Form, Input, Radio, RadioChangeEvent } from 'antd';
+import moment from 'moment';
+import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { typeUser } from '../../../../types/user';
-import { authActions } from '../../../../redux/slice/authSlice';
 import { useNavigate } from 'react-router-dom';
+import {
+  authActions,
+  authSelector,
+  typeAuthState,
+} from '../../../../redux/slice/authSlice';
 
 const ChangeProfile: React.FC = () => {
-  const token: string | null = useSelector(
-    (state: any) => state.auth.currentUser.accessToken
-  );
+  const { currentUser }: typeAuthState = useSelector(authSelector);
+
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [form] = Form.useForm();
   const [gender, setGender] = useState(1);
 
-  const currentUser: typeUser | null = useSelector(
-    (state: any) => state.auth.currentUser.user
-  );
   const onFinish = (values: any) => {
     const data = {
       ...values,
@@ -25,7 +24,7 @@ const ChangeProfile: React.FC = () => {
     };
     dispatch(
       authActions.changeProfile({
-        token,
+        token: currentUser.accessToken,
         dispatch,
         data,
         navigate,
@@ -38,9 +37,9 @@ const ChangeProfile: React.FC = () => {
   };
 
   const initialValues = {
-    fullname: currentUser && currentUser.fullname,
-    birthday: currentUser && moment(currentUser.birthday),
-    gender: currentUser && currentUser.gender,
+    fullname: currentUser.user && currentUser.user.fullname,
+    birthday: currentUser.user && moment(currentUser.user.birthday),
+    gender: currentUser.user && currentUser.user.gender,
   };
 
   return (

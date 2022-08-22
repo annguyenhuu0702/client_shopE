@@ -3,12 +3,15 @@ import React from 'react';
 import { Button, Form, Input } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { authActions } from '../../../../redux/slice/authSlice';
+import {
+  authActions,
+  authSelector,
+  typeAuthState,
+} from '../../../../redux/slice/authSlice';
 
 const ChangePassword: React.FC = () => {
-  const token: string | null = useSelector(
-    (state: any) => state.auth.currentUser.accessToken
-  );
+  const { currentUser }: typeAuthState = useSelector(authSelector);
+
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -20,7 +23,7 @@ const ChangePassword: React.FC = () => {
   const onFinish = (values: any) => {
     dispatch(
       authActions.changePassword({
-        token,
+        token: currentUser.accessToken,
         dispatch,
         data: {
           currentpassword: values.currentpassword,
@@ -91,7 +94,6 @@ const ChangePassword: React.FC = () => {
       >
         <Input.Password />
       </Form.Item>
-
       <Form.Item wrapperCol={{ offset: 20 }} labelAlign="right">
         <Button type="primary" htmlType="submit" size="large">
           Submit

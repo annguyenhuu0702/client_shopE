@@ -4,7 +4,6 @@ import styles from './__profile.module.scss';
 import { Col, Image, Row, Tabs } from 'antd';
 import classNames from 'classnames/bind';
 import { useSelector } from 'react-redux';
-import { typeUser } from '../../../types/user';
 import HeaderTitle from '../../components/HeaderTitle';
 import ChangeEmail from './ChangeEmail';
 import ChangePassword from './ChangePassword';
@@ -16,6 +15,7 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import moment from 'moment';
+import { authSelector, typeAuthState } from '../../../redux/slice/authSlice';
 
 const { TabPane } = Tabs;
 
@@ -47,9 +47,7 @@ const Profile: React.FC = () => {
     );
   }, [position]);
 
-  const currentUser: typeUser | null = useSelector(
-    (state: any) => state.auth.currentUser.user
-  );
+  const { currentUser }: typeAuthState = useSelector(authSelector);
 
   return (
     <section className={cx('profile')}>
@@ -59,15 +57,15 @@ const Profile: React.FC = () => {
           <div className={cx('avatar')}>
             <Image
               src={
-                currentUser?.avatar === ''
+                currentUser.user?.avatar === ''
                   ? 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT65CXLkEWFDlHIHnU1hDnHHVn0GdfzBR7Ejg&usqp=CAU'
-                  : `${currentUser?.avatar}`
+                  : `${currentUser.user?.avatar}`
               }
             />
           </div>
           <div className={cx('info')}>
             <h3 className={cx('name')}>
-              {currentUser && currentUser.fullname}
+              {currentUser && currentUser.user?.fullname}
             </h3>
           </div>
         </div>
@@ -93,14 +91,14 @@ const Profile: React.FC = () => {
                   <FontAwesomeIcon icon={faEnvelope} />
                   <div className={cx('item')}>
                     <span>Email</span>
-                    <p>{currentUser && currentUser.email}</p>
+                    <p>{currentUser && currentUser.user?.email}</p>
                   </div>
                 </div>
                 <div className={cx('phone')}>
                   <FontAwesomeIcon icon={faPhone} />
                   <div className={cx('item')}>
                     <span>Phone</span>
-                    <p>{currentUser && currentUser.phone}</p>
+                    <p>{currentUser && currentUser.user?.phone}</p>
                   </div>
                 </div>
                 <div className={cx('birthday')}>
@@ -108,7 +106,7 @@ const Profile: React.FC = () => {
                   <div className={cx('item')}>
                     <span>Birthday</span>
                     <p className={cx('birthday')}>
-                      {moment(currentUser && currentUser.birthday).format(
+                      {moment(currentUser && currentUser.user?.birthday).format(
                         'MM/DD/YYYY'
                       )}
                     </p>

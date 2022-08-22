@@ -8,6 +8,7 @@ import {
 } from '../../types/auth';
 import { tokenPayload } from '../../types/common';
 import { typeUser } from '../../types/user';
+import { RootState } from '../store';
 
 export interface typeAuthState {
   isLoading: boolean;
@@ -17,7 +18,7 @@ export interface typeAuthState {
 
 export interface typeUserResponse {
   user: typeUser | null;
-  accessToken: string;
+  accessToken: string | null;
 }
 
 const initialState: typeAuthState = {
@@ -144,5 +145,6 @@ const authSlice = createSlice({
 });
 
 export const authActions = authSlice.actions;
+export const authSelector = (state: RootState) => state.auth;
 
 export default authSlice.reducer;

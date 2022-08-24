@@ -11,6 +11,7 @@ const User = lazy(() => import('../dashboard/pages/User'));
 const Statistical = lazy(() => import('../dashboard/pages/Statistical'));
 const Profile = lazy(() => import('../dashboard/pages/Profile'));
 const Category = lazy(() => import('../dashboard/pages/Category'));
+const CategoryType = lazy(() => import('../dashboard/pages/CategoryType'));
 const NotFound = lazy(() => import('../pages/NotFound/NotFound'));
 
 export const publicRoute: typeRoute[] = [
@@ -51,6 +52,11 @@ export const privateRoute: typeRoute[] = [
   {
     path: '/admin/category',
     element: Category,
+    layout: DashboardLayout,
+  },
+  {
+    path: '/admin/category-type',
+    element: CategoryType,
     layout: DashboardLayout,
   },
 ];

@@ -1,8 +1,6 @@
 import {
   AppstoreOutlined,
   BarChartOutlined,
-  ContainerOutlined,
-  MailOutlined,
   MenuFoldOutlined,
   MenuUnfoldOutlined,
   UserOutlined,
@@ -38,12 +36,10 @@ function getItem(
 const items: MenuItem[] = [
   getItem('Statistical', '/admin', <BarChartOutlined />),
   getItem('User', '/admin/user', <UserOutlined />),
-  getItem(
-    'Navigate Category',
-    'sub-category',
-    <FontAwesomeIcon icon={faList} />,
-    [getItem('Category', '/admin/category')]
-  ),
+  getItem('All Category', 'sub-category', <FontAwesomeIcon icon={faList} />, [
+    getItem('CategoryType', '/admin/category-type'),
+    getItem('Category', '/admin/category'),
+  ]),
 
   getItem('Navigation Two', 'sub2', <AppstoreOutlined />, [
     getItem('Option 9', '9'),

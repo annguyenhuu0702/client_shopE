@@ -5,6 +5,7 @@ import userReducer from './slice/userSlice';
 import modalReducer from './slice/modalSlice';
 import rootSaga from './rootSaga';
 import authReducer from './slice/authSlice';
+import categoryTypeReducer from './slice/categoryTypeSlice';
 
 const sagaMiddleware = createSagaMiddleware();
 
@@ -14,6 +15,7 @@ export const store = configureStore({
     category: categoryReducer,
     user: userReducer,
     modal: modalReducer,
+    categoryType: categoryTypeReducer,
   },
   middleware: [sagaMiddleware],
 });

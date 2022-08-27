@@ -15,7 +15,7 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import moment from 'moment';
-import { authSelector, typeAuthState } from '../../../redux/slice/authSlice';
+import { authSelector, authState } from '../../../redux/slice/authSlice';
 
 const { TabPane } = Tabs;
 
@@ -47,7 +47,7 @@ const Profile: React.FC = () => {
     );
   }, [position]);
 
-  const { user }: typeAuthState = useSelector(authSelector);
+  const { user }: authState = useSelector(authSelector);
 
   return (
     <section className={cx('profile')}>

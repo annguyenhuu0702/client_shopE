@@ -7,7 +7,7 @@ import {
   modalSelector,
   modalState,
 } from '../../../../redux/slice/modalSlice';
-import { authSelector, typeAuthState } from '../../../../redux/slice/authSlice';
+import { authSelector, authState } from '../../../../redux/slice/authSlice';
 import {
   categoryTypeActions,
   categoryTypeSelector,
@@ -17,7 +17,7 @@ import {
 const ModalCategoryType: React.FC = () => {
   const dispatch = useDispatch();
 
-  const { user }: typeAuthState = useSelector(authSelector);
+  const { user }: authState = useSelector(authSelector);
   const { isModal, title }: modalState = useSelector(modalSelector);
   const { currentCategoryType }: categoryTypeState =
     useSelector(categoryTypeSelector);

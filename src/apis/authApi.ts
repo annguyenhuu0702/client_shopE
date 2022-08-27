@@ -1,18 +1,18 @@
 import instance, { apiCallerWithToken } from '../config/configAxios';
 import { URL_API } from '../constants';
 import {
-  typeChangeEmail,
-  typeChangePassword,
-  typeChangeProfile,
-  typeLogin,
-  typeRegister,
+  changeEmailDto,
+  changePasswordDto,
+  changeProfileDto,
+  loginDto,
+  registerDto,
 } from '../types/auth';
 
-const register = (user: typeRegister) => {
+const register = (user: registerDto) => {
   return instance.post(`${URL_API}/auth/register`, user);
 };
 
-const login = (user: typeLogin) => {
+const login = (user: loginDto) => {
   return instance.post(`${URL_API}/auth/login`, user);
 };
 
@@ -31,7 +31,7 @@ export const getProfile = (token: string | null, dispatch: any) => {
 export const changeProfile = (
   token: string | null,
   dispatch: any,
-  data: typeChangeProfile
+  data: changeProfileDto
 ) => {
   return apiCallerWithToken(token, dispatch).put(
     `${URL_API}/auth/changeProfile`,
@@ -42,7 +42,7 @@ export const changeProfile = (
 export const changePassword = (
   token: string | null,
   dispatch: any,
-  data: typeChangePassword
+  data: changePasswordDto
 ) => {
   return apiCallerWithToken(token, dispatch).put(
     `${URL_API}/auth/changePassword`,
@@ -53,7 +53,7 @@ export const changePassword = (
 export const changeEmail = (
   token: string | null,
   dispatch: any,
-  data: typeChangeEmail
+  data: changeEmailDto
 ) => {
   return apiCallerWithToken(token, dispatch).put(
     `${URL_API}/auth/changeEmail`,

@@ -24,20 +24,20 @@ import {
   modalState,
 } from '../../../../redux/slice/modalSlice';
 import {
-  typeUserState,
+  userState,
   userActions,
   userSelector,
 } from '../../../../redux/slice/userSlice';
 import { typeUser } from '../../../../types/user';
 import ModalUser from '../ModalUser';
-import { authSelector, typeAuthState } from '../../../../redux/slice/authSlice';
+import { authSelector, authState } from '../../../../redux/slice/authSlice';
 
 const TableUser: React.FC = () => {
   const dispatch = useDispatch();
 
   const { isModal }: modalState = useSelector(modalSelector);
-  const { users, isLoading, page }: typeUserState = useSelector(userSelector);
-  const { user }: typeAuthState = useSelector(authSelector);
+  const { users, isLoading, page }: userState = useSelector(userSelector);
+  const { user }: authState = useSelector(authSelector);
 
   const [form] = Form.useForm();
 

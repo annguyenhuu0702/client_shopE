@@ -7,12 +7,12 @@ import React, { Suspense, useEffect } from 'react';
 import { Spin } from 'antd';
 import { authActions } from './redux/slice/authSlice';
 import { authApi } from './apis/authApi';
-import { typeAuthState, authSelector } from './redux/slice/authSlice';
+import { authState, authSelector } from './redux/slice/authSlice';
 
 const App = () => {
   const dispatch = useDispatch();
 
-  const { user }: typeAuthState = useSelector(authSelector);
+  const { user }: authState = useSelector(authSelector);
 
   useEffect(() => {
     try {
@@ -43,7 +43,7 @@ const App = () => {
     return (
       <React.Fragment>
         {routes.map((route: typeRoute, index: number): React.ReactElement => {
-          let Layout = route.layout;
+          let Layout = route.layout || React.Fragment;
           const Page = route.element;
           return (
             <Route

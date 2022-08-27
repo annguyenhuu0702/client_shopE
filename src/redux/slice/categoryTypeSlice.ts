@@ -2,21 +2,22 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import {
   createCategoryType,
   getAllCategoryTypeParams,
-  responseCategoryType,
+  categoryType,
 } from '../../types/categortType';
 import { tokenPayload, tokenPayloadDelete } from '../../types/common';
 import { RootState } from '../store';
 
 export interface categoryTypeState {
-  categoriesType: categoryType;
-  currentCategoryType: responseCategoryType | null;
+  categoriesType: resCategoryType;
+  currentCategoryType: categoryType | null;
   isLoading: boolean;
   isError: boolean;
   page: number;
+  pageSize: number;
 }
 
-export interface categoryType {
-  rows: responseCategoryType[];
+export interface resCategoryType {
+  rows: categoryType[];
   count: number;
 }
 
@@ -26,6 +27,7 @@ const initialState: categoryTypeState = {
     count: 0,
   },
   page: 1,
+  pageSize: 7,
   isLoading: false,
   isError: false,
   currentCategoryType: null,
@@ -35,13 +37,14 @@ const CategoryTypeSlice = createSlice({
   name: 'categoryType',
   initialState: initialState,
   reducers: {
-    setPage: (state, action: PayloadAction<number>) => {
-      state.page = action.payload;
-    },
-    setCategoryType: (
+    setPage: (
       state,
-      action: PayloadAction<responseCategoryType | null>
+      action: PayloadAction<{ page: number; pageSize: number }>
     ) => {
+      state.page = action.payload.page;
+      state.pageSize = action.payload.pageSize;
+    },
+    setCategoryType: (state, action: PayloadAction<categoryType | null>) => {
       state.currentCategoryType = action.payload;
     },
     getAllCategoryType: (
@@ -50,7 +53,10 @@ const CategoryTypeSlice = createSlice({
     ) => {
       state.isLoading = true;
     },
-    getAllCategoryTypeSuccess: (state, action: PayloadAction<categoryType>) => {
+    getAllCategoryTypeSuccess: (
+      state,
+      action: PayloadAction<resCategoryType>
+    ) => {
       state.isLoading = false;
       state.isError = false;
       state.categoriesType.rows = action.payload.rows;
@@ -66,10 +72,7 @@ const CategoryTypeSlice = createSlice({
     ) => {
       state.isLoading = true;
     },
-    createCategoryTypeSuccess: (
-      state,
-      action: PayloadAction<responseCategoryType>
-    ) => {
+    createCategoryTypeSuccess: (state, action: PayloadAction<categoryType>) => {
       state.isLoading = false;
       state.isError = false;
       state.categoriesType.rows.unshift(action.payload);
@@ -88,14 +91,11 @@ const CategoryTypeSlice = createSlice({
     },
     editCategoryType: (
       state,
-      action: PayloadAction<tokenPayload<responseCategoryType>>
+      action: PayloadAction<tokenPayload<categoryType>>
     ) => {
       state.isLoading = true;
     },
-    editCategoryTypeSuccess: (
-      state,
-      action: PayloadAction<responseCategoryType>
-    ) => {
+    editCategoryTypeSuccess: (state, action: PayloadAction<categoryType>) => {
       state.isLoading = false;
       state.isError = false;
       const index = state.categoriesType.rows.findIndex(

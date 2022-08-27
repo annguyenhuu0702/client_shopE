@@ -16,6 +16,11 @@ const NotFound = lazy(() => import('../pages/NotFound/NotFound'));
 
 export const publicRoute: typeRoute[] = [
   {
+    path: '*',
+    element: NotFound,
+    layout: null,
+  },
+  {
     path: '/',
     element: HomePage,
     layout: DefaultLayout,

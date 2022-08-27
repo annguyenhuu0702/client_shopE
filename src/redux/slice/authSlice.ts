@@ -1,27 +1,27 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import {
-  typeChangeEmail,
-  typeChangePassword,
-  typeChangeProfile,
-  typeLogin,
-  typeRegister,
+  changeEmailDto,
+  changePasswordDto,
+  changeProfileDto,
+  loginDto,
+  registerDto,
 } from '../../types/auth';
 import { tokenPayload } from '../../types/common';
 import { typeUser } from '../../types/user';
 import { RootState } from '../store';
 
-export interface typeAuthState {
+export interface authState {
   isLoading: boolean;
   isError: boolean;
-  user: typeUserResponse;
+  user: resUser;
 }
 
-export interface typeUserResponse {
+export interface resUser {
   user: typeUser | null;
   accessToken: string | null;
 }
 
-const initialState: typeAuthState = {
+const initialState: authState = {
   isLoading: false,
   isError: false,
   user: {
@@ -34,11 +34,11 @@ const authSlice = createSlice({
   name: 'auth',
   initialState: initialState,
   reducers: {
-    register: (state, action: PayloadAction<typeRegister>) => {
+    register: (state, action: PayloadAction<registerDto>) => {
       state.isLoading = true;
       state.isError = false;
     },
-    registerSuccess: (state, action: PayloadAction<typeUserResponse>) => {
+    registerSuccess: (state, action: PayloadAction<resUser>) => {
       state.isLoading = false;
       state.isError = false;
       state.user.user = action.payload.user;
@@ -49,11 +49,11 @@ const authSlice = createSlice({
       state.isLoading = false;
       state.isError = true;
     },
-    login: (state, action: PayloadAction<typeLogin>) => {
+    login: (state, action: PayloadAction<loginDto>) => {
       state.isLoading = true;
       state.isError = false;
     },
-    loginSuccess: (state, action: PayloadAction<typeUserResponse>) => {
+    loginSuccess: (state, action: PayloadAction<resUser>) => {
       state.isLoading = false;
       state.isError = false;
       state.user.user = action.payload.user;
@@ -80,11 +80,11 @@ const authSlice = createSlice({
     },
     changeProfile: (
       state,
-      action: PayloadAction<tokenPayload<typeChangeProfile>>
+      action: PayloadAction<tokenPayload<changeProfileDto>>
     ) => {
       state.isLoading = true;
     },
-    changeProfileSuccess: (state, action: PayloadAction<typeChangeProfile>) => {
+    changeProfileSuccess: (state, action: PayloadAction<changeProfileDto>) => {
       state.isLoading = false;
       state.isError = false;
       if (state.user.user) {
@@ -100,7 +100,7 @@ const authSlice = createSlice({
     },
     changePassword: (
       state,
-      action: PayloadAction<tokenPayload<typeChangePassword>>
+      action: PayloadAction<tokenPayload<changePasswordDto>>
     ) => {
       state.isLoading = true;
     },
@@ -114,11 +114,11 @@ const authSlice = createSlice({
     },
     changeEmail: (
       state,
-      action: PayloadAction<tokenPayload<typeChangeEmail>>
+      action: PayloadAction<tokenPayload<changeEmailDto>>
     ) => {
       state.isLoading = true;
     },
-    changeEmailSuccess: (state, action: PayloadAction<typeChangeEmail>) => {
+    changeEmailSuccess: (state, action: PayloadAction<changeEmailDto>) => {
       if (state.user.user) {
         state.user.user = {
           ...state.user.user,

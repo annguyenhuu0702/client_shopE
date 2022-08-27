@@ -26,7 +26,7 @@ export interface typeUser {
   // userRoles
 }
 
-export interface typeCreateUser {
+export interface createUser {
   email: string;
   password: string;
   avatar?: string;

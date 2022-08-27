@@ -1,7 +1,7 @@
 import { apiCallerWithToken } from '../config/configAxios';
 import { URL_API } from '../constants';
 import { QueryParams } from '../types/common';
-import { typeCreateUser, typeUser } from '../types/user';
+import { createUser, typeUser } from '../types/user';
 
 const getAll = (token: string | null, dispatch: any, params?: QueryParams) => {
   return apiCallerWithToken(token, dispatch).get(`${URL_API}/user/getAll`, {
@@ -9,7 +9,7 @@ const getAll = (token: string | null, dispatch: any, params?: QueryParams) => {
   });
 };
 
-const create = (token: string | null, dispatch: any, user: typeCreateUser) => {
+const create = (token: string | null, dispatch: any, user: createUser) => {
   return apiCallerWithToken(token, dispatch).post(
     `${URL_API}/user/create`,
     user

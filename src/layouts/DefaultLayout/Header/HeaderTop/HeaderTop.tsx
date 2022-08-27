@@ -11,7 +11,7 @@ import { authApi } from '../../../../apis/authApi';
 import {
   authActions,
   authSelector,
-  typeAuthState,
+  authState,
 } from '../../../../redux/slice/authSlice';
 
 const cx = classNames.bind(styles);
@@ -19,7 +19,7 @@ const cx = classNames.bind(styles);
 const HeaderTop: React.FC = () => {
   const dispatch = useDispatch();
 
-  const { user }: typeAuthState = useSelector(authSelector);
+  const { user }: authState = useSelector(authSelector);
 
   const handleLogout = () => {
     authApi.logout();

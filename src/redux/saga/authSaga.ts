@@ -5,16 +5,16 @@ import { call, put, takeEvery } from 'redux-saga/effects';
 import { authApi } from '../../apis/authApi';
 import { STATUS_CODE } from '../../constants';
 import {
-  typeChangeEmail,
-  typeChangePassword,
-  typeChangeProfile,
-  typeLogin,
-  typeRegister,
+  changeEmailDto,
+  changePasswordDto,
+  changeProfileDto,
+  loginDto,
+  registerDto,
 } from '../../types/auth';
 import { tokenPayload } from '../../types/common';
 import { authActions } from '../slice/authSlice';
 
-function* registerSaga({ payload }: PayloadAction<typeRegister>): any {
+function* registerSaga({ payload }: PayloadAction<registerDto>): any {
   try {
     const { navigate }: any = payload;
     const res = yield call(() => {
@@ -44,7 +44,7 @@ function* registerSaga({ payload }: PayloadAction<typeRegister>): any {
   }
 }
 
-function* loginSaga({ payload }: PayloadAction<typeLogin>): any {
+function* loginSaga({ payload }: PayloadAction<loginDto>): any {
   try {
     const { navigate }: any = payload;
     const res = yield call(() => {
@@ -70,7 +70,7 @@ function* loginSaga({ payload }: PayloadAction<typeLogin>): any {
 
 function* changeProfileSaga({
   payload,
-}: PayloadAction<tokenPayload<typeChangeProfile>>): any {
+}: PayloadAction<tokenPayload<changeProfileDto>>): any {
   try {
     const { token, dispatch, data, navigate } = payload;
     const res = yield call(() => {
@@ -97,7 +97,7 @@ function* changeProfileSaga({
 
 function* changePasswordSaga({
   payload,
-}: PayloadAction<tokenPayload<typeChangePassword>>): any {
+}: PayloadAction<tokenPayload<changePasswordDto>>): any {
   try {
     const { token, dispatch, data, navigate } = payload;
     const res = yield call(() => {
@@ -124,7 +124,7 @@ function* changePasswordSaga({
 
 function* changeEmailSaga({
   payload,
-}: PayloadAction<tokenPayload<typeChangeEmail>>): any {
+}: PayloadAction<tokenPayload<changeEmailDto>>): any {
   try {
     const { token, dispatch, data, navigate } = payload;
     const res = yield call(() => {

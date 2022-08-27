@@ -6,11 +6,11 @@ import { useNavigate } from 'react-router-dom';
 import {
   authActions,
   authSelector,
-  typeAuthState,
+  authState,
 } from '../../../../redux/slice/authSlice';
 
 const ChangeProfile: React.FC = () => {
-  const { user }: typeAuthState = useSelector(authSelector);
+  const { user }: authState = useSelector(authSelector);
 
   const navigate = useNavigate();
   const dispatch = useDispatch();

@@ -1,7 +1,7 @@
 import { category } from './category';
 import { QueryParams } from './common';
 
-export interface responseCategoryType {
+export interface categoryType {
   id?: string | number;
   name: string;
   categories: category[];
@@ -21,4 +21,4 @@ export interface createCategoryType {
   resetValues?: Function;
 }
 
-export interface updateCategoryType extends responseCategoryType {}
+export interface updateCategoryType extends categoryType {}

@@ -15,7 +15,7 @@ import { utils, writeFileXLSX } from 'xlsx';
 
 import { useDispatch, useSelector } from 'react-redux';
 import { categoryTypeApi } from '../../../../apis/categoryTypeApi';
-import { authSelector, typeAuthState } from '../../../../redux/slice/authSlice';
+import { authSelector, authState } from '../../../../redux/slice/authSlice';
 import {
   categoryTypeActions,
   categoryTypeSelector,
@@ -26,7 +26,7 @@ import {
   modalSelector,
   modalState,
 } from '../../../../redux/slice/modalSlice';
-import { responseCategoryType } from '../../../../types/categortType';
+import { categoryType } from '../../../../types/categortType';
 import ModalCategoryType from '../ModalCategoryType';
 import moment from 'moment';
 
@@ -35,7 +35,7 @@ const TableCategoryType: React.FC = () => {
   const [form] = Form.useForm();
 
   const { isModal }: modalState = useSelector(modalSelector);
-  const { user }: typeAuthState = useSelector(authSelector);
+  const { user }: authState = useSelector(authSelector);
 
   const { categoriesType, page, isLoading }: categoryTypeState =
     useSelector(categoryTypeSelector);
@@ -50,7 +50,7 @@ const TableCategoryType: React.FC = () => {
       title: 'Action',
       dataIndex: 'action',
       key: 'action',
-      render: (text: string, record: responseCategoryType) => {
+      render: (text: string, record: categoryType) => {
         return (
           <Space size="middle">
             <EditOutlined
@@ -107,7 +107,7 @@ const TableCategoryType: React.FC = () => {
     dispatch(categoryTypeActions.setCategoryType(null));
   };
 
-  const handleEditCategoryType = (record: responseCategoryType) => {
+  const handleEditCategoryType = (record: categoryType) => {
     dispatch(modalActions.showModal('Edit Category Type'));
     dispatch(categoryTypeActions.setCategoryType(record));
   };
@@ -118,7 +118,7 @@ const TableCategoryType: React.FC = () => {
         const data = await categoryTypeApi.getAll();
         let wb = utils.book_new();
         let ws = utils.json_to_sheet(
-          data.data.data.rows.map((item: responseCategoryType) => ({
+          data.data.data.rows.map((item: categoryType) => ({
             name: item.name,
             createdAt: moment(item.createdAt).format('MM/DD/YYYY'),
           }))
@@ -205,14 +205,12 @@ const TableCategoryType: React.FC = () => {
       <Row className="common-content-table">
         <Col xl={24} md={24} xs={24}>
           <Table
-            dataSource={categoriesType.rows.map(
-              (item: responseCategoryType) => {
-                return {
-                  ...item,
-                  key: item.id,
-                };
-              }
-            )}
+            dataSource={categoriesType.rows.map((item: categoryType) => {
+              return {
+                ...item,
+                key: item.id,
+              };
+            })}
             loading={isLoading}
             columns={columns}
             pagination={false}

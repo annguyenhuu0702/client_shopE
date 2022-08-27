@@ -25,7 +25,7 @@ import {
   modalSelector,
   modalState,
 } from '../../../../redux/slice/modalSlice';
-import { authSelector, typeAuthState } from '../../../../redux/slice/authSlice';
+import { authSelector, authState } from '../../../../redux/slice/authSlice';
 
 const getBase64 = (img: RcFile, callback: (url: string) => void) => {
   const reader = new FileReader();
@@ -48,7 +48,7 @@ const beforeUpload = (file: RcFile) => {
 const ModalCategory: React.FC = () => {
   const dispatch = useDispatch();
 
-  const { user }: typeAuthState = useSelector(authSelector);
+  const { user }: authState = useSelector(authSelector);
   const { isModal, title }: modalState = useSelector(modalSelector);
 
   const initialValues = {};

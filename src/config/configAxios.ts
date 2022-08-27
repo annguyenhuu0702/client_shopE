@@ -43,6 +43,7 @@ export const apiCallerWithToken = (token: string | null, dispatch: any) => {
         }
       } catch (error: any) {
         const { data, status } = error.response;
+        console.log(error.message);
         if (
           status === STATUS_CODE.UNAUTHORIZED ||
           data.message === 'Login now'

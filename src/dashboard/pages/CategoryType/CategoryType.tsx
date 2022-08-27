@@ -1,5 +1,4 @@
 import React, { useEffect } from 'react';
-
 import { Layout, Pagination } from 'antd';
 import HeaderTitle from '../../components/HeaderTitle';
 import TableCategoryType from './TableCategoryType/TableCategoryType';
@@ -14,17 +13,17 @@ const { Content } = Layout;
 
 const CategoryType: React.FC = () => {
   const dispatch = useDispatch();
-  const { categoriesType, page }: categoryTypeState =
+  const { categoriesType, page, pageSize }: categoryTypeState =
     useSelector(categoryTypeSelector);
 
   useEffect(() => {
     dispatch(
       categoryTypeActions.getAllCategoryType({
         p: page,
-        limit: 7,
+        limit: pageSize,
       })
     );
-  }, [dispatch, page]);
+  }, [dispatch, page, pageSize]);
 
   return (
     <section className="section-common">
@@ -36,18 +35,18 @@ const CategoryType: React.FC = () => {
           </div>
         </div>
       </Content>
-      {page >= 1 && (
-        <div className="common-pagination-cus">
-          <Pagination
-            pageSize={7}
-            current={page}
-            total={categoriesType.count}
-            onChange={(page: number) => {
-              dispatch(categoryTypeActions.setPage(page));
-            }}
-          />
-        </div>
-      )}
+      <div className="common-pagination-cus">
+        <Pagination
+          pageSize={pageSize}
+          current={page}
+          total={categoriesType.count}
+          onChange={(page: number, pageSize: number) => {
+            dispatch(categoryTypeActions.setPage({ page, pageSize }));
+          }}
+          showSizeChanger={true}
+          pageSizeOptions={[7, 50, 100, 200]}
+        />
+      </div>
     </section>
   );
 };

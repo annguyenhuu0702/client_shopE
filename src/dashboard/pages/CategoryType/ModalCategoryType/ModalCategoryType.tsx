@@ -8,16 +8,22 @@ import {
   modalState,
 } from '../../../../redux/slice/modalSlice';
 import { authSelector, typeAuthState } from '../../../../redux/slice/authSlice';
-import { categoryTypeActions } from '../../../../redux/slice/categoryTypeSlice';
+import {
+  categoryTypeActions,
+  categoryTypeSelector,
+  categoryTypeState,
+} from '../../../../redux/slice/categoryTypeSlice';
 
 const ModalCategoryType: React.FC = () => {
   const dispatch = useDispatch();
 
-  const { currentUser }: typeAuthState = useSelector(authSelector);
+  const { user }: typeAuthState = useSelector(authSelector);
   const { isModal, title }: modalState = useSelector(modalSelector);
+  const { currentCategoryType }: categoryTypeState =
+    useSelector(categoryTypeSelector);
 
   const initialValues = {
-    name: '',
+    name: currentCategoryType ? currentCategoryType.name : '',
   };
 
   const [form] = Form.useForm();
@@ -38,14 +44,25 @@ const ModalCategoryType: React.FC = () => {
   };
 
   const onFinish = (values: any) => {
-    dispatch(
-      categoryTypeActions.createCategoryType({
-        token: currentUser.accessToken,
-        dispatch,
-        data: { ...values, resetValues },
-      })
-    );
-    console.log(values);
+    const data = { ...currentCategoryType, ...values };
+    const { key, ...others } = data;
+    if (currentCategoryType === null) {
+      dispatch(
+        categoryTypeActions.createCategoryType({
+          token: user.accessToken,
+          dispatch,
+          data: { ...values, resetValues },
+        })
+      );
+    } else {
+      dispatch(
+        categoryTypeActions.editCategoryType({
+          token: user.accessToken,
+          dispatch,
+          data: { ...others, resetValues },
+        })
+      );
+    }
   };
   const onFinishFailed = (errorInfo: any) => {
     console.log('Failed:', errorInfo);

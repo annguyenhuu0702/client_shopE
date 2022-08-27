@@ -1,15 +1,15 @@
-import { typeCategory } from './category';
+import { category } from './category';
 import { QueryParams } from './common';
 
 export interface responseCategoryType {
   id?: string | number;
   name: string;
-  categories: typeCategory[];
+  categories: category[];
   key?: React.Key | string | number;
   createdAt?: string;
   updatedAt?: string;
-  resetValues?: Function;
   isDeleted: boolean;
+  resetValues?: Function;
 }
 
 export interface getAllCategoryTypeParams extends QueryParams {
@@ -20,3 +20,5 @@ export interface createCategoryType {
   name: string;
   resetValues?: Function;
 }
+
+export interface updateCategoryType extends responseCategoryType {}

@@ -17,4 +17,6 @@ export interface tokenPayloadDelete {
   dispatch: any;
   id: number;
   params?: QueryParams;
+  p?: number;
+  limit?: number;
 }

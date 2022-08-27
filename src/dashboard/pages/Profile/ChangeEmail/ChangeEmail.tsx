@@ -10,19 +10,19 @@ import {
 } from '../../../../redux/slice/authSlice';
 
 const ChangeEmail: React.FC = () => {
-  const { currentUser }: typeAuthState = useSelector(authSelector);
+  const { user }: typeAuthState = useSelector(authSelector);
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [form] = Form.useForm();
 
   const initialValues = {
-    email: currentUser.user?.email,
+    email: user.user?.email,
   };
   const onFinish = (values: any) => {
     dispatch(
       authActions.changeEmail({
-        token: currentUser.accessToken,
+        token: user.accessToken,
         dispatch,
         data: { ...values },
         navigate,

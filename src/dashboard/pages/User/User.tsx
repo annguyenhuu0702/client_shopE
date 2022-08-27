@@ -15,18 +15,18 @@ const { Content } = Layout;
 
 const User: React.FC = () => {
   const dispatch = useDispatch();
-  const { currentUser }: typeAuthState = useSelector(authSelector);
+  const { user }: typeAuthState = useSelector(authSelector);
   const { users, page }: typeUserState = useSelector(userSelector);
 
   useEffect(() => {
     dispatch(
       userActions.getAllUser({
-        token: currentUser.accessToken,
+        token: user.accessToken,
         dispatch,
         params: { p: page, limit: 7 },
       })
     );
-  }, [dispatch, page, currentUser.accessToken]);
+  }, [dispatch, page, user.accessToken]);
 
   return (
     <section className="section-common">

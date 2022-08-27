@@ -1,4 +1,3 @@
-import React from 'react';
 import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
 import {
   Button,
@@ -11,25 +10,32 @@ import {
   Space,
   Table,
 } from 'antd';
+import React from 'react';
+import { utils, writeFileXLSX } from 'xlsx';
 
 import { useDispatch, useSelector } from 'react-redux';
+import { categoryTypeApi } from '../../../../apis/categoryTypeApi';
+import { authSelector, typeAuthState } from '../../../../redux/slice/authSlice';
+import {
+  categoryTypeActions,
+  categoryTypeSelector,
+  categoryTypeState,
+} from '../../../../redux/slice/categoryTypeSlice';
 import {
   modalActions,
   modalSelector,
   modalState,
 } from '../../../../redux/slice/modalSlice';
-import {
-  categoryTypeSelector,
-  categoryTypeState,
-} from '../../../../redux/slice/categoryTypeSlice';
 import { responseCategoryType } from '../../../../types/categortType';
 import ModalCategoryType from '../ModalCategoryType';
+import moment from 'moment';
 
 const TableCategoryType: React.FC = () => {
   const dispatch = useDispatch();
   const [form] = Form.useForm();
 
   const { isModal }: modalState = useSelector(modalSelector);
+  const { user }: typeAuthState = useSelector(authSelector);
 
   const { categoriesType, page, isLoading }: categoryTypeState =
     useSelector(categoryTypeSelector);
@@ -44,21 +50,21 @@ const TableCategoryType: React.FC = () => {
       title: 'Action',
       dataIndex: 'action',
       key: 'action',
-      render: () => {
+      render: (text: string, record: responseCategoryType) => {
         return (
           <Space size="middle">
             <EditOutlined
               className="common-icon-edit"
-              // onClick={() => {
-              //   handleEditUser(record);
-              // }}
+              onClick={() => {
+                handleEditCategoryType(record);
+              }}
             />
             <Popconfirm
               placement="topLeft"
               title={`Do you want to delete this?`}
-              // onConfirm={() => {
-              //   confirm(record);
-              // }}
+              onConfirm={() => {
+                confirm(record);
+              }}
               okText="Yes"
               cancelText="No"
             >
@@ -70,21 +76,57 @@ const TableCategoryType: React.FC = () => {
     },
   ];
 
-  const onFinish = (values: any) => {};
+  const onFinish = (values: any) => {
+    dispatch(
+      categoryTypeActions.getAllCategoryType({
+        p: page,
+        limit: 7,
+        [values.option]: values.search,
+      })
+    );
+  };
 
   const onFinishFailed = (errorInfo: any) => {
     console.log('Failed:', errorInfo);
   };
 
-  function confirm(record: any) {}
+  function confirm(record: any) {
+    dispatch(
+      categoryTypeActions.deleteCategoryType({
+        token: user.accessToken,
+        dispatch,
+        id: record.id,
+        p: page,
+        limit: 7,
+      })
+    );
+  }
 
-  const handleAddNewCategory = () => {
+  const handleAddNewCategoryType = () => {
     dispatch(modalActions.showModal('Add Category Type'));
+    dispatch(categoryTypeActions.setCategoryType(null));
+  };
+
+  const handleEditCategoryType = (record: responseCategoryType) => {
+    dispatch(modalActions.showModal('Edit Category Type'));
+    dispatch(categoryTypeActions.setCategoryType(record));
   };
 
   const handleExportExcel = () => {
     try {
-      const getAllCategory = async () => {};
+      const getAllCategoryType = async () => {
+        const data = await categoryTypeApi.getAll();
+        let wb = utils.book_new();
+        let ws = utils.json_to_sheet(
+          data.data.data.rows.map((item: responseCategoryType) => ({
+            name: item.name,
+            createdAt: moment(item.createdAt).format('MM/DD/YYYY'),
+          }))
+        );
+        utils.book_append_sheet(wb, ws, 'CategoryType');
+        writeFileXLSX(wb, 'CategoryType.xlsx');
+      };
+      getAllCategoryType();
     } catch (error) {
       console.log(error);
     }
@@ -153,7 +195,7 @@ const TableCategoryType: React.FC = () => {
           <Button
             type="primary"
             onClick={() => {
-              handleAddNewCategory();
+              handleAddNewCategoryType();
             }}
           >
             Add new

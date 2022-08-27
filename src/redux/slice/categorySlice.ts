@@ -1,9 +1,9 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { typeCategory } from '../../types/category';
+import { category } from '../../types/category';
 import { RootState } from '../store';
 
 export interface categoryState {
-  category: typeCategory[];
+  category: category[];
   isLoading: boolean;
   isError: boolean;
 }
@@ -19,7 +19,7 @@ const CategorySlice = createSlice({
   initialState: initialState,
   reducers: {
     fetchCategory: (state) => {},
-    fetchCategorySuccess: (state, action: PayloadAction<typeCategory[]>) => {},
+    fetchCategorySuccess: (state, action: PayloadAction<category[]>) => {},
     fetchCategoryFailed: (state) => {},
   },
 });

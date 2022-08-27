@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom';
 
 const cx = classNames.bind(styles);
 
-interface typeCategory {
+interface category {
   img: string;
   name: string;
   path: string;
@@ -15,7 +15,7 @@ interface typeCategory {
 const Category: React.FC = () => {
   const [isActive, setIsActive] = useState<boolean>(true);
 
-  const categoriesMen: typeCategory[] = [
+  const categoriesMen: category[] = [
     {
       img: 'https://res.cloudinary.com/diot4imoq/image/upload/v1657612561/supersports/Running-Shoes_615a33fd-c7b9-40af-9857-9cbd34bde057_360x_roj0hx.png',
       name: 'Giày chạy bộ',
@@ -68,7 +68,7 @@ const Category: React.FC = () => {
     },
   ];
 
-  const categoriesWomen: typeCategory[] = [
+  const categoriesWomen: category[] = [
     {
       img: 'https://res.cloudinary.com/diot4imoq/image/upload/v1657612750/supersports/Running-Shoes_7fea76c6-0af0-40d6-8f4b-0268e86d97df_360x_ryd8ot.png',
       name: 'Giày chạy bộ',
@@ -148,7 +148,7 @@ const Category: React.FC = () => {
       <div className={cx('tabs-content')}>
         <div className={cx('content')}>
           {isActive &&
-            categoriesMen.map((item: typeCategory, index: number) => {
+            categoriesMen.map((item: category, index: number) => {
               return (
                 <Link to={item.path} className={cx('item')} key={index}>
                   <div className={cx('image')}>
@@ -161,7 +161,7 @@ const Category: React.FC = () => {
               );
             })}
           {!isActive &&
-            categoriesWomen.map((item: typeCategory, index: number) => {
+            categoriesWomen.map((item: category, index: number) => {
               return (
                 <Link to={item.path} className={cx('item')} key={index}>
                   <div className={cx('image')}>

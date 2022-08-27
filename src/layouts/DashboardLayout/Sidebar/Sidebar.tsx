@@ -37,7 +37,7 @@ const items: MenuItem[] = [
   getItem('Statistical', '/admin', <BarChartOutlined />),
   getItem('User', '/admin/user', <UserOutlined />),
   getItem('All Category', 'sub-category', <FontAwesomeIcon icon={faList} />, [
-    getItem('CategoryType', '/admin/category-type'),
+    getItem('Category Type', '/admin/category-type'),
     getItem('Category', '/admin/category'),
   ]),
 

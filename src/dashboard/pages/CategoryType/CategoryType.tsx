@@ -28,7 +28,7 @@ const CategoryType: React.FC = () => {
 
   return (
     <section className="section-common">
-      <HeaderTitle title="Category" />
+      <HeaderTitle title="Category type" />
       <Content className="common-layout-content-cus">
         <div className="common-content-wrap">
           <div className="common-content">

@@ -10,7 +10,7 @@ import {
 } from '../../../../redux/slice/authSlice';
 
 const ChangeProfile: React.FC = () => {
-  const { currentUser }: typeAuthState = useSelector(authSelector);
+  const { user }: typeAuthState = useSelector(authSelector);
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -24,7 +24,7 @@ const ChangeProfile: React.FC = () => {
     };
     dispatch(
       authActions.changeProfile({
-        token: currentUser.accessToken,
+        token: user.accessToken,
         dispatch,
         data,
         navigate,
@@ -37,9 +37,9 @@ const ChangeProfile: React.FC = () => {
   };
 
   const initialValues = {
-    fullname: currentUser.user && currentUser.user.fullname,
-    birthday: currentUser.user && moment(currentUser.user.birthday),
-    gender: currentUser.user && currentUser.user.gender,
+    fullname: user.user && user.user.fullname,
+    birthday: user.user && moment(user.user.birthday),
+    gender: user.user && user.user.gender,
   };
 
   return (

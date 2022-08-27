@@ -10,7 +10,7 @@ import {
 } from '../../../../redux/slice/authSlice';
 
 const ChangePassword: React.FC = () => {
-  const { currentUser }: typeAuthState = useSelector(authSelector);
+  const { user }: typeAuthState = useSelector(authSelector);
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -23,7 +23,7 @@ const ChangePassword: React.FC = () => {
   const onFinish = (values: any) => {
     dispatch(
       authActions.changePassword({
-        token: currentUser.accessToken,
+        token: user.accessToken,
         dispatch,
         data: {
           currentpassword: values.currentpassword,

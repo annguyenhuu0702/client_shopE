@@ -20,7 +20,7 @@ interface Props {
 const HeaderTitle: React.FC<Props> = ({ title }: Props) => {
   const dispatch = useDispatch();
 
-  const { currentUser }: typeAuthState = useSelector(authSelector);
+  const { user }: typeAuthState = useSelector(authSelector);
 
   const handleLogout = () => {
     authApi.logout();
@@ -31,7 +31,7 @@ const HeaderTitle: React.FC<Props> = ({ title }: Props) => {
       <span>{title}</span>
       <div className={cx('account')}>
         <h3>
-          Hi, <b>{currentUser && currentUser.user?.fullname}</b>
+          Hi, <b>{user && user.user?.fullname}</b>
         </h3>
         <div className={cx('profile')}>
           <Link to="/admin/profile">My Account</Link>

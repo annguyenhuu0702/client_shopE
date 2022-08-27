@@ -19,7 +19,7 @@ const cx = classNames.bind(styles);
 const HeaderTop: React.FC = () => {
   const dispatch = useDispatch();
 
-  const { currentUser }: typeAuthState = useSelector(authSelector);
+  const { user }: typeAuthState = useSelector(authSelector);
 
   const handleLogout = () => {
     authApi.logout();
@@ -73,11 +73,11 @@ const HeaderTop: React.FC = () => {
           </span>
           <div className={cx('wrap-account')}>
             <div className={`${'arrow-up'} ${cx('arrow-custom')}`}></div>
-            {currentUser.user ? (
+            {user.user ? (
               <div className="block-hover">
                 <div className="block-child">
                   <Link to="" className="text">
-                    Xin chào <b>{currentUser.user.fullname}</b>
+                    Xin chào <b>{user.user.fullname}</b>
                   </Link>
                 </div>
                 <div className="block-child">

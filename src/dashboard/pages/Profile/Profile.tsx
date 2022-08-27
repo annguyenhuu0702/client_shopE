@@ -47,7 +47,7 @@ const Profile: React.FC = () => {
     );
   }, [position]);
 
-  const { currentUser }: typeAuthState = useSelector(authSelector);
+  const { user }: typeAuthState = useSelector(authSelector);
 
   return (
     <section className={cx('profile')}>
@@ -57,16 +57,14 @@ const Profile: React.FC = () => {
           <div className={cx('avatar')}>
             <Image
               src={
-                currentUser.user?.avatar === ''
+                user.user?.avatar === ''
                   ? 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT65CXLkEWFDlHIHnU1hDnHHVn0GdfzBR7Ejg&usqp=CAU'
-                  : `${currentUser.user?.avatar}`
+                  : `${user.user?.avatar}`
               }
             />
           </div>
           <div className={cx('info')}>
-            <h3 className={cx('name')}>
-              {currentUser && currentUser.user?.fullname}
-            </h3>
+            <h3 className={cx('name')}>{user && user.user?.fullname}</h3>
           </div>
         </div>
         <div className={cx('content')}>
@@ -91,14 +89,14 @@ const Profile: React.FC = () => {
                   <FontAwesomeIcon icon={faEnvelope} />
                   <div className={cx('item')}>
                     <span>Email</span>
-                    <p>{currentUser && currentUser.user?.email}</p>
+                    <p>{user && user.user?.email}</p>
                   </div>
                 </div>
                 <div className={cx('phone')}>
                   <FontAwesomeIcon icon={faPhone} />
                   <div className={cx('item')}>
                     <span>Phone</span>
-                    <p>{currentUser && currentUser.user?.phone}</p>
+                    <p>{user && user.user?.phone}</p>
                   </div>
                 </div>
                 <div className={cx('birthday')}>
@@ -106,9 +104,7 @@ const Profile: React.FC = () => {
                   <div className={cx('item')}>
                     <span>Birthday</span>
                     <p className={cx('birthday')}>
-                      {moment(currentUser && currentUser.user?.birthday).format(
-                        'MM/DD/YYYY'
-                      )}
+                      {moment(user && user.user?.birthday).format('MM/DD/YYYY')}
                     </p>
                   </div>
                 </div>

@@ -12,28 +12,25 @@ import { typeAuthState, authSelector } from './redux/slice/authSlice';
 const App = () => {
   const dispatch = useDispatch();
 
-  const { currentUser }: typeAuthState = useSelector(authSelector);
+  const { user }: typeAuthState = useSelector(authSelector);
 
   useEffect(() => {
     try {
       const getProfile = async () => {
-        const data = await authApi.getProfile(
-          currentUser.accessToken,
-          dispatch
-        );
+        const data = await authApi.getProfile(user.accessToken, dispatch);
         dispatch(authActions.getProfile(data.data.data));
       };
       getProfile();
     } catch (error) {
       console.log(error);
     }
-  }, [dispatch, currentUser.accessToken]);
+  }, [dispatch, user.accessToken]);
 
   const showPrivateRoter = () => {
     try {
       return (
-        currentUser.accessToken &&
-        (jwtDecoded(currentUser.accessToken) as any).role === 'admin' &&
+        user.accessToken &&
+        (jwtDecoded(user.accessToken) as any).role === 'admin' &&
         showRoutes(privateRoute)
       );
     } catch (error) {

@@ -16,6 +16,7 @@ import {
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import moment from 'moment';
 import { authSelector, authState } from '../../../redux/slice/authSlice';
+import { useTitle } from '../../../hooks/useTitle';
 
 const { TabPane } = Tabs;
 
@@ -48,7 +49,7 @@ const Profile: React.FC = () => {
   }, [position]);
 
   const { user }: authState = useSelector(authSelector);
-
+  useTitle('Profile');
   return (
     <section className={cx('profile')}>
       <HeaderTitle title="User" />

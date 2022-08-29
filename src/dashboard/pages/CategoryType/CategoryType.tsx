@@ -8,6 +8,7 @@ import {
   categoryTypeSelector,
   categoryTypeState,
 } from '../../../redux/slice/categoryTypeSlice';
+import { useTitle } from '../../../hooks/useTitle';
 
 const { Content } = Layout;
 
@@ -15,6 +16,8 @@ const CategoryType: React.FC = () => {
   const dispatch = useDispatch();
   const { categoriesType, page, pageSize }: categoryTypeState =
     useSelector(categoryTypeSelector);
+
+  useTitle('Category type');
 
   useEffect(() => {
     dispatch(

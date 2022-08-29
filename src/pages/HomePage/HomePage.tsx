@@ -11,10 +11,12 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import { Pagination, Autoplay, Navigation } from 'swiper';
 
 import 'swiper/css';
+import { useTitle } from '../../hooks/useTitle';
 
 const cx = classNames.bind(styles);
 
 const HomePage = () => {
+  useTitle('Trang chủ');
   return (
     <div className={cx('home-page')}>
       <SlideShow />

@@ -60,7 +60,7 @@ const TableCategoryType: React.FC = () => {
               }}
             />
             <Popconfirm
-              placement="topLeft"
+              placement="topRight"
               title={`Do you want to delete this?`}
               onConfirm={() => {
                 confirm(record);

@@ -7,6 +7,7 @@ import { Button, Form, Input } from 'antd';
 import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { authActions } from '../../redux/slice/authSlice';
+import { useTitle } from '../../hooks/useTitle';
 
 const cx = classNames.bind(styles);
 
@@ -20,7 +21,7 @@ const Login: React.FC = () => {
   const onFinishFailed = (errorInfo: any) => {
     console.log('Failed:', errorInfo);
   };
-
+  useTitle('Login');
   return (
     <section className={cx('login')}>
       <div className="w-1200">

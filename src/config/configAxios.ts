@@ -27,7 +27,7 @@ export const apiCallerWithToken = (token: string | null, dispatch: any) => {
           if (decoded && decoded.exp * 1000 < new Date().getTime()) {
             const res = await authApi.refreshToken();
             if (res && res.data) {
-              const { accessToken } = res.data;
+              const { accessToken } = res.data.data;
               if (accessToken) {
                 if (dispatch) {
                   dispatch(authActions.getNewAccessToken(accessToken));
@@ -39,11 +39,11 @@ export const apiCallerWithToken = (token: string | null, dispatch: any) => {
               console.log({ res });
             }
           }
+
           config.headers['Authorization'] = `Bearer ${token}`;
         }
       } catch (error: any) {
         const { data, status } = error.response;
-        console.log(error.message);
         if (
           status === STATUS_CODE.UNAUTHORIZED ||
           data.message === 'Login now'

@@ -10,6 +10,7 @@ import {
 } from '../../../redux/slice/userSlice';
 import HeaderTitle from '../../components/HeaderTitle';
 import TableUser from './TableUser';
+import { useTitle } from '../../../hooks/useTitle';
 
 const { Content } = Layout;
 
@@ -17,6 +18,8 @@ const User: React.FC = () => {
   const dispatch = useDispatch();
   const { user }: authState = useSelector(authSelector);
   const { users, page, pageSize }: userState = useSelector(userSelector);
+
+  useTitle('User');
 
   useEffect(() => {
     dispatch(
@@ -47,7 +50,7 @@ const User: React.FC = () => {
             dispatch(userActions.setPage({ page, pageSize }));
           }}
           showSizeChanger={true}
-          pageSizeOptions={[7, 50, 100, 200]}
+          pageSizeOptions={[7, 20, 100, 200]}
         />
       </div>
     </section>

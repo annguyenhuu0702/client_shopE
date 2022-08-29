@@ -8,24 +8,22 @@ import {
 } from 'antd/lib/upload';
 
 import { LoadingOutlined, PlusOutlined } from '@ant-design/icons';
-import {
-  Col,
-  Form,
-  Input,
-  message,
-  Modal,
-  Radio,
-  RadioChangeEvent,
-  Upload,
-} from 'antd';
+import { Col, Form, Input, message, Modal, Select, Upload } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
-import { userActions } from '../../../../redux/slice/userSlice';
+import { authSelector, authState } from '../../../../redux/slice/authSlice';
+import {
+  categoryTypeSelector,
+  categoryTypeState,
+} from '../../../../redux/slice/categoryTypeSlice';
 import {
   modalActions,
   modalSelector,
   modalState,
 } from '../../../../redux/slice/modalSlice';
-import { authSelector, authState } from '../../../../redux/slice/authSlice';
+import { categoryType } from '../../../../types/categortType';
+import { createCategory } from '../../../../types/category';
+import { slugify } from '../../../../utils/index';
+import { categoryActions } from '../../../../redux/slice/categorySlice';
 
 const getBase64 = (img: RcFile, callback: (url: string) => void) => {
   const reader = new FileReader();
@@ -50,11 +48,19 @@ const ModalCategory: React.FC = () => {
 
   const { user }: authState = useSelector(authSelector);
   const { isModal, title }: modalState = useSelector(modalSelector);
+  const { categoriesType }: categoryTypeState =
+    useSelector(categoryTypeSelector);
 
-  const initialValues = {};
+  const initialValues = {
+    name: '',
+    thumbnail: '',
+    title: '',
+    description: '',
+    categoryTypeId: '',
+    parentId: -1,
+  };
 
   const [form] = Form.useForm();
-  const [gender, setGender] = useState(1);
 
   // disable button when not input data
   const [disabledSave, setDisabledSave] = useState(true);
@@ -97,11 +103,30 @@ const ModalCategory: React.FC = () => {
     form.setFieldsValue(initialValues);
   };
 
-  const onFinish = (values: any) => {
-    console.log(values);
+  const onFinish = (values: createCategory) => {
+    const formData = {
+      name: values.name,
+      slug: slugify(values.name),
+      title: values.title,
+      thumbnail: values.thumbnail,
+      description: values.description,
+      categoryTypeId: values.categoryTypeId,
+      parentId: values.parentId === -1 ? null : values.parentId,
+    };
+    dispatch(
+      categoryActions.createCategory({
+        token: user.accessToken,
+        dispatch,
+        data: { ...formData, resetValues },
+      })
+    );
   };
   const onFinishFailed = (errorInfo: any) => {
     console.log('Failed:', errorInfo);
+  };
+
+  const handleChange = (value: string) => {
+    console.log(`selected ${value}`);
   };
 
   return (
@@ -138,18 +163,6 @@ const ModalCategory: React.FC = () => {
               <Form.Item
                 label="Name"
                 name="name"
-                rules={[
-                  {
-                    required: true,
-                    message: 'Please fill in this field!',
-                  },
-                ]}
-              >
-                <Input />
-              </Form.Item>
-              <Form.Item
-                label="Slug"
-                name="slug"
                 rules={[
                   {
                     required: true,
@@ -205,6 +218,40 @@ const ModalCategory: React.FC = () => {
                 ]}
               >
                 <Input />
+              </Form.Item>
+              <Form.Item
+                label="CategoryTypeId"
+                name="categoryTypeId"
+                rules={[
+                  {
+                    required: true,
+                    message: 'Please fill in this field!',
+                  },
+                ]}
+              >
+                <Select onChange={handleChange}>
+                  {categoriesType.rows.map((item: categoryType) => {
+                    return (
+                      <Select.Option value={item.id} key={item.id}>
+                        {item.name}
+                      </Select.Option>
+                    );
+                  })}
+                </Select>
+              </Form.Item>
+              <Form.Item
+                label="ParentId"
+                name="parentId"
+                rules={[
+                  {
+                    required: true,
+                    message: 'Please fill in this field!',
+                  },
+                ]}
+              >
+                <Select onChange={handleChange}>
+                  <Select.Option value={-1}>No parent</Select.Option>
+                </Select>
               </Form.Item>
             </Col>
           </div>

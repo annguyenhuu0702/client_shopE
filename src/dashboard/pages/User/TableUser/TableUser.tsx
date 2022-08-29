@@ -45,7 +45,6 @@ const TableUser: React.FC = () => {
     {
       title: 'Avatar',
       dataIndex: 'avatar',
-      key: 'avatar',
       render: (text: string, record: typeUser) => {
         return (
           <React.Fragment>
@@ -68,7 +67,6 @@ const TableUser: React.FC = () => {
     {
       title: 'FullName',
       dataIndex: 'fullname',
-      key: 'fullname',
       sorter: (a: typeUser, b: typeUser) => {
         return a.fullname.localeCompare(b.fullname);
       },
@@ -76,17 +74,14 @@ const TableUser: React.FC = () => {
     {
       title: 'Email',
       dataIndex: 'email',
-      key: 'email',
     },
     {
       title: 'Phone',
       dataIndex: 'phone',
-      key: 'phone',
     },
     {
       title: 'Gender',
       dataIndex: 'gender',
-      key: 'gender',
       render: (text: string, record: typeUser) => {
         return (
           <React.Fragment>
@@ -98,7 +93,6 @@ const TableUser: React.FC = () => {
     {
       title: 'Created Date',
       dataIndex: 'createdAt',
-      key: 'createAt',
       render: (text: string, record: typeUser) => {
         let date = new Date(record.createdAt).toLocaleDateString('en-EN');
         return <React.Fragment>{date}</React.Fragment>;
@@ -107,7 +101,6 @@ const TableUser: React.FC = () => {
     {
       title: 'Action',
       dataIndex: 'action',
-      key: 'action',
       render: (text: string, record: typeUser) => {
         return (
           <Space size="middle">

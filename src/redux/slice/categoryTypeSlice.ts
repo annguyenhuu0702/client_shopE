@@ -10,10 +10,10 @@ import { RootState } from '../store';
 export interface categoryTypeState {
   categoriesType: resCategoryType;
   currentCategoryType: categoryType | null;
-  isLoading: boolean;
-  isError: boolean;
   page: number;
   pageSize: number;
+  isLoading: boolean;
+  isError: boolean;
 }
 
 export interface resCategoryType {

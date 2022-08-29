@@ -44,12 +44,18 @@ const TableCategoryType: React.FC = () => {
     {
       title: 'Name',
       dataIndex: 'name',
-      key: 'name',
+    },
+    {
+      title: 'Created Date',
+      dataIndex: 'createdAt',
+      render: (text: string, record: categoryType) => {
+        let date = moment(record.createdAt).format('MM/DD/YYYY');
+        return <React.Fragment>{date}</React.Fragment>;
+      },
     },
     {
       title: 'Action',
       dataIndex: 'action',
-      key: 'action',
       render: (text: string, record: categoryType) => {
         return (
           <Space size="middle">

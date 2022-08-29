@@ -23,8 +23,13 @@ import {
   modalActions,
   modalSelector,
 } from '../../../../redux/slice/modalSlice';
-import { userActions } from '../../../../redux/slice/userSlice';
+import {
+  userActions,
+  userSelector,
+  userState,
+} from '../../../../redux/slice/userSlice';
 import { typeUser } from '../../../../types/user';
+import { authSelector, authState } from '../../../../redux/slice/authSlice';
 
 const getBase64 = (img: RcFile, callback: (url: string) => void) => {
   const reader = new FileReader();
@@ -46,13 +51,10 @@ const beforeUpload = (file: RcFile) => {
 
 const ModalUser: React.FC = () => {
   const dispatch = useDispatch();
-  const currentUser: typeUser | null = useSelector(
-    (state: any) => state.user.currentUser
-  );
 
-  const token: string | null = useSelector(
-    (state: any) => state.auth.currentUser.accessToken
-  );
+  const { currentUser }: userState = useSelector(userSelector);
+
+  const { user }: authState = useSelector(authSelector);
 
   const { isModal, title } = useSelector(modalSelector);
 
@@ -116,7 +118,7 @@ const ModalUser: React.FC = () => {
     if (currentUser === null) {
       dispatch(
         userActions.createUser({
-          token,
+          token: user.accessToken,
           dispatch,
           data: { ...values, resetValues },
         })
@@ -124,7 +126,7 @@ const ModalUser: React.FC = () => {
     } else {
       dispatch(
         userActions.editUser({
-          token,
+          token: user.accessToken,
           dispatch,
           data: { ...others, resetValues },
         })

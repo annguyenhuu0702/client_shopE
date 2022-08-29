@@ -2,7 +2,7 @@ import React from 'react';
 import { QueryParams } from './common';
 
 export interface typeUser {
-  id?: number;
+  id: number | string;
   createdAt: Date;
   updatedAt: Date;
   fullname: string;

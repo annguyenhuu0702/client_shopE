@@ -14,33 +14,87 @@ import {
 
 import { useDispatch, useSelector } from 'react-redux';
 import ModalCategory from '../ModalCategory';
-import { modalActions } from '../../../../redux/slice/modalSlice';
+import {
+  modalActions,
+  modalSelector,
+  modalState,
+} from '../../../../redux/slice/modalSlice';
+import {
+  categorySelector,
+  categoryState,
+} from '../../../../redux/slice/categorySlice';
+import { category } from '../../../../types/category';
+import moment from 'moment';
 
 const TableCategory: React.FC = () => {
   const dispatch = useDispatch();
   const [form] = Form.useForm();
-  const isModal: boolean = useSelector((state: any) => state.modal.isModal);
+  const { isModal }: modalState = useSelector(modalSelector);
+  const { categories, isLoading, page }: categoryState =
+    useSelector(categorySelector);
 
   const columns = [
     {
       title: 'Thumbnail',
       dataIndex: 'thumbnail',
-      key: 'thumbnail',
     },
     {
       title: 'Name',
       dataIndex: 'name',
-      key: 'name',
+    },
+    {
+      title: 'Title',
+      dataIndex: 'title',
+    },
+    {
+      title: 'Description',
+      dataIndex: 'description',
+    },
+    {
+      title: 'Category Type',
+      dataIndex: 'categoryTypeId',
+      render: (text: string, record: category) => record.categoryType?.name,
+    },
+    {
+      title: 'Parent',
+      dataIndex: 'categoryTypeId',
+      render: (text: string, record: category) =>
+        record.parent ? record.parent?.name : 'Không có',
     },
     {
       title: 'Created Date',
       dataIndex: 'createdAt',
-      key: 'createdAt',
+      render: (text: string, record: category) => {
+        let date = moment(record.createdAt).format('MM/DD/YYYY');
+        return <React.Fragment>{date}</React.Fragment>;
+      },
     },
     {
       title: 'Action',
       dataIndex: 'action',
-      key: 'action',
+      render: (text: string, record: category) => {
+        return (
+          <Space size="middle">
+            <EditOutlined
+              className="common-icon-edit"
+              onClick={() => {
+                handleEditCategory(record);
+              }}
+            />
+            <Popconfirm
+              placement="topRight"
+              title={`Do you want to delete this?`}
+              onConfirm={() => {
+                confirm(record);
+              }}
+              okText="Yes"
+              cancelText="No"
+            >
+              <DeleteOutlined className="common-icon-delete" />
+            </Popconfirm>
+          </Space>
+        );
+      },
     },
   ];
 
@@ -55,6 +109,8 @@ const TableCategory: React.FC = () => {
   const handleAddNewCategory = () => {
     dispatch(modalActions.showModal('Add Category'));
   };
+
+  const handleEditCategory = (record: any) => {};
 
   const handleExportExcel = () => {
     try {
@@ -137,10 +193,16 @@ const TableCategory: React.FC = () => {
       <Row className="common-content-table">
         <Col xl={24} md={24} xs={24}>
           <Table
-            // dataSource={}
-            // loading={isLoading}
+            dataSource={categories.rows.map((item: category) => {
+              return {
+                ...item,
+                key: item.id,
+              };
+            })}
+            loading={isLoading}
             columns={columns}
             pagination={false}
+            expandable={{ showExpandColumn: false }}
           />
         </Col>
       </Row>

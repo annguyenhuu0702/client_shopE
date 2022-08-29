@@ -2,12 +2,12 @@ import { category } from './category';
 import { QueryParams } from './common';
 
 export interface categoryType {
-  id?: string | number;
+  id: string | number;
   name: string;
   categories: category[];
   key?: React.Key | string | number;
-  createdAt?: string;
-  updatedAt?: string;
+  createdAt: string;
+  updatedAt: string;
   isDeleted: boolean;
   resetValues?: Function;
 }

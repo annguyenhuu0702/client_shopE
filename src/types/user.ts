@@ -1,7 +1,7 @@
 import React from 'react';
 import { QueryParams } from './common';
 
-export interface typeUser {
+export interface user {
   id: number | string;
   createdAt: Date;
   updatedAt: Date;
@@ -18,6 +18,7 @@ export interface typeUser {
   isDeleted: boolean;
   key?: React.Key | string | number;
   resetValues?: Function;
+  userRoles: any;
   // votes
   // repVotes
   // productUsers
@@ -29,6 +30,17 @@ export interface typeUser {
 export interface createUser {
   email: string;
   password: string;
+  avatar?: string;
+  fullname: string;
+  phone: string;
+  ward: string;
+  gender: boolean;
+  resetValues?: Function;
+}
+
+export interface updateUser {
+  id: string | number;
+  email: string;
   avatar?: string;
   fullname: string;
   phone: string;

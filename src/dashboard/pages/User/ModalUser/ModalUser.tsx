@@ -19,6 +19,7 @@ import {
   Upload,
 } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
+import { authSelector, authState } from '../../../../redux/slice/authSlice';
 import {
   modalActions,
   modalSelector,
@@ -28,8 +29,6 @@ import {
   userSelector,
   userState,
 } from '../../../../redux/slice/userSlice';
-import { typeUser } from '../../../../types/user';
-import { authSelector, authState } from '../../../../redux/slice/authSlice';
 
 const getBase64 = (img: RcFile, callback: (url: string) => void) => {
   const reader = new FileReader();
@@ -113,14 +112,21 @@ const ModalUser: React.FC = () => {
   };
 
   const onFinish = (values: any) => {
-    const data = { ...currentUser, ...values };
-    const { key, ...others } = data;
+    const formData = {
+      email: values.email,
+      avatar: values.avatar,
+      fullname: values.fullname,
+      password: values.password,
+      phone: values.phone,
+      ward: values.ward,
+      gender: values.gender,
+    };
     if (currentUser === null) {
       dispatch(
         userActions.createUser({
           token: user.accessToken,
           dispatch,
-          data: { ...values, resetValues },
+          data: { ...formData, resetValues },
         })
       );
     } else {
@@ -128,7 +134,7 @@ const ModalUser: React.FC = () => {
         userActions.editUser({
           token: user.accessToken,
           dispatch,
-          data: { ...others, resetValues },
+          data: { ...formData, id: currentUser.id, resetValues },
         })
       );
     }

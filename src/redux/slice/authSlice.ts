@@ -7,7 +7,7 @@ import {
   registerDto,
 } from '../../types/auth';
 import { tokenPayload } from '../../types/common';
-import { typeUser } from '../../types/user';
+import { user } from '../../types/user';
 import { RootState } from '../store';
 
 export interface authState {
@@ -17,7 +17,7 @@ export interface authState {
 }
 
 export interface resUser {
-  user: typeUser | null;
+  user: user | null;
   accessToken: string | null;
 }
 
@@ -69,7 +69,7 @@ const authSlice = createSlice({
       state.user.accessToken = '';
       localStorage.removeItem('mickey:AT');
     },
-    getProfile: (state, action: PayloadAction<typeUser>) => {
+    getProfile: (state, action: PayloadAction<user>) => {
       state.isError = false;
       state.isLoading = false;
       state.user.user = action.payload;

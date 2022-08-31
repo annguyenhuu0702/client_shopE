@@ -3,7 +3,9 @@ import {
   createCategoryType,
   getAllCategoryTypeParams,
   categoryType,
+  updateCategoryType,
 } from '../../types/categortType';
+import { updateCategory } from '../../types/category';
 import { tokenPayload, tokenPayloadDelete } from '../../types/common';
 import { RootState } from '../store';
 
@@ -91,7 +93,7 @@ const CategoryTypeSlice = createSlice({
     },
     editCategoryType: (
       state,
-      action: PayloadAction<tokenPayload<categoryType>>
+      action: PayloadAction<tokenPayload<updateCategoryType>>
     ) => {
       state.isLoading = true;
     },

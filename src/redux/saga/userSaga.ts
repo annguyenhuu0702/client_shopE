@@ -4,7 +4,11 @@ import { call, put, takeEvery } from 'redux-saga/effects';
 import { userApi } from '../../apis/userApi';
 import { STATUS_CODE } from '../../constants';
 import { tokenPayload, tokenPayloadDelete } from '../../types/common';
-import { getAllUserTokenPayload, createUser, typeUser } from '../../types/user';
+import {
+  getAllUserTokenPayload,
+  createUser,
+  updateUser,
+} from '../../types/user';
 import { modalActions } from '../slice/modalSlice';
 import { userActions } from '../slice/userSlice';
 
@@ -56,7 +60,7 @@ function* createUserSaga({
 
 function* editUserSaga({
   payload,
-}: PayloadAction<tokenPayload<typeUser>>): any {
+}: PayloadAction<tokenPayload<updateUser>>): any {
   try {
     const { token, dispatch, data } = payload;
     const res = yield call(() => {

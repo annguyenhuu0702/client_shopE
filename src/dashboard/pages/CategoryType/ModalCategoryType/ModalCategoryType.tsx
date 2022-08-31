@@ -13,6 +13,7 @@ import {
   categoryTypeSelector,
   categoryTypeState,
 } from '../../../../redux/slice/categoryTypeSlice';
+import { categoryType } from '../../../../types/categortType';
 
 const ModalCategoryType: React.FC = () => {
   const dispatch = useDispatch();
@@ -44,14 +45,15 @@ const ModalCategoryType: React.FC = () => {
   };
 
   const onFinish = (values: any) => {
-    const data = { ...currentCategoryType, ...values };
-    const { key, ...others } = data;
+    const formData = {
+      name: values.name,
+    };
     if (currentCategoryType === null) {
       dispatch(
         categoryTypeActions.createCategoryType({
           token: user.accessToken,
           dispatch,
-          data: { ...values, resetValues },
+          data: { ...formData, resetValues },
         })
       );
     } else {
@@ -59,7 +61,7 @@ const ModalCategoryType: React.FC = () => {
         categoryTypeActions.editCategoryType({
           token: user.accessToken,
           dispatch,
-          data: { ...others, resetValues },
+          data: { ...formData, id: currentCategoryType.id, resetValues },
         })
       );
     }

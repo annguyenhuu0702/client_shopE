@@ -21,4 +21,6 @@ export interface createCategoryType {
   resetValues?: Function;
 }
 
-export interface updateCategoryType extends categoryType {}
+export interface updateCategoryType extends createCategoryType {
+  id?: string | number;
+}

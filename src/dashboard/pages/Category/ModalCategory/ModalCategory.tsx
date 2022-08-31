@@ -12,6 +12,11 @@ import { Col, Form, Input, message, Modal, Select, Upload } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
 import { authSelector, authState } from '../../../../redux/slice/authSlice';
 import {
+  categoryActions,
+  categorySelector,
+  categoryState,
+} from '../../../../redux/slice/categorySlice';
+import {
   categoryTypeSelector,
   categoryTypeState,
 } from '../../../../redux/slice/categoryTypeSlice';
@@ -21,9 +26,8 @@ import {
   modalState,
 } from '../../../../redux/slice/modalSlice';
 import { categoryType } from '../../../../types/categortType';
-import { createCategory } from '../../../../types/category';
+import { category, createCategory } from '../../../../types/category';
 import { slugify } from '../../../../utils/index';
-import { categoryActions } from '../../../../redux/slice/categorySlice';
 
 const getBase64 = (img: RcFile, callback: (url: string) => void) => {
   const reader = new FileReader();
@@ -51,13 +55,16 @@ const ModalCategory: React.FC = () => {
   const { categoriesType }: categoryTypeState =
     useSelector(categoryTypeSelector);
 
+  const { categories, currentCategory }: categoryState =
+    useSelector(categorySelector);
+
   const initialValues = {
-    name: '',
-    thumbnail: '',
-    title: '',
-    description: '',
-    categoryTypeId: '',
-    parentId: -1,
+    name: currentCategory ? currentCategory.name : '',
+    thumbnail: currentCategory ? currentCategory.thumbnail : '',
+    title: currentCategory ? currentCategory.title : '',
+    description: currentCategory ? currentCategory.description : '',
+    categoryTypeId: currentCategory ? currentCategory.categoryTypeId : '',
+    parentId: currentCategory ? currentCategory.parentId : -1,
   };
 
   const [form] = Form.useForm();
@@ -103,23 +110,34 @@ const ModalCategory: React.FC = () => {
     form.setFieldsValue(initialValues);
   };
 
-  const onFinish = (values: createCategory) => {
+  const onFinish = (values: any) => {
     const formData = {
-      name: values.name,
-      slug: slugify(values.name),
-      title: values.title,
       thumbnail: values.thumbnail,
+      title: values.title,
+      name: values.name,
       description: values.description,
       categoryTypeId: values.categoryTypeId,
+      slug: slugify(values.name),
       parentId: values.parentId === -1 ? null : values.parentId,
     };
-    dispatch(
-      categoryActions.createCategory({
-        token: user.accessToken,
-        dispatch,
-        data: { ...formData, resetValues },
-      })
-    );
+
+    if (currentCategory === null) {
+      dispatch(
+        categoryActions.createCategory({
+          token: user.accessToken,
+          dispatch,
+          data: { ...formData, resetValues },
+        })
+      );
+    } else {
+      dispatch(
+        categoryActions.editCategory({
+          token: user.accessToken,
+          dispatch,
+          data: { ...formData, id: currentCategory.id, resetValues },
+        })
+      );
+    }
   };
   const onFinishFailed = (errorInfo: any) => {
     console.log('Failed:', errorInfo);
@@ -251,6 +269,13 @@ const ModalCategory: React.FC = () => {
               >
                 <Select onChange={handleChange}>
                   <Select.Option value={-1}>No parent</Select.Option>
+                  {categories.rows.map((item: category) => {
+                    return (
+                      <Select.Option value={item.id} key={item.id}>
+                        {item.name}
+                      </Select.Option>
+                    );
+                  })}
                 </Select>
               </Form.Item>
             </Col>

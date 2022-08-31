@@ -20,6 +20,7 @@ import {
   modalState,
 } from '../../../../redux/slice/modalSlice';
 import {
+  categoryActions,
   categorySelector,
   categoryState,
 } from '../../../../redux/slice/categorySlice';
@@ -104,13 +105,17 @@ const TableCategory: React.FC = () => {
     console.log('Failed:', errorInfo);
   };
 
-  function confirm(record: any) {}
+  function confirm(record: category) {}
 
   const handleAddNewCategory = () => {
     dispatch(modalActions.showModal('Add Category'));
+    dispatch(categoryActions.setCategory(null));
   };
 
-  const handleEditCategory = (record: any) => {};
+  const handleEditCategory = (record: category) => {
+    dispatch(modalActions.showModal('Edit category'));
+    dispatch(categoryActions.setCategory(record));
+  };
 
   const handleExportExcel = () => {
     try {

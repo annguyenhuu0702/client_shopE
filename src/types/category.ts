@@ -7,15 +7,19 @@ export interface category {
   name: string;
   slug: string;
   title: string;
+  description: string;
+  thumbnail: string;
+  isDeleted: boolean;
   categoryTypeId: number | null;
-  categoryType?: categoryType;
-  parent_id: number | null;
-  parent?: category;
+  categoryType: categoryType;
+  parentId: number | null;
+  parent: category;
   children: category[];
   productCategories?: any;
   key?: React.Key | string | number;
   createdAt: string;
   updatedAt: string;
+  resetValues?: Function;
 }
 
 export interface createCategory {
@@ -27,6 +31,10 @@ export interface createCategory {
   categoryTypeId: number;
   parentId?: number | null;
   resetValues?: Function;
+}
+
+export interface updateCategory extends createCategory {
+  id: string | number;
 }
 
 export interface getAllCategoryParams extends QueryParams {

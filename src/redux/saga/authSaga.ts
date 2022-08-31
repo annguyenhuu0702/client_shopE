@@ -118,6 +118,12 @@ function* changePasswordSaga({
     }
   } catch (error: any) {
     yield put(authActions.changePasswordFailed());
+    notification.error({
+      message: 'Error',
+      description: 'Error',
+      placement: 'bottomRight',
+      duration: 3,
+    });
     console.log(error);
   }
 }
@@ -145,6 +151,12 @@ function* changeEmailSaga({
     }
   } catch (error: any) {
     yield put(authActions.changeEmailFailed());
+    notification.error({
+      message: 'Error',
+      description: 'Error',
+      placement: 'bottomRight',
+      duration: 3,
+    });
     console.log(error);
   }
 }

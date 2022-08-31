@@ -17,9 +17,8 @@ const HeaderCenter: React.FC = () => {
       <div className={cx('left')}>
         <Link to="/" className={cx('logo')}>
           <img
-            src="https://res.cloudinary.com/diot4imoq/image/upload/v1656990500/supersports/logo_360x_xpnpoo.png"
+            src="https://res.cloudinary.com/diot4imoq/image/upload/v1661177083/canifa/logo_xju1y6.svg"
             alt="Logo"
-            width={215}
             height={35}
           />
         </Link>

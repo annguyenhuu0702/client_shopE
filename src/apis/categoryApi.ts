@@ -1,6 +1,8 @@
+import { AxiosResponse } from 'axios';
 import instance, { apiCallerWithToken } from '../config/configAxios';
 import { URL_API } from '../constants';
-import { createCategory } from '../types/category';
+import { AppDispatch } from '../redux/store';
+import { createCategory, updateCategory } from '../types/category';
 import { QueryParams } from '../types/common';
 
 const getAll = (params?: QueryParams) => {
@@ -9,9 +11,24 @@ const getAll = (params?: QueryParams) => {
   });
 };
 
-const create = (token: string | null, dispatch: any, data: createCategory) => {
+const create = (
+  token: string | null,
+  dispatch: AppDispatch,
+  data: createCategory
+): Promise<AxiosResponse> => {
   return apiCallerWithToken(token, dispatch).post(
     `${URL_API}/category/create`,
+    data
+  );
+};
+
+const update = (
+  token: string | null,
+  dispatch: AppDispatch,
+  data: updateCategory
+): Promise<AxiosResponse> => {
+  return apiCallerWithToken(token, dispatch).put(
+    `${URL_API}/category/update/${data.id}`,
     data
   );
 };
@@ -19,4 +36,5 @@ const create = (token: string | null, dispatch: any, data: createCategory) => {
 export const categoryApi = {
   create,
   getAll,
+  update,
 };

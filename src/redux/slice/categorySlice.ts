@@ -3,6 +3,7 @@ import {
   category,
   createCategory,
   getAllCategoryParams,
+  updateCategory,
 } from '../../types/category';
 import { tokenPayload } from '../../types/common';
 import { RootState } from '../store';
@@ -44,6 +45,9 @@ const CategorySlice = createSlice({
       state.page = action.payload.page;
       state.pageSize = action.payload.pageSize;
     },
+    setCategory: (state, action: PayloadAction<category | null>) => {
+      state.currentCategory = action.payload;
+    },
     getAllCategory: (state, action: PayloadAction<getAllCategoryParams>) => {
       state.isLoading = true;
     },
@@ -64,7 +68,6 @@ const CategorySlice = createSlice({
       state.isLoading = true;
     },
     createCategorySuccess: (state, action: PayloadAction<category>) => {
-      console.log(action.payload);
       state.isLoading = false;
       state.isError = false;
       state.categories.rows.unshift(action.payload);
@@ -77,6 +80,26 @@ const CategorySlice = createSlice({
     createCategoryFailed: (state) => {
       state.isLoading = false;
       state.isError = true;
+    },
+    editCategory: (
+      state,
+      action: PayloadAction<tokenPayload<updateCategory>>
+    ) => {
+      state.isLoading = true;
+    },
+    editCategorySuccess: (state, action: PayloadAction<category>) => {
+      state.isLoading = false;
+      state.isError = false;
+      const index = state.categories.rows.findIndex(
+        (item) => item.id === action.payload.id
+      );
+      if (index !== -1) {
+        state.categories.rows[index] = action.payload;
+      }
+    },
+    editCategoryFailed: (state) => {
+      state.isLoading = false;
+      state.isError = false;
     },
   },
 });

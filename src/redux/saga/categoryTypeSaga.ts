@@ -7,6 +7,7 @@ import {
   createCategoryType,
   getAllCategoryTypeParams,
   categoryType,
+  updateCategoryType,
 } from '../../types/categortType';
 import { tokenPayload, tokenPayloadDelete } from '../../types/common';
 import { categoryTypeActions } from '../slice/categoryTypeSlice';
@@ -59,7 +60,7 @@ function* createCategoryTypeSaga({
 
 function* editCategoryTypeSaga({
   payload,
-}: PayloadAction<tokenPayload<categoryType>>): any {
+}: PayloadAction<tokenPayload<updateCategoryType>>): any {
   try {
     const { token, dispatch, data } = payload;
     const res = yield call(() => {

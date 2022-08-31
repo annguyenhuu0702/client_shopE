@@ -28,7 +28,7 @@ import {
   userActions,
   userSelector,
 } from '../../../../redux/slice/userSlice';
-import { typeUser } from '../../../../types/user';
+import { user } from '../../../../types/user';
 import ModalUser from '../ModalUser';
 import { authSelector, authState } from '../../../../redux/slice/authSlice';
 
@@ -45,7 +45,7 @@ const TableUser: React.FC = () => {
     {
       title: 'Avatar',
       dataIndex: 'avatar',
-      render: (text: string, record: typeUser) => {
+      render: (text: string, record: user) => {
         return (
           <React.Fragment>
             {record.avatar === '' ? (
@@ -67,7 +67,7 @@ const TableUser: React.FC = () => {
     {
       title: 'FullName',
       dataIndex: 'fullname',
-      sorter: (a: typeUser, b: typeUser) => {
+      sorter: (a: user, b: user) => {
         return a.fullname.localeCompare(b.fullname);
       },
     },
@@ -82,7 +82,7 @@ const TableUser: React.FC = () => {
     {
       title: 'Gender',
       dataIndex: 'gender',
-      render: (text: string, record: typeUser) => {
+      render: (text: string, record: user) => {
         return (
           <React.Fragment>
             {record.gender === true ? <span>Male</span> : <span>Female</span>}
@@ -93,7 +93,7 @@ const TableUser: React.FC = () => {
     {
       title: 'Created Date',
       dataIndex: 'createdAt',
-      render: (text: string, record: typeUser) => {
+      render: (text: string, record: user) => {
         let date = new Date(record.createdAt).toLocaleDateString('en-EN');
         return <React.Fragment>{date}</React.Fragment>;
       },
@@ -101,7 +101,7 @@ const TableUser: React.FC = () => {
     {
       title: 'Action',
       dataIndex: 'action',
-      render: (text: string, record: typeUser) => {
+      render: (text: string, record: user) => {
         return (
           <Space size="middle">
             <EditOutlined
@@ -127,7 +127,7 @@ const TableUser: React.FC = () => {
     },
   ];
 
-  const handleEditUser = (record: typeUser) => {
+  const handleEditUser = (record: user) => {
     dispatch(modalActions.showModal('Edit user'));
     dispatch(userActions.setUser(record));
   };
@@ -175,7 +175,7 @@ const TableUser: React.FC = () => {
         const data = await userApi.getAll(user.accessToken, dispatch);
         let wb = utils.book_new();
         let ws = utils.json_to_sheet(
-          data.data.data.rows.map((item: typeUser) => ({
+          data.data.data.rows.map((item: user) => ({
             fullname: item.fullname,
             email: item.email,
             phone: item.phone,
@@ -271,7 +271,7 @@ const TableUser: React.FC = () => {
           <Table
             dataSource={
               users &&
-              users.rows.map((item: typeUser) => {
+              users.rows.map((item: user) => {
                 return {
                   ...item,
                   key: item.id,

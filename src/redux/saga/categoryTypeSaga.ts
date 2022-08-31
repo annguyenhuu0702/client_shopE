@@ -6,7 +6,6 @@ import { STATUS_CODE } from '../../constants';
 import {
   createCategoryType,
   getAllCategoryTypeParams,
-  categoryType,
   updateCategoryType,
 } from '../../types/categortType';
 import { tokenPayload, tokenPayloadDelete } from '../../types/common';

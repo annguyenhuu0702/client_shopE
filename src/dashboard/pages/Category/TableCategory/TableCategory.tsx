@@ -26,13 +26,17 @@ import {
 } from '../../../../redux/slice/categorySlice';
 import { category } from '../../../../types/category';
 import moment from 'moment';
+import { authSelector, authState } from '../../../../redux/slice/authSlice';
+import { categoryApi } from '../../../../apis/categoryApi';
+import { utils, writeFileXLSX } from 'xlsx';
 
 const TableCategory: React.FC = () => {
   const dispatch = useDispatch();
   const [form] = Form.useForm();
   const { isModal }: modalState = useSelector(modalSelector);
-  const { categories, isLoading, page }: categoryState =
+  const { categories, isLoading, page, pageSize }: categoryState =
     useSelector(categorySelector);
+  const { user }: authState = useSelector(authSelector);
 
   const columns = [
     {
@@ -105,21 +109,46 @@ const TableCategory: React.FC = () => {
     console.log('Failed:', errorInfo);
   };
 
-  function confirm(record: category) {}
+  function confirm(record: any) {
+    dispatch(
+      categoryActions.deleteCategory({
+        token: user.accessToken,
+        dispatch,
+        id: record.id,
+        p: page,
+        limit: pageSize,
+      })
+    );
+  }
 
   const handleAddNewCategory = () => {
     dispatch(modalActions.showModal('Add Category'));
     dispatch(categoryActions.setCategory(null));
   };
 
-  const handleEditCategory = (record: category) => {
+  const handleEditCategory = (record: any) => {
     dispatch(modalActions.showModal('Edit category'));
     dispatch(categoryActions.setCategory(record));
   };
 
   const handleExportExcel = () => {
     try {
-      const getAllCategory = async () => {};
+      const getAllCategory = async () => {
+        const data = await categoryApi.getAll();
+        let wb = utils.book_new();
+        let ws = utils.json_to_sheet(
+          data.data.data.rows.map((item: category) => ({
+            name: item.name,
+            title: item.title,
+            description: item.description,
+            categoryType: item.categoryType.name,
+            createdAt: moment(item.createdAt).format('MM/DD/YYYY'),
+          }))
+        );
+        utils.book_append_sheet(wb, ws, 'Category');
+        writeFileXLSX(wb, 'Category.xlsx');
+      };
+      getAllCategory();
     } catch (error) {
       console.log(error);
     }

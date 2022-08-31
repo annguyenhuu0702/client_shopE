@@ -37,7 +37,7 @@ const TableCategoryType: React.FC = () => {
   const { isModal }: modalState = useSelector(modalSelector);
   const { user }: authState = useSelector(authSelector);
 
-  const { categoriesType, page, isLoading }: categoryTypeState =
+  const { categoriesType, page, pageSize, isLoading }: categoryTypeState =
     useSelector(categoryTypeSelector);
 
   const columns = [
@@ -86,7 +86,7 @@ const TableCategoryType: React.FC = () => {
     dispatch(
       categoryTypeActions.getAllCategoryType({
         p: page,
-        limit: 7,
+        limit: pageSize,
         [values.option]: values.search,
       })
     );
@@ -102,8 +102,10 @@ const TableCategoryType: React.FC = () => {
         token: user.accessToken,
         dispatch,
         id: record.id,
-        p: page,
-        limit: 7,
+        params: {
+          p: page,
+          limit: pageSize,
+        },
       })
     );
   }

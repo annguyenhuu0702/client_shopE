@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 
-import { Layout } from 'antd';
+import { Layout, Pagination } from 'antd';
 import HeaderTitle from '../../components/HeaderTitle';
 import TableCategory from './TableCategory';
 import { useTitle } from '../../../hooks/useTitle';
@@ -16,7 +16,8 @@ const { Content } = Layout;
 
 const Category: React.FC = () => {
   const dispatch = useDispatch();
-  const { page }: categoryState = useSelector(categorySelector);
+  const { page, categories, pageSize }: categoryState =
+    useSelector(categorySelector);
 
   useEffect(() => {
     dispatch(categoryTypeActions.getAllCategoryType({}));
@@ -41,6 +42,18 @@ const Category: React.FC = () => {
           </div>
         </div>
       </Content>
+      <div className="common-pagination-cus">
+        <Pagination
+          pageSize={pageSize}
+          current={page}
+          total={categories.count}
+          onChange={(page: number, pageSize: number) => {
+            dispatch(categoryActions.setPage({ page, pageSize }));
+          }}
+          showSizeChanger={true}
+          pageSizeOptions={[7, 50, 100, 200]}
+        />
+      </div>
     </section>
   );
 };

@@ -5,7 +5,7 @@ import {
   getAllCategoryParams,
   updateCategory,
 } from '../../types/category';
-import { tokenPayload } from '../../types/common';
+import { tokenPayload, tokenPayloadDelete } from '../../types/common';
 import { RootState } from '../store';
 
 export interface categoryState {
@@ -100,6 +100,24 @@ const CategorySlice = createSlice({
     editCategoryFailed: (state) => {
       state.isLoading = false;
       state.isError = false;
+    },
+    deleteCategory: (state, action: PayloadAction<tokenPayloadDelete>) => {
+      state.isLoading = true;
+    },
+    deleteCategorySuccess: (state, action: PayloadAction<number>) => {
+      state.isError = false;
+      state.isLoading = false;
+      state.categories.rows = state.categories.rows.filter(
+        (item) => item.id !== action.payload
+      );
+      state.categories.count -= 1;
+      if (state.categories.rows.length === 0) {
+        state.page = state.page - 1;
+      }
+    },
+    deleteCategoryFailed: (state) => {
+      state.isLoading = false;
+      state.isError = true;
     },
   },
 });

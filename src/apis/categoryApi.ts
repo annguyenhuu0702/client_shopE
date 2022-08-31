@@ -33,8 +33,19 @@ const update = (
   );
 };
 
+const deleteCategory = (
+  token: string | null,
+  dispatch: AppDispatch,
+  id: number
+): Promise<AxiosResponse> => {
+  return apiCallerWithToken(token, dispatch).delete(
+    `${URL_API}/category/delete/${id}`
+  );
+};
+
 export const categoryApi = {
   create,
   getAll,
   update,
+  deleteCategory,
 };

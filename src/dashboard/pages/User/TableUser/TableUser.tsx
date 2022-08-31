@@ -36,7 +36,8 @@ const TableUser: React.FC = () => {
   const dispatch = useDispatch();
 
   const { isModal }: modalState = useSelector(modalSelector);
-  const { users, isLoading, page }: userState = useSelector(userSelector);
+  const { users, isLoading, page, pageSize }: userState =
+    useSelector(userSelector);
   const { user }: authState = useSelector(authSelector);
 
   const [form] = Form.useForm();
@@ -139,7 +140,7 @@ const TableUser: React.FC = () => {
         dispatch,
         params: {
           p: page,
-          limit: 7,
+          limit: pageSize,
           [values.option]: values.search,
         },
       })
@@ -158,7 +159,7 @@ const TableUser: React.FC = () => {
         id: record.id,
         params: {
           p: page,
-          limit: 7,
+          limit: pageSize,
         },
       })
     );

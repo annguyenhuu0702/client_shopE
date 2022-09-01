@@ -103,7 +103,15 @@ const TableCategory: React.FC = () => {
     },
   ];
 
-  const onFinish = (values: any) => {};
+  const onFinish = (values: any) => {
+    dispatch(
+      categoryActions.getAllCategory({
+        p: page,
+        limit: pageSize,
+        [values.option]: values.search,
+      })
+    );
+  };
 
   const onFinishFailed = (errorInfo: any) => {
     console.log('Failed:', errorInfo);
@@ -175,6 +183,10 @@ const TableCategory: React.FC = () => {
               >
                 <Select style={{ width: 120, borderRadius: '5px' }}>
                   <Select.Option value="name">Name</Select.Option>
+                  <Select.Option value="categoryType">
+                    Category Type
+                  </Select.Option>
+                  <Select.Option value="parent">Parent</Select.Option>
                 </Select>
               </Form.Item>
               <Form.Item name="search">

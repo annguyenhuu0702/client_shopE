@@ -1,5 +1,6 @@
 import React from 'react';
 import { QueryParams } from './common';
+import { userRole } from './userRole';
 
 export interface user {
   id: number | string;
@@ -18,13 +19,12 @@ export interface user {
   isDeleted: boolean;
   key?: React.Key | string | number;
   resetValues?: Function;
-  userRoles: any;
+  userRoles: userRole[];
   // votes
   // repVotes
   // productUsers
   // comments
   // repComments
-  // userRoles
 }
 
 export interface createUser {

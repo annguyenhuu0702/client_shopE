@@ -2,18 +2,17 @@ import React, { useState } from 'react';
 
 import { Col, Form, Input, Modal } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
-import {
-  modalActions,
-  modalSelector,
-  modalState,
-} from '../../../../redux/slice/modalSlice';
 import { authSelector, authState } from '../../../../redux/slice/authSlice';
 import {
   categoryTypeActions,
   categoryTypeSelector,
   categoryTypeState,
 } from '../../../../redux/slice/categoryTypeSlice';
-import { categoryType } from '../../../../types/categortType';
+import {
+  modalActions,
+  modalSelector,
+  modalState,
+} from '../../../../redux/slice/modalSlice';
 
 const ModalCategoryType: React.FC = () => {
   const dispatch = useDispatch();

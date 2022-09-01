@@ -40,7 +40,8 @@ const Product: React.FC = () => {
           <div className={cx('img')}>
             <Link to="">
               <img
-                src="https://cdn.shopify.com/s/files/1/0456/5070/6581/products/1127893-MSPBL-1_1080x.jpg?v=1655201512"
+                className="common-img"
+                src="https://res.cloudinary.com/diot4imoq/image/upload/v1662016045/canifa/2ls22s018-sy038-2-thumb_n882ft.jpg"
                 alt=""
               />
             </Link>
@@ -163,9 +164,6 @@ const Product: React.FC = () => {
               </div>
             </Modal>
           )}
-          <div className={cx('category')}>
-            <h5>HOKA</h5>
-          </div>
           <div className={cx('name')}>
             <Link to="">
               <span>
@@ -191,7 +189,8 @@ const Product: React.FC = () => {
           <div className={cx('img')}>
             <Link to="">
               <img
-                src="https://cdn.shopify.com/s/files/1/0456/5070/6581/products/1127893-MSPBL-1_1080x.jpg?v=1655201512"
+                className="common-img"
+                src="https://res.cloudinary.com/diot4imoq/image/upload/v1662016050/canifa/6ls22s010-sa026-1-thumb_iexbcd.jpg"
                 alt=""
               />
             </Link>
@@ -199,9 +198,6 @@ const Product: React.FC = () => {
           <div className={cx('preview')}>
             <FontAwesomeIcon icon={faMagnifyingGlass} className={cx('icon')} />
             <span>Xem trước</span>
-          </div>
-          <div className={cx('category')}>
-            <h5>HOKA</h5>
           </div>
           <div className={cx('name')}>
             <Link to="">
@@ -226,7 +222,8 @@ const Product: React.FC = () => {
           <div className={cx('img')}>
             <Link to="">
               <img
-                src="https://cdn.shopify.com/s/files/1/0456/5070/6581/products/1127893-MSPBL-1_1080x.jpg?v=1655201512"
+                className="common-img"
+                src="https://res.cloudinary.com/diot4imoq/image/upload/v1662016056/canifa/2ls22s017-sw001-2-thumb_lmjp5t.jpg"
                 alt=""
               />
             </Link>
@@ -235,9 +232,7 @@ const Product: React.FC = () => {
             <FontAwesomeIcon icon={faMagnifyingGlass} className={cx('icon')} />
             <span>Xem trước</span>
           </div>
-          <div className={cx('category')}>
-            <h5>HOKA</h5>
-          </div>
+
           <div className={cx('name')}>
             <Link to="">
               Giày chạy bộ nam hoka march

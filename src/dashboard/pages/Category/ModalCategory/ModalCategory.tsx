@@ -26,7 +26,7 @@ import {
   modalState,
 } from '../../../../redux/slice/modalSlice';
 import { categoryType } from '../../../../types/categortType';
-import { category, createCategory } from '../../../../types/category';
+import { category } from '../../../../types/category';
 import { slugify } from '../../../../utils/index';
 
 const getBase64 = (img: RcFile, callback: (url: string) => void) => {
@@ -62,8 +62,7 @@ const ModalCategory: React.FC = () => {
     name: currentCategory ? currentCategory.name : '',
     thumbnail: currentCategory ? currentCategory.thumbnail : '',
     title: currentCategory ? currentCategory.title : '',
-    description: currentCategory ? currentCategory.description : '',
-    categoryTypeId: currentCategory ? currentCategory.categoryTypeId : '',
+    categoryTypeId: currentCategory ? currentCategory.categoryTypeId : -1,
     parentId: currentCategory ? currentCategory.parentId : -1,
   };
 
@@ -116,7 +115,8 @@ const ModalCategory: React.FC = () => {
       title: values.title,
       name: values.name,
       description: values.description,
-      categoryTypeId: values.categoryTypeId,
+      categoryTypeId:
+        values.categoryTypeId === -1 ? null : values.categoryTypeId,
       slug: slugify(values.name),
       parentId: values.parentId === -1 ? null : values.parentId,
     };
@@ -226,18 +226,6 @@ const ModalCategory: React.FC = () => {
                 <Input />
               </Form.Item>
               <Form.Item
-                label="Description"
-                name="description"
-                rules={[
-                  {
-                    required: true,
-                    message: 'Please fill in this field!',
-                  },
-                ]}
-              >
-                <Input />
-              </Form.Item>
-              <Form.Item
                 label="CategoryTypeId"
                 name="categoryTypeId"
                 rules={[
@@ -248,6 +236,7 @@ const ModalCategory: React.FC = () => {
                 ]}
               >
                 <Select onChange={handleChange}>
+                  <Select.Option value={-1}>No category type</Select.Option>
                   {categoriesType.rows.map((item: categoryType) => {
                     return (
                       <Select.Option value={item.id} key={item.id}>

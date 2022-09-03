@@ -64,7 +64,6 @@ const userSlice = createSlice({
     createUserSuccess: (state, action: PayloadAction<user>) => {
       state.isLoading = false;
       state.isError = false;
-      state.currentUser = null;
       state.page = 1;
       state.users.rows.unshift(action.payload);
       state.users.count += 1;
@@ -83,7 +82,6 @@ const userSlice = createSlice({
       state.isLoading = true;
     },
     editUserSuccess: (state, action: PayloadAction<user>) => {
-      state.currentUser = null;
       state.isLoading = false;
       state.isError = false;
       const index = state.users.rows.findIndex(
@@ -103,7 +101,6 @@ const userSlice = createSlice({
     deleteUserSuccess: (state, action: PayloadAction<number>) => {
       state.isError = false;
       state.isLoading = false;
-      state.currentUser = null;
       state.users.rows = state.users.rows.filter(
         (item) => item.id !== action.payload
       );

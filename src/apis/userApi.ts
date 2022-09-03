@@ -2,13 +2,13 @@ import { AxiosResponse } from 'axios';
 import { apiCallerWithToken } from '../config/configAxios';
 import { URL_API } from '../constants';
 import { AppDispatch } from '../redux/store';
-import { QueryParams } from '../types/common';
+import { queryParams } from '../types/common';
 import { createUser, updateUser } from '../types/user';
 
 const getAll = (
   token: string | null,
   dispatch: AppDispatch,
-  params?: QueryParams
+  params?: queryParams
 ): Promise<AxiosResponse> => {
   return apiCallerWithToken(token, dispatch).get(`${URL_API}/user/getAll`, {
     params,

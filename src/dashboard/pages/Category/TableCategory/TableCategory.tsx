@@ -39,10 +39,10 @@ const TableCategory: React.FC = () => {
   const { user }: authState = useSelector(authSelector);
 
   const columns = [
-    {
-      title: 'Thumbnail',
-      dataIndex: 'thumbnail',
-    },
+    // {
+    //   title: 'Thumbnail',
+    //   dataIndex: 'thumbnail',
+    // },
     {
       title: 'Name',
       dataIndex: 'name',
@@ -50,10 +50,6 @@ const TableCategory: React.FC = () => {
     {
       title: 'Title',
       dataIndex: 'title',
-    },
-    {
-      title: 'Description',
-      dataIndex: 'description',
     },
     {
       title: 'Category Type',
@@ -148,7 +144,6 @@ const TableCategory: React.FC = () => {
           data.data.data.rows.map((item: category) => ({
             name: item.name,
             title: item.title,
-            description: item.description,
             categoryType: item.categoryType.name,
             createdAt: moment(item.createdAt).format('MM/DD/YYYY'),
           }))

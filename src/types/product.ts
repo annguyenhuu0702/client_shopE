@@ -1,16 +1,17 @@
-import { category } from './category';
-
 export interface product {
   id: number | string;
-  name: string;
-  slug: string;
-  price: number;
-  thumbnail?: string;
-  description: string;
-  new_price?: number;
   createdAt: string;
   updatedAt: string;
+  name: string;
+  price: number;
+  newPrice: number;
+  thumbnail?: string;
+  slug: string;
+  isDeleted: boolean;
+  categoryId: number;
+  productOptions: any;
+  votes: any;
+  productUsers: any;
+  productCategories: any;
   key?: React.Key | string | number;
-  category_id: number;
-  category?: category;
 }

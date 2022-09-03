@@ -3,9 +3,9 @@ import instance, { apiCallerWithToken } from '../config/configAxios';
 import { URL_API } from '../constants';
 import { AppDispatch } from '../redux/store';
 import { createCategoryType, updateCategoryType } from '../types/categortType';
-import { QueryParams } from '../types/common';
+import { queryParams } from '../types/common';
 
-const getAll = (params?: QueryParams) => {
+const getAll = (params?: queryParams) => {
   return instance.get(`${URL_API}/category-type/getAll`, {
     params,
   });

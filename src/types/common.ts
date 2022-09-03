@@ -1,4 +1,4 @@
-export interface QueryParams {
+export interface queryParams {
   p?: number;
   limit?: number;
   sortBy?: string;
@@ -16,7 +16,7 @@ export interface tokenPayloadDelete {
   token: string | null;
   dispatch: any;
   id: number;
-  params?: QueryParams;
+  params?: queryParams;
   p?: number;
   limit?: number;
 }

@@ -1,13 +1,12 @@
 import React from 'react';
 import { categoryType } from './categortType';
-import { QueryParams } from './common';
+import { queryParams } from './common';
 
 export interface category {
   id: number | string;
   name: string;
   slug: string;
   title: string;
-  description: string;
   thumbnail: string;
   isDeleted: boolean;
   categoryTypeId: number | null;
@@ -27,8 +26,7 @@ export interface createCategory {
   slug: string;
   title: string;
   name: string;
-  description: string;
-  categoryTypeId: number;
+  categoryTypeId: number | null;
   parentId?: number | null;
   resetValues?: Function;
 }
@@ -37,6 +35,6 @@ export interface updateCategory extends createCategory {
   id: string | number;
 }
 
-export interface getAllCategoryParams extends QueryParams {
+export interface getAllCategoryParams extends queryParams {
   name?: string;
 }

@@ -1,5 +1,5 @@
 import { category } from './category';
-import { QueryParams } from './common';
+import { queryParams } from './common';
 
 export interface categoryType {
   id: string | number;
@@ -12,7 +12,7 @@ export interface categoryType {
   resetValues?: Function;
 }
 
-export interface getAllCategoryTypeParams extends QueryParams {
+export interface getAllCategoryTypeParams extends queryParams {
   name?: string;
 }
 

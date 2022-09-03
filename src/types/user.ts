@@ -1,5 +1,5 @@
 import React from 'react';
-import { QueryParams } from './common';
+import { queryParams } from './common';
 import { userRole } from './userRole';
 
 export interface user {
@@ -55,7 +55,7 @@ export interface getAllUserTokenPayload {
   params?: getAllUserParams;
 }
 
-export interface getAllUserParams extends QueryParams {
+export interface getAllUserParams extends queryParams {
   fullname?: string;
   email?: string;
   phone?: string;

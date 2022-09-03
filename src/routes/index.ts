@@ -1,7 +1,7 @@
 import { lazy } from 'react';
 
 import { DashboardLayout, DefaultLayout } from '../layouts';
-import { typeRoute } from '../types/route';
+import { route } from '../types/route';
 
 const HomePage = lazy(() => import('../pages/HomePage'));
 const Login = lazy(() => import('../pages/Login'));
@@ -14,7 +14,7 @@ const Category = lazy(() => import('../dashboard/pages/Category'));
 const CategoryType = lazy(() => import('../dashboard/pages/CategoryType'));
 const NotFound = lazy(() => import('../pages/NotFound/NotFound'));
 
-export const publicRoute: typeRoute[] = [
+export const publicRoute: route[] = [
   {
     path: '*',
     element: NotFound,
@@ -38,7 +38,7 @@ export const publicRoute: typeRoute[] = [
 ];
 
 //admin
-export const privateRoute: typeRoute[] = [
+export const privateRoute: route[] = [
   {
     path: '/admin',
     element: Statistical,

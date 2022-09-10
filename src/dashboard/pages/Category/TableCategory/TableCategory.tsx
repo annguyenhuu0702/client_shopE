@@ -1,4 +1,3 @@
-import React from 'react';
 import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
 import {
   Button,
@@ -11,38 +10,29 @@ import {
   Space,
   Table,
 } from 'antd';
+import React from 'react';
 
+import moment from 'moment';
 import { useDispatch, useSelector } from 'react-redux';
-import ModalCategory from '../ModalCategory';
-import {
-  modalActions,
-  modalSelector,
-  modalState,
-} from '../../../../redux/slice/modalSlice';
+import { useNavigate } from 'react-router-dom';
+import { utils, writeFileXLSX } from 'xlsx';
+import { categoryApi } from '../../../../apis/categoryApi';
+import { authSelector, authState } from '../../../../redux/slice/authSlice';
 import {
   categoryActions,
   categorySelector,
   categoryState,
 } from '../../../../redux/slice/categorySlice';
 import { category } from '../../../../types/category';
-import moment from 'moment';
-import { authSelector, authState } from '../../../../redux/slice/authSlice';
-import { categoryApi } from '../../../../apis/categoryApi';
-import { utils, writeFileXLSX } from 'xlsx';
 
 const TableCategory: React.FC = () => {
   const dispatch = useDispatch();
   const [form] = Form.useForm();
-  const { isModal }: modalState = useSelector(modalSelector);
   const { categories, isLoading, page, pageSize }: categoryState =
     useSelector(categorySelector);
   const { user }: authState = useSelector(authSelector);
-
+  const navigate = useNavigate();
   const columns = [
-    // {
-    //   title: 'Thumbnail',
-    //   dataIndex: 'thumbnail',
-    // },
     {
       title: 'Name',
       dataIndex: 'name',
@@ -126,13 +116,13 @@ const TableCategory: React.FC = () => {
   }
 
   const handleAddNewCategory = () => {
-    dispatch(modalActions.showModal('Add Category'));
     dispatch(categoryActions.setCategory(null));
+    navigate('/admin/category/create');
   };
 
   const handleEditCategory = (record: any) => {
-    dispatch(modalActions.showModal('Edit category'));
     dispatch(categoryActions.setCategory(record));
+    navigate(`/admin/category/edit/${record.id}`);
   };
 
   const handleExportExcel = () => {
@@ -158,7 +148,6 @@ const TableCategory: React.FC = () => {
   };
   return (
     <React.Fragment>
-      {isModal && <ModalCategory />}
       <Row className="common-row-cus">
         <Col xl={18} style={{ paddingInline: '5px' }}>
           <Form

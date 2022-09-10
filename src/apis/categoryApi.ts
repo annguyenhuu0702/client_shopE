@@ -11,6 +11,10 @@ const getAll = (params?: queryParams) => {
   });
 };
 
+const getById = (id: string) => {
+  return instance.get(`${URL_API}/category/getById/${id}`);
+};
+
 const create = (
   token: string | null,
   dispatch: AppDispatch,
@@ -46,6 +50,7 @@ const deleteCategory = (
 export const categoryApi = {
   create,
   getAll,
+  getById,
   update,
   deleteCategory,
 };

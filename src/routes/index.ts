@@ -11,6 +11,9 @@ const User = lazy(() => import('../dashboard/pages/User'));
 const Statistical = lazy(() => import('../dashboard/pages/Statistical'));
 const Profile = lazy(() => import('../dashboard/pages/Profile'));
 const Category = lazy(() => import('../dashboard/pages/Category'));
+const FormCategory = lazy(
+  () => import('../dashboard/pages/Category/FormCategory')
+);
 const CategoryType = lazy(() => import('../dashboard/pages/CategoryType'));
 const NotFound = lazy(() => import('../pages/NotFound/NotFound'));
 
@@ -57,6 +60,16 @@ export const privateRoute: route[] = [
   {
     path: '/admin/category',
     element: Category,
+    layout: DashboardLayout,
+  },
+  {
+    path: '/admin/category/create',
+    element: FormCategory,
+    layout: DashboardLayout,
+  },
+  {
+    path: '/admin/category/edit/:id',
+    element: FormCategory,
     layout: DashboardLayout,
   },
   {

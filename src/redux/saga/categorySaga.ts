@@ -10,7 +10,6 @@ import {
 } from '../../types/category';
 import { tokenPayload, tokenPayloadDelete } from '../../types/common';
 import { categoryActions } from '../slice/categorySlice';
-import { modalActions } from '../slice/modalSlice';
 
 function* getAllCategorySaga({
   payload,
@@ -33,7 +32,7 @@ function* createCategorySaga({
   payload,
 }: PayloadAction<tokenPayload<createCategory>>): any {
   try {
-    const { token, dispatch, data } = payload;
+    const { token, dispatch, data, navigate } = payload;
     const res = yield call(() => {
       return categoryApi.create(token, dispatch, data);
     });
@@ -43,7 +42,13 @@ function* createCategorySaga({
       if (data.resetValues) {
         data.resetValues();
       }
-      yield put(modalActions.hideModal());
+      navigate('/admin/category');
+      notification.success({
+        message: 'Success',
+        description: 'Create success',
+        placement: 'bottomRight',
+        duration: 3,
+      });
     }
   } catch (err) {
     console.log(err);
@@ -61,7 +66,7 @@ function* editCategorySaga({
   payload,
 }: PayloadAction<tokenPayload<updateCategory>>): any {
   try {
-    const { token, dispatch, data } = payload;
+    const { token, dispatch, data, navigate } = payload;
     const res = yield call(() => {
       return categoryApi.update(token, dispatch, data);
     });
@@ -71,7 +76,13 @@ function* editCategorySaga({
       if (data.resetValues) {
         data.resetValues();
       }
-      yield put(modalActions.hideModal());
+      navigate('/admin/category');
+      notification.success({
+        message: 'Success',
+        description: 'Edit success',
+        placement: 'bottomRight',
+        duration: 3,
+      });
     }
   } catch (err) {
     console.log(err);

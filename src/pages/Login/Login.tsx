@@ -23,8 +23,8 @@ const Login: React.FC = () => {
   };
   useTitle('Login');
   return (
-    <section className={cx('login')}>
-      <div className="w-1200">
+    <main className={cx('login')}>
+      <div className="p-50">
         <div className="container-auth">
           <div className="title">
             <span>Đăng nhập</span>
@@ -88,7 +88,7 @@ const Login: React.FC = () => {
           </div>
         </div>
       </div>
-    </section>
+    </main>
   );
 };
 

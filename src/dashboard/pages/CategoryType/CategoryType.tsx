@@ -29,7 +29,7 @@ const CategoryType: React.FC = () => {
   }, [dispatch, page, pageSize]);
 
   return (
-    <section className="section-common">
+    <main className="section-common">
       <HeaderTitle title="Category type" />
       <Content className="common-layout-content-cus">
         <div className="common-content-wrap">
@@ -50,7 +50,7 @@ const CategoryType: React.FC = () => {
           pageSizeOptions={[7, 50, 100, 200]}
         />
       </div>
-    </section>
+    </main>
   );
 };
 

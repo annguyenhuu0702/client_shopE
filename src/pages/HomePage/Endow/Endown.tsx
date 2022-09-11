@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 
 const Endow: React.FC = () => {
   return (
-    <section className="w-1200">
+    <section className="p-50">
       <div className="title">
         <h2 className="common-title">Ưu đãi riêng bạn</h2>
       </div>

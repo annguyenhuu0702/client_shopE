@@ -23,16 +23,15 @@
           content: "";
           position: absolute;
           display: block;
-          width: 50px;
-          height: 20px;
-          bottom: 0;
+          width: 100px;
+          height: 30px;
+          bottom: -10px;
           background: transparent;
         }
         .group-category {
           font-size: 1.4rem;
           text-transform: uppercase;
           color: $white-color;
-          opacity: 0.8;
           &:hover {
             color: $hover-color;
           }
@@ -55,7 +54,7 @@
           position: absolute;
           background: $white-color;
           width: 1200px;
-          top: 100%;
+          top: calc(100% + 10px);
           left: 0;
           z-index: 10;
           padding: 30px 16px;
@@ -96,23 +95,6 @@
               margin: 6px 0;
             }
           }
-        }
-      }
-    }
-    .endow {
-      a {
-        font-size: 1.3rem;
-        text-transform: uppercase;
-        color: $white-color;
-        background: #dc3c3c;
-        padding: 5px 25px;
-        border-radius: 3px;
-        font-weight: 600;
-        cursor: pointer;
-        transition: ease-in 0.3s;
-
-        &:hover {
-          background: $green-color;
         }
       }
     }

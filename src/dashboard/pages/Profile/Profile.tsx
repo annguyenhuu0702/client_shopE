@@ -51,7 +51,7 @@ const Profile: React.FC = () => {
   const { user }: authState = useSelector(authSelector);
   useTitle('Profile');
   return (
-    <section className={cx('profile')}>
+    <main className={cx('profile')}>
       <HeaderTitle title="User" />
       <div className={cx('layout-content')}>
         <div className={cx('banner')}>
@@ -114,7 +114,7 @@ const Profile: React.FC = () => {
           </Row>
         </div>
       </div>
-    </section>
+    </main>
   );
 };
 

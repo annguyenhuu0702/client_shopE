@@ -32,7 +32,7 @@ const User: React.FC = () => {
   }, [dispatch, page, pageSize, user.accessToken]);
 
   return (
-    <section className="section-common">
+    <main className="section-common">
       <HeaderTitle title="User" />
       <Content className="common-layout-content-cus">
         <div className="common-content-wrap">
@@ -53,7 +53,7 @@ const User: React.FC = () => {
           pageSizeOptions={[7, 20, 100, 200]}
         />
       </div>
-    </section>
+    </main>
   );
 };
 

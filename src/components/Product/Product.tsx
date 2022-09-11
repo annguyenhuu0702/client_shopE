@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import 'antd/dist/antd.css';
-
 import styles from './__product.module.scss';
 
 import classNames from 'classnames/bind';
@@ -21,6 +20,8 @@ const cx = classNames.bind(styles);
 const Product: React.FC = () => {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [qtt, setQtt] = useState<number>(1);
+  const [isActiveSize, setIsActiveSize] = useState<boolean>(false);
+  const [isActiveColor, setIsActiveColor] = useState<boolean>(false);
 
   const showModal = () => {
     setIsModalVisible(true);
@@ -83,9 +84,6 @@ const Product: React.FC = () => {
                   </Swiper>
                 </div>
                 <div className={cx('right')}>
-                  <div className={cx('category')}>
-                    <h3>New balance</h3>
-                  </div>
                   <div className={cx('name')}>
                     <Link to="">
                       Giày Thời Trang Nam New Balance XC-72 Shifted Lifestyle
@@ -98,7 +96,14 @@ const Product: React.FC = () => {
                   <div className={cx('colors')}>
                     <h3>Màu sắc</h3>
                     <div className={cx('wrap')}>
-                      <div className={cx('color')}>
+                      <div
+                        className={cx('color', {
+                          active: isActiveColor,
+                        })}
+                        onClick={() => {
+                          setIsActiveColor(true);
+                        }}
+                      >
                         <span>WA</span>
                       </div>
                       <div className={cx('color')}>
@@ -109,7 +114,14 @@ const Product: React.FC = () => {
                   <div className={cx('sizes')}>
                     <h3>Kích thước</h3>
                     <div className={cx('wrap')}>
-                      <div className={cx('size')}>
+                      <div
+                        className={cx('size', {
+                          active: isActiveSize,
+                        })}
+                        onClick={() => {
+                          setIsActiveSize(true);
+                        }}
+                      >
                         <span>US5</span>
                       </div>
                       <div className={cx('size')}>
@@ -167,76 +179,9 @@ const Product: React.FC = () => {
           <div className={cx('name')}>
             <Link to="">
               <span>
-                Giày chạy bộ nam hoka march
-                5aaaaaaaaaaaaaaaaaaaaaaaáddddddđsadddđádddddđsaddddddddddddddddd
+                Giày chạy bộ nam hoka march gì mà đẹp thế kia kia kia kia kia
+                Giày chạy bộ nam hoka march gì mà đẹp thế kia kia kia kia kia
               </span>
-            </Link>
-          </div>
-          <div className={cx('price')}>
-            <span>{castToVND(570000)}</span>
-            <span className={cx('price-old')}>{castToVND(123000000)}</span>
-          </div>
-          <div className={cx('star')}>
-            <Rate allowHalf defaultValue={5} />
-          </div>
-          <div className={cx('tags-name')}>
-            <span>Mới</span>
-          </div>
-        </div>
-      </Col>
-      <Col xl={6} md={8} xs={12}>
-        <div className={cx('item')}>
-          <div className={cx('img')}>
-            <Link to="">
-              <img
-                className="common-img"
-                src="https://res.cloudinary.com/diot4imoq/image/upload/v1662016050/canifa/6ls22s010-sa026-1-thumb_iexbcd.jpg"
-                alt=""
-              />
-            </Link>
-          </div>
-          <div className={cx('preview')}>
-            <FontAwesomeIcon icon={faMagnifyingGlass} className={cx('icon')} />
-            <span>Xem trước</span>
-          </div>
-          <div className={cx('name')}>
-            <Link to="">
-              Giày chạy bộ nam hoka march
-              5aaaaaaaaaaaaaaaaaaaaaaaáddddddđsadddđádddddđsaddddddddddddddddd
-            </Link>
-          </div>
-          <div className={cx('price')}>
-            <span>{castToVND(570000)}</span>
-            <span className={cx('price-old')}>{castToVND(123000000)}</span>
-          </div>
-          <div className={cx('star')}>
-            <Rate allowHalf defaultValue={5} />
-          </div>
-          <div className={cx('tags-name')}>
-            <span>Mới</span>
-          </div>
-        </div>
-      </Col>
-      <Col xl={6} md={8} xs={12}>
-        <div className={cx('item')}>
-          <div className={cx('img')}>
-            <Link to="">
-              <img
-                className="common-img"
-                src="https://res.cloudinary.com/diot4imoq/image/upload/v1662016056/canifa/2ls22s017-sw001-2-thumb_lmjp5t.jpg"
-                alt=""
-              />
-            </Link>
-          </div>
-          <div className={cx('preview')}>
-            <FontAwesomeIcon icon={faMagnifyingGlass} className={cx('icon')} />
-            <span>Xem trước</span>
-          </div>
-
-          <div className={cx('name')}>
-            <Link to="">
-              Giày chạy bộ nam hoka march
-              5aaaaaaaaaaaaaaaaaaaaaaaáddddddđsadddđádddddđsaddddddddddddddddd
             </Link>
           </div>
           <div className={cx('price')}>

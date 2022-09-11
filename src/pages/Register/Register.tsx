@@ -24,8 +24,8 @@ const Register: React.FC = () => {
   };
   useTitle('Register');
   return (
-    <section className={cx('register')}>
-      <div className="w-1200">
+    <main className={cx('register')}>
+      <div className="p-50">
         <div className="container-auth">
           <div className="title">
             <span>Tạo tài khoản</span>
@@ -93,7 +93,7 @@ const Register: React.FC = () => {
           </div>
         </div>
       </div>
-    </section>
+    </main>
   );
 };
 

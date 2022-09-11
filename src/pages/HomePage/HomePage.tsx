@@ -14,7 +14,7 @@ const cx = classNames.bind(styles);
 const HomePage = () => {
   useTitle('CANIFA');
   return (
-    <section className={cx('home-page')}>
+    <main className={cx('home-page')}>
       <section className="banner">
         <Link to="">
           <img
@@ -27,7 +27,7 @@ const HomePage = () => {
       <Endow />
       {/* code hàng mới đây là xong trang chủ */}
       <section className="block-endow">
-        <div className="w-1200">
+        <div className="p-50">
           <div className="title">
             <h2 className="common-title">Sản phẩm giá tốt</h2>
           </div>
@@ -45,10 +45,10 @@ const HomePage = () => {
         </div>
       </section>
       <section className="bst-family" style={{ marginTop: '48px' }}>
-        <div className="w-1200">
+        <div className="p-50">
           <h2 className="common-title">BST gia đình</h2>
-          <Row className={cx('list-product')} gutter={[24, 24]}>
-            <Col xl={6}>
+          <Row gutter={[16, 16]} className={cx('list-product')}>
+            <Col xl={6} md={24} xs={12}>
               <Link to="">
                 <img
                   className="common-img"
@@ -57,6 +57,8 @@ const HomePage = () => {
                 />
               </Link>
             </Col>
+            <Product />
+            <Product />
             <Product />
           </Row>
           <div className="view-all" style={{ margin: '48px 0' }}>
@@ -67,7 +69,7 @@ const HomePage = () => {
         </div>
       </section>
       <section className="block-canifaz">
-        <div className="w-1200">
+        <div className="p-50">
           <div className="title">
             <h2 className="common-title">Canifa Z</h2>
           </div>
@@ -85,10 +87,10 @@ const HomePage = () => {
         </div>
       </section>
       <section className="style-at-home" style={{ marginTop: '48px' }}>
-        <div className="w-1200">
+        <div className="p-50">
           <h2 className="common-title">Style at home</h2>
           <Row className={cx('list-product')} gutter={[24, 24]}>
-            <Col xl={6}>
+            <Col xl={6} md={24} xs={12}>
               <Link to="">
                 <img
                   className="common-img"
@@ -107,7 +109,7 @@ const HomePage = () => {
         </div>
       </section>
       <section className="jeans">
-        <div className="w-1200">
+        <div className="p-50">
           <div className="title">
             <h2 className="common-title">Quần jean</h2>
           </div>
@@ -124,11 +126,11 @@ const HomePage = () => {
           </Row>
         </div>
       </section>
-      <section className="bst-family" style={{ marginTop: '48px' }}>
-        <div className="w-1200">
+      <section style={{ marginTop: '48px' }}>
+        <div className="p-50">
           <h2 className="common-title">Áo phông</h2>
           <Row className={cx('list-product')} gutter={[24, 24]}>
-            <Col xl={6}>
+            <Col xl={6} md={24} xs={12}>
               <Link to="">
                 <img
                   className="common-img"
@@ -146,7 +148,7 @@ const HomePage = () => {
           </div>
         </div>
       </section>
-    </section>
+    </main>
   );
 };
 

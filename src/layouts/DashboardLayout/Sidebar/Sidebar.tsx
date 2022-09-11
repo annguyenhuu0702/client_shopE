@@ -65,7 +65,7 @@ const Sidebar: React.FC = () => {
   };
 
   return (
-    <div
+    <section
       style={collapsed ? { width: '80px' } : { width: '256px' }}
       className={cx('wrap')}
     >
@@ -95,7 +95,7 @@ const Sidebar: React.FC = () => {
         onClick={handleContent}
         selectedKeys={[location.pathname]}
       />
-    </div>
+    </section>
   );
 };
 

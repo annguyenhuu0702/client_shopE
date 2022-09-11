@@ -12,7 +12,7 @@ const { Content } = Layout;
 const Statistical: React.FC = () => {
   useTitle('Statistical');
   return (
-    <section className={cx('statistical')}>
+    <main className={cx('statistical')}>
       <HeaderTitle title="Statistical" />
       <Content className={cx('layout-content-cus')}>
         <div className={cx('content-wrap')}>
@@ -22,7 +22,7 @@ const Statistical: React.FC = () => {
       <div className={cx('pagination-cus')}>
         <Pagination />
       </div>
-    </section>
+    </main>
   );
 };
 

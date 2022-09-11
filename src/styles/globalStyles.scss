@@ -1,24 +1,28 @@
 @import "./variable.module.scss";
-.w-1200 {
-  width: 100%;
-  max-width: 1290px;
-  margin: 0 auto;
+@import "./mixin.module.scss";
+
+.p-50 {
+  padding: 0 50px;
+
+  @include mobile {
+    padding: 0 20px;
+  }
 }
 
 // hover header language and account home page
 .arrow-up {
-  margin-left: 50px;
+  margin-left: 108px;
   width: 0;
   height: 0;
-  border-left: 10px solid transparent;
-  border-right: 10px solid transparent;
-  border-bottom: 10px solid $white-color;
+  border-left: 8px solid transparent;
+  border-right: 8px solid transparent;
+  border-bottom: 8px solid $white-color;
 }
 
 .block-hover {
   background: $white-color;
-  width: 180px;
-  padding: 10px 0 10px 10px;
+  width: 160px;
+  padding: 10px;
 
   .block-child {
     margin: 0 0 6px 0;
@@ -50,6 +54,10 @@
     }
 
     .text {
+      display: -webkit-box;
+      -webkit-line-clamp: 1;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
       &:hover {
         opacity: 1;
         color: $green-color;
@@ -68,7 +76,7 @@
   font-size: 1.4rem;
 
   a {
-    color: $text-color;
+    color: $black-color;
   }
 
   &:hover {
@@ -104,7 +112,6 @@
   line-height: 36px;
 }
 
-// custom input search header home page
 .custom-input {
   .ant-input-affix-wrapper-focused {
     outline: none;
@@ -159,8 +166,9 @@
     line-height: 2.2;
     font-weight: 600;
 
-    &:hover {
-      background: $green-color;
+    @include mobile {
+      width: 160px;
+      padding: 8px 26px;
     }
   }
 }

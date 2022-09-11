@@ -28,7 +28,7 @@ const Category: React.FC = () => {
   }, [dispatch, page]);
   useTitle('Category');
   return (
-    <section className="section-common">
+    <main className="section-common">
       <HeaderTitle title="Category" />
       <Content className="common-layout-content-cus">
         <div className="common-content-wrap">
@@ -49,7 +49,7 @@ const Category: React.FC = () => {
           pageSizeOptions={[7, 50, 100, 200]}
         />
       </div>
-    </section>
+    </main>
   );
 };
 

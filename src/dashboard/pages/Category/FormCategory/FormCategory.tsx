@@ -25,6 +25,7 @@ import { slugify } from '../../../../utils';
 import HeaderTitle from '../../../components/HeaderTitle';
 import { useNavigate, useParams } from 'react-router-dom';
 import { categoryApi } from '../../../../apis/categoryApi';
+import { useTitle } from '../../../../hooks/useTitle';
 
 const { Content } = Layout;
 
@@ -145,22 +146,28 @@ const FormCategory: React.FC = () => {
   }, [dispatch]);
 
   useEffect(() => {
-    const getCategoryById = async () => {
-      if (id) {
-        const res = await categoryApi.getById(id);
-        const { data } = res.data;
-        dispatch(categoryActions.setCategory(data));
-        form.setFieldsValue({
-          name: data.name,
-          thumbnail: data.thumbnail,
-          title: data.title,
-          categoryTypeId: data.categoryTypeId,
-          parentId: data.parentId,
-        });
-      }
-    };
-    getCategoryById();
+    try {
+      const getCategoryById = async () => {
+        if (id) {
+          const res = await categoryApi.getById(id);
+          const { data } = res.data;
+          dispatch(categoryActions.setCategory(data));
+          form.setFieldsValue({
+            name: data.name,
+            thumbnail: data.thumbnail,
+            title: data.title,
+            categoryTypeId: data.categoryTypeId,
+            parentId: data.parentId,
+          });
+        }
+      };
+      getCategoryById();
+    } catch (error) {
+      console.log(error);
+    }
   }, [id, dispatch, form]);
+
+  useTitle(currentCategory ? 'Edit category' : 'Create category');
 
   return (
     <section className="section-common">

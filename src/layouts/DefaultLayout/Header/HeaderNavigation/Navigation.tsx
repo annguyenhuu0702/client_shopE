@@ -57,9 +57,6 @@ const HeaderNavigation: React.FC = () => {
             </div>
           </li>
         </ul>
-        <div className={cx('endow')}>
-          <Link to="/uu-dai">Ưu đãi</Link>
-        </div>
       </div>
     </section>
   );

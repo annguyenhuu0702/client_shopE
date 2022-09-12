@@ -30,7 +30,7 @@ const App = () => {
     try {
       return (
         user.accessToken &&
-        (jwtDecoded(user.accessToken) as any).role === 'admin' &&
+        (jwtDecoded(user.accessToken) as any).roleId === 2 &&
         showRoutes(privateRoute)
       );
     } catch (error) {
@@ -74,7 +74,7 @@ const App = () => {
         </div>
       }
     >
-      <div className="App" style={{ overflow: 'hidden' }}>
+      <div className="App">
         <Routes>
           {showPrivateRoter()}
           {showRoutes(publicRoute)}

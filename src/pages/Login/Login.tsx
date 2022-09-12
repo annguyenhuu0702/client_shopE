@@ -23,7 +23,7 @@ const Login: React.FC = () => {
   };
   useTitle('Login');
   return (
-    <main className={cx('login')}>
+    <main className="auth">
       <div className="p-50">
         <div className="container-auth">
           <div className="title">
@@ -37,6 +37,7 @@ const Login: React.FC = () => {
               onFinishFailed={onFinishFailed}
               autoComplete="off"
               className="form-custom"
+              labelAlign="left"
             >
               <Form.Item
                 label="Email"

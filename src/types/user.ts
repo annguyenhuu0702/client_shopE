@@ -1,6 +1,6 @@
 import React from 'react';
 import { queryParams, tokenPayload } from './common';
-import { userRole } from './userRole';
+import { role } from './role';
 
 export interface user {
   id: number | string;
@@ -19,7 +19,7 @@ export interface user {
   isDeleted: boolean;
   key?: React.Key | string | number;
   resetValues?: Function;
-  userRoles: userRole[];
+  role: role;
   // votes
   // repVotes
   // productUsers

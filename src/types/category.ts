@@ -1,6 +1,6 @@
 import React from 'react';
 import { categoryType } from './categortType';
-import { queryParams } from './common';
+import { queryParams, tokenPayload } from './common';
 
 export interface category {
   id: number | string;
@@ -33,6 +33,11 @@ export interface createCategory {
 
 export interface updateCategory extends createCategory {
   id: string | number;
+}
+
+export interface deleteCategory extends tokenPayload {
+  id: number;
+  params?: queryParams;
 }
 
 export interface getAllCategoryParams extends queryParams {

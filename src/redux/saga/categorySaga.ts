@@ -5,10 +5,11 @@ import { categoryApi } from '../../apis/categoryApi';
 import { STATUS_CODE } from '../../constants';
 import {
   createCategory,
+  deleteCategory,
   getAllCategoryParams,
   updateCategory,
 } from '../../types/category';
-import { tokenPayload, tokenPayloadDelete } from '../../types/common';
+import { tokenPayloadData } from '../../types/common';
 import { categoryActions } from '../slice/categorySlice';
 
 function* getAllCategorySaga({
@@ -30,7 +31,7 @@ function* getAllCategorySaga({
 
 function* createCategorySaga({
   payload,
-}: PayloadAction<tokenPayload<createCategory>>): any {
+}: PayloadAction<tokenPayloadData<createCategory>>): any {
   try {
     const { token, dispatch, data, navigate } = payload;
     const res = yield call(() => {
@@ -64,7 +65,7 @@ function* createCategorySaga({
 
 function* editCategorySaga({
   payload,
-}: PayloadAction<tokenPayload<updateCategory>>): any {
+}: PayloadAction<tokenPayloadData<updateCategory>>): any {
   try {
     const { token, dispatch, data, navigate } = payload;
     const res = yield call(() => {
@@ -96,11 +97,9 @@ function* editCategorySaga({
   }
 }
 
-function* deleteCategorySaga({
-  payload,
-}: PayloadAction<tokenPayloadDelete>): any {
+function* deleteCategorySaga({ payload }: PayloadAction<deleteCategory>): any {
   try {
-    const { token, dispatch, id, p, limit } = payload;
+    const { token, dispatch, id, params } = payload;
     const res = yield call(() => {
       return categoryApi.deleteCategory(token, dispatch, id);
     });
@@ -108,10 +107,7 @@ function* deleteCategorySaga({
     if (status === STATUS_CODE.SUCCESS) {
       yield put(categoryActions.deleteCategorySuccess(id));
       yield put(
-        categoryActions.getAllCategory({
-          p,
-          limit,
-        })
+        categoryActions.getAllCategory({ p: params?.p, limit: params?.limit })
       );
     }
   } catch (err) {

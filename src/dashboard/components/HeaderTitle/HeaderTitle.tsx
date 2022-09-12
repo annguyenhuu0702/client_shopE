@@ -1,6 +1,5 @@
 import React from 'react';
 import styles from './__headerTitle.module.scss';
-
 import classNames from 'classnames/bind';
 import { useDispatch, useSelector } from 'react-redux';
 import { authApi } from '../../../apis/authApi';

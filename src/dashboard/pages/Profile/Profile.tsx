@@ -1,22 +1,22 @@
 import React, { useMemo, useState } from 'react';
 import styles from './__profile.module.scss';
 
-import { Col, Image, Row, Tabs } from 'antd';
-import classNames from 'classnames/bind';
-import { useSelector } from 'react-redux';
-import HeaderTitle from '../../components/HeaderTitle';
-import ChangeEmail from './ChangeEmail';
-import ChangePassword from './ChangePassword';
-import ChangeProfile from './ChangeProfile';
 import {
   faCakeCandles,
   faEnvelope,
   faPhone,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Col, Image, Row, Tabs } from 'antd';
+import classNames from 'classnames/bind';
 import moment from 'moment';
-import { authSelector, authState } from '../../../redux/slice/authSlice';
+import { useSelector } from 'react-redux';
 import { useTitle } from '../../../hooks/useTitle';
+import { authSelector, authState } from '../../../redux/slice/authSlice';
+import HeaderTitle from '../../components/HeaderTitle';
+import ChangeEmail from './ChangeEmail';
+import ChangePassword from './ChangePassword';
+import ChangeProfile from './ChangeProfile';
 
 const { TabPane } = Tabs;
 
@@ -50,6 +50,7 @@ const Profile: React.FC = () => {
 
   const { user }: authState = useSelector(authSelector);
   useTitle('Profile');
+
   return (
     <main className={cx('profile')}>
       <HeaderTitle title="User" />

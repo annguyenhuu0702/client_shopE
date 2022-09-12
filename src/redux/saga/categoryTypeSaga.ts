@@ -5,10 +5,11 @@ import { categoryTypeApi } from '../../apis/categoryTypeApi';
 import { STATUS_CODE } from '../../constants';
 import {
   createCategoryType,
+  deleteCategoryType,
   getAllCategoryTypeParams,
   updateCategoryType,
 } from '../../types/categortType';
-import { tokenPayload, tokenPayloadDelete } from '../../types/common';
+import { tokenPayloadData } from '../../types/common';
 import { categoryTypeActions } from '../slice/categoryTypeSlice';
 import { modalActions } from '../slice/modalSlice';
 
@@ -31,7 +32,7 @@ function* getAllCategoryTypeSaga({
 
 function* createCategoryTypeSaga({
   payload,
-}: PayloadAction<tokenPayload<createCategoryType>>): any {
+}: PayloadAction<tokenPayloadData<createCategoryType>>): any {
   try {
     const { token, dispatch, data } = payload;
     const res = yield call(() => {
@@ -59,7 +60,7 @@ function* createCategoryTypeSaga({
 
 function* editCategoryTypeSaga({
   payload,
-}: PayloadAction<tokenPayload<updateCategoryType>>): any {
+}: PayloadAction<tokenPayloadData<updateCategoryType>>): any {
   try {
     const { token, dispatch, data } = payload;
     const res = yield call(() => {
@@ -87,9 +88,9 @@ function* editCategoryTypeSaga({
 
 function* deleteCategoryTypeSaga({
   payload,
-}: PayloadAction<tokenPayloadDelete>): any {
+}: PayloadAction<deleteCategoryType>): any {
   try {
-    const { token, dispatch, id, p, limit } = payload;
+    const { token, dispatch, id, params } = payload;
     const res = yield call(() => {
       return categoryTypeApi.deleteCategoryType(token, dispatch, id);
     });
@@ -98,8 +99,8 @@ function* deleteCategoryTypeSaga({
       yield put(categoryTypeActions.deleteCategoryTypeSuccess(id));
       yield put(
         categoryTypeActions.getAllCategoryType({
-          p,
-          limit,
+          p: params?.p,
+          limit: params?.limit,
         })
       );
     }

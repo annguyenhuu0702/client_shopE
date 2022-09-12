@@ -1,5 +1,5 @@
 import { category } from './category';
-import { queryParams } from './common';
+import { queryParams, tokenPayload } from './common';
 
 export interface categoryType {
   id: string | number;
@@ -12,10 +12,6 @@ export interface categoryType {
   resetValues?: Function;
 }
 
-export interface getAllCategoryTypeParams extends queryParams {
-  name?: string;
-}
-
 export interface createCategoryType {
   name: string;
   resetValues?: Function;
@@ -23,4 +19,13 @@ export interface createCategoryType {
 
 export interface updateCategoryType extends createCategoryType {
   id?: string | number;
+}
+
+export interface deleteCategoryType extends tokenPayload {
+  id: number;
+  params?: queryParams;
+}
+
+export interface getAllCategoryTypeParams extends queryParams {
+  name?: string;
 }

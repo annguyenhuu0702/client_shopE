@@ -6,7 +6,7 @@ import {
   loginDto,
   registerDto,
 } from '../../types/auth';
-import { tokenPayload } from '../../types/common';
+import { tokenPayloadData } from '../../types/common';
 import { user } from '../../types/user';
 import { RootState } from '../store';
 
@@ -80,7 +80,7 @@ const authSlice = createSlice({
     },
     changeProfile: (
       state,
-      action: PayloadAction<tokenPayload<changeProfileDto>>
+      action: PayloadAction<tokenPayloadData<changeProfileDto>>
     ) => {
       state.isLoading = true;
     },
@@ -100,7 +100,7 @@ const authSlice = createSlice({
     },
     changePassword: (
       state,
-      action: PayloadAction<tokenPayload<changePasswordDto>>
+      action: PayloadAction<tokenPayloadData<changePasswordDto>>
     ) => {
       state.isLoading = true;
     },
@@ -114,7 +114,7 @@ const authSlice = createSlice({
     },
     changeEmail: (
       state,
-      action: PayloadAction<tokenPayload<changeEmailDto>>
+      action: PayloadAction<tokenPayloadData<changeEmailDto>>
     ) => {
       state.isLoading = true;
     },

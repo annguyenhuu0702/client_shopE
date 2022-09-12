@@ -3,18 +3,17 @@ import { notification } from 'antd';
 import { call, put, takeEvery } from 'redux-saga/effects';
 import { userApi } from '../../apis/userApi';
 import { STATUS_CODE } from '../../constants';
-import { tokenPayload, tokenPayloadDelete } from '../../types/common';
+import { tokenPayloadData } from '../../types/common';
 import {
-  getAllUserTokenPayload,
   createUser,
+  deleteUser,
+  getAllUser,
   updateUser,
 } from '../../types/user';
 import { modalActions } from '../slice/modalSlice';
 import { userActions } from '../slice/userSlice';
 
-function* getAllUserSaga({
-  payload,
-}: PayloadAction<getAllUserTokenPayload>): any {
+function* getAllUserSaga({ payload }: PayloadAction<getAllUser>): any {
   try {
     const { token, dispatch, params } = payload;
     const res = yield call(() => {
@@ -32,7 +31,7 @@ function* getAllUserSaga({
 
 function* createUserSaga({
   payload,
-}: PayloadAction<tokenPayload<createUser>>): any {
+}: PayloadAction<tokenPayloadData<createUser>>): any {
   try {
     const { token, dispatch, data } = payload;
     const res = yield call(() => {
@@ -60,7 +59,7 @@ function* createUserSaga({
 
 function* editUserSaga({
   payload,
-}: PayloadAction<tokenPayload<updateUser>>): any {
+}: PayloadAction<tokenPayloadData<updateUser>>): any {
   try {
     const { token, dispatch, data } = payload;
     const res = yield call(() => {
@@ -86,7 +85,7 @@ function* editUserSaga({
   }
 }
 
-function* deleteUserSaga({ payload }: PayloadAction<tokenPayloadDelete>): any {
+function* deleteUserSaga({ payload }: PayloadAction<deleteUser>): any {
   try {
     const { token, dispatch, id, params } = payload;
     const res = yield call(() => {

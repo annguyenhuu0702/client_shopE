@@ -109,8 +109,10 @@ const TableCategory: React.FC = () => {
         token: user.accessToken,
         dispatch,
         id: record.id,
-        p: page,
-        limit: pageSize,
+        params: {
+          p: page,
+          limit: pageSize,
+        },
       })
     );
   }

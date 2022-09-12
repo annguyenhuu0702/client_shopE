@@ -5,18 +5,14 @@ export interface queryParams {
   sortType?: string;
 }
 
-export interface tokenPayload<T> {
+export interface tokenPayloadData<T> {
   token: string | null;
   dispatch: any;
   data: T;
   navigate?: any;
 }
 
-export interface tokenPayloadDelete {
+export interface tokenPayload {
   token: string | null;
   dispatch: any;
-  id: number;
-  params?: queryParams;
-  p?: number;
-  limit?: number;
 }

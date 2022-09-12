@@ -2,10 +2,11 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import {
   category,
   createCategory,
+  deleteCategory,
   getAllCategoryParams,
   updateCategory,
 } from '../../types/category';
-import { tokenPayload, tokenPayloadDelete } from '../../types/common';
+import { tokenPayloadData } from '../../types/common';
 import { RootState } from '../store';
 
 export interface categoryState {
@@ -63,7 +64,7 @@ const CategorySlice = createSlice({
     },
     createCategory: (
       state,
-      action: PayloadAction<tokenPayload<createCategory>>
+      action: PayloadAction<tokenPayloadData<createCategory>>
     ) => {
       state.isLoading = true;
     },
@@ -83,7 +84,7 @@ const CategorySlice = createSlice({
     },
     editCategory: (
       state,
-      action: PayloadAction<tokenPayload<updateCategory>>
+      action: PayloadAction<tokenPayloadData<updateCategory>>
     ) => {
       state.isLoading = true;
     },
@@ -101,7 +102,7 @@ const CategorySlice = createSlice({
       state.isLoading = false;
       state.isError = false;
     },
-    deleteCategory: (state, action: PayloadAction<tokenPayloadDelete>) => {
+    deleteCategory: (state, action: PayloadAction<deleteCategory>) => {
       state.isLoading = true;
     },
     deleteCategorySuccess: (state, action: PayloadAction<number>) => {

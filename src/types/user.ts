@@ -1,5 +1,5 @@
 import React from 'react';
-import { queryParams } from './common';
+import { queryParams, tokenPayload } from './common';
 import { userRole } from './userRole';
 
 export interface user {
@@ -49,9 +49,12 @@ export interface updateUser {
   resetValues?: Function;
 }
 
-export interface getAllUserTokenPayload {
-  token: string | null;
-  dispatch: any;
+export interface deleteUser extends tokenPayload {
+  id: number;
+  params?: queryParams;
+}
+
+export interface getAllUser extends tokenPayload {
   params?: getAllUserParams;
 }
 

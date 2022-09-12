@@ -1,4 +1,5 @@
 import { lazy } from 'react';
+import routes from '../config/routes';
 
 import { DashboardLayout, DefaultLayout } from '../layouts';
 import { route } from '../types/route';
@@ -24,17 +25,17 @@ export const publicRoute: route[] = [
     layout: null,
   },
   {
-    path: '/',
+    path: routes.home,
     element: HomePage,
     layout: DefaultLayout,
   },
   {
-    path: '/register',
+    path: routes.register,
     element: Register,
     layout: DefaultLayout,
   },
   {
-    path: '/login',
+    path: routes.login,
     element: Login,
     layout: DefaultLayout,
   },
@@ -43,37 +44,37 @@ export const publicRoute: route[] = [
 //admin
 export const privateRoute: route[] = [
   {
-    path: '/admin',
+    path: routes.admin,
     element: Statistical,
     layout: DashboardLayout,
   },
   {
-    path: '/admin/user',
+    path: routes.userAdmin,
     element: User,
     layout: DashboardLayout,
   },
   {
-    path: '/admin/profile',
+    path: routes.profileAdmin,
     element: Profile,
     layout: DashboardLayout,
   },
   {
-    path: '/admin/category',
+    path: routes.categoryAdmin,
     element: Category,
     layout: DashboardLayout,
   },
   {
-    path: '/admin/category/create',
+    path: routes.createCategoryAdmin,
     element: FormCategory,
     layout: DashboardLayout,
   },
   {
-    path: '/admin/category/edit/:id',
+    path: routes.editCategoryAdmin,
     element: FormCategory,
     layout: DashboardLayout,
   },
   {
-    path: '/admin/category-type',
+    path: routes.categoryTypeAdmin,
     element: CategoryType,
     layout: DashboardLayout,
   },

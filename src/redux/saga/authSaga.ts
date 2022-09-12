@@ -11,7 +11,7 @@ import {
   loginDto,
   registerDto,
 } from '../../types/auth';
-import { tokenPayload } from '../../types/common';
+import { tokenPayloadData } from '../../types/common';
 import { authActions } from '../slice/authSlice';
 
 function* registerSaga({ payload }: PayloadAction<registerDto>): any {
@@ -70,7 +70,7 @@ function* loginSaga({ payload }: PayloadAction<loginDto>): any {
 
 function* changeProfileSaga({
   payload,
-}: PayloadAction<tokenPayload<changeProfileDto>>): any {
+}: PayloadAction<tokenPayloadData<changeProfileDto>>): any {
   try {
     const { token, dispatch, data, navigate } = payload;
     const res = yield call(() => {
@@ -97,7 +97,7 @@ function* changeProfileSaga({
 
 function* changePasswordSaga({
   payload,
-}: PayloadAction<tokenPayload<changePasswordDto>>): any {
+}: PayloadAction<tokenPayloadData<changePasswordDto>>): any {
   try {
     const { token, dispatch, data, navigate } = payload;
     const res = yield call(() => {
@@ -130,7 +130,7 @@ function* changePasswordSaga({
 
 function* changeEmailSaga({
   payload,
-}: PayloadAction<tokenPayload<changeEmailDto>>): any {
+}: PayloadAction<tokenPayloadData<changeEmailDto>>): any {
   try {
     const { token, dispatch, data, navigate } = payload;
     const res = yield call(() => {

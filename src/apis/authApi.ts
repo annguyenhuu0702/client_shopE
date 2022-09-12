@@ -18,22 +18,22 @@ const login = (user: loginDto): Promise<AxiosResponse> => {
   return instance.post(`${URL_API}/auth/login`, user);
 };
 
-export const logout = (): Promise<AxiosResponse> => {
+const logout = (): Promise<AxiosResponse> => {
   return instance.post(`${URL_API}/auth/logout`);
 };
 
-export const refreshToken = (): Promise<AxiosResponse> => {
+const refreshToken = (): Promise<AxiosResponse> => {
   return instance.post(`${URL_API}/auth/refreshToken`);
 };
 
-export const getProfile = (
+const getProfile = (
   token: string | null,
   dispatch: AppDispatch
 ): Promise<AxiosResponse> => {
   return apiCallerWithToken(token, dispatch).get(`${URL_API}/auth/getProfile`);
 };
 
-export const changeProfile = (
+const changeProfile = (
   token: string | null,
   dispatch: AppDispatch,
   data: changeProfileDto
@@ -44,7 +44,7 @@ export const changeProfile = (
   );
 };
 
-export const changePassword = (
+const changePassword = (
   token: string | null,
   dispatch: AppDispatch,
   data: changePasswordDto
@@ -55,7 +55,7 @@ export const changePassword = (
   );
 };
 
-export const changeEmail = (
+const changeEmail = (
   token: string | null,
   dispatch: AppDispatch,
   data: changeEmailDto

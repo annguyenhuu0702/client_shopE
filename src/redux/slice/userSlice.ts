@@ -1,10 +1,11 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { tokenPayload, tokenPayloadDelete } from '../../types/common';
+import { tokenPayloadData } from '../../types/common';
 import {
-  getAllUserTokenPayload,
   createUser,
-  user,
+  deleteUser,
+  getAllUser,
   updateUser,
+  user,
 } from '../../types/user';
 import { RootState } from '../store';
 
@@ -38,7 +39,7 @@ const userSlice = createSlice({
   name: 'user',
   initialState: initialState,
   reducers: {
-    getAllUser: (state, action: PayloadAction<getAllUserTokenPayload>) => {
+    getAllUser: (state, action: PayloadAction<getAllUser>) => {
       state.isLoading = true;
     },
     getAllUserSuccess: (state, action: PayloadAction<ResponseUsers>) => {
@@ -58,7 +59,10 @@ const userSlice = createSlice({
       state.page = action.payload.page;
       state.pageSize = action.payload.pageSize;
     },
-    createUser: (state, action: PayloadAction<tokenPayload<createUser>>) => {
+    createUser: (
+      state,
+      action: PayloadAction<tokenPayloadData<createUser>>
+    ) => {
       state.isLoading = true;
     },
     createUserSuccess: (state, action: PayloadAction<user>) => {
@@ -78,7 +82,7 @@ const userSlice = createSlice({
     setUser: (state, action: PayloadAction<user | null>) => {
       state.currentUser = action.payload;
     },
-    editUser: (state, action: PayloadAction<tokenPayload<updateUser>>) => {
+    editUser: (state, action: PayloadAction<tokenPayloadData<updateUser>>) => {
       state.isLoading = true;
     },
     editUserSuccess: (state, action: PayloadAction<user>) => {
@@ -95,7 +99,7 @@ const userSlice = createSlice({
       state.isLoading = false;
       state.isError = false;
     },
-    deleteUser: (state, action: PayloadAction<tokenPayloadDelete>) => {
+    deleteUser: (state, action: PayloadAction<deleteUser>) => {
       state.isLoading = true;
     },
     deleteUserSuccess: (state, action: PayloadAction<number>) => {

@@ -148,7 +148,6 @@
 }
 
 // nút view all product
-
 .view-all {
   display: flex;
   justify-content: center;
@@ -159,12 +158,12 @@
     justify-content: center;
     width: 220px;
     background: $black-color;
-    padding: 8px 34px;
+    padding: 12px 34px;
     color: $white-color;
     text-transform: uppercase;
     font-size: 1.4rem;
-    line-height: 2.2;
     font-weight: 600;
+    border-radius: 10px;
 
     @include mobile {
       width: 160px;

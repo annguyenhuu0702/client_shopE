@@ -3,10 +3,10 @@ import 'antd/dist/antd.css';
 import styles from './__product.module.scss';
 
 import classNames from 'classnames/bind';
-import { Col, Image, Modal, Rate } from 'antd';
+import { Col, Image, Modal, Rate, Tooltip } from 'antd';
 import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
+import { faHeart, faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
 import { castToVND } from '../../utils';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css';
@@ -188,11 +188,19 @@ const Product: React.FC = () => {
             <span>{castToVND(570000)}</span>
             <span className={cx('price-old')}>{castToVND(123000000)}</span>
           </div>
-          <div className={cx('star')}>
-            <Rate allowHalf defaultValue={5} />
+          <div className={cx('choosen')}>
+            <Rate allowHalf value={0} />
+            <div className={cx('wish-list')}>
+              <Tooltip placement="bottom" title="Yêu thích">
+                <FontAwesomeIcon icon={faHeart} />
+              </Tooltip>
+            </div>
           </div>
           <div className={cx('tags-name')}>
             <span>Mới</span>
+          </div>
+          <div className={cx('tags-percent')}>
+            <span>-10%</span>
           </div>
         </div>
       </Col>

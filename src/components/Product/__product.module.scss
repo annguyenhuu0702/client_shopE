@@ -17,7 +17,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    padding: 4px 0;
+    padding: 8px 0;
     cursor: pointer;
 
     &:hover {
@@ -34,10 +34,10 @@
   }
 
   .name {
+    margin: 4px 0;
     a {
-      color: $black-color;
       font-size: 1.4rem;
-      line-height: 20px;
+      color: $black-color;
       display: -webkit-box;
       -webkit-line-clamp: 2;
       -webkit-box-orient: vertical;
@@ -46,17 +46,32 @@
   }
 
   .price {
+    font-size: 1.4rem;
     display: flex;
     justify-content: space-between;
     margin: 10px 0;
-    color: $black-color;
+    color: $red;
     font-weight: bold;
-    font-size: 1.4rem;
 
     .price-old {
       text-decoration: line-through;
-      color: #9b9b9b;
+      color: $root-price;
       font-weight: 400;
+    }
+  }
+
+  .choosen {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    .wish-list {
+      font-size: 2rem;
+      color: #ccc;
+      background: #fff;
+      cursor: pointer;
+      &:hover {
+        color: red;
+      }
     }
   }
 
@@ -73,6 +88,19 @@
       text-transform: uppercase;
     }
   }
+  .tags-percent {
+    position: absolute;
+    top: 0;
+    left: 0;
+    span {
+      display: block;
+      font-size: 1.4rem;
+      color: $white-color;
+      background: $red;
+      padding: 6px 16px;
+      text-transform: uppercase;
+    }
+  }
 }
 
 //modal product
@@ -80,8 +108,11 @@
   display: flex;
   width: 100%;
   .left {
+    display: flex;
+    align-items: center;
     width: 40%;
     margin-right: 20px;
+    border: 1px solid #ccc;
     .my-swiper {
       img {
         width: 100%;
@@ -106,12 +137,12 @@
       span {
         display: block;
         font-size: 1.4rem;
-        color: $black-color;
+        color: $red;
       }
       .sale {
         margin-left: 16px;
         text-decoration: line-through;
-        color: #89939f;
+        color: $root-price;
       }
     }
     .colors,
@@ -150,6 +181,7 @@
         .active {
           border: 1px solid $black-color;
           color: $black-color;
+          font-weight: 600;
         }
       }
     }
@@ -190,9 +222,6 @@
         }
         .btn-add-to-cart {
           width: 100%;
-          display: flex;
-          align-items: center;
-          justify-content: center;
           margin-left: 16px;
           button {
             width: 100%;

@@ -188,16 +188,12 @@ const Product: React.FC = () => {
             <span>{castToVND(570000)}</span>
             <span className={cx('price-old')}>{castToVND(123000000)}</span>
           </div>
-          <div className={cx('choosen')}>
-            <Rate allowHalf value={0} />
+          <div className={cx('tags-name')}>
             <div className={cx('wish-list')}>
-              <Tooltip placement="bottom" title="Yêu thích">
+              <Tooltip placement="bottomRight" title="Yêu thích">
                 <FontAwesomeIcon icon={faHeart} />
               </Tooltip>
             </div>
-          </div>
-          <div className={cx('tags-name')}>
-            <span>Mới</span>
           </div>
           <div className={cx('tags-percent')}>
             <span>-10%</span>

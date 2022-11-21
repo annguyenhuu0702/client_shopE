@@ -2,6 +2,9 @@ const routes = {
   home: '/',
   register: '/register',
   login: '/login',
+  productDetail: '/:slug',
+
+  // admin
   admin: '/admin',
   userAdmin: '/admin/user',
   profileAdmin: '/admin/profile',

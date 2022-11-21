@@ -1,12 +1,12 @@
 import { lazy } from 'react';
 import routes from '../config/routes';
-
 import { DashboardLayout, DefaultLayout } from '../layouts';
 import { route } from '../types/route';
 
 const HomePage = lazy(() => import('../pages/HomePage'));
 const Login = lazy(() => import('../pages/Login'));
 const Register = lazy(() => import('../pages/Register'));
+const ProductDetail = lazy(() => import('../pages/ProductDetail'));
 
 const User = lazy(() => import('../dashboard/pages/User'));
 const Statistical = lazy(() => import('../dashboard/pages/Statistical'));
@@ -37,6 +37,11 @@ export const publicRoute: route[] = [
   {
     path: routes.login,
     element: Login,
+    layout: DefaultLayout,
+  },
+  {
+    path: routes.productDetail,
+    element: ProductDetail,
     layout: DefaultLayout,
   },
 ];

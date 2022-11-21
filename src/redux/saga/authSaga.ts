@@ -53,7 +53,7 @@ function* loginSaga({ payload }: PayloadAction<loginDto>): any {
     const { data, status } = res;
     const roleId = (jwtDecoded(data.data.accessToken) as any).roleId;
     console.log(roleId);
-    if (status === STATUS_CODE.CREATED) {
+    if (status === STATUS_CODE.SUCCESS) {
       yield put(authActions.loginSuccess(data.data));
       navigate(roleId === 2 ? '/admin' : '/');
     }

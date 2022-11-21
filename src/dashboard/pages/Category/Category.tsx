@@ -37,18 +37,20 @@ const Category: React.FC = () => {
           </div>
         </div>
       </Content>
-      <div className="common-pagination-cus">
-        <Pagination
-          pageSize={pageSize}
-          current={page}
-          total={categories.count}
-          onChange={(page: number, pageSize: number) => {
-            dispatch(categoryActions.setPage({ page, pageSize }));
-          }}
-          showSizeChanger={true}
-          pageSizeOptions={[7, 50, 100, 200]}
-        />
-      </div>
+      {categories.count > 0 && (
+        <div className="common-pagination-cus">
+          <Pagination
+            pageSize={pageSize}
+            current={page}
+            total={categories.count}
+            onChange={(page: number, pageSize: number) => {
+              dispatch(categoryActions.setPage({ page, pageSize }));
+            }}
+            showSizeChanger={true}
+            pageSizeOptions={[7, 50, 100, 200]}
+          />
+        </div>
+      )}
     </main>
   );
 };

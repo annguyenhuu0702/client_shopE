@@ -41,18 +41,20 @@ const User: React.FC = () => {
           </div>
         </div>
       </Content>
-      <div className="common-pagination-cus">
-        <Pagination
-          pageSize={pageSize}
-          current={page}
-          total={users.count}
-          onChange={(page: number, pageSize: number) => {
-            dispatch(userActions.setPage({ page, pageSize }));
-          }}
-          showSizeChanger={true}
-          pageSizeOptions={[7, 20, 100, 200]}
-        />
-      </div>
+      {users.count > 0 && (
+        <div className="common-pagination-cus">
+          <Pagination
+            pageSize={pageSize}
+            current={page}
+            total={users.count}
+            onChange={(page: number, pageSize: number) => {
+              dispatch(userActions.setPage({ page, pageSize }));
+            }}
+            showSizeChanger={true}
+            pageSizeOptions={[7, 20, 100, 200]}
+          />
+        </div>
+      )}
     </main>
   );
 };

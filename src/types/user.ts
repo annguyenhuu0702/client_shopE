@@ -19,7 +19,8 @@ export interface user {
   isDeleted: boolean;
   key?: React.Key | string | number;
   resetValues?: Function;
-  role: role;
+  roleId: number;
+  // role: role;
   // votes
   // repVotes
   // productUsers

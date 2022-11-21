@@ -9,6 +9,14 @@
   }
 }
 
+.p-100 {
+  padding: 0 100px;
+
+  @include tablet {
+    padding: 0 50px;
+  }
+}
+
 // hover header language and account home page
 .arrow-up {
   margin-left: 108px;
@@ -80,7 +88,7 @@
   }
 
   &:hover {
-    background: $hover-color;
+    background: $hover-green;
 
     .text,
     .icon {
@@ -140,7 +148,7 @@
       color: $black-color;
 
       &:hover {
-        background: $hover-color;
+        background: $hover-green;
         color: $white-color;
       }
     }
@@ -163,7 +171,15 @@
     text-transform: uppercase;
     font-size: 1.4rem;
     font-weight: 600;
+    border: 1px solid transparent;
     border-radius: 10px;
+    transition: ease-in 0.3s;
+
+    &:hover {
+      color: $black-color;
+      background: $white-color;
+      border: 1px solid $black-color;
+    }
 
     @include mobile {
       width: 160px;
@@ -289,7 +305,6 @@
 
   .common-layout-content-cus {
     height: calc(100vh - 65px - 65px);
-    overflow-y: auto;
 
     .common-content-wrap {
       .common-content {
@@ -300,7 +315,6 @@
 }
 
 .common-row-cus {
-  display: flex;
   .common-form-cus {
     display: flex;
     justify-content: space-between;

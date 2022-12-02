@@ -32,12 +32,14 @@ const HeaderTitle: React.FC<Props> = ({ title }: Props) => {
         <h3>
           Hi, <b>{user && user.user?.fullname}</b>
         </h3>
-        <div className={cx('profile')}>
-          <Link to="/admin/profile">My Account</Link>
-          <Link to="/" onClick={handleLogout}>
-            Logout
-          </Link>
-        </div>
+        {user && (
+          <div className={cx('profile')}>
+            <Link to="/admin/profile">My Account</Link>
+            <Link to="/" onClick={handleLogout}>
+              Logout
+            </Link>
+          </div>
+        )}
       </div>
     </section>
   );

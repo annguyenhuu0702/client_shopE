@@ -17,9 +17,9 @@ const cx = classNames.bind(styles);
 const HeaderNavigation: React.FC = () => {
   const dispatch = useDispatch();
   const { categories }: categoryState = useSelector(categorySelector);
-  useEffect(() => {
-    dispatch(categoryActions.getAllCategory({}));
-  }, [dispatch]);
+  // useEffect(() => {
+  //   dispatch(categoryActions.getAllCategory({}));
+  // }, [dispatch]);
 
   return (
     <section className={cx('navigation')}>

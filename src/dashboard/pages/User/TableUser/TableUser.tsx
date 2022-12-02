@@ -1,6 +1,5 @@
 import 'antd/dist/antd.css';
 import React from 'react';
-
 import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
 import {
   Button,
@@ -68,9 +67,6 @@ const TableUser: React.FC = () => {
     {
       title: 'FullName',
       dataIndex: 'fullname',
-      sorter: (a: user, b: user) => {
-        return a.fullname.localeCompare(b.fullname);
-      },
     },
     {
       title: 'Email',
@@ -180,7 +176,6 @@ const TableUser: React.FC = () => {
             fullname: item.fullname,
             email: item.email,
             phone: item.phone,
-            city: item.city,
             birthday: item.birthday,
             gender: item.gender === true ? 'Nam' : 'Nữ',
             createdAt: moment(item.createdAt).format('MM/DD/YYYY'),

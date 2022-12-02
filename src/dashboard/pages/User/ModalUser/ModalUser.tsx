@@ -63,7 +63,6 @@ const ModalUser: React.FC = () => {
     gender: currentUser ? currentUser.gender : true,
     password: '',
     phone: currentUser ? currentUser.phone : '',
-    city: currentUser ? currentUser.city : '',
     avatar: currentUser ? currentUser.avatar : '',
   };
 
@@ -118,7 +117,6 @@ const ModalUser: React.FC = () => {
       fullname: values.fullname,
       password: values.password,
       phone: values.phone,
-      ward: values.ward,
       gender: values.gender,
     };
     if (currentUser === null) {

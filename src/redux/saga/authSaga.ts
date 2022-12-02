@@ -51,11 +51,10 @@ function* loginSaga({ payload }: PayloadAction<loginDto>): any {
       return authApi.login(payload);
     });
     const { data, status } = res;
-    const roleId = (jwtDecoded(data.data.accessToken) as any).roleId;
-    console.log(roleId);
+    const role = (jwtDecoded(data.data.accessToken) as any).role;
     if (status === STATUS_CODE.SUCCESS) {
       yield put(authActions.loginSuccess(data.data));
-      navigate(roleId === 2 ? '/admin' : '/');
+      navigate(role === 'admin' ? '/admin' : '/');
     }
   } catch (error: any) {
     yield put(authActions.loginFailed());

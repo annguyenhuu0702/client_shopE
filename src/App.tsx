@@ -30,7 +30,7 @@ const App = () => {
     try {
       return (
         user.accessToken &&
-        (jwtDecoded(user.accessToken) as any).roleId === 2 &&
+        (jwtDecoded(user.accessToken) as any).role === 'admin' &&
         showRoutes(privateRoute)
       );
     } catch (error) {

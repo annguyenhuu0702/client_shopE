@@ -4,12 +4,7 @@ import { call, put, takeEvery } from 'redux-saga/effects';
 import { userApi } from '../../apis/userApi';
 import { STATUS_CODE } from '../../constants';
 import { tokenPayloadData } from '../../types/common';
-import {
-  createUser,
-  deleteUser,
-  getAllUser,
-  updateUser,
-} from '../../types/user';
+import { createUser, deleteUser, getAllUser, user } from '../../types/user';
 import { modalActions } from '../slice/modalSlice';
 import { userActions } from '../slice/userSlice';
 
@@ -38,7 +33,7 @@ function* createUserSaga({
       return userApi.create(token, dispatch, data);
     });
     const { data: newData, status } = res;
-    if (status === STATUS_CODE.SUCCESS) {
+    if (status === STATUS_CODE.CREATED) {
       yield put(userActions.createUserSuccess(newData.data));
       if (data.resetValues) {
         data.resetValues();
@@ -59,15 +54,15 @@ function* createUserSaga({
 
 function* editUserSaga({
   payload,
-}: PayloadAction<tokenPayloadData<updateUser>>): any {
+}: PayloadAction<tokenPayloadData<user>>): any {
   try {
     const { token, dispatch, data } = payload;
     const res = yield call(() => {
       return userApi.update(token, dispatch, data);
     });
-    const { data: newData, status } = res;
+    const { status } = res;
     if (status === STATUS_CODE.SUCCESS) {
-      yield put(userActions.editUserSuccess(newData.data));
+      yield put(userActions.editUserSuccess(data));
       if (data.resetValues) {
         data.resetValues();
       }
@@ -78,7 +73,7 @@ function* editUserSaga({
     yield put(userActions.editUserFailed());
     notification.error({
       message: 'Error',
-      description: 'Email is already exists',
+      description: 'Error',
       placement: 'bottomRight',
       duration: 3,
     });

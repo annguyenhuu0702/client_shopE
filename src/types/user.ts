@@ -1,6 +1,5 @@
 import React from 'react';
 import { queryParams, tokenPayload } from './common';
-import { role } from './role';
 
 export interface user {
   id: number | string;
@@ -16,16 +15,9 @@ export interface user {
   avatar: string;
   phone: string;
   gender: boolean;
-  isDeleted: boolean;
+  role: string;
   key?: React.Key | string | number;
   resetValues?: Function;
-  roleId: number;
-  // role: role;
-  // votes
-  // repVotes
-  // productUsers
-  // comments
-  // repComments
 }
 
 export interface createUser {
@@ -34,7 +26,6 @@ export interface createUser {
   avatar?: string;
   fullname: string;
   phone: string;
-  ward: string;
   gender: boolean;
   resetValues?: Function;
 }
@@ -42,10 +33,9 @@ export interface createUser {
 export interface updateUser {
   id: string | number;
   email: string;
-  avatar?: string;
+  avatar: string;
   fullname: string;
   phone: string;
-  ward: string;
   gender: boolean;
   resetValues?: Function;
 }

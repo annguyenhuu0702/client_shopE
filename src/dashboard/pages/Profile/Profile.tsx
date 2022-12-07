@@ -28,7 +28,7 @@ const OperationsSlot: Record<PositionType, React.ReactNode> = {
         paddingLeft: '20px',
       }}
     >
-      Settings
+      Cài đặt
     </span>
   ),
 };
@@ -73,20 +73,20 @@ const Profile: React.FC = () => {
           <Row>
             <Col xl={14} md={14} className={cx('settings')}>
               <Tabs tabBarExtraContent={slot} centered>
-                <TabPane tab="Change Profile" key="1">
+                <TabPane tab="Thông tin" key="profile">
                   <ChangeProfile />
                 </TabPane>
-                <TabPane tab="Change Password" key="2">
+                <TabPane tab="Mật khẩu" key="password">
                   <ChangePassword />
                 </TabPane>
-                <TabPane tab="Change Email" key="3">
+                <TabPane tab="Email" key="email">
                   <ChangeEmail />
                 </TabPane>
               </Tabs>
             </Col>
             <Col xl={8} md={8} className={cx('contact')}>
               <div className={cx('content')}>
-                <h3 className={cx('title')}>Contact</h3>
+                <h3 className={cx('title')}>Kết nối</h3>
                 <div className={cx('email')}>
                   <FontAwesomeIcon icon={faEnvelope} />
                   <div className={cx('item')}>
@@ -97,14 +97,14 @@ const Profile: React.FC = () => {
                 <div className={cx('phone')}>
                   <FontAwesomeIcon icon={faPhone} />
                   <div className={cx('item')}>
-                    <span>Phone</span>
+                    <span>SĐT</span>
                     <p>{user && user.user?.phone}</p>
                   </div>
                 </div>
                 <div className={cx('birthday')}>
                   <FontAwesomeIcon icon={faCakeCandles} />
                   <div className={cx('item')}>
-                    <span>Birthday</span>
+                    <span>Sinh nhật</span>
                     <p className={cx('birthday')}>
                       {moment(user && user.user?.birthday).format('MM/DD/YYYY')}
                     </p>

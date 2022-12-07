@@ -1,5 +1,5 @@
 import { lazy } from 'react';
-import routes from '../config/routes';
+import { routes } from '../config/routes';
 import { DashboardLayout, DefaultLayout } from '../layouts';
 import { route } from '../types/route';
 
@@ -15,7 +15,11 @@ const Category = lazy(() => import('../dashboard/pages/Category'));
 const FormCategory = lazy(
   () => import('../dashboard/pages/Category/FormCategory')
 );
-const CategoryType = lazy(() => import('../dashboard/pages/CategoryType'));
+const Colletion = lazy(() => import('../dashboard/pages/Collection'));
+const FormCollection = lazy(
+  () => import('../dashboard/pages/Collection/FormCollection')
+);
+
 const NotFound = lazy(() => import('../pages/NotFound/NotFound'));
 
 export const publicRoute: route[] = [
@@ -79,8 +83,18 @@ export const privateRoute: route[] = [
     layout: DashboardLayout,
   },
   {
-    path: routes.categoryTypeAdmin,
-    element: CategoryType,
+    path: routes.collectionAdmin,
+    element: Colletion,
+    layout: DashboardLayout,
+  },
+  {
+    path: routes.createCollectionAdmin,
+    element: FormCollection,
+    layout: DashboardLayout,
+  },
+  {
+    path: routes.editCollectionAdmin,
+    element: FormCollection,
     layout: DashboardLayout,
   },
 ];

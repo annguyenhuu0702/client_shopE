@@ -34,11 +34,13 @@ function getItem(
 }
 
 const items: MenuItem[] = [
-  getItem('Statistical', '/admin', <BarChartOutlined />),
-  getItem('User', '/admin/user', <UserOutlined />),
-  getItem('All Category', 'sub-category', <FontAwesomeIcon icon={faList} />, [
-    getItem('Category Type', '/admin/category-type'),
-    getItem('Category', '/admin/category'),
+  getItem('Thống kê', '/admin', <BarChartOutlined />),
+  getItem('Tài khoản', '/admin/user', <UserOutlined />),
+  getItem('Danh mục', '/admin/category', <UserOutlined />),
+  getItem('Bộ sưu tập', '/admin/collection', <UserOutlined />),
+  getItem('Quản lý sản phẩm', 'qlsanpham', <FontAwesomeIcon icon={faList} />, [
+    getItem('Danh mục sản phẩm', '/admin/product-categories'),
+    getItem('Sản phẩm', '/admin/products'),
   ]),
 
   getItem('Navigation Two', 'sub2', <AppstoreOutlined />, [

@@ -1,4 +1,4 @@
-const routes = {
+export const routes = {
   home: '/',
   register: '/register',
   login: '/login',
@@ -11,7 +11,9 @@ const routes = {
   categoryAdmin: '/admin/category',
   createCategoryAdmin: '/admin/category/create',
   editCategoryAdmin: '/admin/category/edit/:id',
-  categoryTypeAdmin: '/admin/category-type',
+  collectionAdmin: '/admin/collection',
+  createCollectionAdmin: '/admin/collection/create',
+  editCollectionAdmin: '/admin/collection/edit/:id',
 };
 
-export default routes;
+// export default routes;

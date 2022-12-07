@@ -1,4 +1,9 @@
-import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
+import React from 'react';
+import {
+  DeleteOutlined,
+  EditOutlined,
+  DownloadOutlined,
+} from '@ant-design/icons';
 import {
   Button,
   Col,
@@ -10,8 +15,6 @@ import {
   Space,
   Table,
 } from 'antd';
-import React from 'react';
-
 import moment from 'moment';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
@@ -34,26 +37,11 @@ const TableCategory: React.FC = () => {
   const navigate = useNavigate();
   const columns = [
     {
-      title: 'Name',
+      title: 'Tên',
       dataIndex: 'name',
     },
     {
-      title: 'Title',
-      dataIndex: 'title',
-    },
-    {
-      title: 'Category Type',
-      dataIndex: 'categoryTypeId',
-      render: (text: string, record: category) => record.categoryType?.name,
-    },
-    {
-      title: 'Parent',
-      dataIndex: 'categoryTypeId',
-      render: (text: string, record: category) =>
-        record.parent ? record.parent?.name : 'Không có',
-    },
-    {
-      title: 'Created Date',
+      title: 'Ngày tạo',
       dataIndex: 'createdAt',
       render: (text: string, record: category) => {
         let date = moment(record.createdAt).format('MM/DD/YYYY');
@@ -61,7 +49,7 @@ const TableCategory: React.FC = () => {
       },
     },
     {
-      title: 'Action',
+      title: 'Hành động',
       dataIndex: 'action',
       render: (text: string, record: category) => {
         return (
@@ -135,8 +123,7 @@ const TableCategory: React.FC = () => {
         let ws = utils.json_to_sheet(
           data.data.data.rows.map((item: category) => ({
             name: item.name,
-            title: item.title,
-            categoryType: item.categoryType.name,
+
             createdAt: moment(item.createdAt).format('MM/DD/YYYY'),
           }))
         );
@@ -168,15 +155,11 @@ const TableCategory: React.FC = () => {
                 }}
               >
                 <Select style={{ width: 120, borderRadius: '5px' }}>
-                  <Select.Option value="name">Name</Select.Option>
-                  <Select.Option value="categoryType">
-                    Category Type
-                  </Select.Option>
-                  <Select.Option value="parent">Parent</Select.Option>
+                  <Select.Option value="name">Tên</Select.Option>
                 </Select>
               </Form.Item>
               <Form.Item name="search">
-                <Input placeholder="Search" />
+                <Input placeholder="Tìm kiếm" />
               </Form.Item>
             </div>
             <Form.Item shouldUpdate>
@@ -190,7 +173,7 @@ const TableCategory: React.FC = () => {
                       .length > 0
                   }
                 >
-                  Search
+                  Tìm kiếm
                 </Button>
               )}
             </Form.Item>
@@ -202,8 +185,12 @@ const TableCategory: React.FC = () => {
             textAlign: 'center',
           }}
         >
-          <Button type="primary" onClick={handleExportExcel}>
-            Export to Excel
+          <Button
+            type="primary"
+            icon={<DownloadOutlined />}
+            onClick={handleExportExcel}
+          >
+            Excel
           </Button>
         </Col>
         <Col
@@ -218,7 +205,7 @@ const TableCategory: React.FC = () => {
               handleAddNewCategory();
             }}
           >
-            Add new
+            Thêm mới
           </Button>
         </Col>
       </Row>

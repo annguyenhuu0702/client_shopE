@@ -1,4 +1,4 @@
-export const URL_API = 'http://localhost:6868/v1/api';
+export const URL_API = 'http://localhost:8686/v1/api';
 
 export const STATUS_CODE = {
   SUCCESS: 200,

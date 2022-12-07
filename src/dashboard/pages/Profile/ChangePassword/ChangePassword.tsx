@@ -11,6 +11,7 @@ import {
 
 const ChangePassword: React.FC = () => {
   const { user }: authState = useSelector(authSelector);
+  const [form] = Form.useForm();
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -40,6 +41,7 @@ const ChangePassword: React.FC = () => {
 
   return (
     <Form
+      form={form}
       labelCol={{ span: 6 }}
       wrapperCol={{ span: 14 }}
       initialValues={initialValues}
@@ -54,7 +56,7 @@ const ChangePassword: React.FC = () => {
         rules={[
           {
             required: true,
-            message: 'Please fill in this field!',
+            message: 'Vui lòng không bỏ trống!',
           },
         ]}
       >
@@ -66,7 +68,7 @@ const ChangePassword: React.FC = () => {
         rules={[
           {
             required: true,
-            message: 'Please fill in this field!',
+            message: 'Vui lòng không bỏ trống!',
           },
         ]}
       >
@@ -94,10 +96,21 @@ const ChangePassword: React.FC = () => {
       >
         <Input.Password />
       </Form.Item>
-      <Form.Item wrapperCol={{ offset: 20 }} labelAlign="right">
-        <Button type="primary" htmlType="submit" size="large">
-          Submit
-        </Button>
+      <Form.Item wrapperCol={{ offset: 20 }} labelAlign="right" shouldUpdate>
+        {() => (
+          <Button
+            type="primary"
+            htmlType="submit"
+            size="large"
+            disabled={
+              !form.isFieldsTouched(false) ||
+              !!form.getFieldsError().filter(({ errors }) => errors.length)
+                .length
+            }
+          >
+            Submit
+          </Button>
+        )}
       </Form.Item>
     </Form>
   );

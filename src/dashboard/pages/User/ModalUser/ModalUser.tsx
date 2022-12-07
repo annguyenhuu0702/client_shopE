@@ -178,7 +178,7 @@ const ModalUser: React.FC = () => {
                 rules={[
                   {
                     required: true,
-                    message: 'Please fill in this field!',
+                    message: 'Vui lòng không bỏ trống!',
                   },
                   {
                     type: 'email',
@@ -195,7 +195,7 @@ const ModalUser: React.FC = () => {
                   rules={[
                     {
                       required: true,
-                      message: 'Please fill in this field!',
+                      message: 'Vui lòng không bỏ trống!',
                     },
                     {
                       min: 6,
@@ -236,7 +236,7 @@ const ModalUser: React.FC = () => {
                 rules={[
                   {
                     required: true,
-                    message: 'Please fill in this field!',
+                    message: 'Vui lòng không bỏ trống!',
                   },
                 ]}
               >
@@ -248,7 +248,7 @@ const ModalUser: React.FC = () => {
                 rules={[
                   {
                     required: true,
-                    message: 'Please fill in this field!',
+                    message: 'Vui lòng không bỏ trống!',
                   },
                 ]}
               >

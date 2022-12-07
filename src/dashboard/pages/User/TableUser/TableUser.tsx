@@ -1,6 +1,10 @@
 import 'antd/dist/antd.css';
 import React from 'react';
-import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
+import {
+  DeleteOutlined,
+  EditOutlined,
+  DownloadOutlined,
+} from '@ant-design/icons';
 import {
   Button,
   Col,
@@ -43,12 +47,12 @@ const TableUser: React.FC = () => {
 
   const columns = [
     {
-      title: 'Avatar',
+      title: 'Hình ảnh',
       dataIndex: 'avatar',
       render: (text: string, record: user) => {
         return (
           <React.Fragment>
-            {record.avatar === '' ? (
+            {!record.avatar ? (
               <img
                 style={{
                   width: '30px',
@@ -65,7 +69,7 @@ const TableUser: React.FC = () => {
       },
     },
     {
-      title: 'FullName',
+      title: 'Họ tên',
       dataIndex: 'fullname',
     },
     {
@@ -73,22 +77,22 @@ const TableUser: React.FC = () => {
       dataIndex: 'email',
     },
     {
-      title: 'Phone',
+      title: 'SĐT',
       dataIndex: 'phone',
     },
     {
-      title: 'Gender',
+      title: 'Giới tính',
       dataIndex: 'gender',
       render: (text: string, record: user) => {
         return (
           <React.Fragment>
-            {record.gender === true ? <span>Male</span> : <span>Female</span>}
+            {record.gender === true ? <span>Nam</span> : <span>Nữ</span>}
           </React.Fragment>
         );
       },
     },
     {
-      title: 'Created Date',
+      title: 'Ngày tạo',
       dataIndex: 'createdAt',
       render: (text: string, record: user) => {
         let date = new Date(record.createdAt).toLocaleDateString('en-EN');
@@ -96,7 +100,7 @@ const TableUser: React.FC = () => {
       },
     },
     {
-      title: 'Action',
+      title: 'Hành động',
       dataIndex: 'action',
       render: (text: string, record: user) => {
         return (
@@ -210,13 +214,13 @@ const TableUser: React.FC = () => {
                 }}
               >
                 <Select style={{ width: 120, borderRadius: '5px' }}>
-                  <Select.Option value="fullname">Fullname</Select.Option>
+                  <Select.Option value="fullname">Họ tên</Select.Option>
                   <Select.Option value="email">Email</Select.Option>
-                  <Select.Option value="phone">Phone</Select.Option>
+                  <Select.Option value="phone">SĐT</Select.Option>
                 </Select>
               </Form.Item>
               <Form.Item name="search">
-                <Input placeholder="Search" />
+                <Input placeholder="Tìm kiếm" />
               </Form.Item>
             </div>
             <Form.Item shouldUpdate>
@@ -230,7 +234,7 @@ const TableUser: React.FC = () => {
                       .length > 0
                   }
                 >
-                  Search
+                  Tìm kiếm
                 </Button>
               )}
             </Form.Item>
@@ -242,8 +246,12 @@ const TableUser: React.FC = () => {
             textAlign: 'center',
           }}
         >
-          <Button type="primary" onClick={handleExportExcel}>
-            Export to Excel
+          <Button
+            type="primary"
+            icon={<DownloadOutlined />}
+            onClick={handleExportExcel}
+          >
+            Excel
           </Button>
         </Col>
         <Col
@@ -258,7 +266,7 @@ const TableUser: React.FC = () => {
               handleAddNewUser();
             }}
           >
-            Add new
+            Thêm mới
           </Button>
         </Col>
       </Row>

@@ -51,7 +51,7 @@ const ChangeEmail: React.FC = () => {
         rules={[
           {
             required: true,
-            message: 'Please fill in this field!',
+            message: 'Vui lòng không bỏ trống!',
           },
         ]}
       >

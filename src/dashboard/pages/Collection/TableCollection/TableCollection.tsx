@@ -1,4 +1,9 @@
-import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
+import React from 'react';
+import {
+  DeleteOutlined,
+  DownloadOutlined,
+  EditOutlined,
+} from '@ant-design/icons';
 import {
   Button,
   Col,
@@ -10,59 +15,56 @@ import {
   Space,
   Table,
 } from 'antd';
-import React from 'react';
-import { utils, writeFileXLSX } from 'xlsx';
-
+import moment from 'moment';
 import { useDispatch, useSelector } from 'react-redux';
-import { categoryTypeApi } from '../../../../apis/categoryTypeApi';
+import { useNavigate } from 'react-router-dom';
+import { utils, writeFileXLSX } from 'xlsx';
 import { authSelector, authState } from '../../../../redux/slice/authSlice';
 import {
-  categoryTypeActions,
-  categoryTypeSelector,
-  categoryTypeState,
-} from '../../../../redux/slice/categoryTypeSlice';
-import {
-  modalActions,
-  modalSelector,
-  modalState,
-} from '../../../../redux/slice/modalSlice';
-import { categoryType } from '../../../../types/categortType';
-import ModalCategoryType from '../ModalCategoryType';
-import moment from 'moment';
+  collectionActions,
+  collectionSelector,
+  collectionState,
+} from '../../../../redux/slice/collectionSlice';
+import { collectionApi } from '../../../../apis/collectionApi';
+import { collection } from '../../../../types/collection';
 
-const TableCategoryType: React.FC = () => {
+const TableCollection: React.FC = () => {
   const dispatch = useDispatch();
   const [form] = Form.useForm();
-
-  const { isModal }: modalState = useSelector(modalSelector);
+  const { collections, isLoading, page, pageSize }: collectionState =
+    useSelector(collectionSelector);
   const { user }: authState = useSelector(authSelector);
-
-  const { categoriesType, page, pageSize, isLoading }: categoryTypeState =
-    useSelector(categoryTypeSelector);
-
+  const navigate = useNavigate();
   const columns = [
     {
-      title: 'Name',
+      title: 'Tên',
       dataIndex: 'name',
     },
     {
-      title: 'Created Date',
+      title: 'Danh mục',
+      dataIndex: 'categoryId',
+      render: (text: string, record: any) => {
+        return <React.Fragment>{record?.category?.name}</React.Fragment>;
+      },
+    },
+    {
+      title: 'Ngày tạo',
       dataIndex: 'createdAt',
-      render: (text: string, record: categoryType) => {
+      render: (text: string, record: any) => {
         let date = moment(record.createdAt).format('MM/DD/YYYY');
         return <React.Fragment>{date}</React.Fragment>;
       },
     },
     {
-      title: 'Action',
+      title: 'Hành động',
       dataIndex: 'action',
-      render: (text: string, record: categoryType) => {
+      render: (text: string, record: any) => {
         return (
           <Space size="middle">
             <EditOutlined
               className="common-icon-edit"
               onClick={() => {
-                handleEditCategoryType(record);
+                handleEditCollection(record);
               }}
             />
             <Popconfirm
@@ -84,7 +86,7 @@ const TableCategoryType: React.FC = () => {
 
   const onFinish = (values: any) => {
     dispatch(
-      categoryTypeActions.getAllCategoryType({
+      collectionActions.getAllCollection({
         p: page,
         limit: pageSize,
         [values.option]: values.search,
@@ -98,7 +100,7 @@ const TableCategoryType: React.FC = () => {
 
   function confirm(record: any) {
     dispatch(
-      categoryTypeActions.deleteCategoryType({
+      collectionActions.deleteCollection({
         token: user.accessToken,
         dispatch,
         id: record.id,
@@ -110,38 +112,37 @@ const TableCategoryType: React.FC = () => {
     );
   }
 
-  const handleAddNewCategoryType = () => {
-    dispatch(modalActions.showModal('Add Category Type'));
-    dispatch(categoryTypeActions.setCategoryType(null));
+  const handleAddNewCollection = () => {
+    dispatch(collectionActions.setCollection(null));
+    navigate('/admin/collection/create');
   };
 
-  const handleEditCategoryType = (record: categoryType) => {
-    dispatch(modalActions.showModal('Edit Category Type'));
-    dispatch(categoryTypeActions.setCategoryType(record));
+  const handleEditCollection = (record: any) => {
+    dispatch(collectionActions.setCollection(record));
+    navigate(`/admin/collection/edit/${record.id}`);
   };
 
   const handleExportExcel = () => {
     try {
-      const getAllCategoryType = async () => {
-        const data = await categoryTypeApi.getAll();
+      const getAllCollection = async () => {
+        const data = await collectionApi.getAll();
         let wb = utils.book_new();
         let ws = utils.json_to_sheet(
-          data.data.data.rows.map((item: categoryType) => ({
+          data.data.data.rows.map((item: collection) => ({
             name: item.name,
             createdAt: moment(item.createdAt).format('MM/DD/YYYY'),
           }))
         );
-        utils.book_append_sheet(wb, ws, 'CategoryType');
-        writeFileXLSX(wb, 'CategoryType.xlsx');
+        utils.book_append_sheet(wb, ws, 'Collection');
+        writeFileXLSX(wb, 'Collection.xlsx');
       };
-      getAllCategoryType();
+      getAllCollection();
     } catch (error) {
       console.log(error);
     }
   };
   return (
     <React.Fragment>
-      {isModal && <ModalCategoryType />}
       <Row className="common-row-cus">
         <Col xl={18} style={{ paddingInline: '5px' }}>
           <Form
@@ -160,11 +161,11 @@ const TableCategoryType: React.FC = () => {
                 }}
               >
                 <Select style={{ width: 120, borderRadius: '5px' }}>
-                  <Select.Option value="name">Name</Select.Option>
+                  <Select.Option value="name">Tên</Select.Option>
                 </Select>
               </Form.Item>
               <Form.Item name="search">
-                <Input placeholder="Search" />
+                <Input placeholder="Tìm kiếm" />
               </Form.Item>
             </div>
             <Form.Item shouldUpdate>
@@ -178,7 +179,7 @@ const TableCategoryType: React.FC = () => {
                       .length > 0
                   }
                 >
-                  Search
+                  Tìm kiếm
                 </Button>
               )}
             </Form.Item>
@@ -190,8 +191,12 @@ const TableCategoryType: React.FC = () => {
             textAlign: 'center',
           }}
         >
-          <Button type="primary" onClick={handleExportExcel}>
-            Export to Excel
+          <Button
+            type="primary"
+            icon={<DownloadOutlined />}
+            onClick={handleExportExcel}
+          >
+            Excel
           </Button>
         </Col>
         <Col
@@ -203,17 +208,17 @@ const TableCategoryType: React.FC = () => {
           <Button
             type="primary"
             onClick={() => {
-              handleAddNewCategoryType();
+              handleAddNewCollection();
             }}
           >
-            Add new
+            Thêm mới
           </Button>
         </Col>
       </Row>
       <Row className="common-content-table">
         <Col xl={24} md={24} xs={24}>
           <Table
-            dataSource={categoriesType.rows.map((item: categoryType) => {
+            dataSource={collections.rows.map((item: collection) => {
               return {
                 ...item,
                 key: item.id,
@@ -222,6 +227,7 @@ const TableCategoryType: React.FC = () => {
             loading={isLoading}
             columns={columns}
             pagination={false}
+            expandable={{ showExpandColumn: false }}
           />
         </Col>
       </Row>
@@ -229,4 +235,4 @@ const TableCategoryType: React.FC = () => {
   );
 };
 
-export default TableCategoryType;
+export default TableCollection;

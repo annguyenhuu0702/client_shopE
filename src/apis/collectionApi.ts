@@ -2,22 +2,26 @@ import { AxiosResponse } from 'axios';
 import instance, { apiCallerWithToken } from '../config/configAxios';
 import { URL_API } from '../constants';
 import { AppDispatch } from '../redux/store';
-import { createCategoryType, updateCategoryType } from '../types/categortType';
+import { createCollection, updateCollection } from '../types/collection';
 import { queryParams } from '../types/common';
 
 const getAll = (params?: queryParams) => {
-  return instance.get(`${URL_API}/category-type/getAll`, {
+  return instance.get(`${URL_API}/collection/getAll`, {
     params,
   });
+};
+
+const getById = (id: string) => {
+  return instance.get(`${URL_API}/collection/getById/${id}`);
 };
 
 const create = (
   token: string | null,
   dispatch: AppDispatch,
-  data: createCategoryType
+  data: createCollection
 ): Promise<AxiosResponse> => {
   return apiCallerWithToken(token, dispatch).post(
-    `${URL_API}/category-type/create`,
+    `${URL_API}/collection/create`,
     data
   );
 };
@@ -25,27 +29,28 @@ const create = (
 const update = (
   token: string | null,
   dispatch: AppDispatch,
-  data: updateCategoryType
+  data: updateCollection
 ): Promise<AxiosResponse> => {
   return apiCallerWithToken(token, dispatch).put(
-    `${URL_API}/category-type/update/${data.id}`,
+    `${URL_API}/collection/update/${data.id}`,
     data
   );
 };
 
-const deleteCategoryType = (
+const deleteCollection = (
   token: string | null,
   dispatch: AppDispatch,
   id: number
 ): Promise<AxiosResponse> => {
   return apiCallerWithToken(token, dispatch).delete(
-    `${URL_API}/category-type/delete/${id}`
+    `${URL_API}/collection/delete/${id}`
   );
 };
 
-export const categoryTypeApi = {
-  getAll,
+export const collectionApi = {
   create,
+  getAll,
+  getById,
   update,
-  deleteCategoryType,
+  deleteCollection,
 };

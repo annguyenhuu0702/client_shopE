@@ -3,8 +3,8 @@ import { notification } from 'antd';
 import { call, put, takeEvery } from 'redux-saga/effects';
 import { userApi } from '../../apis/userApi';
 import { STATUS_CODE } from '../../constants';
-import { tokenPayloadData } from '../../types/common';
-import { createUser, deleteUser, getAllUser, user } from '../../types/user';
+import { deleteParams, tokenPayloadData } from '../../types/common';
+import { createUser, getAllUser, user } from '../../types/user';
 import { modalActions } from '../slice/modalSlice';
 import { userActions } from '../slice/userSlice';
 
@@ -44,8 +44,8 @@ function* createUserSaga({
     console.log(err);
     yield put(userActions.createUserFailed());
     notification.error({
-      message: 'Error',
-      description: 'Email is already exists',
+      message: 'Thất bại',
+      description: 'Email đã tồn tại!',
       placement: 'bottomRight',
       duration: 3,
     });
@@ -72,15 +72,15 @@ function* editUserSaga({
     console.log(err);
     yield put(userActions.editUserFailed());
     notification.error({
-      message: 'Error',
-      description: 'Error',
+      message: 'Thất bại',
+      description: 'Lỗi rồi!',
       placement: 'bottomRight',
       duration: 3,
     });
   }
 }
 
-function* deleteUserSaga({ payload }: PayloadAction<deleteUser>): any {
+function* deleteUserSaga({ payload }: PayloadAction<deleteParams>): any {
   try {
     const { token, dispatch, id, params } = payload;
     const res = yield call(() => {
@@ -95,8 +95,8 @@ function* deleteUserSaga({ payload }: PayloadAction<deleteUser>): any {
     console.log(err);
     yield put(userActions.deleteUserFailed());
     notification.error({
-      message: 'Error',
-      description: 'Error',
+      message: 'Thất bại',
+      description: 'Lỗi rồi!',
       placement: 'bottomRight',
       duration: 3,
     });

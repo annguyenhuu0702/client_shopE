@@ -1,50 +1,50 @@
-import React, { useEffect } from 'react';
 import { Layout, Pagination } from 'antd';
+import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useTitle } from '../../../hooks/useTitle';
 import {
-  categoryActions,
-  categorySelector,
-  categoryState,
-} from '../../../redux/slice/categorySlice';
+  collectionActions,
+  collectionSelector,
+  collectionState,
+} from '../../../redux/slice/collectionSlice';
 import HeaderTitle from '../../components/HeaderTitle';
-import TableCategory from './TableCategory';
+import TableCollection from './TableCollection';
 
 const { Content } = Layout;
 
-const Category: React.FC = () => {
+const Collection: React.FC = () => {
   const dispatch = useDispatch();
-  const { page, categories, pageSize }: categoryState =
-    useSelector(categorySelector);
+  const { collections, page, pageSize }: collectionState =
+    useSelector(collectionSelector);
 
   useEffect(() => {
     dispatch(
-      categoryActions.getAllCategory({
+      collectionActions.getAllCollection({
         p: page,
         limit: 7,
       })
     );
   }, [dispatch, page]);
 
-  useTitle('Danh mục');
+  useTitle('Bộ sưu tập');
   return (
     <main className="section-common">
-      <HeaderTitle title="Danh mục" />
+      <HeaderTitle title="Bộ sưu tập" />
       <Content className="common-layout-content-cus">
         <div className="common-content-wrap">
           <div className="common-content">
-            <TableCategory />
+            <TableCollection />
           </div>
         </div>
       </Content>
-      {categories.count > 0 && (
+      {collections.count > 0 && (
         <div className="common-pagination-cus">
           <Pagination
             pageSize={pageSize}
             current={page}
-            total={categories.count}
+            total={collections.count}
             onChange={(page: number, pageSize: number) => {
-              dispatch(categoryActions.setPage({ page, pageSize }));
+              dispatch(collectionActions.setPage({ page, pageSize }));
             }}
             // showSizeChanger={true}
             // pageSizeOptions={[7, 50, 100, 200]}
@@ -55,4 +55,4 @@ const Category: React.FC = () => {
   );
 };
 
-export default Category;
+export default Collection;

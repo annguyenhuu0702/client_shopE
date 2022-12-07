@@ -1,23 +1,28 @@
-import React, { useEffect, useState } from 'react';
 import { LoadingOutlined, PlusOutlined } from '@ant-design/icons';
-import { Button, Form, Input, Layout, message } from 'antd';
+import { Button, Form, Input, Layout, message, Select } from 'antd';
 import Upload, {
   RcFile,
   UploadChangeParam,
   UploadFile,
   UploadProps,
 } from 'antd/lib/upload';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
-import { categoryApi } from '../../../../apis/categoryApi';
 import { useTitle } from '../../../../hooks/useTitle';
 import { authSelector, authState } from '../../../../redux/slice/authSlice';
+
+import { collectionApi } from '../../../../apis/collectionApi';
 import {
   categoryActions,
   categorySelector,
   categoryState,
 } from '../../../../redux/slice/categorySlice';
-
+import {
+  collectionActions,
+  collectionSelector,
+  collectionState,
+} from '../../../../redux/slice/collectionSlice';
 import { slugify } from '../../../../utils';
 import HeaderTitle from '../../../components/HeaderTitle';
 
@@ -41,17 +46,21 @@ const beforeUpload = (file: RcFile) => {
   return isJpgOrPng && isLt2M;
 };
 
-const FormCategory: React.FC = () => {
+const FormCollection: React.FC = () => {
   const navigate = useNavigate();
   const { id } = useParams();
   const { user }: authState = useSelector(authSelector);
 
-  const { currentCategory }: categoryState = useSelector(categorySelector);
+  const { currentCollection }: collectionState =
+    useSelector(collectionSelector);
+
+  const { categories }: categoryState = useSelector(categorySelector);
 
   const initialValues = {
-    name: currentCategory ? currentCategory.name : '',
-    thumbnail: currentCategory ? currentCategory.thumbnail : '',
-    description: currentCategory ? currentCategory.description : '',
+    name: currentCollection ? currentCollection.name : '',
+    categoryId: currentCollection ? currentCollection.categoryId : '',
+    thumbnail: currentCollection ? currentCollection.thumbnail : '',
+    description: currentCollection ? currentCollection.description : '',
   };
 
   const [form] = Form.useForm();
@@ -90,13 +99,14 @@ const FormCategory: React.FC = () => {
   const onFinish = (values: any) => {
     const formData = {
       name: values.name,
+      categoryId: values.categoryId,
       description: values.description,
       thumbnail: values.thumbnail,
       slug: slugify(values.name),
     };
-    if (currentCategory === null) {
+    if (currentCollection === null) {
       dispatch(
-        categoryActions.createCategory({
+        collectionActions.createCollection({
           token: user.accessToken,
           dispatch,
           data: { ...formData, resetValues },
@@ -105,10 +115,10 @@ const FormCategory: React.FC = () => {
       );
     } else {
       dispatch(
-        categoryActions.editCategory({
+        collectionActions.editCollection({
           token: user.accessToken,
           dispatch,
-          data: { ...formData, id: currentCategory.id, resetValues },
+          data: { ...formData, id: currentCollection.id, resetValues },
           navigate,
         })
       );
@@ -119,31 +129,42 @@ const FormCategory: React.FC = () => {
     console.log('Failed:', errorInfo);
   };
 
+  const handleChange = (value: string) => {
+    console.log(`selected ${value}`);
+  };
+
+  useEffect(() => {
+    dispatch(categoryActions.getAllCategory({}));
+  }, [dispatch]);
+
   useEffect(() => {
     try {
-      const getCategoryById = async () => {
+      const getCollectionById = async () => {
         if (id) {
-          const res = await categoryApi.getById(id);
+          const res = await collectionApi.getById(id);
           const { data } = res.data;
-          dispatch(categoryActions.setCategory(data));
+          dispatch(collectionActions.setCollection(data));
           form.setFieldsValue({
             name: data.name,
+            categoryId: data.category.name,
             description: data.description,
             thumbnail: data.thumbnail,
           });
         }
       };
-      getCategoryById();
+      getCollectionById();
     } catch (error) {
       console.log(error);
     }
   }, [id, dispatch, form]);
 
-  useTitle(currentCategory ? 'Sửa danh mục' : 'Thêm danh mục');
+  useTitle(currentCollection ? 'Sửa bộ sưu tập' : 'Thêm bộ sưu tập');
 
   return (
     <section className="section-common">
-      <HeaderTitle title={currentCategory ? 'Sửa danh mục' : 'Thêm danh mục'} />
+      <HeaderTitle
+        title={currentCollection ? 'Sửa bộ sưu tập' : 'Thêm bộ sưu tập'}
+      />
       <Content className="common-layout-content-cus">
         <div className="common-content-wrap">
           <div className="common-content">
@@ -170,6 +191,32 @@ const FormCategory: React.FC = () => {
                 >
                   <Input />
                 </Form.Item>
+                <Form.Item
+                  label="Danh mục"
+                  name="categoryId"
+                  rules={[
+                    {
+                      required: true,
+                      message: 'Vui lòng không bỏ trống!',
+                    },
+                  ]}
+                >
+                  <Select
+                    onChange={handleChange}
+                    options={
+                      categories
+                        ? categories.rows.map((item: any) => {
+                            return {
+                              value: item.id,
+                              label: item.name,
+                              key: item.id,
+                            };
+                          })
+                        : []
+                    }
+                  />
+                </Form.Item>
+
                 <Form.Item label="Mô tả" name="description">
                   <Input />
                 </Form.Item>
@@ -216,7 +263,7 @@ const FormCategory: React.FC = () => {
                           .filter(({ errors }) => errors.length).length > 0
                       }
                     >
-                      {currentCategory ? 'Sửa' : 'Thêm'}
+                      {currentCollection ? 'Sửa' : 'Thêm'}
                     </Button>
                   )}
                 </Form.Item>
@@ -229,4 +276,4 @@ const FormCategory: React.FC = () => {
   );
 };
 
-export default FormCategory;
+export default FormCollection;

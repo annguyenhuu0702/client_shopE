@@ -54,39 +54,39 @@ const ChangeProfile: React.FC = () => {
       size="large"
     >
       <Form.Item
-        label="FullName"
+        label="Họ tên"
         name="fullname"
         rules={[
           {
             required: true,
-            message: 'Please fill in this field!',
+            message: 'Vui lòng không bỏ trống!',
           },
         ]}
       >
         <Input />
       </Form.Item>
       <Form.Item
-        label="Date of birth"
+        label="Ngày sinh"
         name="birthday"
         rules={[
           {
             required: true,
-            message: 'Please fill in this field!',
+            message: 'Vui lòng không bỏ trống!',
           },
         ]}
       >
         <DatePicker format={'MM/DD/YYYY'} allowClear={false} />
       </Form.Item>
 
-      <Form.Item label="Gender" name="gender">
+      <Form.Item label="Giới tính" name="gender">
         <Radio.Group
           value={gender}
           onChange={(e: RadioChangeEvent) => {
             setGender(e.target.value);
           }}
         >
-          <Radio value={true}>Male</Radio>
-          <Radio value={false}>Female</Radio>
+          <Radio value={true}>Nam</Radio>
+          <Radio value={false}>Nữ</Radio>
         </Radio.Group>
       </Form.Item>
 

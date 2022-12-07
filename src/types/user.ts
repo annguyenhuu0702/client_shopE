@@ -2,7 +2,7 @@ import React from 'react';
 import { queryParams, tokenPayload } from './common';
 
 export interface user {
-  id: number | string;
+  id: number;
   createdAt: Date;
   updatedAt: Date;
   fullname: string;
@@ -23,7 +23,7 @@ export interface user {
 export interface createUser {
   email: string;
   password: string;
-  avatar?: string;
+  avatar: string;
   fullname: string;
   phone: string;
   gender: boolean;
@@ -31,7 +31,7 @@ export interface createUser {
 }
 
 export interface updateUser {
-  id: string | number;
+  id: number;
   email: string;
   avatar: string;
   fullname: string;

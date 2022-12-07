@@ -16,3 +16,8 @@ export interface tokenPayload {
   token: string | null;
   dispatch: any;
 }
+
+export interface deleteParams extends tokenPayload {
+  id: number;
+  params?: queryParams;
+}

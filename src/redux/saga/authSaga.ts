@@ -24,8 +24,8 @@ function* registerSaga({ payload }: PayloadAction<registerDto>): any {
     if (status === STATUS_CODE.CREATED) {
       yield put(authActions.registerSuccess(data.data));
       notification.success({
-        message: 'Success',
-        description: 'Create account success',
+        message: 'Thành công',
+        description: 'Tạo tài khoản thành công!',
         placement: 'bottomRight',
         duration: 3,
       });
@@ -34,8 +34,8 @@ function* registerSaga({ payload }: PayloadAction<registerDto>): any {
   } catch (error: any) {
     yield put(authActions.registerFailed());
     notification.error({
-      message: 'Error',
-      description: 'Email is already exists',
+      message: 'Thất bại',
+      description: 'Email này đã tồn tại!',
       placement: 'bottomRight',
       duration: 3,
     });
@@ -59,8 +59,8 @@ function* loginSaga({ payload }: PayloadAction<loginDto>): any {
   } catch (error: any) {
     yield put(authActions.loginFailed());
     notification.error({
-      message: 'Error',
-      description: 'Email or password wrong!',
+      message: 'Thất bại',
+      description: 'Email hoặc mật khẩu không chính xác!',
       placement: 'bottomRight',
       duration: 3,
     });
@@ -83,14 +83,20 @@ function* changeProfileSaga({
         navigate('/admin');
       }
       notification.success({
-        message: 'Success',
-        description: 'Change profile success',
+        message: 'Thành công',
+        description: 'Thay đổi thông tin thành công',
         placement: 'bottomRight',
         duration: 3,
       });
     }
   } catch (error: any) {
     yield put(authActions.changeProfileFailed());
+    notification.error({
+      message: 'Thất bại',
+      description: 'Lỗi rồi!',
+      placement: 'bottomRight',
+      duration: 3,
+    });
     console.log(error);
   }
 }
@@ -110,8 +116,8 @@ function* changePasswordSaga({
         navigate('/admin');
       }
       notification.success({
-        message: 'Success',
-        description: 'Change password success',
+        message: 'Thành công',
+        description: 'Thay đổi mật khẩu thành công',
         placement: 'bottomRight',
         duration: 3,
       });
@@ -119,8 +125,8 @@ function* changePasswordSaga({
   } catch (error: any) {
     yield put(authActions.changePasswordFailed());
     notification.error({
-      message: 'Error',
-      description: 'Error',
+      message: 'Thất bại',
+      description: 'Lỗi rồi!',
       placement: 'bottomRight',
       duration: 3,
     });
@@ -143,8 +149,8 @@ function* changeEmailSaga({
         navigate('/admin');
       }
       notification.success({
-        message: 'Success',
-        description: 'Change email success',
+        message: 'Thành công',
+        description: 'Thay đổi email thành công',
         placement: 'bottomRight',
         duration: 3,
       });
@@ -152,8 +158,8 @@ function* changeEmailSaga({
   } catch (error: any) {
     yield put(authActions.changeEmailFailed());
     notification.error({
-      message: 'Error',
-      description: 'Error',
+      message: 'Thất bại',
+      description: 'Lỗi rồi!',
       placement: 'bottomRight',
       duration: 3,
     });

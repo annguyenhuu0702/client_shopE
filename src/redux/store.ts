@@ -1,21 +1,21 @@
 import { configureStore } from '@reduxjs/toolkit';
 import createSagaMiddleware from '@redux-saga/core';
-import categoryReducer from './slice/categorySlice';
+import rootSaga from './rootSaga';
 import userReducer from './slice/userSlice';
 import modalReducer from './slice/modalSlice';
-import rootSaga from './rootSaga';
 import authReducer from './slice/authSlice';
-import categoryTypeReducer from './slice/categoryTypeSlice';
+import categoryReducer from './slice/categorySlice';
+import collectionReducer from './slice/collectionSlice';
 
 const sagaMiddleware = createSagaMiddleware();
 
 export const store = configureStore({
   reducer: {
     auth: authReducer,
-    category: categoryReducer,
-    user: userReducer,
     modal: modalReducer,
-    categoryType: categoryTypeReducer,
+    user: userReducer,
+    category: categoryReducer,
+    collection: collectionReducer,
   },
   middleware: [sagaMiddleware],
 });

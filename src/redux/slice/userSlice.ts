@@ -1,16 +1,10 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { tokenPayloadData } from '../../types/common';
-import {
-  createUser,
-  deleteUser,
-  getAllUser,
-  updateUser,
-  user,
-} from '../../types/user';
+import { deleteParams, tokenPayloadData } from '../../types/common';
+import { createUser, getAllUser, updateUser, user } from '../../types/user';
 import { RootState } from '../store';
 
 export interface userState {
-  users: ResponseUsers;
+  users: resUser;
   page: number;
   pageSize: number;
   isLoading: boolean;
@@ -18,7 +12,7 @@ export interface userState {
   currentUser: user | null;
 }
 
-export interface ResponseUsers {
+export interface resUser {
   rows: user[];
   count: number;
 }
@@ -42,7 +36,7 @@ const userSlice = createSlice({
     getAllUser: (state, action: PayloadAction<getAllUser>) => {
       state.isLoading = true;
     },
-    getAllUserSuccess: (state, action: PayloadAction<ResponseUsers>) => {
+    getAllUserSuccess: (state, action: PayloadAction<resUser>) => {
       state.isLoading = false;
       state.isError = false;
       state.users.rows = action.payload.rows;
@@ -99,7 +93,7 @@ const userSlice = createSlice({
       state.isLoading = false;
       state.isError = false;
     },
-    deleteUser: (state, action: PayloadAction<deleteUser>) => {
+    deleteUser: (state, action: PayloadAction<deleteParams>) => {
       state.isLoading = true;
     },
     deleteUserSuccess: (state, action: PayloadAction<number>) => {

@@ -1,48 +1,49 @@
 import { PayloadAction } from '@reduxjs/toolkit';
 import { notification } from 'antd';
 import { call, put, takeEvery } from 'redux-saga/effects';
-import { categoryApi } from '../../apis/categoryApi';
+import { collectionApi } from '../../apis/collectionApi';
 import { STATUS_CODE } from '../../constants';
 import {
-  category,
-  createCategory,
-  getAllCategoryParams,
-} from '../../types/category';
+  collection,
+  createCollection,
+  getAllCollectionParams,
+} from '../../types/collection';
 import { deleteParams, tokenPayloadData } from '../../types/common';
-import { categoryActions } from '../slice/categorySlice';
+import { collectionActions } from '../slice/collectionSlice';
+import { routes } from '../../config/routes';
 
-function* getAllCategorySaga({
+function* getAllCollectionSaga({
   payload,
-}: PayloadAction<getAllCategoryParams>): any {
+}: PayloadAction<getAllCollectionParams>): any {
   try {
     const res = yield call(() => {
-      return categoryApi.getAll(payload);
+      return collectionApi.getAll(payload);
     });
     const { data, status } = res;
     if (status === STATUS_CODE.SUCCESS) {
-      yield put(categoryActions.getAllCategorySuccess(data.data));
+      yield put(collectionActions.getAllCollectionSuccess(data.data));
     }
   } catch (err) {
     console.log(err);
-    yield put(categoryActions.getAllCategoryFailed());
+    yield put(collectionActions.getAllCollectionFailed());
   }
 }
 
-function* createCategorySaga({
+function* createCollectionSaga({
   payload,
-}: PayloadAction<tokenPayloadData<createCategory>>): any {
+}: PayloadAction<tokenPayloadData<createCollection>>): any {
   try {
     const { token, dispatch, data, navigate } = payload;
     const res = yield call(() => {
-      return categoryApi.create(token, dispatch, data);
+      return collectionApi.create(token, dispatch, data);
     });
     const { data: newData, status } = res;
     if (status === STATUS_CODE.CREATED) {
-      yield put(categoryActions.createCategorySuccess(newData.data));
+      yield put(collectionActions.createCollectionSuccess(newData.data));
       if (data.resetValues) {
         data.resetValues();
       }
-      navigate('/admin/category');
+      navigate(routes.collectionAdmin);
       notification.success({
         message: 'Thành công',
         description: 'Thêm thành công',
@@ -52,7 +53,7 @@ function* createCategorySaga({
     }
   } catch (err) {
     console.log(err);
-    yield put(categoryActions.createCategoryFailed());
+    yield put(collectionActions.createCollectionFailed());
     notification.error({
       message: 'Thất bại',
       description: 'Lỗi rồi!',
@@ -62,21 +63,21 @@ function* createCategorySaga({
   }
 }
 
-function* editCategorySaga({
+function* editCollectionSaga({
   payload,
-}: PayloadAction<tokenPayloadData<category>>): any {
+}: PayloadAction<tokenPayloadData<collection>>): any {
   try {
     const { token, dispatch, data, navigate } = payload;
     const res = yield call(() => {
-      return categoryApi.update(token, dispatch, data);
+      return collectionApi.update(token, dispatch, data);
     });
     const { status } = res;
     if (status === STATUS_CODE.SUCCESS) {
-      yield put(categoryActions.editCategorySuccess(data));
+      yield put(collectionActions.editCollectionSuccess(data));
       if (data.resetValues) {
         data.resetValues();
       }
-      navigate('/admin/category');
+      navigate(routes.collectionAdmin);
       notification.success({
         message: 'Thành công',
         description: 'Sửa thành công',
@@ -86,7 +87,7 @@ function* editCategorySaga({
     }
   } catch (err) {
     console.log(err);
-    yield put(categoryActions.editCategoryFailed());
+    yield put(collectionActions.editCollectionFailed());
     notification.error({
       message: 'Thất bại',
       description: 'Lỗi rồi!',
@@ -96,22 +97,25 @@ function* editCategorySaga({
   }
 }
 
-function* deleteCategorySaga({ payload }: PayloadAction<deleteParams>): any {
+function* deleteCollectionSaga({ payload }: PayloadAction<deleteParams>): any {
   try {
     const { token, dispatch, id, params } = payload;
     const res = yield call(() => {
-      return categoryApi.deleteCategory(token, dispatch, id);
+      return collectionApi.deleteCollection(token, dispatch, id);
     });
     const { status } = res;
     if (status === STATUS_CODE.SUCCESS) {
-      yield put(categoryActions.deleteCategorySuccess(id));
+      yield put(collectionActions.deleteCollectionSuccess(id));
       yield put(
-        categoryActions.getAllCategory({ p: params?.p, limit: params?.limit })
+        collectionActions.getAllCollection({
+          p: params?.p,
+          limit: params?.limit,
+        })
       );
     }
   } catch (err) {
     console.log(err);
-    yield put(categoryActions.deleteCategoryFailed());
+    yield put(collectionActions.deleteCollectionFailed());
     notification.error({
       message: 'Thất bại',
       description: 'Lỗi rồi!',
@@ -122,10 +126,10 @@ function* deleteCategorySaga({ payload }: PayloadAction<deleteParams>): any {
 }
 
 function* categorySaga() {
-  yield takeEvery('category/createCategory', createCategorySaga);
-  yield takeEvery('category/getAllCategory', getAllCategorySaga);
-  yield takeEvery('category/editCategory', editCategorySaga);
-  yield takeEvery('category/deleteCategory', deleteCategorySaga);
+  yield takeEvery('collection/createCollection', createCollectionSaga);
+  yield takeEvery('collection/getAllCollection', getAllCollectionSaga);
+  yield takeEvery('collection/editCollection', editCollectionSaga);
+  yield takeEvery('collection/deleteCollection', deleteCollectionSaga);
 }
 
 export default categorySaga;

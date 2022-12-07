@@ -19,7 +19,7 @@ const User: React.FC = () => {
   const { user }: authState = useSelector(authSelector);
   const { users, page, pageSize }: userState = useSelector(userSelector);
 
-  useTitle('User');
+  useTitle('Tài khoản');
 
   useEffect(() => {
     dispatch(
@@ -33,7 +33,7 @@ const User: React.FC = () => {
 
   return (
     <main className="section-common">
-      <HeaderTitle title="User" />
+      <HeaderTitle title="Tài khoản" />
       <Content className="common-layout-content-cus">
         <div className="common-content-wrap">
           <div className="common-content">
@@ -50,8 +50,8 @@ const User: React.FC = () => {
             onChange={(page: number, pageSize: number) => {
               dispatch(userActions.setPage({ page, pageSize }));
             }}
-            showSizeChanger={true}
-            pageSizeOptions={[7, 20, 100, 200]}
+            // showSizeChanger={true}
+            // pageSizeOptions={[7, 20, 100, 200]}
           />
         </div>
       )}

@@ -19,6 +19,12 @@ const Colletion = lazy(() => import('../dashboard/pages/Collection'));
 const FormCollection = lazy(
   () => import('../dashboard/pages/Collection/FormCollection')
 );
+const ProductCategory = lazy(
+  () => import('../dashboard/pages/ProductCategory')
+);
+const FormProductCategory = lazy(
+  () => import('../dashboard/pages/ProductCategory/FormProductCategory')
+);
 
 const NotFound = lazy(() => import('../pages/NotFound/NotFound'));
 
@@ -95,6 +101,21 @@ export const privateRoute: route[] = [
   {
     path: routes.editCollectionAdmin,
     element: FormCollection,
+    layout: DashboardLayout,
+  },
+  {
+    path: routes.productCategoryAdmin,
+    element: ProductCategory,
+    layout: DashboardLayout,
+  },
+  {
+    path: routes.createProductCategoryAdmin,
+    element: FormProductCategory,
+    layout: DashboardLayout,
+  },
+  {
+    path: routes.editProductCategoryAdmin,
+    element: FormProductCategory,
     layout: DashboardLayout,
   },
 ];

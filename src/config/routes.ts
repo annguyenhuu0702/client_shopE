@@ -14,6 +14,9 @@ export const routes = {
   collectionAdmin: '/admin/collection',
   createCollectionAdmin: '/admin/collection/create',
   editCollectionAdmin: '/admin/collection/edit/:id',
+  productCategoryAdmin: '/admin/product-category',
+  createProductCategoryAdmin: '/admin/product-category/create',
+  editProductCategoryAdmin: '/admin/product-category/edit/:id',
 };
 
 // export default routes;

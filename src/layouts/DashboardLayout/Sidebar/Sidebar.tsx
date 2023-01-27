@@ -12,6 +12,7 @@ import classNames from 'classnames/bind';
 import React, { useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import styles from './__sidebar.module.scss';
+import { BiCategory, BiCollection } from 'react-icons/bi';
 
 const cx = classNames.bind(styles);
 
@@ -36,10 +37,10 @@ function getItem(
 const items: MenuItem[] = [
   getItem('Thống kê', '/admin', <BarChartOutlined />),
   getItem('Tài khoản', '/admin/user', <UserOutlined />),
-  getItem('Danh mục', '/admin/category', <UserOutlined />),
-  getItem('Bộ sưu tập', '/admin/collection', <UserOutlined />),
+  getItem('Danh mục', '/admin/category', <BiCategory />),
+  getItem('Bộ sưu tập', '/admin/collection', <BiCollection />),
   getItem('Quản lý sản phẩm', 'qlsanpham', <FontAwesomeIcon icon={faList} />, [
-    getItem('Danh mục sản phẩm', '/admin/product-categories'),
+    getItem('Danh mục sản phẩm', '/admin/product-category'),
     getItem('Sản phẩm', '/admin/products'),
   ]),
 

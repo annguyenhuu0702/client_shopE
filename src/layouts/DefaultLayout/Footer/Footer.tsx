@@ -1,5 +1,5 @@
 import React from 'react';
-import 'antd/dist/antd.css';
+//import 'antd/dist/antd.css';
 import styles from './__footer.module.scss';
 
 import classNames from 'classnames/bind';

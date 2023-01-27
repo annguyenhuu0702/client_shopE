@@ -1,10 +1,9 @@
 import { Col, Row } from 'antd';
-import 'antd/dist/antd.css';
+//import 'antd/dist/antd.css';
 import classNames from 'classnames/bind';
 import { Link } from 'react-router-dom';
 import Product from '../../components/Product';
 import styles from './__homepage.module.scss';
-
 import 'swiper/css';
 import { useTitle } from '../../hooks/useTitle';
 import Endow from './Endow';
@@ -57,9 +56,15 @@ const HomePage = () => {
                 />
               </Link>
             </Col>
-            <Product />
-            <Product />
-            <Product />
+            <Col xl={6} md={8} xs={12}>
+              <Product />
+            </Col>
+            <Col xl={6} md={8} xs={12}>
+              <Product />
+            </Col>
+            <Col xl={6} md={8} xs={12}>
+              <Product />
+            </Col>
           </Row>
           <div className="view-all" style={{ margin: '48px 0' }}>
             <Link to="" className="text">

@@ -1,9 +1,7 @@
-// import 'antd/dist/antd.css';
-import React from 'react';
 import {
   DeleteOutlined,
-  EditOutlined,
   DownloadOutlined,
+  EditOutlined,
 } from '@ant-design/icons';
 import {
   Button,
@@ -16,103 +14,87 @@ import {
   Space,
   Table,
 } from 'antd';
-
 import moment from 'moment';
+import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 import { utils, writeFileXLSX } from 'xlsx';
-import { userApi } from '../../../../apis/userApi';
-import {
-  modalActions,
-  modalSelector,
-  modalState,
-} from '../../../../redux/slice/modalSlice';
-import {
-  userState,
-  userActions,
-  userSelector,
-} from '../../../../redux/slice/userSlice';
-import { user } from '../../../../types/user';
-import ModalUser from '../ModalUser';
+import { productApi } from '../../../../apis/productApi';
 import { authSelector, authState } from '../../../../redux/slice/authSlice';
+import {
+  productActions,
+  productSelector,
+  productState,
+} from '../../../../redux/slice/productSlice';
+import { product } from '../../../../types/product';
 
-const TableUser: React.FC = () => {
+const TableProduct: React.FC = () => {
   const dispatch = useDispatch();
-
-  const { isModal }: modalState = useSelector(modalSelector);
-  const { users, isLoading, page, pageSize }: userState =
-    useSelector(userSelector);
-  const { user }: authState = useSelector(authSelector);
-
   const [form] = Form.useForm();
-
+  const { products, isLoading, page, pageSize }: productState =
+    useSelector(productSelector);
+  const { user }: authState = useSelector(authSelector);
+  const navigate = useNavigate();
   const columns = [
     {
+      title: 'Tên sản phẩm',
+      dataIndex: 'name',
+    },
+    // {
+    //   title: 'Bí danh',
+    //   dataIndex: 'slug',
+    // },
+    {
+      title: 'Danh mục sản phẩm',
+      dataIndex: 'productCategoryId',
+      render: (text: string, record: product) => {
+        return <React.Fragment>{record?.productCategory?.name}</React.Fragment>;
+      },
+    },
+    {
       title: 'Hình ảnh',
-      dataIndex: 'avatar',
-      render: (text: string, record: user) => {
+      // dataIndex: 'image',
+      render: () => {
         return (
-          <React.Fragment>
-            {!record.avatar ? (
-              <img
-                style={{
-                  width: '30px',
-                  height: '30px',
-                }}
-                src="https://res.cloudinary.com/diot4imoq/image/upload/v1659164349/supersports/1200px-Breezeicons-actions-22-im-user.svg_ophigj.png"
-                alt=""
-              />
-            ) : (
-              <img src={record.avatar} alt="" />
-            )}
-          </React.Fragment>
+          <span className="cursor-pointer uppercase text-red-500">
+            Thiết lập
+          </span>
         );
       },
     },
     {
-      title: 'Họ tên',
-      dataIndex: 'fullname',
-    },
-    {
-      title: 'Email',
-      dataIndex: 'email',
-    },
-    {
-      title: 'SĐT',
-      dataIndex: 'phone',
-    },
-    {
-      title: 'Giới tính',
-      dataIndex: 'gender',
-      render: (text: string, record: user) => {
+      title: 'Biến thể',
+      // dataIndex: 'productVariant',
+      render: () => {
         return (
-          <React.Fragment>
-            {record.gender === true ? <span>Nam</span> : <span>Nữ</span>}
-          </React.Fragment>
+          <span className="cursor-pointer uppercase text-red-500">
+            Thiết lập
+          </span>
         );
       },
     },
     {
       title: 'Ngày tạo',
-      dataIndex: 'createdAt',
-      render: (text: string, record: user) => {
-        let date = new Date(record.createdAt).toLocaleDateString('en-EN');
+      // dataIndex: 'createdAt',
+      render: (text: string, record: product) => {
+        let date = moment(record.createdAt).format('MM/DD/YYYY');
         return <React.Fragment>{date}</React.Fragment>;
       },
     },
     {
       title: 'Hành động',
-      dataIndex: 'action',
-      render: (text: string, record: user) => {
+      // dataIndex: 'action',
+      render: (text: string, record: product) => {
         return (
           <Space size="middle">
             <EditOutlined
               className="common-icon-edit"
               onClick={() => {
-                handleEditUser(record);
+                handleEditProduct(record);
               }}
             />
             <Popconfirm
-              placement="topLeft"
+              placement="topRight"
               title={`Bạn có muốn xóa??`}
               onConfirm={() => {
                 confirm(record);
@@ -128,21 +110,12 @@ const TableUser: React.FC = () => {
     },
   ];
 
-  const handleEditUser = (record: user) => {
-    dispatch(modalActions.showModal('Edit user'));
-    dispatch(userActions.setUser(record));
-  };
-
   const onFinish = (values: any) => {
     dispatch(
-      userActions.getAllUser({
-        token: user.accessToken,
-        dispatch,
-        params: {
-          p: page,
-          limit: pageSize,
-          [values.option]: values.search,
-        },
+      productActions.getAllProduct({
+        p: page,
+        limit: pageSize,
+        [values.option]: values.search,
       })
     );
   };
@@ -153,7 +126,7 @@ const TableUser: React.FC = () => {
 
   function confirm(record: any) {
     dispatch(
-      userActions.deleteUser({
+      productActions.deleteProduct({
         token: user.accessToken,
         dispatch,
         id: record.id,
@@ -165,42 +138,46 @@ const TableUser: React.FC = () => {
     );
   }
 
-  const handleAddNewUser = () => {
-    dispatch(modalActions.showModal('Add user'));
-    dispatch(userActions.setUser(null));
+  const handleAddNewProduct = () => {
+    dispatch(productActions.setProduct(null));
+    navigate('/admin/product/create');
+  };
+
+  const handleEditProduct = (record: any) => {
+    dispatch(productActions.setProduct(record));
+    navigate(`/admin/product/edit/${record.id}`);
   };
 
   const handleExportExcel = () => {
     try {
-      const getAllUser = async () => {
-        const data = await userApi.getAll(user.accessToken, dispatch);
+      const getAllProduct = async () => {
+        const data = await productApi.getAll();
         let wb = utils.book_new();
         let ws = utils.json_to_sheet(
-          data.data.data.rows.map((item: user) => ({
-            fullname: item.fullname,
-            email: item.email,
-            phone: item.phone,
-            birthday: item.birthday,
-            gender: item.gender === true ? 'Nam' : 'Nữ',
+          data.data.data.rows.map((item: product) => ({
+            name: item.name,
+            productCategoryId: item.productCategoryId,
+            price: item.price,
+            priceSale: item.priceSale,
+            description: item.description,
             createdAt: moment(item.createdAt).format('MM/DD/YYYY'),
           }))
         );
-        utils.book_append_sheet(wb, ws, 'User');
-        writeFileXLSX(wb, 'User.xlsx');
+        utils.book_append_sheet(wb, ws, 'product');
+        writeFileXLSX(wb, 'Product.xlsx');
       };
-      getAllUser();
+      getAllProduct();
     } catch (error) {
       console.log(error);
     }
   };
   return (
     <React.Fragment>
-      {isModal && <ModalUser />}
       <Row className="common-row-cus">
         <Col xl={18} style={{ paddingInline: '5px' }}>
           <Form
             form={form}
-            initialValues={{ option: 'fullname', search: '' }}
+            initialValues={{ option: 'name', search: '' }}
             onFinish={onFinish}
             onFinishFailed={onFinishFailed}
             autoComplete="off"
@@ -214,9 +191,7 @@ const TableUser: React.FC = () => {
                 }}
               >
                 <Select style={{ width: 120, borderRadius: '5px' }}>
-                  <Select.Option value="fullname">Họ tên</Select.Option>
-                  <Select.Option value="email">Email</Select.Option>
-                  <Select.Option value="phone">SĐT</Select.Option>
+                  <Select.Option value="name">Tên</Select.Option>
                 </Select>
               </Form.Item>
               <Form.Item name="search">
@@ -263,7 +238,7 @@ const TableUser: React.FC = () => {
           <Button
             type="primary"
             onClick={() => {
-              handleAddNewUser();
+              handleAddNewProduct();
             }}
           >
             Thêm mới
@@ -273,18 +248,16 @@ const TableUser: React.FC = () => {
       <Row className="common-content-table">
         <Col xl={24} md={24} xs={24}>
           <Table
-            dataSource={
-              users &&
-              users.rows.map((item: user) => {
-                return {
-                  ...item,
-                  key: item.id,
-                };
-              })
-            }
+            dataSource={products.rows.map((item: product) => {
+              return {
+                ...item,
+                key: item.id,
+              };
+            })}
             loading={isLoading}
             columns={columns}
             pagination={false}
+            expandable={{ showExpandColumn: false }}
           />
         </Col>
       </Row>
@@ -292,4 +265,4 @@ const TableUser: React.FC = () => {
   );
 };
 
-export default TableUser;
+export default TableProduct;

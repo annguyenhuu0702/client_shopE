@@ -2,16 +2,16 @@ import React, { useState } from 'react';
 //import 'antd/dist/antd.css';
 import styles from './__product.module.scss';
 
-import classNames from 'classnames/bind';
-import { Col, Image, Modal, Rate, Tooltip } from 'antd';
-import { Link } from 'react-router-dom';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHeart, faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
-import { castToVND } from '../../utils';
-import { Swiper, SwiperSlide } from 'swiper/react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Image, Modal, Tooltip } from 'antd';
+import classNames from 'classnames/bind';
+import { Link } from 'react-router-dom';
+import { Pagination } from 'swiper';
 import 'swiper/css';
 import 'swiper/css/pagination';
-import { Pagination } from 'swiper';
+import { Swiper, SwiperSlide } from 'swiper/react';
+import { castToVND } from '../../utils';
 
 import { MinusOutlined, PlusOutlined } from '@ant-design/icons';
 

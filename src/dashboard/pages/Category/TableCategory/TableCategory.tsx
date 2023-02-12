@@ -42,7 +42,7 @@ const TableCategory: React.FC = () => {
     },
     {
       title: 'Ngày tạo',
-      dataIndex: 'createdAt',
+      // dataIndex: 'createdAt',
       render: (text: string, record: category) => {
         let date = moment(record.createdAt).format('MM/DD/YYYY');
         return <React.Fragment>{date}</React.Fragment>;
@@ -50,7 +50,7 @@ const TableCategory: React.FC = () => {
     },
     {
       title: 'Hành động',
-      dataIndex: 'action',
+      // dataIndex: 'action',
       render: (text: string, record: category) => {
         return (
           <Space size="middle">
@@ -159,7 +159,7 @@ const TableCategory: React.FC = () => {
                 </Select>
               </Form.Item>
               <Form.Item name="search">
-                <Input placeholder="Tìm kiếm" />
+                <Input allowClear placeholder="Tìm kiếm" />
               </Form.Item>
             </div>
             <Form.Item shouldUpdate>

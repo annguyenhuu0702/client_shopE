@@ -7,6 +7,7 @@ import authReducer from './slice/authSlice';
 import categoryReducer from './slice/categorySlice';
 import collectionReducer from './slice/collectionSlice';
 import productCategoryReducer from './slice/productCategorySlice';
+import productReducer from './slice/productSlice';
 
 const sagaMiddleware = createSagaMiddleware();
 
@@ -18,6 +19,7 @@ export const store = configureStore({
     category: categoryReducer,
     collection: collectionReducer,
     productCategory: productCategoryReducer,
+    product: productReducer,
   },
   middleware: [sagaMiddleware],
 });

@@ -68,7 +68,7 @@ const ProductDetail: React.FC = () => {
                 flexWrap: 'nowrap',
               }}
             >
-              <Col xl={14} md={14} className={cx('left')}>
+              <Col xl={12} md={12} className={cx('left')}>
                 <Swiper
                   modules={[Pagination]}
                   className={cx('my-swiper')}
@@ -94,7 +94,7 @@ const ProductDetail: React.FC = () => {
                   </SwiperSlide>
                 </Swiper>
               </Col>
-              <Col xl={10} md={10} className={cx('right')}>
+              <Col xl={12} md={12} className={cx('right')}>
                 <div className={cx('info')}>
                   <div
                     className={cx('add-wishlist')}

@@ -1,25 +1,32 @@
-import React, { useEffect, useState } from 'react';
 import { LoadingOutlined, PlusOutlined } from '@ant-design/icons';
-import { Button, Form, Input, Layout, message } from 'antd';
+import { Button, Form, Input, Layout, message, Select } from 'antd';
 import Upload, {
   RcFile,
   UploadChangeParam,
   UploadFile,
   UploadProps,
 } from 'antd/lib/upload';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
-import { categoryApi } from '../../../../apis/categoryApi';
+import { productApi } from '../../../../apis/productApi';
 import { useTitle } from '../../../../hooks/useTitle';
 import { authSelector, authState } from '../../../../redux/slice/authSlice';
-import {
-  categoryActions,
-  categorySelector,
-  categoryState,
-} from '../../../../redux/slice/categorySlice';
 
+import TextArea from 'antd/lib/input/TextArea';
+import {
+  productCategoryActions,
+  productCategorySelector,
+  productCategoryState,
+} from '../../../../redux/slice/productCategorySlice';
 import { configSlugify } from '../../../../utils';
 import HeaderTitle from '../../../components/HeaderTitle';
+
+import {
+  productActions,
+  productSelector,
+  productState,
+} from '../../../../redux/slice/productSlice';
 
 const { Content } = Layout;
 
@@ -41,17 +48,23 @@ const beforeUpload = (file: RcFile) => {
   return isJpgOrPng && isLt2M;
 };
 
-const FormCategory: React.FC = () => {
+const FormProduct: React.FC = () => {
+  const { productCategories, page }: productCategoryState = useSelector(
+    productCategorySelector
+  );
   const navigate = useNavigate();
   const { id } = useParams();
   const { user }: authState = useSelector(authSelector);
 
-  const { currentCategory }: categoryState = useSelector(categorySelector);
+  const { currentProduct }: productState = useSelector(productSelector);
 
   const initialValues = {
-    name: currentCategory ? currentCategory.name : '',
-    thumbnail: currentCategory ? currentCategory.thumbnail : '',
-    description: currentCategory ? currentCategory.description : '',
+    name: currentProduct ? currentProduct.name : '',
+    productCategoryId: currentProduct ? currentProduct.productCategoryId : '',
+    price: currentProduct ? currentProduct.price : 0,
+    priceSale: currentProduct ? currentProduct.priceSale : 0,
+    thumbnail: currentProduct ? currentProduct.thumbnail : '',
+    description: currentProduct ? currentProduct.description : '',
   };
 
   const [form] = Form.useForm();
@@ -87,16 +100,24 @@ const FormCategory: React.FC = () => {
     form.setFieldsValue(initialValues);
   };
 
+  const handleChange = (value: string) => {
+    console.log(`selected ${value}`);
+  };
+
   const onFinish = (values: any) => {
     const formData = {
       name: values.name,
+      slug: configSlugify(values.name),
+      productCategoryId: values.productCategoryId,
+      price: values.price,
+      priceSale: values.priceSale,
       description: values.description,
       thumbnail: values.thumbnail,
-      slug: configSlugify(values.name),
     };
-    if (currentCategory === null) {
+    if (!currentProduct) {
+      console.log('ngáo à');
       dispatch(
-        categoryActions.createCategory({
+        productActions.createProduct({
           token: user.accessToken,
           dispatch,
           data: { ...formData, resetValues },
@@ -105,10 +126,10 @@ const FormCategory: React.FC = () => {
       );
     } else {
       dispatch(
-        categoryActions.editCategory({
+        productActions.editProduct({
           token: user.accessToken,
           dispatch,
-          data: { ...formData, id: currentCategory.id, resetValues },
+          data: { ...formData, id: currentProduct.id, resetValues },
           navigate,
         })
       );
@@ -120,30 +141,42 @@ const FormCategory: React.FC = () => {
   };
 
   useEffect(() => {
+    dispatch(
+      productCategoryActions.getAllProductCategory({
+        p: page,
+        limit: 7,
+      })
+    );
+  }, [dispatch, page]);
+
+  useEffect(() => {
     try {
-      const getCategoryById = async () => {
+      const getProductById = async () => {
         if (id) {
-          const res = await categoryApi.getById(id);
+          const res = await productApi.getById(id);
           const { data } = res.data;
-          dispatch(categoryActions.setCategory(data));
+          dispatch(productActions.setProduct(data));
           form.setFieldsValue({
             name: data.name,
+            productCategoryId: data.productCategoryId,
+            price: data.price,
+            priceSale: data.priceSale,
             description: data.description,
             thumbnail: data.thumbnail,
           });
         }
       };
-      getCategoryById();
+      getProductById();
     } catch (error) {
       console.log(error);
     }
   }, [id, dispatch, form]);
 
-  useTitle(currentCategory ? 'Sửa danh mục' : 'Thêm danh mục');
+  useTitle(currentProduct ? 'Sửa sản phẩm' : 'Thêm sản phẩm');
 
   return (
     <section className="section-common">
-      <HeaderTitle title={currentCategory ? 'Sửa danh mục' : 'Thêm danh mục'} />
+      <HeaderTitle title={currentProduct ? 'Sửa sản phẩm' : 'Thêm sản phẩm'} />
       <Content className="common-layout-content-cus">
         <div className="common-content-wrap">
           <div className="common-content">
@@ -170,8 +203,43 @@ const FormCategory: React.FC = () => {
                 >
                   <Input />
                 </Form.Item>
-                <Form.Item label="Mô tả" name="description">
+                <Form.Item
+                  label="Danh mục sản phẩm"
+                  name="productCategoryId"
+                  rules={[
+                    {
+                      required: true,
+                      message: 'Vui lòng không bỏ trống!',
+                    },
+                  ]}
+                >
+                  <Select
+                    onChange={handleChange}
+                    options={productCategories.rows.map((item: any) => {
+                      return {
+                        value: item.id,
+                        label: item.name,
+                      };
+                    })}
+                  />
+                </Form.Item>
+                <Form.Item
+                  label="Giá"
+                  name="price"
+                  rules={[
+                    {
+                      required: true,
+                      message: 'Vui lòng không bỏ trống!',
+                    },
+                  ]}
+                >
                   <Input />
+                </Form.Item>
+                <Form.Item label="Giá khuyến mãi" name="priceSale">
+                  <Input />
+                </Form.Item>
+                <Form.Item label="Mô tả" name="description">
+                  <TextArea rows={4} />
                 </Form.Item>
                 <Form.Item label="Hình ảnh">
                   <Upload
@@ -216,7 +284,7 @@ const FormCategory: React.FC = () => {
                           .filter(({ errors }) => errors.length).length > 0
                       }
                     >
-                      {currentCategory ? 'Sửa' : 'Thêm'}
+                      {currentProduct ? 'Sửa' : 'Thêm'}
                     </Button>
                   )}
                 </Form.Item>
@@ -229,4 +297,4 @@ const FormCategory: React.FC = () => {
   );
 };
 
-export default FormCategory;
+export default FormProduct;

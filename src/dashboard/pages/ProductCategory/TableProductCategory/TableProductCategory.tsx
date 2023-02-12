@@ -27,7 +27,6 @@ import {
   productCategorySelector,
   productCategoryState,
 } from '../../../../redux/slice/productCategorySlice';
-import { collection } from '../../../../types/collection';
 import { productCategory } from '../../../../types/productCategory';
 
 const TableProductCategory: React.FC = () => {
@@ -44,14 +43,14 @@ const TableProductCategory: React.FC = () => {
     },
     {
       title: 'Bộ sưu tập',
-      dataIndex: 'collectionId',
-      render: (text: string, record: any) => {
-        return <React.Fragment>{record?.collection?.name}</React.Fragment>;
+      // dataIndex: 'collectionId',
+      render: (text: string, record: productCategory) => {
+        return <React.Fragment>{record.collection.name}</React.Fragment>;
       },
     },
     {
       title: 'Ngày tạo',
-      dataIndex: 'createdAt',
+      // dataIndex: 'createdAt',
       render: (text: string, record: any) => {
         let date = moment(record.createdAt).format('MM/DD/YYYY');
         return <React.Fragment>{date}</React.Fragment>;
@@ -130,8 +129,9 @@ const TableProductCategory: React.FC = () => {
         const data = await productCategoryApi.getAll();
         let wb = utils.book_new();
         let ws = utils.json_to_sheet(
-          data.data.data.rows.map((item: collection) => ({
+          data.data.data.rows.map((item: productCategory) => ({
             name: item.name,
+            collection: item.collection.name,
             createdAt: moment(item.createdAt).format('MM/DD/YYYY'),
           }))
         );
@@ -167,7 +167,7 @@ const TableProductCategory: React.FC = () => {
                 </Select>
               </Form.Item>
               <Form.Item name="search">
-                <Input placeholder="Tìm kiếm" />
+                <Input allowClear placeholder="Tìm kiếm" />
               </Form.Item>
             </div>
             <Form.Item shouldUpdate>

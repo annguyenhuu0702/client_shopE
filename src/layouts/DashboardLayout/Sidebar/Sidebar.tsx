@@ -41,7 +41,7 @@ const items: MenuItem[] = [
   getItem('Bộ sưu tập', '/admin/collection', <BiCollection />),
   getItem('Quản lý sản phẩm', 'qlsanpham', <FontAwesomeIcon icon={faList} />, [
     getItem('Danh mục sản phẩm', '/admin/product-category'),
-    getItem('Sản phẩm', '/admin/products'),
+    getItem('Sản phẩm', '/admin/product'),
   ]),
 
   getItem('Navigation Two', 'sub2', <AppstoreOutlined />, [

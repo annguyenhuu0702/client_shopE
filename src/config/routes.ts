@@ -17,6 +17,9 @@ export const routes = {
   productCategoryAdmin: '/admin/product-category',
   createProductCategoryAdmin: '/admin/product-category/create',
   editProductCategoryAdmin: '/admin/product-category/edit/:id',
+  productAdmin: '/admin/product',
+  createProductAdmin: '/admin/product/create',
+  editProductAdmin: '/admin/product/edit/:id',
 };
 
 // export default routes;

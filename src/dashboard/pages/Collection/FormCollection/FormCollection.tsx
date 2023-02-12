@@ -23,7 +23,7 @@ import {
   collectionSelector,
   collectionState,
 } from '../../../../redux/slice/collectionSlice';
-import { slugify } from '../../../../utils';
+import { configSlugify } from '../../../../utils';
 import HeaderTitle from '../../../components/HeaderTitle';
 
 const { Content } = Layout;
@@ -102,7 +102,7 @@ const FormCollection: React.FC = () => {
       categoryId: values.categoryId,
       description: values.description,
       thumbnail: values.thumbnail,
-      slug: slugify(values.name),
+      slug: configSlugify(values.name),
     };
     if (currentCollection === null) {
       dispatch(

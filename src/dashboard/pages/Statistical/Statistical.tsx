@@ -10,10 +10,10 @@ const cx = classNames.bind(styles);
 const { Content } = Layout;
 
 const Statistical: React.FC = () => {
-  useTitle('Statistical');
+  useTitle('Thống kê');
   return (
     <main className={cx('statistical')}>
-      <HeaderTitle title="Statistical" />
+      <HeaderTitle title="Thống kê" />
       <Content className={cx('layout-content-cus')}>
         <div className={cx('content-wrap')}>
           <div className={cx('content')}></div>

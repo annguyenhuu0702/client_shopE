@@ -42,14 +42,14 @@ const TableCollection: React.FC = () => {
     },
     {
       title: 'Danh mục',
-      dataIndex: 'categoryId',
+      // dataIndex: 'categoryId',
       render: (text: string, record: any) => {
         return <React.Fragment>{record?.category?.name}</React.Fragment>;
       },
     },
     {
       title: 'Ngày tạo',
-      dataIndex: 'createdAt',
+      // dataIndex: 'createdAt',
       render: (text: string, record: any) => {
         let date = moment(record.createdAt).format('MM/DD/YYYY');
         return <React.Fragment>{date}</React.Fragment>;
@@ -57,7 +57,7 @@ const TableCollection: React.FC = () => {
     },
     {
       title: 'Hành động',
-      dataIndex: 'action',
+      // dataIndex: 'action',
       render: (text: string, record: any) => {
         return (
           <Space size="middle">
@@ -130,6 +130,7 @@ const TableCollection: React.FC = () => {
         let ws = utils.json_to_sheet(
           data.data.data.rows.map((item: collection) => ({
             name: item.name,
+            category: item.category.name,
             createdAt: moment(item.createdAt).format('MM/DD/YYYY'),
           }))
         );
@@ -165,7 +166,7 @@ const TableCollection: React.FC = () => {
                 </Select>
               </Form.Item>
               <Form.Item name="search">
-                <Input placeholder="Tìm kiếm" />
+                <Input allowClear placeholder="Tìm kiếm" />
               </Form.Item>
             </div>
             <Form.Item shouldUpdate>

@@ -23,7 +23,7 @@ import {
   productCategorySelector,
   productCategoryState,
 } from '../../../../redux/slice/productCategorySlice';
-import { slugify } from '../../../../utils';
+import { configSlugify } from '../../../../utils';
 import HeaderTitle from '../../../components/HeaderTitle';
 
 const { Content } = Layout;
@@ -107,7 +107,7 @@ const FormProductCategory: React.FC = () => {
       description: values.description,
       collectionId: values.collectionId,
       thumbnail: values.thumbnail,
-      slug: slugify(values.name),
+      slug: configSlugify(values.name),
     };
     if (currentProductCategory === null) {
       dispatch(

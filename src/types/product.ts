@@ -1,17 +1,44 @@
+import React from 'react';
+import { queryParams, tokenPayload } from './common';
+import { productCategory } from './productCategory';
+
 export interface product {
+  key?: React.Key | string | number;
   id: number;
+  productCategoryId: number;
+  name: string;
+  slug: string;
+  thumbnail: string;
+  description: string;
+  price: number;
+  priceSale: number;
+  deletedAt: Date;
   createdAt: string;
   updatedAt: string;
+  resetValues?: Function;
+  productCategory: productCategory;
+}
+
+export interface createProduct {
+  productCategoryId: number;
   name: string;
-  price: number;
-  newPrice: number;
-  thumbnail?: string;
   slug: string;
-  isDeleted: boolean;
-  categoryId: number;
-  productOptions: any;
-  votes: any;
-  productUsers: any;
-  productCategories: any;
-  key?: React.Key | string | number;
+  thumbnail: string;
+  description: string;
+  price: number;
+  priceSale: number;
+  resetValues?: Function;
+}
+
+export interface updateProduct extends createProduct {
+  id: number;
+}
+
+export interface deleteProduct extends tokenPayload {
+  id: number;
+  params?: queryParams;
+}
+
+export interface getAllProductParams extends queryParams {
+  name?: string;
 }

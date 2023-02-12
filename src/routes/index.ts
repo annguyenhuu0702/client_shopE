@@ -26,6 +26,11 @@ const FormProductCategory = lazy(
   () => import('../dashboard/pages/ProductCategory/FormProductCategory')
 );
 
+const ProductAdmin = lazy(() => import('../dashboard/pages/Product/Product'));
+const FormProduct = lazy(
+  () => import('../dashboard/pages/Product/FormProduct')
+);
+
 const NotFound = lazy(() => import('../pages/NotFound/NotFound'));
 
 export const publicRoute: route[] = [
@@ -116,6 +121,21 @@ export const privateRoute: route[] = [
   {
     path: routes.editProductCategoryAdmin,
     element: FormProductCategory,
+    layout: DashboardLayout,
+  },
+  {
+    path: routes.productAdmin,
+    element: ProductAdmin,
+    layout: DashboardLayout,
+  },
+  {
+    path: routes.createProductAdmin,
+    element: FormProduct,
+    layout: DashboardLayout,
+  },
+  {
+    path: routes.editProductAdmin,
+    element: FormProduct,
     layout: DashboardLayout,
   },
 ];

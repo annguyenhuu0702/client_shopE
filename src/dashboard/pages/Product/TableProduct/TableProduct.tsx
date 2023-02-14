@@ -22,19 +22,35 @@ import { utils, writeFileXLSX } from 'xlsx';
 import { productApi } from '../../../../apis/productApi';
 import { authSelector, authState } from '../../../../redux/slice/authSlice';
 import {
+  modalActions,
+  modalSelector,
+} from '../../../../redux/slice/modalSlice';
+import {
   productActions,
   productSelector,
   productState,
 } from '../../../../redux/slice/productSlice';
 import { product } from '../../../../types/product';
+import ModalProductImage from '../ProductImage/ProductImage';
 
 const TableProduct: React.FC = () => {
   const dispatch = useDispatch();
+
   const [form] = Form.useForm();
+
   const { products, isLoading, page, pageSize }: productState =
     useSelector(productSelector);
+
+  const { isModal } = useSelector(modalSelector);
+
   const { user }: authState = useSelector(authSelector);
+
   const navigate = useNavigate();
+
+  const handleModal = () => {
+    dispatch(modalActions.showModal('Hình ảnh sản phẩm'));
+  };
+
   const columns = [
     {
       title: 'Tên sản phẩm',
@@ -56,7 +72,12 @@ const TableProduct: React.FC = () => {
       // dataIndex: 'image',
       render: () => {
         return (
-          <span className="cursor-pointer uppercase text-red-500">
+          <span
+            className="cursor-pointer uppercase text-red-500"
+            onClick={() => {
+              handleModal();
+            }}
+          >
             Thiết lập
           </span>
         );
@@ -173,6 +194,7 @@ const TableProduct: React.FC = () => {
   };
   return (
     <React.Fragment>
+      {isModal && <ModalProductImage />}
       <Row className="common-row-cus">
         <Col xl={18} style={{ paddingInline: '5px' }}>
           <Form

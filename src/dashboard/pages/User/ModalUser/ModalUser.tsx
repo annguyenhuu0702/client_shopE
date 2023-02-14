@@ -150,8 +150,8 @@ const ModalUser: React.FC = () => {
         centered
         onOk={form.submit}
         onCancel={hideModal}
-        okText="Save"
-        cancelText="Back"
+        okText="Lưu"
+        cancelText="Quay lại"
         width={1000}
         okButtonProps={{ disabled: disabledSave }}
       >

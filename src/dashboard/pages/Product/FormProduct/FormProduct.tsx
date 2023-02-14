@@ -1,5 +1,14 @@
 import { LoadingOutlined, PlusOutlined } from '@ant-design/icons';
-import { Button, Form, Input, Layout, message, Select } from 'antd';
+import {
+  Button,
+  Col,
+  Form,
+  Input,
+  InputNumber,
+  Layout,
+  message,
+  Select,
+} from 'antd';
 import Upload, {
   RcFile,
   UploadChangeParam,
@@ -190,105 +199,105 @@ const FormProduct: React.FC = () => {
               autoComplete="off"
               labelAlign="left"
             >
-              <div>
-                <Form.Item
-                  label="Tên"
-                  name="name"
-                  rules={[
-                    {
-                      required: true,
-                      message: 'Vui lòng không bỏ trống!',
-                    },
-                  ]}
+              {/* <div> */}
+              <Form.Item
+                label="Tên"
+                name="name"
+                rules={[
+                  {
+                    required: true,
+                    message: 'Vui lòng không bỏ trống!',
+                  },
+                ]}
+              >
+                <Input />
+              </Form.Item>
+              <Form.Item
+                label="Danh mục sản phẩm"
+                name="productCategoryId"
+                rules={[
+                  {
+                    required: true,
+                    message: 'Vui lòng không bỏ trống!',
+                  },
+                ]}
+              >
+                <Select
+                  onChange={handleChange}
+                  options={productCategories.rows.map((item: any) => {
+                    return {
+                      value: item.id,
+                      label: item.name,
+                    };
+                  })}
+                />
+              </Form.Item>
+              <Form.Item
+                label="Giá"
+                name="price"
+                rules={[
+                  {
+                    required: true,
+                    message: 'Vui lòng không bỏ trống!',
+                  },
+                ]}
+              >
+                <InputNumber min={0} className="w-full" />
+              </Form.Item>
+              <Form.Item label="Giá khuyến mãi" name="priceSale">
+                <InputNumber min={0} className="w-full" />
+              </Form.Item>
+              <Form.Item label="Mô tả" name="description">
+                <TextArea rows={4} />
+              </Form.Item>
+              <Form.Item label="Hình ảnh">
+                <Upload
+                  name="thumbnail"
+                  listType="picture-card"
+                  className="avatar-uploader"
+                  showUploadList={false}
+                  action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
+                  beforeUpload={beforeUpload}
+                  onChange={handleChangeUpload}
                 >
-                  <Input />
-                </Form.Item>
-                <Form.Item
-                  label="Danh mục sản phẩm"
-                  name="productCategoryId"
-                  rules={[
-                    {
-                      required: true,
-                      message: 'Vui lòng không bỏ trống!',
-                    },
-                  ]}
-                >
-                  <Select
-                    onChange={handleChange}
-                    options={productCategories.rows.map((item: any) => {
-                      return {
-                        value: item.id,
-                        label: item.name,
-                      };
-                    })}
-                  />
-                </Form.Item>
-                <Form.Item
-                  label="Giá"
-                  name="price"
-                  rules={[
-                    {
-                      required: true,
-                      message: 'Vui lòng không bỏ trống!',
-                    },
-                  ]}
-                >
-                  <Input />
-                </Form.Item>
-                <Form.Item label="Giá khuyến mãi" name="priceSale">
-                  <Input />
-                </Form.Item>
-                <Form.Item label="Mô tả" name="description">
-                  <TextArea rows={4} />
-                </Form.Item>
-                <Form.Item label="Hình ảnh">
-                  <Upload
-                    name="thumbnail"
-                    listType="picture-card"
-                    className="avatar-uploader"
-                    showUploadList={false}
-                    action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
-                    beforeUpload={beforeUpload}
-                    onChange={handleChangeUpload}
-                  >
-                    {imageUrl ? (
-                      <img
-                        src={imageUrl}
-                        alt="avatar"
-                        style={{ width: '100%' }}
-                      />
-                    ) : (
-                      uploadButton
-                    )}
-                  </Upload>
-                </Form.Item>
-                <Form.Item
-                  style={{
-                    textAlign: 'center',
-                  }}
-                  wrapperCol={{ span: 14 }}
-                  shouldUpdate
-                >
-                  {() => (
-                    <Button
-                      type="primary"
-                      htmlType="submit"
-                      style={{
-                        width: '200px',
-                      }}
-                      size="large"
-                      disabled={
-                        !form.isFieldsTouched(false) ||
-                        form
-                          .getFieldsError()
-                          .filter(({ errors }) => errors.length).length > 0
-                      }
-                    >
-                      {currentProduct ? 'Sửa' : 'Thêm'}
-                    </Button>
+                  {imageUrl ? (
+                    <img
+                      src={imageUrl}
+                      alt="avatar"
+                      style={{ width: '100%' }}
+                    />
+                  ) : (
+                    uploadButton
                   )}
-                </Form.Item>
-              </div>
+                </Upload>
+              </Form.Item>
+              <Form.Item
+                style={{
+                  textAlign: 'center',
+                }}
+                wrapperCol={{ span: 14 }}
+                shouldUpdate
+              >
+                {() => (
+                  <Button
+                    type="primary"
+                    htmlType="submit"
+                    style={{
+                      width: '200px',
+                    }}
+                    size="large"
+                    disabled={
+                      !form.isFieldsTouched(false) ||
+                      form
+                        .getFieldsError()
+                        .filter(({ errors }) => errors.length).length > 0
+                    }
+                  >
+                    {currentProduct ? 'Sửa' : 'Thêm'}
+                  </Button>
+                )}
+              </Form.Item>
+              {/* </div> */}
             </Form>
           </div>
         </div>

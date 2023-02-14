@@ -1,48 +1,49 @@
 import { PayloadAction } from '@reduxjs/toolkit';
 import { notification } from 'antd';
 import { call, put, takeEvery } from 'redux-saga/effects';
-import { productApi } from '../../apis/productApi';
+import { productImageApi } from '../../apis/productImage';
+import { routes } from '../../config/routes';
 import { STATUS_CODE } from '../../constants';
 import { deleteParams, tokenPayloadData } from '../../types/common';
 import {
-  createProduct,
-  getAllProductParams,
-  product,
-} from '../../types/product';
-import { productActions } from '../slice/productSlice';
+  createProductImage,
+  getAllProductImageParams,
+  productImage,
+} from '../../types/productImage';
+import { productImageActions } from '../slice/productImageSlice';
 
-function* getAllProductSaga({
+function* getAllProductImageSaga({
   payload,
-}: PayloadAction<getAllProductParams>): any {
+}: PayloadAction<getAllProductImageParams>): any {
   try {
     const res = yield call(() => {
-      return productApi.getAll(payload);
+      return productImageApi.getAll(payload);
     });
     const { data, status } = res;
     if (status === STATUS_CODE.SUCCESS) {
-      yield put(productActions.getAllProductSuccess(data.data));
+      yield put(productImageActions.getAllProductImageSuccess(data.data));
     }
   } catch (err) {
     console.log(err);
-    yield put(productActions.getAllProductFailed());
+    yield put(productImageActions.getAllProductImageFailed());
   }
 }
 
-function* createProductSaga({
+function* createProductImageSaga({
   payload,
-}: PayloadAction<tokenPayloadData<createProduct>>): any {
+}: PayloadAction<tokenPayloadData<createProductImage>>): any {
   try {
     const { token, dispatch, data, navigate } = payload;
     const res = yield call(() => {
-      return productApi.create(token, dispatch, data);
+      return productImageApi.create(token, dispatch, data);
     });
     const { data: newData, status } = res;
     if (status === STATUS_CODE.CREATED) {
-      yield put(productActions.createProductSuccess(newData.data));
+      yield put(productImageActions.createProductImageSuccess(newData.data));
       if (data.resetValues) {
         data.resetValues();
       }
-      navigate('/admin/product');
+      navigate(routes.productCategoryAdmin);
       notification.success({
         message: 'Thành công',
         description: 'Thêm thành công',
@@ -52,7 +53,7 @@ function* createProductSaga({
     }
   } catch (err) {
     console.log(err);
-    yield put(productActions.createProductFailed());
+    yield put(productImageActions.createProductImageFailed());
     notification.error({
       message: 'Thất bại',
       description: 'Lỗi rồi!',
@@ -62,21 +63,21 @@ function* createProductSaga({
   }
 }
 
-function* editProductSaga({
+function* editProductImageSaga({
   payload,
-}: PayloadAction<tokenPayloadData<product>>): any {
+}: PayloadAction<tokenPayloadData<productImage>>): any {
   try {
     const { token, dispatch, data, navigate } = payload;
     const res = yield call(() => {
-      return productApi.update(token, dispatch, data);
+      return productImageApi.update(token, dispatch, data);
     });
     const { status } = res;
     if (status === STATUS_CODE.SUCCESS) {
-      yield put(productActions.editProductSuccess(data));
+      yield put(productImageActions.editProductImageSuccess(data));
       if (data.resetValues) {
         data.resetValues();
       }
-      navigate('/admin/product');
+      navigate(routes.productCategoryAdmin);
       notification.success({
         message: 'Thành công',
         description: 'Sửa thành công',
@@ -86,7 +87,7 @@ function* editProductSaga({
     }
   } catch (err) {
     console.log(err);
-    yield put(productActions.editProductFailed());
+    yield put(productImageActions.editProductImageFailed());
     notification.error({
       message: 'Thất bại',
       description: 'Lỗi rồi!',
@@ -96,22 +97,27 @@ function* editProductSaga({
   }
 }
 
-function* deleteProductSaga({ payload }: PayloadAction<deleteParams>): any {
+function* deleteProductImageSaga({
+  payload,
+}: PayloadAction<deleteParams>): any {
   try {
     const { token, dispatch, id, params } = payload;
     const res = yield call(() => {
-      return productApi.deleteProduct(token, dispatch, id);
+      return productImageApi.deleteProductImage(token, dispatch, id);
     });
     const { status } = res;
     if (status === STATUS_CODE.SUCCESS) {
-      yield put(productActions.deleteProductSuccess(id));
+      yield put(productImageActions.deleteProductImageSuccess(id));
       yield put(
-        productActions.getAllProduct({ p: params?.p, limit: params?.limit })
+        productImageActions.getAllProductImage({
+          p: params?.p,
+          limit: params?.limit,
+        })
       );
     }
   } catch (err) {
     console.log(err);
-    yield put(productActions.deleteProductFailed());
+    yield put(productImageActions.deleteProductImageFailed());
     notification.error({
       message: 'Thất bại',
       description: 'Lỗi rồi!',
@@ -121,11 +127,11 @@ function* deleteProductSaga({ payload }: PayloadAction<deleteParams>): any {
   }
 }
 
-function* productSaga() {
-  yield takeEvery('product/createProduct', createProductSaga);
-  yield takeEvery('product/getAllProduct', getAllProductSaga);
-  yield takeEvery('product/editProduct', editProductSaga);
-  yield takeEvery('product/deleteProduct', deleteProductSaga);
+function* productImageSaga() {
+  yield takeEvery('productImage/createProductImage', createProductImageSaga);
+  yield takeEvery('productImage/getAllProductImage', getAllProductImageSaga);
+  yield takeEvery('productImage/editProductImage', editProductImageSaga);
+  yield takeEvery('productImage/deleteProductImage', deleteProductImageSaga);
 }
 
-export default productSaga;
+export default productImageSaga;

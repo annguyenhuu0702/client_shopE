@@ -1,46 +1,46 @@
 import { PayloadAction } from '@reduxjs/toolkit';
 import { notification } from 'antd';
 import { call, put, takeEvery } from 'redux-saga/effects';
-import { productCategoryApi } from '../../apis/productCategoryApi';
+import { productVariantApi } from '../../apis/productVariant';
 import { routes } from '../../config/routes';
 import { STATUS_CODE } from '../../constants';
 import { deleteParams, tokenPayloadData } from '../../types/common';
 import {
-  createProductCategory,
-  getAllProductCategoryParams,
-  productCategory,
-} from '../../types/productCategory';
-import { productCategoryActions } from '../slice/productCategorySlice';
+  createProductVariant,
+  getAllProductProductVariantParams,
+  productVariant,
+} from '../../types/productVariant';
+import { productVariantActions } from '../slice/productVariantSlice';
 
-function* getAllProductCategorySaga({
+function* getAllProductVariantSaga({
   payload,
-}: PayloadAction<getAllProductCategoryParams>): any {
+}: PayloadAction<getAllProductProductVariantParams>): any {
   try {
     const res = yield call(() => {
-      return productCategoryApi.getAll(payload);
+      return productVariantApi.getAll(payload);
     });
     const { data, status } = res;
     if (status === STATUS_CODE.SUCCESS) {
-      yield put(productCategoryActions.getAllProductCategorySuccess(data.data));
+      yield put(productVariantActions.getAllProductVariantSuccess(data.data));
     }
   } catch (err) {
     console.log(err);
-    yield put(productCategoryActions.getAllProductCategoryFailed());
+    yield put(productVariantActions.getAllProductVariantFailed());
   }
 }
 
-function* createProductCategorySaga({
+function* createProductVariantSaga({
   payload,
-}: PayloadAction<tokenPayloadData<createProductCategory>>): any {
+}: PayloadAction<tokenPayloadData<createProductVariant>>): any {
   try {
     const { token, dispatch, data, navigate } = payload;
     const res = yield call(() => {
-      return productCategoryApi.create(token, dispatch, data);
+      return productVariantApi.create(token, dispatch, data);
     });
     const { data: newData, status } = res;
     if (status === STATUS_CODE.CREATED) {
       yield put(
-        productCategoryActions.createProductCategorySuccess(newData.data)
+        productVariantActions.createProductVariantSuccess(newData.data)
       );
       if (data.resetValues) {
         data.resetValues();
@@ -55,7 +55,7 @@ function* createProductCategorySaga({
     }
   } catch (err) {
     console.log(err);
-    yield put(productCategoryActions.createProductCategoryFailed());
+    yield put(productVariantActions.createProductVariantFailed());
     notification.error({
       message: 'Thất bại',
       description: 'Lỗi rồi!',
@@ -65,17 +65,17 @@ function* createProductCategorySaga({
   }
 }
 
-function* editProductCategorySaga({
+function* editProductVariantSaga({
   payload,
-}: PayloadAction<tokenPayloadData<productCategory>>): any {
+}: PayloadAction<tokenPayloadData<productVariant>>): any {
   try {
     const { token, dispatch, data, navigate } = payload;
     const res = yield call(() => {
-      return productCategoryApi.update(token, dispatch, data);
+      return productVariantApi.update(token, dispatch, data);
     });
     const { status } = res;
     if (status === STATUS_CODE.SUCCESS) {
-      yield put(productCategoryActions.editProductCategorySuccess(data));
+      yield put(productVariantActions.editProductVariantSuccess(data));
       if (data.resetValues) {
         data.resetValues();
       }
@@ -89,7 +89,7 @@ function* editProductCategorySaga({
     }
   } catch (err) {
     console.log(err);
-    yield put(productCategoryActions.editProductCategoryFailed());
+    yield put(productVariantActions.editProductVariantFailed());
     notification.error({
       message: 'Thất bại',
       description: 'Lỗi rồi!',
@@ -99,19 +99,19 @@ function* editProductCategorySaga({
   }
 }
 
-function* deleteProductCategorySaga({
+function* deleteProductVariantSaga({
   payload,
 }: PayloadAction<deleteParams>): any {
   try {
     const { token, dispatch, id, params } = payload;
     const res = yield call(() => {
-      return productCategoryApi.deleteProductCategory(token, dispatch, id);
+      return productVariantApi.deleteProductVariant(token, dispatch, id);
     });
     const { status } = res;
     if (status === STATUS_CODE.SUCCESS) {
-      yield put(productCategoryActions.deleteProductCategorySuccess(id));
+      yield put(productVariantActions.deleteProductVariantSuccess(id));
       yield put(
-        productCategoryActions.getAllProductCategory({
+        productVariantActions.getAllProductVariant({
           p: params?.p,
           limit: params?.limit,
         })
@@ -119,7 +119,7 @@ function* deleteProductCategorySaga({
     }
   } catch (err) {
     console.log(err);
-    yield put(productCategoryActions.deleteProductCategoryFailed());
+    yield put(productVariantActions.deleteProductVariantFailed());
     notification.error({
       message: 'Thất bại',
       description: 'Lỗi rồi!',
@@ -129,23 +129,20 @@ function* deleteProductCategorySaga({
   }
 }
 
-function* productCategorySaga() {
+function* productVariantSaga() {
   yield takeEvery(
-    'productCategory/createProductCategory',
-    createProductCategorySaga
+    'productVariant/createProductVariant',
+    createProductVariantSaga
   );
   yield takeEvery(
-    'productCategory/getAllProductCategory',
-    getAllProductCategorySaga
+    'productVariant/getAllProductVariant',
+    getAllProductVariantSaga
   );
+  yield takeEvery('productVariant/editProductVariant', editProductVariantSaga);
   yield takeEvery(
-    'productCategory/editProductCategory',
-    editProductCategorySaga
-  );
-  yield takeEvery(
-    'productCategory/deleteProductCategory',
-    deleteProductCategorySaga
+    'productVariant/deleteProductVariant',
+    deleteProductVariantSaga
   );
 }
 
-export default productCategorySaga;
+export default productVariantSaga;

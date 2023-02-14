@@ -8,6 +8,8 @@ import categoryReducer from './slice/categorySlice';
 import collectionReducer from './slice/collectionSlice';
 import productCategoryReducer from './slice/productCategorySlice';
 import productReducer from './slice/productSlice';
+import productImageReducer from './slice/productImageSlice';
+import productVariantReducer from './slice/productVariantSlice';
 
 const sagaMiddleware = createSagaMiddleware();
 
@@ -20,6 +22,8 @@ export const store = configureStore({
     collection: collectionReducer,
     productCategory: productCategoryReducer,
     product: productReducer,
+    productImage: productImageReducer,
+    productVariant: productVariantReducer,
   },
   middleware: [sagaMiddleware],
 });

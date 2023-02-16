@@ -21,7 +21,7 @@ const Register: React.FC = () => {
   useTitle('Register');
   return (
     <main className="auth">
-      <div className="p-50">
+      <div className="p-50 max-sm:p-0">
         <div className="container-auth">
           <div className="title">
             <span>Tạo tài khoản</span>
@@ -34,6 +34,7 @@ const Register: React.FC = () => {
             autoComplete="off"
             className="form-custom"
             labelAlign="left"
+            layout="vertical"
           >
             <Form.Item
               label="Họ và tên"
@@ -69,11 +70,11 @@ const Register: React.FC = () => {
               rules={[
                 {
                   required: true,
-                  message: 'Please enter a password',
+                  message: 'Vui lòng nhập mật khẩu',
                 },
                 {
                   min: 6,
-                  message: 'Password must be at least 6 characters',
+                  message: 'Mật khẩu có tối thiểu 6 kí tự',
                 },
               ]}
             >

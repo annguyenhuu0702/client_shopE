@@ -145,7 +145,7 @@
     width: 80px;
     button {
       position: relative;
-      font-weight: 600;
+      font-weight: 500;
       background: $green-color;
       border: none;
       outline: none;
@@ -201,14 +201,6 @@
   }
 }
 
-// custom form login register
-.form-custom {
-  .ant-form-item {
-    display: flex;
-    flex-direction: column;
-  }
-}
-
 // nút login register
 
 .btn-auth {
@@ -221,9 +213,7 @@
   background: #13283f;
   color: $white-color;
   margin-top: 24px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  text-align: center;
   cursor: pointer;
 
   span {
@@ -246,6 +236,10 @@
     text-align: center;
     margin-bottom: 30px;
     font-size: 3rem;
+  }
+  @include mobile {
+    width: 100%;
+    padding: 40px 20px;
   }
 }
 

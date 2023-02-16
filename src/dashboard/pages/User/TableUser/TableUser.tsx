@@ -95,7 +95,7 @@ const TableUser: React.FC = () => {
       title: 'Ngày tạo',
       dataIndex: 'createdAt',
       render: (text: string, record: user) => {
-        let date = new Date(record.createdAt).toLocaleDateString('en-EN');
+        let date = moment(record.createdAt).format('MM/DD/YYYY');
         return <React.Fragment>{date}</React.Fragment>;
       },
     },

@@ -20,7 +20,7 @@ const Footer: React.FC = () => {
     <footer className={cx('footer')}>
       <section className={cx('footer-center')}>
         <div className={cx('content')}>
-          <Row>
+          <Row gutter={[12, 12]}>
             <Col xl={6} md={6} xs={24}>
               <div className={cx('item')}>
                 <h4>CÔNG TY CỔ PHẦN CANIFA</h4>

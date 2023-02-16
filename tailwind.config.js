@@ -10,6 +10,9 @@ module.exports = {
         'btn-order': '#333f48',
         'bg-cart': '#f9f9f9',
       },
+      spacing: {
+        '100%': '100%',
+      },
     },
   },
   plugins: [require('@tailwindcss/line-clamp')],

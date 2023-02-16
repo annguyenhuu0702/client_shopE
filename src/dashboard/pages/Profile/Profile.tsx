@@ -67,7 +67,7 @@ const Profile: React.FC = () => {
         <div className={cx('content')}>
           <Row>
             <Col xl={14} md={14} className={cx('settings')}>
-              <Tabs items={items} onChange={onChange} />
+              <Tabs items={items} onChange={onChange} className="pl-4" />
             </Col>
             <Col xl={8} md={8} className={cx('contact')}>
               <div className={cx('content')}>

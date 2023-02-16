@@ -1,19 +1,14 @@
-import { Col, Row, Space } from 'antd';
-//import 'antd/dist/antd.css';
-import classNames from 'classnames/bind';
+import { Col, Row } from 'antd';
 import { Link } from 'react-router-dom';
-import Product from '../../components/Product';
-import styles from './__homepage.module.scss';
 import 'swiper/css';
+import Product from '../../components/Product';
 import { useTitle } from '../../hooks/useTitle';
 import Endow from './Endow';
-
-const cx = classNames.bind(styles);
 
 const HomePage = () => {
   useTitle('CANIFA');
   return (
-    <main className={cx('home-page')}>
+    <main className="home-page">
       <section className="banner">
         <Link to="">
           <img
@@ -43,11 +38,11 @@ const HomePage = () => {
           </Row>
         </div>
       </section>
-      <section className="bst-family" style={{ marginTop: '48px' }}>
+      <section className="bst-family">
         <div className="p-50">
           <h2 className="common-title">BST gia đình</h2>
-          <Row gutter={[24, 24]} className={cx('list-product')}>
-            <Col xl={6} md={24} xs={12}>
+          <Row gutter={[12, 12]} className="list-product">
+            <Col xl={6} md={6} xs={12}>
               <Link to="">
                 <img
                   className="common-img"
@@ -56,17 +51,17 @@ const HomePage = () => {
                 />
               </Link>
             </Col>
-            <Col xl={6} md={8} xs={12}>
+            <Col xl={6} md={6} xs={12}>
               <Product />
             </Col>
-            <Col xl={6} md={8} xs={12}>
+            <Col xl={6} md={6} xs={12}>
               <Product />
             </Col>
-            <Col xl={6} md={8} xs={12}>
+            <Col xl={6} md={6} xs={12}>
               <Product />
             </Col>
           </Row>
-          <div className="view-all" style={{ margin: '48px 0' }}>
+          <div className="view-all my-10">
             <Link to="" className="text">
               Xem tất cả
             </Link>
@@ -91,11 +86,11 @@ const HomePage = () => {
           </Row>
         </div>
       </section>
-      <section className="style-at-home" style={{ marginTop: '48px' }}>
+      <section className="style-at-home">
         <div className="p-50">
           <h2 className="common-title">Style at home</h2>
-          <Row className={cx('list-product')} gutter={[24, 24]}>
-            <Col xl={6} md={24} xs={12}>
+          <Row className="list-product" gutter={[12, 12]}>
+            <Col xl={6} md={6} xs={12}>
               <Link to="">
                 <img
                   className="common-img"
@@ -105,17 +100,17 @@ const HomePage = () => {
               </Link>
             </Col>
 
-            <Col xl={6} md={8} xs={12}>
+            <Col xl={6} md={6} xs={12}>
               <Product />
             </Col>
-            <Col xl={6} md={8} xs={12}>
+            <Col xl={6} md={6} xs={12}>
               <Product />
             </Col>
-            <Col xl={6} md={8} xs={12}>
+            <Col xl={6} md={6} xs={12}>
               <Product />
             </Col>
           </Row>
-          <div className="view-all" style={{ margin: '48px 0' }}>
+          <div className="view-all" style={{ margin: '24px 0' }}>
             <Link to="" className="text">
               Xem tất cả
             </Link>
@@ -140,11 +135,11 @@ const HomePage = () => {
           </Row>
         </div>
       </section>
-      <section style={{ marginTop: '48px' }}>
+      <section>
         <div className="p-50">
           <h2 className="common-title">Áo phông</h2>
-          <Row className={cx('list-product')} gutter={[24, 24]}>
-            <Col xl={6} md={24} xs={12}>
+          <Row className="list-product" gutter={[12, 12]}>
+            <Col xl={6} md={6} xs={12}>
               <Link to="">
                 <img
                   className="common-img"
@@ -153,17 +148,17 @@ const HomePage = () => {
                 />
               </Link>
             </Col>
-            <Col xl={6} md={8} xs={12}>
+            <Col xl={6} md={6} xs={12}>
               <Product />
             </Col>
-            <Col xl={6} md={8} xs={12}>
+            <Col xl={6} md={6} xs={12}>
               <Product />
             </Col>
-            <Col xl={6} md={8} xs={12}>
+            <Col xl={6} md={6} xs={12}>
               <Product />
             </Col>
           </Row>
-          <div className="view-all" style={{ margin: '48px 0' }}>
+          <div className="view-all" style={{ margin: '24px 0' }}>
             <Link to="" className="text">
               Xem tất cả
             </Link>

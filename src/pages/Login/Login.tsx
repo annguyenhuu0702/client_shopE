@@ -24,7 +24,7 @@ const Login: React.FC = () => {
   useTitle('Login');
   return (
     <main className="auth">
-      <div className="p-50">
+      <div className="p-50 max-sm:p-0">
         <div className="container-auth">
           <div className="title">
             <span>Đăng nhập</span>
@@ -38,6 +38,7 @@ const Login: React.FC = () => {
               autoComplete="off"
               className="form-custom"
               labelAlign="left"
+              layout="vertical"
             >
               <Form.Item
                 label="Email"

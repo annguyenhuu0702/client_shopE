@@ -3,6 +3,7 @@ export const routes = {
   register: '/register',
   login: '/login',
   productDetail: '/:slug',
+  cart: '/cart',
 
   // admin
   admin: '/admin',

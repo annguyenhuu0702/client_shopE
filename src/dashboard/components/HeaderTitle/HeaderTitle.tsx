@@ -27,11 +27,11 @@ const HeaderTitle: React.FC<Props> = ({ title }: Props) => {
   };
   return (
     <section className={cx('header')}>
-      <span>{title}</span>
+      <span className={cx('title')}>{title}</span>
       <div className={cx('account')}>
-        <h3>
+        <span>
           Hi, <b>{user && user.user?.fullname}</b>
-        </h3>
+        </span>
         {user && (
           <div className={cx('profile')}>
             <Link to="/admin/profile">My Account</Link>

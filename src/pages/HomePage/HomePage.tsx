@@ -1,4 +1,4 @@
-import { Col, Row } from 'antd';
+import { Col, Row, Space } from 'antd';
 //import 'antd/dist/antd.css';
 import classNames from 'classnames/bind';
 import { Link } from 'react-router-dom';
@@ -46,7 +46,7 @@ const HomePage = () => {
       <section className="bst-family" style={{ marginTop: '48px' }}>
         <div className="p-50">
           <h2 className="common-title">BST gia đình</h2>
-          <Row gutter={[16, 16]} className={cx('list-product')}>
+          <Row gutter={[24, 24]} className={cx('list-product')}>
             <Col xl={6} md={24} xs={12}>
               <Link to="">
                 <img
@@ -104,7 +104,16 @@ const HomePage = () => {
                 />
               </Link>
             </Col>
-            <Product />
+
+            <Col xl={6} md={8} xs={12}>
+              <Product />
+            </Col>
+            <Col xl={6} md={8} xs={12}>
+              <Product />
+            </Col>
+            <Col xl={6} md={8} xs={12}>
+              <Product />
+            </Col>
           </Row>
           <div className="view-all" style={{ margin: '48px 0' }}>
             <Link to="" className="text">
@@ -144,7 +153,15 @@ const HomePage = () => {
                 />
               </Link>
             </Col>
-            <Product />
+            <Col xl={6} md={8} xs={12}>
+              <Product />
+            </Col>
+            <Col xl={6} md={8} xs={12}>
+              <Product />
+            </Col>
+            <Col xl={6} md={8} xs={12}>
+              <Product />
+            </Col>
           </Row>
           <div className="view-all" style={{ margin: '48px 0' }}>
             <Link to="" className="text">

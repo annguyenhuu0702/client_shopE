@@ -9,7 +9,7 @@ import { BiUserCircle } from 'react-icons/bi';
 import { HiOutlineShoppingBag } from 'react-icons/hi';
 import { RiStoreLine } from 'react-icons/ri';
 import { useDispatch, useSelector } from 'react-redux';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { authApi } from '../../../../apis/authApi';
 import {
   authActions,
@@ -22,12 +22,17 @@ const cx = classNames.bind(styles);
 
 const HeaderTop: React.FC = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const { user }: authState = useSelector(authSelector);
 
   const handleLogout = () => {
     authApi.logout();
     dispatch(authActions.logoutSuccess());
+  };
+
+  const redirectCart = () => {
+    navigate('/cart');
   };
 
   return (
@@ -93,7 +98,12 @@ const HeaderTop: React.FC = () => {
               )}
             </div>
           </div>
-          <div className={cx('cart')}>
+          <div
+            className={cx('cart')}
+            onClick={() => {
+              redirectCart();
+            }}
+          >
             <HiOutlineShoppingBag />
           </div>
         </div>

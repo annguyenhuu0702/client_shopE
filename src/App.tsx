@@ -74,7 +74,7 @@ const App = () => {
         </div>
       }
     >
-      <div className="App">
+      <div className="app overflow-hidden">
         <Routes>
           {showPrivateRoter()}
           {showRoutes(publicRoute)}

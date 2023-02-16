@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React from 'react';
 import styles from './__profile.module.scss';
 
 import {
@@ -7,7 +7,7 @@ import {
   faPhone,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Col, Image, Row, Tabs } from 'antd';
+import { Col, Image, Row, Tabs, TabsProps } from 'antd';
 import classNames from 'classnames/bind';
 import moment from 'moment';
 import { useSelector } from 'react-redux';
@@ -18,35 +18,30 @@ import ChangeEmail from './ChangeEmail';
 import ChangePassword from './ChangePassword';
 import ChangeProfile from './ChangeProfile';
 
-const { TabPane } = Tabs;
-
-const OperationsSlot: Record<PositionType, React.ReactNode> = {
-  left: (
-    <span
-      style={{
-        fontSize: '2.4rem',
-        paddingLeft: '20px',
-      }}
-    >
-      Cài đặt
-    </span>
-  ),
-};
-
-type PositionType = 'left';
-
 const cx = classNames.bind(styles);
 
 const Profile: React.FC = () => {
-  const [position] = useState<PositionType[]>(['left']);
+  const items: TabsProps['items'] = [
+    {
+      key: 'profile',
+      label: `Thông tin`,
+      children: <ChangeProfile />,
+    },
+    {
+      key: 'password',
+      label: `Mật khẩu`,
+      children: <ChangePassword />,
+    },
+    {
+      key: 'email',
+      label: `Email`,
+      children: <ChangeEmail />,
+    },
+  ];
 
-  const slot = useMemo(() => {
-    if (position.length === 0) return null;
-    return position.reduce(
-      (acc, direction) => ({ ...acc, [direction]: OperationsSlot[direction] }),
-      {}
-    );
-  }, [position]);
+  const onChange = (key: string) => {
+    console.log(key);
+  };
 
   const { user }: authState = useSelector(authSelector);
   useTitle('Profile');
@@ -72,17 +67,7 @@ const Profile: React.FC = () => {
         <div className={cx('content')}>
           <Row>
             <Col xl={14} md={14} className={cx('settings')}>
-              <Tabs tabBarExtraContent={slot} centered>
-                <TabPane tab="Thông tin" key="profile">
-                  <ChangeProfile />
-                </TabPane>
-                <TabPane tab="Mật khẩu" key="password">
-                  <ChangePassword />
-                </TabPane>
-                <TabPane tab="Email" key="email">
-                  <ChangeEmail />
-                </TabPane>
-              </Tabs>
+              <Tabs items={items} onChange={onChange} />
             </Col>
             <Col xl={8} md={8} className={cx('contact')}>
               <div className={cx('content')}>

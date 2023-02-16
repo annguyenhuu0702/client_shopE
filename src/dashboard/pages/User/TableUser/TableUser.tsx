@@ -195,9 +195,8 @@ const TableUser: React.FC = () => {
   };
   return (
     <React.Fragment>
-      {/* {isModal && <ModalUser />}
-       */}
-      <ModalUser />
+      {isModal && <ModalUser />}
+
       <Row className="common-row-cus">
         <Col xl={18} style={{ paddingInline: '5px' }}>
           <Form

@@ -36,12 +36,11 @@ const Product: React.FC = () => {
   };
   return (
     <React.Fragment>
-      {/* <Col xl={6} md={8} xs={12}> */}
       <div className={cx('item')}>
         <div className={cx('img')}>
           <Link to="">
             <img
-              className="common-img"
+              // className="common-img"
               src="https://res.cloudinary.com/diot4imoq/image/upload/v1662016045/canifa/2ls22s018-sy038-2-thumb_n882ft.jpg"
               alt=""
             />
@@ -54,7 +53,7 @@ const Product: React.FC = () => {
         {isModalVisible && (
           <Modal
             title={null}
-            visible={isModalVisible}
+            open={isModalVisible}
             onOk={handleOk}
             onCancel={handleCancel}
             footer={null}
@@ -178,9 +177,8 @@ const Product: React.FC = () => {
         )}
         <div className={cx('name')}>
           <Link to="">
-            <span>
-              Giày chạy bộ nam hoka march gì mà đẹp thế kia kia kia kia kia Giày
-              chạy bộ nam hoka march gì mà đẹp thế kia kia kia kia kia
+            <span className=" hover:text-red-600 transition ease-in-out delay-75">
+              Giày chạy bộ nam hoka march
             </span>
           </Link>
         </div>
@@ -199,7 +197,6 @@ const Product: React.FC = () => {
           <span>-10%</span>
         </div>
       </div>
-      {/* </Col> */}
     </React.Fragment>
   );
 };

@@ -145,7 +145,7 @@ const ModalUser: React.FC = () => {
     <React.Fragment>
       <Modal
         title={title}
-        visible={isModal}
+        open={isModal}
         destroyOnClose
         centered
         onOk={form.submit}

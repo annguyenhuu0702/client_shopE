@@ -82,7 +82,7 @@ const ModalProductImage = () => {
   return (
     <Modal
       title={title}
-      visible={isModal}
+      open={isModal}
       centered
       destroyOnClose
       // width={1000}

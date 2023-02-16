@@ -4,8 +4,13 @@
 .p-50 {
   padding: 0 50px;
 
+  @include tablet {
+    padding: 0 20px;
+  }
+
   @include mobile {
     padding: 0 20px;
+    margin: 0;
   }
 }
 

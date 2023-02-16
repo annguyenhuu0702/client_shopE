@@ -7,6 +7,7 @@ const HomePage = lazy(() => import('../pages/HomePage'));
 const Login = lazy(() => import('../pages/Login'));
 const Register = lazy(() => import('../pages/Register'));
 const ProductDetail = lazy(() => import('../pages/ProductDetail'));
+const CartPage = lazy(() => import('../pages/CartPage'));
 
 const User = lazy(() => import('../dashboard/pages/User'));
 const Statistical = lazy(() => import('../dashboard/pages/Statistical'));
@@ -57,6 +58,11 @@ export const publicRoute: route[] = [
   {
     path: routes.productDetail,
     element: ProductDetail,
+    layout: DefaultLayout,
+  },
+  {
+    path: routes.cart,
+    element: CartPage,
     layout: DefaultLayout,
   },
 ];

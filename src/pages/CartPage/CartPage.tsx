@@ -8,7 +8,7 @@ import { castToVND } from '../../utils';
 const CartPage: React.FC = () => {
   useTitle('Giỏ hàng');
   return (
-    <main className="p-50 cart my-20 max-lg:px-0 max-sm:p-0  ">
+    <main className="p-50 cart my-20 max-lg:px-0 max-sm:p-0 max-sm:mt-24 ">
       <Row className="justify-center lg:mb-20">
         <Col xl={12} xs={0} className="max-sm:hidden">
           <Steps

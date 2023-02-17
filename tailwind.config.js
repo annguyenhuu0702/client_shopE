@@ -10,9 +10,11 @@ module.exports = {
         'btn-order': '#333f48',
         'bg-cart': '#f9f9f9',
         'border-mobile': '#D9D9D9',
+        'name-product': '#333f48',
+        'root-price': '#fdaa63',
       },
-      spacing: {
-        '100%': '100%',
+      width: {
+        45: '45rem',
       },
     },
   },

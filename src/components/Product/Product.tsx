@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-//import 'antd/dist/antd.css';
 import styles from './__product.module.scss';
 
 import { faHeart, faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
@@ -93,7 +92,7 @@ const Product: React.FC = () => {
                   <span className={cx('sale')}>{castToVND(100000)}</span>
                 </div>
                 <div className={cx('colors')}>
-                  <h3>Màu sắc</h3>
+                  <h3>Màu sắc:</h3>
                   <div className={cx('wrap')}>
                     <div
                       className={cx('color', {
@@ -111,7 +110,7 @@ const Product: React.FC = () => {
                   </div>
                 </div>
                 <div className={cx('sizes')}>
-                  <h3>Kích thước</h3>
+                  <h3>Kích thước:</h3>
                   <div className={cx('wrap')}>
                     <div
                       className={cx('size', {

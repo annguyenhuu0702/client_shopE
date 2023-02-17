@@ -1,17 +1,18 @@
 import {
   AppstoreOutlined,
   BarChartOutlined,
-  ContainerOutlined,
-  MailOutlined,
   MenuFoldOutlined,
   MenuUnfoldOutlined,
   UserOutlined,
 } from '@ant-design/icons';
+import { faList } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Menu, MenuProps } from 'antd';
 import classNames from 'classnames/bind';
 import React, { useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import styles from './__sidebar.module.scss';
+import { BiCategory, BiCollection } from 'react-icons/bi';
 
 const cx = classNames.bind(styles);
 
@@ -34,15 +35,15 @@ function getItem(
 }
 
 const items: MenuItem[] = [
-  getItem('Statistical', '/admin', <BarChartOutlined />),
-  getItem('User', '/admin/user', <UserOutlined />),
-  getItem('Category', '/admin/category', <ContainerOutlined />),
-  getItem('Navigation One', 'sub1', <MailOutlined />, [
-    getItem('Option 5', '5'),
-    getItem('Option 6', '6'),
-    getItem('Option 7', '7'),
-    getItem('Option 8', '8'),
+  getItem('Thống kê', '/admin', <BarChartOutlined />),
+  getItem('Tài khoản', '/admin/user', <UserOutlined />),
+  getItem('Danh mục', '/admin/category', <BiCategory />),
+  getItem('Bộ sưu tập', '/admin/collection', <BiCollection />),
+  getItem('Quản lý sản phẩm', 'qlsanpham', <FontAwesomeIcon icon={faList} />, [
+    getItem('Danh mục sản phẩm', '/admin/product-category'),
+    getItem('Sản phẩm', '/admin/product'),
   ]),
+
   getItem('Navigation Two', 'sub2', <AppstoreOutlined />, [
     getItem('Option 9', '9'),
     getItem('Option 10', '10'),
@@ -67,7 +68,7 @@ const Sidebar: React.FC = () => {
   };
 
   return (
-    <div
+    <section
       style={collapsed ? { width: '80px' } : { width: '256px' }}
       className={cx('wrap')}
     >
@@ -79,10 +80,9 @@ const Sidebar: React.FC = () => {
         )}
         {!collapsed && (
           <img
-            src="https://res.cloudinary.com/diot4imoq/image/upload/v1656990500/supersports/logo_360x_xpnpoo.png"
+            src="https://res.cloudinary.com/diot4imoq/image/upload/v1661177083/canifa/logo_xju1y6.svg"
             alt=""
             style={{
-              width: '150px',
               height: '35px',
             }}
           />
@@ -98,7 +98,7 @@ const Sidebar: React.FC = () => {
         onClick={handleContent}
         selectedKeys={[location.pathname]}
       />
-    </div>
+    </section>
   );
 };
 

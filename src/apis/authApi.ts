@@ -1,60 +1,65 @@
+import { AxiosResponse } from 'axios';
 import instance, { apiCallerWithToken } from '../config/configAxios';
 import { URL_API } from '../constants';
+import { AppDispatch } from '../redux/store';
 import {
-  typeChangeEmail,
-  typeChangePassword,
-  typeChangeProfile,
-  typeLogin,
-  typeRegister,
+  changeEmailDto,
+  changePasswordDto,
+  changeProfileDto,
+  loginDto,
+  registerDto,
 } from '../types/auth';
 
-const register = (user: typeRegister) => {
+const register = (user: registerDto): Promise<AxiosResponse> => {
   return instance.post(`${URL_API}/auth/register`, user);
 };
 
-const login = (user: typeLogin) => {
+const login = (user: loginDto): Promise<AxiosResponse> => {
   return instance.post(`${URL_API}/auth/login`, user);
 };
 
-export const logout = () => {
+const logout = (): Promise<AxiosResponse> => {
   return instance.post(`${URL_API}/auth/logout`);
 };
 
-export const refreshToken = () => {
+const refreshToken = (): Promise<AxiosResponse> => {
   return instance.post(`${URL_API}/auth/refreshToken`);
 };
 
-export const getProfile = (token: string | null, dispatch: any) => {
+const getProfile = (
+  token: string | null,
+  dispatch: AppDispatch
+): Promise<AxiosResponse> => {
   return apiCallerWithToken(token, dispatch).get(`${URL_API}/auth/getProfile`);
 };
 
-export const changeProfile = (
+const changeProfile = (
   token: string | null,
-  dispatch: any,
-  data: typeChangeProfile
-) => {
+  dispatch: AppDispatch,
+  data: changeProfileDto
+): Promise<AxiosResponse> => {
   return apiCallerWithToken(token, dispatch).put(
     `${URL_API}/auth/changeProfile`,
     data
   );
 };
 
-export const changePassword = (
+const changePassword = (
   token: string | null,
-  dispatch: any,
-  data: typeChangePassword
-) => {
+  dispatch: AppDispatch,
+  data: changePasswordDto
+): Promise<AxiosResponse> => {
   return apiCallerWithToken(token, dispatch).put(
     `${URL_API}/auth/changePassword`,
     data
   );
 };
 
-export const changeEmail = (
+const changeEmail = (
   token: string | null,
-  dispatch: any,
-  data: typeChangeEmail
-) => {
+  dispatch: AppDispatch,
+  data: changeEmailDto
+): Promise<AxiosResponse> => {
   return apiCallerWithToken(token, dispatch).put(
     `${URL_API}/auth/changeEmail`,
     data

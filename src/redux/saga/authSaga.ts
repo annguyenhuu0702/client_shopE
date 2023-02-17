@@ -5,16 +5,16 @@ import { call, put, takeEvery } from 'redux-saga/effects';
 import { authApi } from '../../apis/authApi';
 import { STATUS_CODE } from '../../constants';
 import {
-  typeChangeEmail,
-  typeChangePassword,
-  typeChangeProfile,
-  typeLogin,
-  typeRegister,
+  changeEmailDto,
+  changePasswordDto,
+  changeProfileDto,
+  loginDto,
+  registerDto,
 } from '../../types/auth';
-import { tokenPayload } from '../../types/common';
+import { tokenPayloadData } from '../../types/common';
 import { authActions } from '../slice/authSlice';
 
-function* registerSaga({ payload }: PayloadAction<typeRegister>): any {
+function* registerSaga({ payload }: PayloadAction<registerDto>): any {
   try {
     const { navigate }: any = payload;
     const res = yield call(() => {
@@ -24,8 +24,8 @@ function* registerSaga({ payload }: PayloadAction<typeRegister>): any {
     if (status === STATUS_CODE.CREATED) {
       yield put(authActions.registerSuccess(data.data));
       notification.success({
-        message: 'Success',
-        description: 'Create account success',
+        message: 'Thành công',
+        description: 'Tạo tài khoản thành công!',
         placement: 'bottomRight',
         duration: 3,
       });
@@ -34,8 +34,8 @@ function* registerSaga({ payload }: PayloadAction<typeRegister>): any {
   } catch (error: any) {
     yield put(authActions.registerFailed());
     notification.error({
-      message: 'Error',
-      description: 'Email is already exists',
+      message: 'Thất bại',
+      description: 'Email này đã tồn tại!',
       placement: 'bottomRight',
       duration: 3,
     });
@@ -44,7 +44,7 @@ function* registerSaga({ payload }: PayloadAction<typeRegister>): any {
   }
 }
 
-function* loginSaga({ payload }: PayloadAction<typeLogin>): any {
+function* loginSaga({ payload }: PayloadAction<loginDto>): any {
   try {
     const { navigate }: any = payload;
     const res = yield call(() => {
@@ -52,15 +52,15 @@ function* loginSaga({ payload }: PayloadAction<typeLogin>): any {
     });
     const { data, status } = res;
     const role = (jwtDecoded(data.data.accessToken) as any).role;
-    if (status === STATUS_CODE.CREATED) {
+    if (status === STATUS_CODE.SUCCESS) {
       yield put(authActions.loginSuccess(data.data));
       navigate(role === 'admin' ? '/admin' : '/');
     }
   } catch (error: any) {
     yield put(authActions.loginFailed());
     notification.error({
-      message: 'Error',
-      description: 'Email or password wrong!',
+      message: 'Thất bại',
+      description: 'Email hoặc mật khẩu không chính xác!',
       placement: 'bottomRight',
       duration: 3,
     });
@@ -70,7 +70,7 @@ function* loginSaga({ payload }: PayloadAction<typeLogin>): any {
 
 function* changeProfileSaga({
   payload,
-}: PayloadAction<tokenPayload<typeChangeProfile>>): any {
+}: PayloadAction<tokenPayloadData<changeProfileDto>>): any {
   try {
     const { token, dispatch, data, navigate } = payload;
     const res = yield call(() => {
@@ -83,21 +83,27 @@ function* changeProfileSaga({
         navigate('/admin');
       }
       notification.success({
-        message: 'Success',
-        description: 'Change profile success',
+        message: 'Thành công',
+        description: 'Thay đổi thông tin thành công',
         placement: 'bottomRight',
         duration: 3,
       });
     }
   } catch (error: any) {
     yield put(authActions.changeProfileFailed());
+    notification.error({
+      message: 'Thất bại',
+      description: 'Lỗi rồi!',
+      placement: 'bottomRight',
+      duration: 3,
+    });
     console.log(error);
   }
 }
 
 function* changePasswordSaga({
   payload,
-}: PayloadAction<tokenPayload<typeChangePassword>>): any {
+}: PayloadAction<tokenPayloadData<changePasswordDto>>): any {
   try {
     const { token, dispatch, data, navigate } = payload;
     const res = yield call(() => {
@@ -110,21 +116,27 @@ function* changePasswordSaga({
         navigate('/admin');
       }
       notification.success({
-        message: 'Success',
-        description: 'Change password success',
+        message: 'Thành công',
+        description: 'Thay đổi mật khẩu thành công',
         placement: 'bottomRight',
         duration: 3,
       });
     }
   } catch (error: any) {
     yield put(authActions.changePasswordFailed());
+    notification.error({
+      message: 'Thất bại',
+      description: 'Lỗi rồi!',
+      placement: 'bottomRight',
+      duration: 3,
+    });
     console.log(error);
   }
 }
 
 function* changeEmailSaga({
   payload,
-}: PayloadAction<tokenPayload<typeChangeEmail>>): any {
+}: PayloadAction<tokenPayloadData<changeEmailDto>>): any {
   try {
     const { token, dispatch, data, navigate } = payload;
     const res = yield call(() => {
@@ -137,14 +149,20 @@ function* changeEmailSaga({
         navigate('/admin');
       }
       notification.success({
-        message: 'Success',
-        description: 'Change email success',
+        message: 'Thành công',
+        description: 'Thay đổi email thành công',
         placement: 'bottomRight',
         duration: 3,
       });
     }
   } catch (error: any) {
     yield put(authActions.changeEmailFailed());
+    notification.error({
+      message: 'Thất bại',
+      description: 'Lỗi rồi!',
+      placement: 'bottomRight',
+      duration: 3,
+    });
     console.log(error);
   }
 }

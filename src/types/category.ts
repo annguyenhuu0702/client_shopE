@@ -1,12 +1,38 @@
-import React from "react";
+import React from 'react';
+import { collection } from './collection';
+import { queryParams, tokenPayload } from './common';
 
-export interface typeCategory {
-  id?: number,
-  name: string,
-  slug: string,
-  parent_id: number | null,
-  children: typeCategory[],
-  key?: React.Key | string | number,
-  createdAt?: string,
-  updatedAt?: string,
+export interface category {
+  key?: React.Key | string | number;
+  id: number;
+  name: string;
+  slug: string;
+  thumbnail: string;
+  description: string;
+  collections: collection;
+  deletedAt: Date;
+  createdAt: string;
+  updatedAt: string;
+  resetValues?: Function;
+}
+
+export interface createCategory {
+  name: string;
+  slug: string;
+  thumbnail: string;
+  description: string;
+  resetValues?: Function;
+}
+
+export interface updateCategory extends createCategory {
+  id: number;
+}
+
+export interface deleteCategory extends tokenPayload {
+  id: number;
+  params?: queryParams;
+}
+
+export interface getAllCategoryParams extends queryParams {
+  name?: string;
 }

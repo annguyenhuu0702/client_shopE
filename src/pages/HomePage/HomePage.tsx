@@ -1,108 +1,171 @@
-import 'antd/dist/antd.css';
-import { Row } from 'antd';
-import classNames from 'classnames/bind';
+import { Col, Row } from 'antd';
 import { Link } from 'react-router-dom';
-import Product from '../../components/Product';
-import Brand from './Brand';
-import Category from './Category';
-import SlideShow from './SlideShow';
-import styles from './__homepage.module.scss';
-import { Swiper, SwiperSlide } from 'swiper/react';
-import { Pagination, Autoplay, Navigation } from 'swiper';
-
 import 'swiper/css';
-
-const cx = classNames.bind(styles);
+import Product from '../../components/Product';
+import { useTitle } from '../../hooks/useTitle';
+import Endow from './Endow';
 
 const HomePage = () => {
+  useTitle('CANIFA');
   return (
-    <div className={cx('home-page')}>
-      <SlideShow />
-      <Brand />
-      <section className="new-product" style={{ marginTop: '48px' }}>
-        <div className="w-1200">
-          <h2 className="subject-line">HÀNG MỚI</h2>
-          <Row className={cx('list-product')}>
-            <div className={cx('new-arrival')}>
+    <main className="home-page">
+      <section className="banner max-sm:mt-24">
+        <Link to="">
+          <img
+            className="common-img"
+            src="https://res.cloudinary.com/diot4imoq/image/upload/v1662004283/canifa/banner_name_tablet1661792546_s7efpf.jpg"
+            alt="endow"
+          />
+        </Link>
+      </section>
+      <Endow />
+      {/* code hàng mới đây là xong trang chủ */}
+      <section className="block-endow">
+        <div className="p-50">
+          <div className="title">
+            <h2 className="common-title">Sản phẩm giá tốt</h2>
+          </div>
+          <Row>
+            <Col xl={24} md={24}>
               <Link to="">
                 <img
-                  src="https://cdn.shopify.com/s/files/1/0456/5070/6581/files/New_Arrival_270x490_6991d991-adce-462d-a0eb-cf4159c20ddd_270x.jpg?v=1627833572"
-                  alt=""
+                  className="common-img"
+                  src="https://res.cloudinary.com/diot4imoq/image/upload/v1662007772/canifa/list_image_tablet1646719696_zpgxfv.jpg"
+                  alt="product-endow"
                 />
               </Link>
-            </div>
-            <Product />
+            </Col>
           </Row>
-          <div className="view-all" style={{ margin: '48px 0' }}>
+        </div>
+      </section>
+      <section className="bst-family">
+        <div className="p-50">
+          <h2 className="common-title">BST gia đình</h2>
+          <Row gutter={[12, 12]} className="list-product">
+            <Col xl={6} md={6} xs={12}>
+              <Link to="">
+                <img
+                  className="common-img"
+                  src="https://res.cloudinary.com/diot4imoq/image/upload/v1662008630/canifa/list_image_tablet_third1650513698_wdxvrh.png"
+                  alt="style-at-home"
+                />
+              </Link>
+            </Col>
+            <Col xl={6} md={6} xs={12}>
+              <Product />
+            </Col>
+            <Col xl={6} md={6} xs={12}>
+              <Product />
+            </Col>
+            <Col xl={6} md={6} xs={12}>
+              <Product />
+            </Col>
+          </Row>
+          <div className="view-all my-10">
             <Link to="" className="text">
               Xem tất cả
             </Link>
           </div>
         </div>
       </section>
-      <section className="banner" style={{ marginTop: '48px' }}>
-        <div className="w-1200">
-          <img
-            style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-            src="https://res.cloudinary.com/diot4imoq/image/upload/v1657618849/supersports/1140x300_1_1512x_dignwt.jpg"
-            alt=""
-          />
-        </div>
-      </section>
-      <section className={cx('categories')}>
-        <div className="w-1200">
-          <Category />
-        </div>
-      </section>
-      <section className="sale-product" style={{ marginTop: '48px' }}>
-        <div className="w-1200">
-          <h2 className="subject-line">KHUYẾN MÃI</h2>
-          <div className="slide-show">
-            <Swiper
-              modules={[Pagination, Autoplay, Navigation]}
-              slidesPerView={1}
-              autoplay={{ delay: 5000 }}
-              pagination={{ clickable: true }}
-              navigation={true}
-              loop={true}
-            >
-              <SwiperSlide>
-                <Link to="" className="slide-show-custom">
-                  <img
-                    src="https://res.cloudinary.com/diot4imoq/image/upload/v1657680931/supersports/Promotion_Desktop_banner_1140x475_copy_g7tpkm.jpg"
-                    alt=""
-                  />
-                </Link>
-              </SwiperSlide>
-              <SwiperSlide>
-                <Link to="" className="slide-show-custom">
-                  <img
-                    src="https://res.cloudinary.com/diot4imoq/image/upload/v1657680969/supersports/1140x475_2c08432e-a520-46d7-a4bb-abe5399be701_bie7ar.jpg"
-                    alt=""
-                  />
-                </Link>
-              </SwiperSlide>
-              <SwiperSlide>
-                <Link to="" className="slide-show-custom">
-                  <img
-                    src="https://res.cloudinary.com/diot4imoq/image/upload/v1657680990/supersports/1140x475_6_1f615ef6-c846-4b12-ba08-7307cf4d9c77_fcxrkn.jpg"
-                    alt=""
-                  />
-                </Link>
-              </SwiperSlide>
-            </Swiper>
+      <section className="block-canifaz">
+        <div className="p-50">
+          <div className="title">
+            <h2 className="common-title">Canifa Z</h2>
           </div>
-          <Row className={cx('list-product')} style={{ marginTop: '16px' }}>
-            <Product />
+          <Row>
+            <Col xl={24} md={24}>
+              <Link to="">
+                <img
+                  className="common-img"
+                  src="https://res.cloudinary.com/diot4imoq/image/upload/v1662017065/canifa/list_image_tablet1660929641_irwu7j.jpg"
+                  alt="canifaz"
+                />
+              </Link>
+            </Col>
           </Row>
-          <div className="view-all" style={{ margin: '48px 0' }}>
+        </div>
+      </section>
+      <section className="style-at-home">
+        <div className="p-50">
+          <h2 className="common-title">Style at home</h2>
+          <Row className="list-product" gutter={[12, 12]}>
+            <Col xl={6} md={6} xs={12}>
+              <Link to="">
+                <img
+                  className="common-img"
+                  src="https://res.cloudinary.com/diot4imoq/image/upload/v1662008630/canifa/list_image_tablet_third1650513698_wdxvrh.png"
+                  alt="style-at-home"
+                />
+              </Link>
+            </Col>
+
+            <Col xl={6} md={6} xs={12}>
+              <Product />
+            </Col>
+            <Col xl={6} md={6} xs={12}>
+              <Product />
+            </Col>
+            <Col xl={6} md={6} xs={12}>
+              <Product />
+            </Col>
+          </Row>
+          <div className="view-all" style={{ margin: '24px 0' }}>
             <Link to="" className="text">
               Xem tất cả
             </Link>
           </div>
         </div>
       </section>
-    </div>
+      <section className="jeans">
+        <div className="p-50">
+          <div className="title">
+            <h2 className="common-title">Quần jean</h2>
+          </div>
+          <Row>
+            <Col xl={24} md={24}>
+              <Link to="">
+                <img
+                  className="common-img"
+                  src="https://res.cloudinary.com/diot4imoq/image/upload/v1662018253/canifa/list_image_tablet1650248471_nn79wp.jpg"
+                  alt="jeans"
+                />
+              </Link>
+            </Col>
+          </Row>
+        </div>
+      </section>
+      <section>
+        <div className="p-50">
+          <h2 className="common-title">Áo phông</h2>
+          <Row className="list-product" gutter={[12, 12]}>
+            <Col xl={6} md={6} xs={12}>
+              <Link to="">
+                <img
+                  className="common-img"
+                  src="https://res.cloudinary.com/diot4imoq/image/upload/v1662008630/canifa/list_image_tablet_third1650513698_wdxvrh.png"
+                  alt="style-at-home"
+                />
+              </Link>
+            </Col>
+            <Col xl={6} md={6} xs={12}>
+              <Product />
+            </Col>
+            <Col xl={6} md={6} xs={12}>
+              <Product />
+            </Col>
+            <Col xl={6} md={6} xs={12}>
+              <Product />
+            </Col>
+          </Row>
+          <div className="view-all" style={{ margin: '24px 0' }}>
+            <Link to="" className="text">
+              Xem tất cả
+            </Link>
+          </div>
+        </div>
+      </section>
+    </main>
   );
 };
 

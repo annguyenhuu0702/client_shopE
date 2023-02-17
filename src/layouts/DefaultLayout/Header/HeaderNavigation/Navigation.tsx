@@ -1,16 +1,25 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import styles from './__navigation.module.scss';
 
 import { faAngleDown } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import classNames from 'classnames/bind';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
+import {
+  categoryActions,
+  categorySelector,
+  categoryState,
+} from '../../../../redux/slice/categorySlice';
 
 const cx = classNames.bind(styles);
 
 const HeaderNavigation: React.FC = () => {
   const dispatch = useDispatch();
+  const { categories }: categoryState = useSelector(categorySelector);
+  // useEffect(() => {
+  //   dispatch(categoryActions.getAllCategory({}));
+  // }, [dispatch]);
 
   return (
     <section className={cx('navigation')}>
@@ -57,9 +66,6 @@ const HeaderNavigation: React.FC = () => {
             </div>
           </li>
         </ul>
-        <div className={cx('endow')}>
-          <Link to="/uu-dai">Ưu đãi</Link>
-        </div>
       </div>
     </section>
   );

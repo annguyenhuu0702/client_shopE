@@ -1,23 +1,22 @@
-import React, { useState } from 'react';
-import moment from 'moment';
 import { Button, DatePicker, Form, Input, Radio, RadioChangeEvent } from 'antd';
+import moment from 'moment';
+import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { typeUser } from '../../../../types/user';
-import { authActions } from '../../../../redux/slice/authSlice';
 import { useNavigate } from 'react-router-dom';
+import {
+  authActions,
+  authSelector,
+  authState,
+} from '../../../../redux/slice/authSlice';
 
 const ChangeProfile: React.FC = () => {
-  const token: string | null = useSelector(
-    (state: any) => state.auth.currentUser.accessToken
-  );
+  const { user }: authState = useSelector(authSelector);
+
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [form] = Form.useForm();
   const [gender, setGender] = useState(1);
 
-  const currentUser: typeUser | null = useSelector(
-    (state: any) => state.auth.currentUser.user
-  );
   const onFinish = (values: any) => {
     const data = {
       ...values,
@@ -25,7 +24,7 @@ const ChangeProfile: React.FC = () => {
     };
     dispatch(
       authActions.changeProfile({
-        token,
+        token: user.accessToken,
         dispatch,
         data,
         navigate,
@@ -38,9 +37,9 @@ const ChangeProfile: React.FC = () => {
   };
 
   const initialValues = {
-    fullname: currentUser && currentUser.fullname,
-    birthday: currentUser && moment(currentUser.birthday),
-    gender: currentUser && currentUser.gender,
+    fullname: user.user && user.user.fullname,
+    birthday: user.user && moment(user.user.birthday),
+    gender: user.user && user.user.gender,
   };
 
   return (
@@ -55,39 +54,39 @@ const ChangeProfile: React.FC = () => {
       size="large"
     >
       <Form.Item
-        label="FullName"
+        label="Họ tên"
         name="fullname"
         rules={[
           {
             required: true,
-            message: 'Please fill in this field!',
+            message: 'Vui lòng không bỏ trống!',
           },
         ]}
       >
         <Input />
       </Form.Item>
       <Form.Item
-        label="Date of birth"
+        label="Ngày sinh"
         name="birthday"
         rules={[
           {
             required: true,
-            message: 'Please fill in this field!',
+            message: 'Vui lòng không bỏ trống!',
           },
         ]}
       >
         <DatePicker format={'MM/DD/YYYY'} allowClear={false} />
       </Form.Item>
 
-      <Form.Item label="Gender" name="gender">
+      <Form.Item label="Giới tính" name="gender">
         <Radio.Group
           value={gender}
           onChange={(e: RadioChangeEvent) => {
             setGender(e.target.value);
           }}
         >
-          <Radio value={true}>Male</Radio>
-          <Radio value={false}>Female</Radio>
+          <Radio value={true}>Nam</Radio>
+          <Radio value={false}>Nữ</Radio>
         </Radio.Group>
       </Form.Item>
 

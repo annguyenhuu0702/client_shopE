@@ -3,10 +3,10 @@ import Sidebar from './Sidebar';
 
 const DashboardLayout: React.FC = ({ children }: any) => {
   return (
-    <div style={{ display: 'flex' }}>
+    <section style={{ display: 'flex' }}>
       <Sidebar />
       {children}
-    </div>
+    </section>
   );
 };
 

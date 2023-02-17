@@ -1,24 +1,41 @@
 @import "./variable.module.scss";
-.w-1200 {
-  width: 100%;
-  max-width: 1200px;
-  margin: 0 auto;
+@import "./mixin.module.scss";
+
+.p-50 {
+  padding: 0 50px;
+
+  @include tablet {
+    padding: 0 20px;
+  }
+
+  @include mobile {
+    padding: 0 20px;
+    margin: 0;
+  }
 }
 
-// hover header language and account
+.p-100 {
+  padding: 0 100px;
+
+  @include tablet {
+    padding: 0 50px;
+  }
+}
+
+// hover header language and account home page
 .arrow-up {
-  margin-left: 50px;
+  margin-left: 108px;
   width: 0;
   height: 0;
-  border-left: 10px solid transparent;
-  border-right: 10px solid transparent;
-  border-bottom: 10px solid $white-color;
+  border-left: 8px solid transparent;
+  border-right: 8px solid transparent;
+  border-bottom: 8px solid $white-color;
 }
 
 .block-hover {
   background: $white-color;
-  width: 180px;
-  padding: 10px 0 10px 10px;
+  width: 160px;
+  padding: 10px;
 
   .block-child {
     margin: 0 0 6px 0;
@@ -50,6 +67,10 @@
     }
 
     .text {
+      display: -webkit-box;
+      -webkit-line-clamp: 1;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
       &:hover {
         opacity: 1;
         color: $green-color;
@@ -58,7 +79,7 @@
   }
 }
 
-//hover btn text
+//hover btn text home page
 .btn-common {
   display: flex;
   align-items: center;
@@ -68,11 +89,11 @@
   font-size: 1.4rem;
 
   a {
-    color: $text-color;
+    color: $black-color;
   }
 
   &:hover {
-    background: $hover-color;
+    background: $hover-green;
 
     .text,
     .icon {
@@ -87,7 +108,23 @@
   }
 }
 
-// custom input search header
+// common image
+
+.common-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+// common title home-page
+
+.common-title {
+  margin: 48px 0 8px 0;
+  font-weight: 700;
+  font-size: 2.4rem;
+  line-height: 36px;
+}
+
 .custom-input {
   .ant-input-affix-wrapper-focused {
     outline: none;
@@ -108,7 +145,7 @@
     width: 80px;
     button {
       position: relative;
-      font-weight: 600;
+      font-weight: 500;
       background: $green-color;
       border: none;
       outline: none;
@@ -116,36 +153,14 @@
       color: $black-color;
 
       &:hover {
-        background: $hover-color;
+        background: $hover-green;
         color: $white-color;
       }
     }
   }
 }
 
-// brand home page
-
-.brand-custom {
-  display: block;
-  height: 120px;
-  img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-  }
-}
-
-// slide show home page
-.slide-show-custom {
-  img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-  }
-}
-
 // nút view all product
-
 .view-all {
   display: flex;
   justify-content: center;
@@ -156,45 +171,33 @@
     justify-content: center;
     width: 220px;
     background: $black-color;
-    padding: 8px 34px;
+    padding: 12px 34px;
     color: $white-color;
     text-transform: uppercase;
     font-size: 1.4rem;
-    line-height: 2.2;
     font-weight: 600;
+    border: 1px solid transparent;
+    border-radius: 10px;
+    transition: ease-in 0.3s;
 
     &:hover {
-      background: $green-color;
+      color: $black-color;
+      background: $white-color;
+      border: 1px solid $black-color;
+    }
+
+    @include mobile {
+      width: 160px;
+      padding: 8px 26px;
     }
   }
 }
 
-// tiêu đề ở trang chủ mỗi section
-.subject-line {
-  display: flex;
-  justify-content: center;
-  margin: 20px 0;
-  font-weight: 700;
-  font-size: 3rem;
-}
-
 // modal product
-
 .ant-modal-wrap {
   .modal-product {
     top: 0;
     width: 900px !important;
-  }
-}
-
-.form-custom {
-  .ant-form-item {
-    display: flex;
-    flex-direction: column;
-
-    .ant-form-item-label {
-      text-align: left;
-    }
   }
 }
 
@@ -210,9 +213,7 @@
   background: #13283f;
   color: $white-color;
   margin-top: 24px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  text-align: center;
   cursor: pointer;
 
   span {
@@ -236,6 +237,15 @@
     margin-bottom: 30px;
     font-size: 3rem;
   }
+  @include mobile {
+    width: 100%;
+    padding: 40px 20px;
+  }
+}
+
+// common auth
+.auth {
+  margin: 20px 0;
 }
 
 .ant-select:not(.ant-select-customize-input) .ant-select-selector,
@@ -277,5 +287,45 @@
     background-color: #038fde !important;
     border-color: #038fde !important;
     color: $white-color;
+  }
+}
+
+//admin common
+.section-common {
+  width: 100%;
+  background: $bg-dashboard;
+
+  .common-pagination-cus {
+    height: 65px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .common-layout-content-cus {
+    height: calc(100vh - 65px - 65px);
+
+    .common-content-wrap {
+      .common-content {
+        padding: 32px 32px 0 32px;
+      }
+    }
+  }
+}
+
+.common-row-cus {
+  .common-form-cus {
+    display: flex;
+    justify-content: space-between;
+  }
+}
+
+.common-content-table {
+  .common-icon-edit {
+    cursor: pointer;
+    color: $blue-color;
+  }
+  .common-icon-delete {
+    color: rgb(255, 77, 79);
   }
 }

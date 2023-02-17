@@ -1,9 +1,10 @@
-import 'antd/dist/antd.css';
-import React, { useState } from 'react';
-
-import styles from './__tableUser.module.scss';
-
-import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
+// import 'antd/dist/antd.css';
+import React from 'react';
+import {
+  DeleteOutlined,
+  EditOutlined,
+  DownloadOutlined,
+} from '@ant-design/icons';
 import {
   Button,
   Col,
@@ -16,39 +17,42 @@ import {
   Table,
 } from 'antd';
 
-import { utils, writeFileXLSX } from 'xlsx';
-import classNames from 'classnames/bind';
-import { useDispatch, useSelector } from 'react-redux';
-import { modalActions } from '../../../../redux/slice/modalSlice';
-import { userActions } from '../../../../redux/slice/userSlice';
-import { typeUser } from '../../../../types/user';
-import ModalUser from '../ModalUser';
-import { userApi } from '../../../../apis/userApi';
 import moment from 'moment';
-
-const cx = classNames.bind(styles);
+import { useDispatch, useSelector } from 'react-redux';
+import { utils, writeFileXLSX } from 'xlsx';
+import { userApi } from '../../../../apis/userApi';
+import {
+  modalActions,
+  modalSelector,
+  modalState,
+} from '../../../../redux/slice/modalSlice';
+import {
+  userState,
+  userActions,
+  userSelector,
+} from '../../../../redux/slice/userSlice';
+import { user } from '../../../../types/user';
+import ModalUser from '../ModalUser';
+import { authSelector, authState } from '../../../../redux/slice/authSlice';
 
 const TableUser: React.FC = () => {
   const dispatch = useDispatch();
 
-  const isModal: boolean = useSelector((state: any) => state.modal.isModal);
-  const users: typeUser[] = useSelector((state: any) => state.user.users?.rows);
-  const isLoading: boolean = useSelector((state: any) => state.user.isLoading);
-  const page: number = useSelector((state: any) => state.user.page);
-  const token: string | null = useSelector(
-    (state: any) => state.auth.currentUser.accessToken
-  );
+  const { isModal }: modalState = useSelector(modalSelector);
+  const { users, isLoading, page, pageSize }: userState =
+    useSelector(userSelector);
+  const { user }: authState = useSelector(authSelector);
+
   const [form] = Form.useForm();
 
   const columns = [
     {
-      title: 'Avatar',
+      title: 'Hình ảnh',
       dataIndex: 'avatar',
-      key: 'avatar',
-      render: (text: string, record: typeUser) => {
+      render: (text: string, record: user) => {
         return (
           <React.Fragment>
-            {record.avatar === '' ? (
+            {!record.avatar ? (
               <img
                 style={{
                   width: '30px',
@@ -65,64 +69,58 @@ const TableUser: React.FC = () => {
       },
     },
     {
-      title: 'FullName',
+      title: 'Họ tên',
       dataIndex: 'fullname',
-      key: 'fullname',
     },
     {
       title: 'Email',
       dataIndex: 'email',
-      key: 'email',
     },
     {
-      title: 'Phone',
+      title: 'SĐT',
       dataIndex: 'phone',
-      key: 'phone',
     },
     {
-      title: 'Gender',
+      title: 'Giới tính',
       dataIndex: 'gender',
-      key: 'gender',
-      render: (text: string, record: typeUser) => {
+      render: (text: string, record: user) => {
         return (
           <React.Fragment>
-            {record.gender === true ? <span>Male</span> : <span>Female</span>}
+            {record.gender === true ? <span>Nam</span> : <span>Nữ</span>}
           </React.Fragment>
         );
       },
     },
     {
-      title: 'Created Date',
+      title: 'Ngày tạo',
       dataIndex: 'createdAt',
-      key: 'createAt',
-      render: (text: string, record: typeUser) => {
-        let date = new Date(record.createdAt).toLocaleDateString('en-EN');
+      render: (text: string, record: user) => {
+        let date = moment(record.createdAt).format('MM/DD/YYYY');
         return <React.Fragment>{date}</React.Fragment>;
       },
     },
     {
-      title: 'Action',
+      title: 'Hành động',
       dataIndex: 'action',
-      key: 'action',
-      render: (text: string, record: typeUser) => {
+      render: (text: string, record: user) => {
         return (
           <Space size="middle">
             <EditOutlined
-              className={cx('icon-edit')}
+              className="common-icon-edit"
               onClick={() => {
                 handleEditUser(record);
               }}
             />
             <Popconfirm
               placement="topLeft"
-              title={`Do you want to delete this?`}
+              title={`Bạn có muốn xóa??`}
               onConfirm={() => {
                 confirm(record);
               }}
               okText="Yes"
               cancelText="No"
             >
-              <DeleteOutlined className={cx('icon-delete')} />
+              <DeleteOutlined className="common-icon-delete" />
             </Popconfirm>
           </Space>
         );
@@ -130,7 +128,7 @@ const TableUser: React.FC = () => {
     },
   ];
 
-  const handleEditUser = (record: typeUser) => {
+  const handleEditUser = (record: user) => {
     dispatch(modalActions.showModal('Edit user'));
     dispatch(userActions.setUser(record));
   };
@@ -138,11 +136,11 @@ const TableUser: React.FC = () => {
   const onFinish = (values: any) => {
     dispatch(
       userActions.getAllUser({
-        token,
+        token: user.accessToken,
         dispatch,
         params: {
           p: page,
-          limit: 7,
+          limit: pageSize,
           [values.option]: values.search,
         },
       })
@@ -156,12 +154,12 @@ const TableUser: React.FC = () => {
   function confirm(record: any) {
     dispatch(
       userActions.deleteUser({
-        token,
+        token: user.accessToken,
         dispatch,
         id: record.id,
         params: {
           p: page,
-          limit: 7,
+          limit: pageSize,
         },
       })
     );
@@ -175,14 +173,13 @@ const TableUser: React.FC = () => {
   const handleExportExcel = () => {
     try {
       const getAllUser = async () => {
-        const data = await userApi.getAll(token, dispatch);
+        const data = await userApi.getAll(user.accessToken, dispatch);
         let wb = utils.book_new();
         let ws = utils.json_to_sheet(
-          data.data.data.rows.map((item: typeUser) => ({
+          data.data.data.rows.map((item: user) => ({
             fullname: item.fullname,
             email: item.email,
             phone: item.phone,
-            city: item.city,
             birthday: item.birthday,
             gender: item.gender === true ? 'Nam' : 'Nữ',
             createdAt: moment(item.createdAt).format('MM/DD/YYYY'),
@@ -199,7 +196,8 @@ const TableUser: React.FC = () => {
   return (
     <React.Fragment>
       {isModal && <ModalUser />}
-      <Row className={cx('row-cus')}>
+
+      <Row className="common-row-cus">
         <Col xl={18} style={{ paddingInline: '5px' }}>
           <Form
             form={form}
@@ -207,7 +205,7 @@ const TableUser: React.FC = () => {
             onFinish={onFinish}
             onFinishFailed={onFinishFailed}
             autoComplete="off"
-            className={cx('form-cus')}
+            className="common-form-cus"
           >
             <div style={{ display: 'flex' }}>
               <Form.Item
@@ -217,13 +215,13 @@ const TableUser: React.FC = () => {
                 }}
               >
                 <Select style={{ width: 120, borderRadius: '5px' }}>
-                  <Select.Option value="fullname">Fullname</Select.Option>
+                  <Select.Option value="fullname">Họ tên</Select.Option>
                   <Select.Option value="email">Email</Select.Option>
-                  <Select.Option value="phone">Phone</Select.Option>
+                  <Select.Option value="phone">SĐT</Select.Option>
                 </Select>
               </Form.Item>
               <Form.Item name="search">
-                <Input placeholder="Search" />
+                <Input allowClear placeholder="Tìm kiếm" />
               </Form.Item>
             </div>
             <Form.Item shouldUpdate>
@@ -237,7 +235,7 @@ const TableUser: React.FC = () => {
                       .length > 0
                   }
                 >
-                  Search
+                  Tìm kiếm
                 </Button>
               )}
             </Form.Item>
@@ -249,8 +247,12 @@ const TableUser: React.FC = () => {
             textAlign: 'center',
           }}
         >
-          <Button type="primary" onClick={handleExportExcel}>
-            Export to Excel
+          <Button
+            type="primary"
+            icon={<DownloadOutlined />}
+            onClick={handleExportExcel}
+          >
+            Excel
           </Button>
         </Col>
         <Col
@@ -265,16 +267,16 @@ const TableUser: React.FC = () => {
               handleAddNewUser();
             }}
           >
-            Add new
+            Thêm mới
           </Button>
         </Col>
       </Row>
-      <Row className={cx('content-table')}>
+      <Row className="common-content-table">
         <Col xl={24} md={24} xs={24}>
           <Table
             dataSource={
               users &&
-              users.map((item: typeUser) => {
+              users.rows.map((item: user) => {
                 return {
                   ...item,
                   key: item.id,

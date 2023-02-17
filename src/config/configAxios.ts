@@ -6,7 +6,7 @@ import { authActions } from '../redux/slice/authSlice';
 
 const instance = axios.create({
   baseURL: URL_API,
-  withCredentials: true,
+  // withCredentials: true,
 });
 
 export const decodeToken = (token: string | undefined | null): any => {
@@ -17,7 +17,7 @@ export const decodeToken = (token: string | undefined | null): any => {
 export const apiCallerWithToken = (token: string | null, dispatch: any) => {
   const instance = axios.create({
     baseURL: URL_API,
-    withCredentials: true,
+    // withCredentials: true,
   });
   instance.interceptors.request.use(
     async (config: AxiosRequestConfig) => {
@@ -27,7 +27,7 @@ export const apiCallerWithToken = (token: string | null, dispatch: any) => {
           if (decoded && decoded.exp * 1000 < new Date().getTime()) {
             const res = await authApi.refreshToken();
             if (res && res.data) {
-              const { accessToken } = res.data;
+              const { accessToken } = res.data.data;
               if (accessToken) {
                 if (dispatch) {
                   dispatch(authActions.getNewAccessToken(accessToken));
@@ -39,6 +39,7 @@ export const apiCallerWithToken = (token: string | null, dispatch: any) => {
               console.log({ res });
             }
           }
+
           config.headers['Authorization'] = `Bearer ${token}`;
         }
       } catch (error: any) {

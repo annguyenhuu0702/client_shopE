@@ -3,12 +3,16 @@ import React from 'react';
 import { Button, Form, Input } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { authActions } from '../../../../redux/slice/authSlice';
+import {
+  authActions,
+  authSelector,
+  authState,
+} from '../../../../redux/slice/authSlice';
 
 const ChangePassword: React.FC = () => {
-  const token: string | null = useSelector(
-    (state: any) => state.auth.currentUser.accessToken
-  );
+  const { user }: authState = useSelector(authSelector);
+  const [form] = Form.useForm();
+
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -20,7 +24,7 @@ const ChangePassword: React.FC = () => {
   const onFinish = (values: any) => {
     dispatch(
       authActions.changePassword({
-        token,
+        token: user.accessToken,
         dispatch,
         data: {
           currentpassword: values.currentpassword,
@@ -37,6 +41,7 @@ const ChangePassword: React.FC = () => {
 
   return (
     <Form
+      form={form}
       labelCol={{ span: 6 }}
       wrapperCol={{ span: 14 }}
       initialValues={initialValues}
@@ -51,7 +56,7 @@ const ChangePassword: React.FC = () => {
         rules={[
           {
             required: true,
-            message: 'Please fill in this field!',
+            message: 'Vui lòng không bỏ trống!',
           },
         ]}
       >
@@ -63,7 +68,7 @@ const ChangePassword: React.FC = () => {
         rules={[
           {
             required: true,
-            message: 'Please fill in this field!',
+            message: 'Vui lòng không bỏ trống!',
           },
         ]}
       >
@@ -91,11 +96,21 @@ const ChangePassword: React.FC = () => {
       >
         <Input.Password />
       </Form.Item>
-
-      <Form.Item wrapperCol={{ offset: 20 }} labelAlign="right">
-        <Button type="primary" htmlType="submit" size="large">
-          Submit
-        </Button>
+      <Form.Item wrapperCol={{ offset: 20 }} labelAlign="right" shouldUpdate>
+        {() => (
+          <Button
+            type="primary"
+            htmlType="submit"
+            size="large"
+            disabled={
+              !form.isFieldsTouched(false) ||
+              !!form.getFieldsError().filter(({ errors }) => errors.length)
+                .length
+            }
+          >
+            Submit
+          </Button>
+        )}
       </Form.Item>
     </Form>
   );

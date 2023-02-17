@@ -1,57 +1,61 @@
 import React, { useEffect } from 'react';
-import styles from './__user.module.scss';
 
 import { Layout, Pagination } from 'antd';
-import classNames from 'classnames/bind';
 import { useDispatch, useSelector } from 'react-redux';
-import { userActions } from '../../../redux/slice/userSlice';
+import { authSelector, authState } from '../../../redux/slice/authSlice';
+import {
+  userState,
+  userActions,
+  userSelector,
+} from '../../../redux/slice/userSlice';
 import HeaderTitle from '../../components/HeaderTitle';
 import TableUser from './TableUser';
+import { useTitle } from '../../../hooks/useTitle';
 
-const cx = classNames.bind(styles);
 const { Content } = Layout;
 
 const User: React.FC = () => {
   const dispatch = useDispatch();
-  const token: string | null = useSelector(
-    (state: any) => state.auth.currentUser.accessToken
-  );
-  const page: number = useSelector((state: any) => state.user.page);
-  const count: number = useSelector((state: any) => state.user.users?.count);
+  const { user }: authState = useSelector(authSelector);
+  const { users, page, pageSize }: userState = useSelector(userSelector);
+
+  useTitle('Tài khoản');
 
   useEffect(() => {
     dispatch(
       userActions.getAllUser({
-        token,
+        token: user.accessToken,
         dispatch,
-        params: { p: page, limit: 7 },
+        params: { p: page, limit: pageSize },
       })
     );
-  }, [dispatch, page, token]);
+  }, [dispatch, page, pageSize, user.accessToken]);
 
   return (
-    <section className={cx('user')}>
-      <HeaderTitle title="User" />
-      <Content className={cx('layout-content-cus')}>
-        <div className={cx('content-wrap')}>
-          <div className={cx('content')}>
+    <main className="section-common">
+      <HeaderTitle title="Tài khoản" />
+      <Content className="common-layout-content-cus">
+        <div className="common-content-wrap">
+          <div className="common-content">
             <TableUser />
           </div>
         </div>
       </Content>
-      {page >= 1 && (
-        <div className={cx('pagination-cus')}>
+      {users.count > 0 && (
+        <div className="common-pagination-cus">
           <Pagination
-            pageSize={7}
+            pageSize={pageSize}
             current={page}
-            total={count}
-            onChange={(page: number) => {
-              dispatch(userActions.setPage(page));
+            total={users.count}
+            onChange={(page: number, pageSize: number) => {
+              dispatch(userActions.setPage({ page, pageSize }));
             }}
+            // showSizeChanger={true}
+            // pageSizeOptions={[7, 20, 100, 200]}
           />
         </div>
       )}
-    </section>
+    </main>
   );
 };
 

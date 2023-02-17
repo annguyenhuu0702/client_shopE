@@ -1,30 +1,29 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { tokenPayload, tokenPayloadDelete } from '../../types/common';
-import {
-  getAllUserTokenPayload,
-  typeCreateUser,
-  typeUser,
-} from '../../types/user';
+import { deleteParams, tokenPayloadData } from '../../types/common';
+import { createUser, getAllUser, updateUser, user } from '../../types/user';
+import { RootState } from '../store';
 
-export interface typeUserState {
-  users: ResponseUsers;
+export interface userState {
+  users: resUser;
   page: number;
+  pageSize: number;
   isLoading: boolean;
   isError: boolean;
-  currentUser: typeUser | null;
+  currentUser: user | null;
 }
 
-export interface ResponseUsers {
-  rows: typeUser[];
+export interface resUser {
+  rows: user[];
   count: number;
 }
 
-const initialState: typeUserState = {
+const initialState: userState = {
   users: {
     rows: [],
     count: 0,
   },
   page: 1,
+  pageSize: 7,
   isLoading: false,
   isError: false,
   currentUser: null,
@@ -34,10 +33,10 @@ const userSlice = createSlice({
   name: 'user',
   initialState: initialState,
   reducers: {
-    getAllUser: (state, action: PayloadAction<getAllUserTokenPayload>) => {
+    getAllUser: (state, action: PayloadAction<getAllUser>) => {
       state.isLoading = true;
     },
-    getAllUserSuccess: (state, action: PayloadAction<ResponseUsers>) => {
+    getAllUserSuccess: (state, action: PayloadAction<resUser>) => {
       state.isLoading = false;
       state.isError = false;
       state.users.rows = action.payload.rows;
@@ -47,19 +46,22 @@ const userSlice = createSlice({
       state.isLoading = false;
       state.isError = true;
     },
-    setPage: (state, action: PayloadAction<number>) => {
-      state.page = action.payload;
+    setPage: (
+      state,
+      action: PayloadAction<{ page: number; pageSize: number }>
+    ) => {
+      state.page = action.payload.page;
+      state.pageSize = action.payload.pageSize;
     },
     createUser: (
       state,
-      action: PayloadAction<tokenPayload<typeCreateUser>>
+      action: PayloadAction<tokenPayloadData<createUser>>
     ) => {
       state.isLoading = true;
     },
-    createUserSuccess: (state, action: PayloadAction<typeUser>) => {
+    createUserSuccess: (state, action: PayloadAction<user>) => {
       state.isLoading = false;
       state.isError = false;
-      state.currentUser = null;
       state.page = 1;
       state.users.rows.unshift(action.payload);
       state.users.count += 1;
@@ -71,14 +73,13 @@ const userSlice = createSlice({
       state.isLoading = false;
       state.isError = true;
     },
-    setUser: (state, action: PayloadAction<typeUser | null>) => {
+    setUser: (state, action: PayloadAction<user | null>) => {
       state.currentUser = action.payload;
     },
-    editUser: (state, action: PayloadAction<tokenPayload<typeUser>>) => {
+    editUser: (state, action: PayloadAction<tokenPayloadData<updateUser>>) => {
       state.isLoading = true;
     },
-    editUserSuccess: (state, action: PayloadAction<typeUser>) => {
-      state.currentUser = null;
+    editUserSuccess: (state, action: PayloadAction<user>) => {
       state.isLoading = false;
       state.isError = false;
       const index = state.users.rows.findIndex(
@@ -92,13 +93,12 @@ const userSlice = createSlice({
       state.isLoading = false;
       state.isError = false;
     },
-    deleteUser: (state, action: PayloadAction<tokenPayloadDelete>) => {
+    deleteUser: (state, action: PayloadAction<deleteParams>) => {
       state.isLoading = true;
     },
     deleteUserSuccess: (state, action: PayloadAction<number>) => {
       state.isError = false;
       state.isLoading = false;
-      state.currentUser = null;
       state.users.rows = state.users.rows.filter(
         (item) => item.id !== action.payload
       );
@@ -115,4 +115,6 @@ const userSlice = createSlice({
 });
 
 export const userActions = userSlice.actions;
+export const userSelector = (state: RootState) => state.user;
+
 export default userSlice.reducer;

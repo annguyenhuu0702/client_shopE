@@ -1,8 +1,8 @@
 import React from 'react';
-import { QueryParams } from './common';
+import { queryParams, tokenPayload } from './common';
 
-export interface typeUser {
-  id?: number;
+export interface user {
+  id: number;
   createdAt: Date;
   updatedAt: Date;
   fullname: string;
@@ -15,35 +15,41 @@ export interface typeUser {
   avatar: string;
   phone: string;
   gender: boolean;
-  isDeleted: boolean;
+  role: string;
   key?: React.Key | string | number;
   resetValues?: Function;
-  // votes
-  // repVotes
-  // productUsers
-  // comments
-  // repComments
-  // userRoles
 }
 
-export interface typeCreateUser {
+export interface createUser {
   email: string;
   password: string;
-  avatar?: string;
+  avatar: string;
   fullname: string;
   phone: string;
-  ward: string;
   gender: boolean;
   resetValues?: Function;
 }
 
-export interface getAllUserTokenPayload {
-  token: string | null;
-  dispatch: any;
+export interface updateUser {
+  id: number;
+  email: string;
+  avatar: string;
+  fullname: string;
+  phone: string;
+  gender: boolean;
+  resetValues?: Function;
+}
+
+export interface deleteUser extends tokenPayload {
+  id: number;
+  params?: queryParams;
+}
+
+export interface getAllUser extends tokenPayload {
   params?: getAllUserParams;
 }
 
-export interface getAllUserParams extends QueryParams {
+export interface getAllUserParams extends queryParams {
   fullname?: string;
   email?: string;
   phone?: string;

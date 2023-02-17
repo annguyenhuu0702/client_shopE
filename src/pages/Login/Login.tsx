@@ -1,5 +1,5 @@
 import React from 'react';
-import 'antd/dist/antd.css';
+//import 'antd/dist/antd.css';
 import styles from './__login.module.scss';
 
 import classNames from 'classnames/bind';
@@ -7,6 +7,7 @@ import { Button, Form, Input } from 'antd';
 import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { authActions } from '../../redux/slice/authSlice';
+import { useTitle } from '../../hooks/useTitle';
 
 const cx = classNames.bind(styles);
 
@@ -20,22 +21,24 @@ const Login: React.FC = () => {
   const onFinishFailed = (errorInfo: any) => {
     console.log('Failed:', errorInfo);
   };
-
+  useTitle('Login');
   return (
-    <div className={cx('register')}>
-      <div className="w-1200">
+    <main className="auth">
+      <div className="p-50 max-sm:p-0">
         <div className="container-auth">
           <div className="title">
             <span>Đăng nhập</span>
           </div>
           <div className={cx('group-input')}>
             <Form
-              name="basic"
+              name="Login"
               initialValues={{ email: '', password: '' }}
               onFinish={onFinish}
               onFinishFailed={onFinishFailed}
               autoComplete="off"
               className="form-custom"
+              labelAlign="left"
+              layout="vertical"
             >
               <Form.Item
                 label="Email"
@@ -87,7 +90,7 @@ const Login: React.FC = () => {
           </div>
         </div>
       </div>
-    </div>
+    </main>
   );
 };
 

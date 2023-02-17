@@ -1,29 +1,28 @@
 import React from 'react';
 
 import { Button, Form, Input } from 'antd';
-import { typeUser } from '../../../../types/user';
 import { useDispatch, useSelector } from 'react-redux';
-import { authActions } from '../../../../redux/slice/authSlice';
 import { useNavigate } from 'react-router-dom';
+import {
+  authActions,
+  authSelector,
+  authState,
+} from '../../../../redux/slice/authSlice';
 
 const ChangeEmail: React.FC = () => {
-  const currentUser: typeUser = useSelector(
-    (state: any) => state.auth.currentUser.user
-  );
-  const token: string | null = useSelector(
-    (state: any) => state.auth.currentUser.accessToken
-  );
+  const { user }: authState = useSelector(authSelector);
+
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [form] = Form.useForm();
 
   const initialValues = {
-    email: currentUser.email,
+    email: user.user?.email,
   };
   const onFinish = (values: any) => {
     dispatch(
       authActions.changeEmail({
-        token,
+        token: user.accessToken,
         dispatch,
         data: { ...values },
         navigate,
@@ -52,7 +51,7 @@ const ChangeEmail: React.FC = () => {
         rules={[
           {
             required: true,
-            message: 'Please fill in this field!',
+            message: 'Vui lòng không bỏ trống!',
           },
         ]}
       >

@@ -15,16 +15,32 @@
   }
 
   .account {
+    width: 170px;
     color: #fff;
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
     &:hover {
       .profile {
         display: flex;
       }
     }
     cursor: pointer;
-    h3 {
+    span {
+      display: block;
       padding: 0;
       margin: 0;
+
+      ::after {
+        display: block;
+        position: absolute;
+        top: 40px;
+        content: "";
+        width: 170px;
+        height: 10px;
+        background: transparent;
+      }
     }
     .profile {
       z-index: 1;
@@ -35,6 +51,8 @@
       display: none;
       flex-direction: column;
       align-items: center;
+      top: 50px;
+      right: 32px;
       a {
         padding: 6px 0;
       }

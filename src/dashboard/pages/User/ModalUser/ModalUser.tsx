@@ -1,7 +1,4 @@
 import React, { useState } from 'react';
-import 'antd/dist/antd.css';
-import styles from './__modalUser.module.scss';
-import classNames from 'classnames/bind';
 
 import {
   RcFile,
@@ -22,11 +19,16 @@ import {
   Upload,
 } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
-import { userActions } from '../../../../redux/slice/userSlice';
-import { modalActions } from '../../../../redux/slice/modalSlice';
-import { typeUser } from '../../../../types/user';
-
-const cx = classNames.bind(styles);
+import { authSelector, authState } from '../../../../redux/slice/authSlice';
+import {
+  modalActions,
+  modalSelector,
+} from '../../../../redux/slice/modalSlice';
+import {
+  userActions,
+  userSelector,
+  userState,
+} from '../../../../redux/slice/userSlice';
 
 const getBase64 = (img: RcFile, callback: (url: string) => void) => {
   const reader = new FileReader();
@@ -48,15 +50,12 @@ const beforeUpload = (file: RcFile) => {
 
 const ModalUser: React.FC = () => {
   const dispatch = useDispatch();
-  const currentUser: typeUser | null = useSelector(
-    (state: any) => state.user.currentUser
-  );
 
-  const token: string | null = useSelector(
-    (state: any) => state.auth.currentUser.accessToken
-  );
+  const { currentUser }: userState = useSelector(userSelector);
 
-  const { isModal, title } = useSelector((state: any) => state.modal);
+  const { user }: authState = useSelector(authSelector);
+
+  const { isModal, title } = useSelector(modalSelector);
 
   const initialValues = {
     email: currentUser ? currentUser.email : '',
@@ -64,7 +63,6 @@ const ModalUser: React.FC = () => {
     gender: currentUser ? currentUser.gender : true,
     password: '',
     phone: currentUser ? currentUser.phone : '',
-    city: currentUser ? currentUser.city : '',
     avatar: currentUser ? currentUser.avatar : '',
   };
 
@@ -113,22 +111,28 @@ const ModalUser: React.FC = () => {
   };
 
   const onFinish = (values: any) => {
-    const data = { ...currentUser, ...values };
-    const { key, ...others } = data;
+    const formData = {
+      email: values.email,
+      avatar: values.avatar,
+      fullname: values.fullname,
+      password: values.password,
+      phone: values.phone,
+      gender: values.gender,
+    };
     if (currentUser === null) {
       dispatch(
         userActions.createUser({
-          token,
+          token: user.accessToken,
           dispatch,
-          data: { ...values, resetValues },
+          data: { ...formData, resetValues },
         })
       );
     } else {
       dispatch(
         userActions.editUser({
-          token,
+          token: user.accessToken,
           dispatch,
-          data: { ...others, resetValues },
+          data: { ...formData, id: currentUser.id, resetValues },
         })
       );
     }
@@ -141,13 +145,13 @@ const ModalUser: React.FC = () => {
     <React.Fragment>
       <Modal
         title={title}
-        visible={isModal}
+        open={isModal}
         destroyOnClose
         centered
         onOk={form.submit}
         onCancel={hideModal}
-        okText="Save"
-        cancelText="Back"
+        okText="Lưu"
+        cancelText="Quay lại"
         width={1000}
         okButtonProps={{ disabled: disabledSave }}
       >
@@ -162,7 +166,11 @@ const ModalUser: React.FC = () => {
           autoComplete="off"
           labelAlign="left"
         >
-          <div className={cx('wrap-form-modal')}>
+          <div
+            style={{
+              display: 'flex',
+            }}
+          >
             <Col xl={12} md={12}>
               <Form.Item
                 label="Email"
@@ -170,7 +178,7 @@ const ModalUser: React.FC = () => {
                 rules={[
                   {
                     required: true,
-                    message: 'Please fill in this field!',
+                    message: 'Vui lòng không bỏ trống!',
                   },
                   {
                     type: 'email',
@@ -187,7 +195,7 @@ const ModalUser: React.FC = () => {
                   rules={[
                     {
                       required: true,
-                      message: 'Please fill in this field!',
+                      message: 'Vui lòng không bỏ trống!',
                     },
                     {
                       min: 6,
@@ -228,7 +236,7 @@ const ModalUser: React.FC = () => {
                 rules={[
                   {
                     required: true,
-                    message: 'Please fill in this field!',
+                    message: 'Vui lòng không bỏ trống!',
                   },
                 ]}
               >
@@ -240,7 +248,7 @@ const ModalUser: React.FC = () => {
                 rules={[
                   {
                     required: true,
-                    message: 'Please fill in this field!',
+                    message: 'Vui lòng không bỏ trống!',
                   },
                 ]}
               >

@@ -1,116 +1,97 @@
-import React, { useMemo, useState } from 'react';
+import React from 'react';
 import styles from './__profile.module.scss';
 
-import { Col, Image, Row, Tabs } from 'antd';
-import classNames from 'classnames/bind';
-import { useSelector } from 'react-redux';
-import { typeUser } from '../../../types/user';
-import HeaderTitle from '../../components/HeaderTitle';
-import ChangeEmail from './ChangeEmail';
-import ChangePassword from './ChangePassword';
-import ChangeProfile from './ChangeProfile';
 import {
   faCakeCandles,
   faEnvelope,
   faPhone,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Col, Image, Row, Tabs, TabsProps } from 'antd';
+import classNames from 'classnames/bind';
 import moment from 'moment';
-
-const { TabPane } = Tabs;
-
-const OperationsSlot: Record<PositionType, React.ReactNode> = {
-  left: (
-    <span
-      style={{
-        fontSize: '2.4rem',
-        paddingLeft: '20px',
-      }}
-    >
-      Settings
-    </span>
-  ),
-};
-
-type PositionType = 'left';
+import { useSelector } from 'react-redux';
+import { useTitle } from '../../../hooks/useTitle';
+import { authSelector, authState } from '../../../redux/slice/authSlice';
+import HeaderTitle from '../../components/HeaderTitle';
+import ChangeEmail from './ChangeEmail';
+import ChangePassword from './ChangePassword';
+import ChangeProfile from './ChangeProfile';
 
 const cx = classNames.bind(styles);
 
 const Profile: React.FC = () => {
-  const [position] = useState<PositionType[]>(['left']);
+  const items: TabsProps['items'] = [
+    {
+      key: 'profile',
+      label: `Thông tin`,
+      children: <ChangeProfile />,
+    },
+    {
+      key: 'password',
+      label: `Mật khẩu`,
+      children: <ChangePassword />,
+    },
+    {
+      key: 'email',
+      label: `Email`,
+      children: <ChangeEmail />,
+    },
+  ];
 
-  const slot = useMemo(() => {
-    if (position.length === 0) return null;
-    return position.reduce(
-      (acc, direction) => ({ ...acc, [direction]: OperationsSlot[direction] }),
-      {}
-    );
-  }, [position]);
+  const onChange = (key: string) => {
+    console.log(key);
+  };
 
-  const currentUser: typeUser | null = useSelector(
-    (state: any) => state.auth.currentUser.user
-  );
+  const { user }: authState = useSelector(authSelector);
+  useTitle('Profile');
 
   return (
-    <section className={cx('profile')}>
+    <main className={cx('profile')}>
       <HeaderTitle title="User" />
       <div className={cx('layout-content')}>
         <div className={cx('banner')}>
           <div className={cx('avatar')}>
             <Image
               src={
-                currentUser?.avatar === ''
+                user.user?.avatar === ''
                   ? 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT65CXLkEWFDlHIHnU1hDnHHVn0GdfzBR7Ejg&usqp=CAU'
-                  : `${currentUser?.avatar}`
+                  : `${user.user?.avatar}`
               }
             />
           </div>
           <div className={cx('info')}>
-            <h3 className={cx('name')}>
-              {currentUser && currentUser.fullname}
-            </h3>
+            <h3 className={cx('name')}>{user && user.user?.fullname}</h3>
           </div>
         </div>
         <div className={cx('content')}>
           <Row>
             <Col xl={14} md={14} className={cx('settings')}>
-              <Tabs tabBarExtraContent={slot} centered>
-                <TabPane tab="Change Profile" key="1">
-                  <ChangeProfile />
-                </TabPane>
-                <TabPane tab="Change Password" key="2">
-                  <ChangePassword />
-                </TabPane>
-                <TabPane tab="Change Email" key="3">
-                  <ChangeEmail />
-                </TabPane>
-              </Tabs>
+              <Tabs items={items} onChange={onChange} className="pl-4" />
             </Col>
             <Col xl={8} md={8} className={cx('contact')}>
               <div className={cx('content')}>
-                <h3 className={cx('title')}>Contact</h3>
+                <h3 className={cx('title')}>Kết nối</h3>
                 <div className={cx('email')}>
                   <FontAwesomeIcon icon={faEnvelope} />
                   <div className={cx('item')}>
                     <span>Email</span>
-                    <p>{currentUser && currentUser.email}</p>
+                    <p>{user && user.user?.email}</p>
                   </div>
                 </div>
                 <div className={cx('phone')}>
                   <FontAwesomeIcon icon={faPhone} />
                   <div className={cx('item')}>
-                    <span>Phone</span>
-                    <p>{currentUser && currentUser.phone}</p>
+                    <span>SĐT</span>
+                    <p>{user && user.user?.phone}</p>
                   </div>
                 </div>
                 <div className={cx('birthday')}>
                   <FontAwesomeIcon icon={faCakeCandles} />
                   <div className={cx('item')}>
-                    <span>Birthday</span>
+                    <span>Sinh nhật</span>
                     <p className={cx('birthday')}>
-                      {moment(currentUser && currentUser.birthday).format(
-                        'MM/DD/YYYY'
-                      )}
+                      {moment(user && user.user?.birthday).format('MM/DD/YYYY')}
                     </p>
                   </div>
                 </div>
@@ -119,7 +100,7 @@ const Profile: React.FC = () => {
           </Row>
         </div>
       </div>
-    </section>
+    </main>
   );
 };
 

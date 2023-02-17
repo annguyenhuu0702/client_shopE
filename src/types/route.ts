@@ -1,5 +1,5 @@
-export interface typeRoute {
-  path: string,
-  element: any,
-  layout?: any
+export interface route {
+  path: string;
+  element: any;
+  layout?: any;
 }

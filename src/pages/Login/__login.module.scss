@@ -1,20 +1,17 @@
 @import "../../styles/variable.module.scss";
 
-.register {
-  margin: 20px 0;
-  .text-register {
-    line-height: 1.8;
-    span {
-      font-size: 1.4rem;
-      color: #13283f99;
-      margin-right: 4px;
-    }
-    a {
-      color: $green-color;
-      font-weight: 700;
-      &:hover {
-        color: $text-category;
-      }
+.text-register {
+  line-height: 1.8;
+  span {
+    font-size: 1.4rem;
+    color: #13283f99;
+    margin-right: 4px;
+  }
+  a {
+    color: $green-color;
+    font-weight: 700;
+    &:hover {
+      color: $text-category;
     }
   }
 }

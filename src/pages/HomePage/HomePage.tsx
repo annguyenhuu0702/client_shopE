@@ -9,7 +9,7 @@ const HomePage = () => {
   useTitle('CANIFA');
   return (
     <main className="home-page">
-      <section className="banner">
+      <section className="banner max-sm:mt-24">
         <Link to="">
           <img
             className="common-img"

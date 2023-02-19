@@ -1,7 +1,6 @@
 import { LoadingOutlined, PlusOutlined } from '@ant-design/icons';
 import {
   Button,
-  Col,
   Form,
   Input,
   InputNumber,
@@ -252,6 +251,7 @@ const FormProduct: React.FC = () => {
               </Form.Item>
               <Form.Item label="Hình ảnh">
                 <Upload
+                  // multiple
                   name="thumbnail"
                   listType="picture-card"
                   className="avatar-uploader"

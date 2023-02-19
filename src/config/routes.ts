@@ -4,6 +4,8 @@ export const routes = {
   login: '/login',
   productDetail: '/:slug',
   cart: '/cart',
+  categoryPage: '/category',
+  productCategory: '/product-category',
 
   // admin
   admin: '/admin',

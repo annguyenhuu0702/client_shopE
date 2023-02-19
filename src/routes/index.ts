@@ -1,6 +1,7 @@
 import { lazy } from 'react';
 import { routes } from '../config/routes';
 import { DashboardLayout, DefaultLayout } from '../layouts';
+
 import { route } from '../types/route';
 
 const HomePage = lazy(() => import('../pages/HomePage'));
@@ -31,6 +32,8 @@ const ProductAdmin = lazy(() => import('../dashboard/pages/Product/Product'));
 const FormProduct = lazy(
   () => import('../dashboard/pages/Product/FormProduct')
 );
+const CategoryPage = lazy(() => import('../pages/CategoryPage/CategoryPage'));
+const ProductCategoryPage = lazy(() => import('../pages/ProductCategoryPage'));
 
 const NotFound = lazy(() => import('../pages/NotFound/NotFound'));
 
@@ -63,6 +66,16 @@ export const publicRoute: route[] = [
   {
     path: routes.cart,
     element: CartPage,
+    layout: DefaultLayout,
+  },
+  {
+    path: routes.categoryPage,
+    element: CategoryPage,
+    layout: DefaultLayout,
+  },
+  {
+    path: routes.productCategory,
+    element: ProductCategoryPage,
     layout: DefaultLayout,
   },
 ];

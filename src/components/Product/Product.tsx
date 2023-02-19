@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import styles from './__product.module.scss';
-
 import { faHeart, faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Image, Modal, Tooltip } from 'antd';
@@ -65,19 +64,21 @@ const Product: React.FC = () => {
                   className={cx('my-swiper')}
                   pagination={{ clickable: true }}
                 >
-                  <SwiperSlide>
-                    <Image
-                      src="https://cdn.shopify.com/s/files/1/0456/5070/6581/products/UXC72WA-2_x450.jpg?v=1657686129"
-                      alt=""
-                      className={cx('img')}
-                    />
+                  <SwiperSlide className="max-sm:flex max-sm:items-center max-lg:flex max-lg:items-center">
+                    <div>
+                      <Image
+                        src="https://cdn.shopify.com/s/files/1/0456/5070/6581/products/UXC72WA-2_x450.jpg?v=1657686129"
+                        alt=""
+                      />
+                    </div>
                   </SwiperSlide>
-                  <SwiperSlide>
-                    <Image
-                      src="https://cdn.shopify.com/s/files/1/0456/5070/6581/products/UXC72WA-3_x450.jpg?v=1657686130"
-                      alt=""
-                      className={cx('img')}
-                    />
+                  <SwiperSlide className="max-sm:flex max-sm:items-center max-lg:flex max-lg:items-center">
+                    <div>
+                      <Image
+                        src="https://cdn.shopify.com/s/files/1/0456/5070/6581/products/UXC72WA-3_x450.jpg?v=1657686130"
+                        alt=""
+                      />
+                    </div>
                   </SwiperSlide>
                 </Swiper>
               </div>

@@ -12,6 +12,7 @@ module.exports = {
         'border-mobile': '#D9D9D9',
         'name-product': '#333f48',
         'root-price': '#fdaa63',
+        'border-product-page': '#c8c7cc',
       },
       width: {
         45: '45rem',

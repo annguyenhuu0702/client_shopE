@@ -47,7 +47,8 @@ const TableProduct: React.FC = () => {
 
   const navigate = useNavigate();
 
-  const handleModal = () => {
+  const handleModal = (record: product) => {
+    dispatch(productActions.setProduct(record));
     dispatch(modalActions.showModal('Hình ảnh sản phẩm'));
   };
 
@@ -70,12 +71,12 @@ const TableProduct: React.FC = () => {
     {
       title: 'Hình ảnh',
       // dataIndex: 'image',
-      render: () => {
+      render: (text: string, record: product) => {
         return (
           <span
             className="cursor-pointer uppercase text-red-500"
             onClick={() => {
-              handleModal();
+              handleModal(record);
             }}
           >
             Thiết lập

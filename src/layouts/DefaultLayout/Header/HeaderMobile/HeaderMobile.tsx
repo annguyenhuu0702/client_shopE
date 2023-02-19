@@ -1,8 +1,8 @@
 import { Drawer, Form, Input } from 'antd';
 import React, { useState } from 'react';
 import { BsBag, BsList, BsSearch } from 'react-icons/bs';
-import { AiOutlineUser } from 'react-icons/ai';
-import { FaShippingFast } from 'react-icons/fa';
+import { AiOutlineLogin } from 'react-icons/ai';
+import { FaRegRegistered } from 'react-icons/fa';
 import { Link, useNavigate } from 'react-router-dom';
 
 const HeaderMobile: React.FC = () => {
@@ -48,25 +48,47 @@ const HeaderMobile: React.FC = () => {
           </Link>
         </div>
         <div className="text-4xl">
-          <div
-            className="flex items-center"
-            onClick={() => {
-              navigate('/cart');
-            }}
-          >
+          <div className="flex items-center">
             <BsSearch
-              className="mr-6"
+              className="mr-8"
               onClick={() => {
                 handleShowSearch();
               }}
             />
-            <BsBag />
+            <BsBag
+              onClick={() => {
+                navigate('/cart');
+              }}
+            />
           </div>
         </div>
       </div>
       <>
-        <Drawer placement="left" onClose={onClose} open={open} destroyOnClose>
-          <ul className="list-none border-solid border-0 border-b-2 border-border-mobile">
+        <Drawer
+          placement="left"
+          onClose={onClose}
+          open={open}
+          destroyOnClose={true}
+        >
+          <div className="border-solid border-0 border-b-2 border-border-mobile flex justify-between ">
+            <div className="text-3xl pb-6 flex items-center">
+              <span className="flex items-center mr-3">
+                <AiOutlineLogin />
+              </span>
+              <Link to="/login">
+                <span>Đăng nhập</span>
+              </Link>
+            </div>
+            <div className="text-3xl pb-6 flex items-center">
+              <span className="flex items-center mr-3">
+                <FaRegRegistered />
+              </span>
+              <Link to="/register">
+                <span>Đăng ký</span>
+              </Link>
+            </div>
+          </div>
+          <ul className="list-none mt-8">
             <li className="pb-8">
               <a href=" " className="text-3xl uppercase font-bold">
                 <span>Nam</span>
@@ -93,24 +115,6 @@ const HeaderMobile: React.FC = () => {
               </a>
             </li>
           </ul>
-          <div>
-            <div className="text-3xl pb-6 flex items-center">
-              <span className="flex mr-3">
-                <AiOutlineUser />
-              </span>
-              <Link to="/login">
-                <span>Đăng nhập</span>
-              </Link>
-            </div>
-            <div className="text-3xl pb-6 flex items-center">
-              <span className="flex mr-3">
-                <FaShippingFast />
-              </span>
-              <a href=" ">
-                <span>Đơn hàng của tôi</span>
-              </a>
-            </div>
-          </div>
         </Drawer>
       </>
       <>

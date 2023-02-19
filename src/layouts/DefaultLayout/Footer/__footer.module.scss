@@ -5,6 +5,10 @@
   background: #333f48;
   padding: 20px 50px;
 
+  @include mobile {
+    padding: 20px;
+  }
+
   .footer-center {
     .content {
       width: 100%;

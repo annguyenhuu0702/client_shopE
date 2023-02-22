@@ -6,6 +6,7 @@ export const routes = {
   cart: '/cart',
   categoryPage: '/category',
   productCategory: '/product-category',
+  checkOut: '/checkout',
 
   // admin
   admin: '/admin',

@@ -186,7 +186,6 @@ const ModalProductImage = () => {
                   <span style={{ whiteSpace: 'nowrap', fontSize: '12px' }}>
                     Chọn màu
                   </span>
-
                   <Select
                     className="w-full"
                     onChange={(value) => {

@@ -4,12 +4,16 @@ import { DashboardLayout, DefaultLayout } from '../layouts';
 
 import { route } from '../types/route';
 
-const HomePage = lazy(() => import('../pages/HomePage'));
 const Login = lazy(() => import('../pages/Login'));
 const Register = lazy(() => import('../pages/Register'));
-const ProductDetail = lazy(() => import('../pages/ProductDetail'));
+const HomePage = lazy(() => import('../pages/HomePage'));
+const ProductDetailPage = lazy(() => import('../pages/ProductDetail'));
+const CategoryPage = lazy(() => import('../pages/CategoryPage/CategoryPage'));
+const ProductCategoryPage = lazy(() => import('../pages/ProductCategoryPage'));
 const CartPage = lazy(() => import('../pages/CartPage'));
+const CheckOutPage = lazy(() => import('../pages/CheckOutPage'));
 
+// admin
 const User = lazy(() => import('../dashboard/pages/User'));
 const Statistical = lazy(() => import('../dashboard/pages/Statistical'));
 const Profile = lazy(() => import('../dashboard/pages/Profile'));
@@ -32,8 +36,6 @@ const ProductAdmin = lazy(() => import('../dashboard/pages/Product/Product'));
 const FormProduct = lazy(
   () => import('../dashboard/pages/Product/FormProduct')
 );
-const CategoryPage = lazy(() => import('../pages/CategoryPage/CategoryPage'));
-const ProductCategoryPage = lazy(() => import('../pages/ProductCategoryPage'));
 
 const NotFound = lazy(() => import('../pages/NotFound/NotFound'));
 
@@ -60,12 +62,7 @@ export const publicRoute: route[] = [
   },
   {
     path: routes.productDetail,
-    element: ProductDetail,
-    layout: DefaultLayout,
-  },
-  {
-    path: routes.cart,
-    element: CartPage,
+    element: ProductDetailPage,
     layout: DefaultLayout,
   },
   {
@@ -76,6 +73,16 @@ export const publicRoute: route[] = [
   {
     path: routes.productCategory,
     element: ProductCategoryPage,
+    layout: DefaultLayout,
+  },
+  {
+    path: routes.cart,
+    element: CartPage,
+    layout: DefaultLayout,
+  },
+  {
+    path: routes.checkOut,
+    element: CheckOutPage,
     layout: DefaultLayout,
   },
 ];

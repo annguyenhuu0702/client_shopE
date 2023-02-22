@@ -45,7 +45,7 @@ const TableProductCategory: React.FC = () => {
       title: 'Bộ sưu tập',
       // dataIndex: 'collectionId',
       render: (text: string, record: productCategory) => {
-        return <React.Fragment>{record.collection.name}</React.Fragment>;
+        return <React.Fragment>{record.collection?.name}</React.Fragment>;
       },
     },
     {

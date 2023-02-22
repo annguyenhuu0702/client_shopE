@@ -1,33 +1,16 @@
-import { Col, Row, Steps } from 'antd';
+import { Col, Row } from 'antd';
 import React from 'react';
 import { AiOutlineDelete, AiOutlineMinus, AiOutlinePlus } from 'react-icons/ai';
 import { FaShippingFast } from 'react-icons/fa';
+import { useNavigate } from 'react-router-dom';
 import { useTitle } from '../../hooks/useTitle';
 import { castToVND } from '../../utils';
 
 const CartPage: React.FC = () => {
+  const navigate = useNavigate();
   useTitle('Giỏ hàng');
   return (
-    <main className="p-50 cart my-20 max-lg:px-0 max-sm:p-0 max-sm:mt-24 ">
-      <Row className="justify-center lg:mb-20">
-        <Col xl={12} xs={0} className="max-sm:hidden">
-          <Steps
-            size="small"
-            current={0}
-            items={[
-              {
-                title: 'Giỏ hàng',
-              },
-              {
-                title: 'Đặt hàng',
-              },
-              {
-                title: 'Hoàn tất',
-              },
-            ]}
-          />
-        </Col>
-      </Row>
+    <main className="p-50 my-20 max-lg:px-0 max-sm:p-0 max-sm:mt-24 ">
       <Row className="lg:mb-20 ">
         <Col xl={18} md={16} xs={24}>
           <div className="px-16 py-32 bg-bg-cart max-lg:p-10 max-sm:p-8">
@@ -43,7 +26,7 @@ const CartPage: React.FC = () => {
               <h2 className="m-0 text-4xl ">(2) sản phẩm</h2>
             </div>
             <div className="w-full">
-              <div className="w-full flex items-center text-left bg-btn-order text-gray-200 text-2xl p-3  max-sm:hidden">
+              <div className="w-full flex items-center text-left bg-name-product text-gray-200 text-2xl p-3 max-sm:hidden">
                 <span className="w-2/5 uppercase">Sản phẩm</span>
                 <span className="w-1/5 uppercase">Giá tiền</span>
                 <span className="w-1/5 uppercase">Số lượng</span>
@@ -111,8 +94,13 @@ const CartPage: React.FC = () => {
               <span>Tổng tiền</span>
               <span>{castToVND(10000000000)}</span>
             </div>
-            <div className="mb-10 max-lg:mb-8 ">
-              <button className="bg-btn-order w-full flex items-center justify-center uppercase py-6 text-white text-2xl border-none outline-none rounded-xl cursor-pointer ">
+            <div className="mb-10 max-lg:mb-8">
+              <button
+                className="bg-btn-order w-full flex items-center justify-center uppercase py-6 text-black text-2xl border-none outline-none rounded-xl cursor-pointer hover:bg-hover-btn-order"
+                onClick={() => {
+                  navigate('/checkout');
+                }}
+              >
                 Đặt hàng
               </button>
             </div>
@@ -132,7 +120,7 @@ const CartPage: React.FC = () => {
               </span>
             </div>
             <div className="mb-4">
-              <button className="bg-btn-order w-full flex items-center justify-center uppercase py-4 text-white text-xl border-none outline-none rounded-xl cursor-pointer ">
+              <button className="bg-btn-order w-full flex items-center justify-center uppercase py-6 text-white text-xl border-none outline-none rounded-xl cursor-pointer ">
                 Đặt hàng
               </button>
             </div>

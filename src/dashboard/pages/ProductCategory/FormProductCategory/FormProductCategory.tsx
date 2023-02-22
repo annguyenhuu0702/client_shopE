@@ -101,7 +101,6 @@ const FormProductCategory: React.FC = () => {
   };
 
   const onFinish = (values: any) => {
-    console.log(values);
     const formData = {
       name: values.name,
       description: values.description,

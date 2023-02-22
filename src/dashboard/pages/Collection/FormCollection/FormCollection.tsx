@@ -55,6 +55,7 @@ const FormCollection: React.FC = () => {
     useSelector(collectionSelector);
 
   const { categories }: categoryState = useSelector(categorySelector);
+  console.log(currentCollection);
 
   const initialValues = {
     name: currentCollection ? currentCollection.name : '',

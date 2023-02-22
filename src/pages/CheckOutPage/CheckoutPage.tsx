@@ -14,6 +14,7 @@ import React, { useState } from 'react';
 import { AiOutlineRollback } from 'react-icons/ai';
 import { FaMoneyBillAlt } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
+import { routes } from '../../config/routes';
 import { useTitle } from '../../hooks/useTitle';
 import province from '../../province.json';
 
@@ -307,7 +308,7 @@ const CheckoutPage: React.FC = () => {
               <div className="mt-8 pb-8 flex items-center justify-between">
                 <div>
                   <Link
-                    to="/cart"
+                    to={routes.cart}
                     className="text-2xl hover:text-amber-600 flex"
                   >
                     <span className="flex items-center mr-2">

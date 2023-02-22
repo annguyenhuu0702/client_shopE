@@ -126,12 +126,6 @@ const Product: React.FC = () => {
                     <div className={cx('size')}>
                       <span>US6</span>
                     </div>
-                    <div className={cx('size')}>
-                      <span>US7</span>
-                    </div>
-                    <div className={cx('size')}>
-                      <span>US8</span>
-                    </div>
                   </div>
                 </div>
                 <div className={cx('qtt-cart')}>

@@ -81,7 +81,7 @@ const Sidebar: React.FC = () => {
         {!collapsed && (
           <img
             src="https://res.cloudinary.com/diot4imoq/image/upload/v1661177083/canifa/logo_xju1y6.svg"
-            alt=""
+            alt="logo"
             style={{
               height: '35px',
             }}

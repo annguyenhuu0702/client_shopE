@@ -56,7 +56,7 @@ const Register: React.FC = () => {
                 },
                 {
                   type: 'email',
-                  message: 'Please enter a valid email!',
+                  message: 'Vui lòng nhập email hợp lệ!',
                 },
               ]}
             >

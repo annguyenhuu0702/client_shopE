@@ -4,6 +4,7 @@ import { BsBag, BsList, BsSearch } from 'react-icons/bs';
 import { AiOutlineLogin } from 'react-icons/ai';
 import { FaRegRegistered } from 'react-icons/fa';
 import { Link, useNavigate } from 'react-router-dom';
+import { routes } from '../../../../config/routes';
 
 const HeaderMobile: React.FC = () => {
   const [open, setOpen] = useState(false);
@@ -39,11 +40,11 @@ const HeaderMobile: React.FC = () => {
           <BsList />
         </div>
         <div>
-          <Link to="/">
+          <Link to={routes.home}>
             <img
               className="w-24 h-12"
               src="https://res.cloudinary.com/diot4imoq/image/upload/v1661177083/canifa/logo_xju1y6.svg"
-              alt=""
+              alt="logo"
             />
           </Link>
         </div>
@@ -57,7 +58,7 @@ const HeaderMobile: React.FC = () => {
             />
             <BsBag
               onClick={() => {
-                navigate('/cart');
+                navigate(routes.cart);
               }}
             />
           </div>

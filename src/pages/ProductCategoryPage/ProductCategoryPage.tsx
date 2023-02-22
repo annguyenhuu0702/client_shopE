@@ -182,7 +182,7 @@ const ProductCategoryPage: React.FC = () => {
         </Row>
       </section>
       <section className="pb-12 mt-4 flex justify-end">
-        <Pagination defaultCurrent={1} total={50} />;
+        <Pagination defaultCurrent={1} total={50} />
       </section>
     </main>
   );

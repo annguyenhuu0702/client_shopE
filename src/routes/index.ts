@@ -1,6 +1,6 @@
 import { lazy } from 'react';
 import { routes } from '../config/routes';
-import { DashboardLayout, DefaultLayout } from '../layouts';
+import { CartLayout, DashboardLayout, DefaultLayout } from '../layouts';
 
 import { route } from '../types/route';
 
@@ -78,12 +78,12 @@ export const publicRoute: route[] = [
   {
     path: routes.cart,
     element: CartPage,
-    layout: DefaultLayout,
+    layout: CartLayout,
   },
   {
     path: routes.checkOut,
     element: CheckOutPage,
-    layout: DefaultLayout,
+    layout: CartLayout,
   },
 ];
 

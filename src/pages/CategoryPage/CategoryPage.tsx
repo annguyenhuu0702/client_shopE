@@ -220,7 +220,7 @@ const CategoryPage: React.FC = () => {
             </Link>
           </div>
         </div>
-      </section>{' '}
+      </section>
       <section className="mb-16 ">
         <div>
           <h3 className="m-0 mb-8 font-bold text-4xl">Áo phông</h3>
@@ -246,7 +246,7 @@ const CategoryPage: React.FC = () => {
             </Link>
           </div>
         </div>
-      </section>{' '}
+      </section>
       <section className="mb-16 ">
         <div>
           <h3 className="m-0 mb-8 font-bold text-4xl">Áo phông</h3>

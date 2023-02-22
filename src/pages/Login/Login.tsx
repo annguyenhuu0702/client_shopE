@@ -44,8 +44,11 @@ const Login: React.FC = () => {
                 rules={[
                   {
                     required: true,
+                    message: 'Vui lòng nhập email!',
+                  },
+                  {
                     type: 'email',
-                    message: 'Vui lòng nhập địa chỉ email hợp lệ!',
+                    message: 'Vui lòng nhập email hợp lệ!',
                   },
                 ]}
               >

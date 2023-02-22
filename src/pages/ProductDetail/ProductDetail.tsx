@@ -144,7 +144,7 @@ const ProductDetail: React.FC = () => {
                   </div>
                   <div className="my-8">
                     <div className="">
-                      <button className="w-45 border-none outline-none bg-btn-order cursor-pointer max-lg:w-96 max-sm:w-96">
+                      <button className="w-45 border-none outline-none bg-name-product cursor-pointer max-lg:w-96 max-sm:w-96">
                         <span className="flex justify-center py-6 text-3xl uppercase text-white font-light">
                           Thêm vào giỏ hàng
                         </span>

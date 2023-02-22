@@ -3,6 +3,7 @@ import React from 'react';
 import { AiOutlineDelete, AiOutlineMinus, AiOutlinePlus } from 'react-icons/ai';
 import { FaShippingFast } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
+import { routes } from '../../config/routes';
 import { useTitle } from '../../hooks/useTitle';
 import { castToVND } from '../../utils';
 
@@ -32,7 +33,53 @@ const CartPage: React.FC = () => {
                 <span className="w-1/5 uppercase">Số lượng</span>
                 <span className="w-1/5 uppercase">Tổng tiền</span>
               </div>
-              <div className="w-full flex text-lef mt-8 pb-8 border-solid border-0 border-b-2 border-slate-400">
+              <div className="w-full flex text-lef mt-8 pb-8 border-solid border-0 border-b-2 border-border-layout-cart">
+                <div className="w-2/5 max-lg:mr-2 max-sm:w-3/4">
+                  <div className="flex ">
+                    <div className="w-32">
+                      <img
+                        className="w-full object-cover"
+                        src="https://canifa.com/img/210/300/resize/2/o/2ot22w011-sb148-1-thumb.webp"
+                        alt=""
+                      />
+                    </div>
+                    <div className="w-full pl-4 flex flex-col justify-between">
+                      <div className="text-2xl">
+                        <a
+                          href=" "
+                          className="text-gray-500 max-lg:line-clamp-1 max-sm:line-clamp-1"
+                        >
+                          Áo khoác nỉ có mũ bé trai
+                        </a>
+                      </div>
+                      <div className="text-2xl">
+                        <span className="text-black">90 / Xanh</span>
+                      </div>
+                      <div>
+                        <AiOutlineDelete className="inline-block cursor-pointer hover:text-red-500 " />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div className="w-1/5 max-sm:hidden">
+                  <span className="text-2xl">{castToVND(499999)}</span>
+                </div>
+                <div className="w-1/5 max-sm:w-1/4 max-sm:flex max-sm:items-start justify-end">
+                  <div className="text-2xl flex items-center justify-left">
+                    <span className="flex rounded-full border border-solid border-gray-400 p-1 mr-6 cursor-pointer">
+                      <AiOutlineMinus />
+                    </span>
+                    <span>2</span>
+                    <span className="flex rounded-full border border-solid border-gray-400 p-1 ml-6 cursor-pointer">
+                      <AiOutlinePlus />
+                    </span>
+                  </div>
+                </div>
+                <div className="w-1/5 max-sm:hidden">
+                  <span className="text-2xl flex">{castToVND(499999)}</span>
+                </div>
+              </div>
+              <div className="w-full flex text-lef mt-8 pb-8 border-solid border-0 border-b-2 border-border-layout-cart">
                 <div className="w-2/5 max-lg:mr-2 max-sm:w-3/4">
                   <div className="flex ">
                     <div className="w-32">
@@ -98,7 +145,7 @@ const CartPage: React.FC = () => {
               <button
                 className="bg-btn-order w-full flex items-center justify-center uppercase py-6 text-black text-2xl border-none outline-none rounded-xl cursor-pointer hover:bg-hover-btn-order"
                 onClick={() => {
-                  navigate('/checkout');
+                  navigate(routes.checkOut);
                 }}
               >
                 Đặt hàng
@@ -120,7 +167,12 @@ const CartPage: React.FC = () => {
               </span>
             </div>
             <div className="mb-4">
-              <button className="bg-btn-order w-full flex items-center justify-center uppercase py-6 text-white text-xl border-none outline-none rounded-xl cursor-pointer ">
+              <button
+                className="bg-btn-order w-full flex items-center justify-center uppercase py-6 text-white text-xl border-none outline-none rounded-xl cursor-pointer"
+                onClick={() => {
+                  navigate(routes.checkOut);
+                }}
+              >
                 Đặt hàng
               </button>
             </div>

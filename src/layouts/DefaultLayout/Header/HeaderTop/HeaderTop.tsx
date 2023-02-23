@@ -71,7 +71,11 @@ const HeaderTop: React.FC = () => {
                 <div className="block-hover">
                   <div className="block-child">
                     <Link
-                      to={user.user.role === 'admin' ? '/admin' : '/profile'}
+                      to={
+                        user.user.role === 'admin'
+                          ? '/admin/profile'
+                          : '/account'
+                      }
                       className="text"
                     >
                       Xin chào <b>{user.user.fullname}</b>

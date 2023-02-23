@@ -17,6 +17,8 @@ module.exports = {
         'border-checkout': '#545454',
         'bg-checkout': '#e7e8fc',
         'border-layout-cart': '#e8e8e8',
+        'bg-layout-profile': '#f8f8f8',
+        'item-profile': '#FEEEEA',
       },
       width: {
         45: '45rem',

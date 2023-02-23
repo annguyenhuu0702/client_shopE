@@ -1,12 +1,28 @@
 import { lazy } from 'react';
 import { routes } from '../config/routes';
-import { CartLayout, DashboardLayout, DefaultLayout } from '../layouts';
+import {
+  CartLayout,
+  DashboardLayout,
+  DefaultLayout,
+  ProfileLayout,
+} from '../layouts';
 
 import { route } from '../types/route';
 
+const HomePage = lazy(() => import('../pages/HomePage'));
 const Login = lazy(() => import('../pages/Login'));
 const Register = lazy(() => import('../pages/Register'));
-const HomePage = lazy(() => import('../pages/HomePage'));
+const ProfilePage = lazy(() => import('../pages/ProfilePage'));
+const AccumulatedPoint = lazy(
+  () => import('../pages/ProfilePage/AccumulatedPoint')
+);
+const ChangePasswordUser = lazy(
+  () => import('../pages/ProfilePage/ChangePasswordUser')
+);
+const FavoriteProduct = lazy(
+  () => import('../pages/ProfilePage/FavoriteProduct')
+);
+const MyOrder = lazy(() => import('../pages/ProfilePage/MyOrder'));
 const ProductDetailPage = lazy(() => import('../pages/ProductDetail'));
 const CategoryPage = lazy(() => import('../pages/CategoryPage/CategoryPage'));
 const ProductCategoryPage = lazy(() => import('../pages/ProductCategoryPage'));
@@ -59,6 +75,31 @@ export const publicRoute: route[] = [
     path: routes.login,
     element: Login,
     layout: DefaultLayout,
+  },
+  {
+    path: routes.profile,
+    element: ProfilePage,
+    layout: ProfileLayout,
+  },
+  {
+    path: routes.accumulatedPoints,
+    element: AccumulatedPoint,
+    layout: ProfileLayout,
+  },
+  {
+    path: routes.myOrder,
+    element: MyOrder,
+    layout: ProfileLayout,
+  },
+  {
+    path: routes.changePassword,
+    element: ChangePasswordUser,
+    layout: ProfileLayout,
+  },
+  {
+    path: routes.favoriteProduct,
+    element: FavoriteProduct,
+    layout: ProfileLayout,
   },
   {
     path: routes.productDetail,

@@ -4,7 +4,7 @@ import HeaderTop from './HeaderTop';
 
 const Header: React.FC = () => {
   return (
-    <main>
+    <React.Fragment>
       <header style={{ background: '#12283e' }} className="max-sm:hidden">
         <div className="p-50">
           <div className="header-container">
@@ -13,7 +13,7 @@ const Header: React.FC = () => {
         </div>
       </header>
       <HeaderMobile />
-    </main>
+    </React.Fragment>
   );
 };
 

@@ -7,9 +7,9 @@ export const routes = {
   changePassword: '/account/change-password',
   accumulatedPoints: '/account/accumulated-points',
   favoriteProduct: '/account/favorite-product',
-  productDetail: '/:slug',
+  productDetail: '/product-detail',
   cart: '/cart',
-  categoryPage: '/category',
+  categoryPage: '/:categorySlug',
   productCategory: '/product-category',
   checkOut: '/checkout',
 

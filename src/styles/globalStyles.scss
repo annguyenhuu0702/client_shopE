@@ -12,7 +12,7 @@
 }
 
 .swiper-button-prev {
-  top: 46% !important;
+  top: 44% !important;
   border-radius: 50%;
   background: $white-color;
   width: 46px !important;
@@ -28,12 +28,12 @@
   }
 
   @include mobile {
-    top: 42% !important;
+    top: 40% !important;
   }
 }
 
 .swiper-button-next {
-  top: 46% !important;
+  top: 44% !important;
   border-radius: 50%;
   background: $white-color;
   width: 46px !important;
@@ -48,7 +48,7 @@
   }
 
   @include mobile {
-    top: 42% !important;
+    top: 40% !important;
   }
 }
 

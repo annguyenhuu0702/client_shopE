@@ -57,10 +57,12 @@ const HeaderTop: React.FC = () => {
           />
         </div>
         <div className={cx('group-icon')}>
-          <div className={cx('store')}>
-            <RiStoreLine />
-          </div>
-          <div className={cx('wish-list')}>
+          <div
+            className={cx('wish-list')}
+            onClick={() => {
+              navigate(routes.favoriteProduct);
+            }}
+          >
             <AiOutlineHeart />
           </div>
           <div className={cx('account')}>
@@ -90,12 +92,12 @@ const HeaderTop: React.FC = () => {
               ) : (
                 <div className="block-hover">
                   <div className="block-child">
-                    <Link to="/login" className="text">
+                    <Link to={routes.login} className="text">
                       Đăng nhập
                     </Link>
                   </div>
                   <div className="block-child">
-                    <Link to="/register" className="text">
+                    <Link to={routes.register} className="text">
                       Đăng ký
                     </Link>
                   </div>

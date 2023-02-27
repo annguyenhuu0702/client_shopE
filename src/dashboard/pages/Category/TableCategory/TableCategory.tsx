@@ -37,12 +37,28 @@ const TableCategory: React.FC = () => {
   const navigate = useNavigate();
   const columns = [
     {
+      title: 'Hình ảnh',
+      width: '100px',
+      render: (text: string, record: category) => {
+        return record.thumbnail !== '' ? (
+          <div className="flex justify-center cursor-text">
+            <img
+              src={record.thumbnail}
+              alt=""
+              className="w-20 h-14 object-cover"
+            />
+          </div>
+        ) : (
+          <></>
+        );
+      },
+    },
+    {
       title: 'Tên',
       dataIndex: 'name',
     },
     {
       title: 'Ngày tạo',
-      // dataIndex: 'createdAt',
       render: (text: string, record: category) => {
         let date = moment(record.createdAt).format('MM/DD/YYYY');
         return <React.Fragment>{date}</React.Fragment>;
@@ -50,7 +66,6 @@ const TableCategory: React.FC = () => {
     },
     {
       title: 'Hành động',
-      // dataIndex: 'action',
       render: (text: string, record: category) => {
         return (
           <Space size="middle">
@@ -222,6 +237,7 @@ const TableCategory: React.FC = () => {
             columns={columns}
             pagination={false}
             expandable={{ showExpandColumn: false }}
+            size="middle"
           />
         </Col>
       </Row>

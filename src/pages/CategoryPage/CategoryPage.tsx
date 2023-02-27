@@ -1,14 +1,43 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Breadcrumb, Col, Row } from 'antd';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Pagination, Navigation } from 'swiper';
 import 'swiper/css';
 import 'swiper/css/pagination';
 import 'swiper/css/navigation';
-import { Link } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import Product from '../../components/Product';
+import { useDispatch, useSelector } from 'react-redux';
+import {
+  categoryActions,
+  categorySelector,
+} from '../../redux/slice/categorySlice';
+import { collection } from '../../types/collection';
+import { useTitle } from '../../hooks/useTitle';
 
 const CategoryPage: React.FC = () => {
+  const dispatch = useDispatch();
+  const { categorySlug } = useParams();
+  const { currentCategory } = useSelector(categorySelector);
+
+  useEffect(() => {
+    categorySlug &&
+      dispatch(
+        categoryActions.getCategoryBySlug({
+          collections: true,
+          slug: categorySlug,
+        })
+      );
+  }, [dispatch, categorySlug]);
+  useTitle(currentCategory?.name ? currentCategory?.name : '');
+
+  const countProductCategory = () => {
+    return currentCategory
+      ? currentCategory.collections.reduce((prev: any, current: any) => {
+          return prev + current.productCategories.length;
+        }, 0)
+      : 0;
+  };
   return (
     <main className="px-20 max-sm:px-4">
       <section className="my-8">
@@ -16,159 +45,73 @@ const CategoryPage: React.FC = () => {
           <Breadcrumb.Item>
             <Link to="/">Trang chủ</Link>
           </Breadcrumb.Item>
-          <Breadcrumb.Item>Nam</Breadcrumb.Item>
+          <Breadcrumb.Item>{currentCategory?.name}</Breadcrumb.Item>
         </Breadcrumb>
       </section>
       <section className="mb-16">
         <div>
-          <img
-            className="common-img"
-            src="https://media.canifa.com/Simiconnector/banner_name_tablet1675168324.webp"
-            alt=""
-          />
+          <img className="common-img" src={currentCategory?.thumbnail} alt="" />
         </div>
       </section>
-      <section className="mb-16 border-solid border-0 border-b-2 border-border-product-page">
-        <div>
-          <h3 className="m-0 mb-8 font-bold text-4xl">Danh mục sản phẩm</h3>
-        </div>
-        <div className="pb-6">
-          <Swiper
-            navigation={true}
-            modules={[Pagination, Navigation]}
-            slidesPerView={5}
-            spaceBetween={35}
-            breakpoints={{
-              375: {
-                slidesPerView: 2,
-                spaceBetween: 20,
-              },
-              640: {
-                slidesPerView: 2,
-                spaceBetween: 20,
-              },
-              768: {
-                slidesPerView: 4,
-                spaceBetween: 40,
-              },
-            }}
-            className="mySwiper"
-          >
-            <SwiperSlide>
-              <Link to="">
-                <img
-                  className="common-img-slide"
-                  src="https://media.canifa.com/Simiconnector/simicategory_filename_tablet1672294265.webp"
-                  alt=""
-                />
-                <div className="mt-8">
-                  <span className="text-xl text-name-product">
-                    Áo phông tay dài
-                  </span>
-                </div>
-              </Link>
-            </SwiperSlide>
-            <SwiperSlide>
-              <Link to="">
-                <img
-                  className="common-img-slide"
-                  src="https://media.canifa.com/Simiconnector/simicategory_filename_tablet1672294283.webp"
-                  alt=""
-                />
-                <div className="mt-8">
-                  <span className="text-xl text-name-product">
-                    Áo phông tay dài
-                  </span>
-                </div>
-              </Link>
-            </SwiperSlide>
-            <SwiperSlide>
-              <Link to="">
-                <img
-                  className="common-img-slide"
-                  src="https://media.canifa.com/Simiconnector/simicategory_filename_tablet1629472230.webp"
-                  alt=""
-                />
-                <div className="mt-8">
-                  <span className="text-xl text-name-product">
-                    Áo phông tay dài
-                  </span>
-                </div>
-              </Link>
-            </SwiperSlide>
-            <SwiperSlide>
-              <Link to="">
-                <img
-                  className="common-img-slide"
-                  src="https://media.canifa.com/Simiconnector/simicategory_filename_tablet1672294397.webp"
-                  alt=""
-                />
-                <div className="mt-8">
-                  <span className="text-xl text-name-product">
-                    Áo phông tay dài
-                  </span>
-                </div>
-              </Link>
-            </SwiperSlide>
-            <SwiperSlide>
-              <Link to="">
-                <img
-                  className="common-img-slide"
-                  src="https://media.canifa.com/Simiconnector/simicategory_filename_tablet1672294418.webp"
-                  alt=""
-                />
-                <div className="mt-8">
-                  <span className="text-xl text-name-product">
-                    Áo phông tay dài
-                  </span>
-                </div>
-              </Link>
-            </SwiperSlide>
-            <SwiperSlide>
-              <Link to="">
-                <img
-                  className="common-img-slide"
-                  src="https://media.canifa.com/Simiconnector/simicategory_filename_tablet1672294511.webp"
-                  alt=""
-                />
-                <div className="mt-8">
-                  <span className="text-xl text-name-product">
-                    Áo phông tay dài
-                  </span>
-                </div>
-              </Link>
-            </SwiperSlide>
-            <SwiperSlide>
-              <Link to="">
-                <img
-                  className="common-img-slide"
-                  src="https://media.canifa.com/Simiconnector/simicategory_filename_tablet1672294433.webp"
-                  alt=""
-                />
-                <div className="mt-8">
-                  <span className="text-xl text-name-product">
-                    Áo phông tay dài
-                  </span>
-                </div>
-              </Link>
-            </SwiperSlide>
-            <SwiperSlide>
-              <Link to="">
-                <img
-                  className="common-img-slide"
-                  src="https://media.canifa.com/Simiconnector/simicategory_filename_tablet1664983519.webp"
-                  alt=""
-                />
-                <div className="mt-8">
-                  <span className="text-xl text-name-product">
-                    Áo phông tay dài
-                  </span>
-                </div>
-              </Link>
-            </SwiperSlide>
-          </Swiper>
-        </div>
-      </section>
+      {countProductCategory() > 0 && (
+        <section className="mb-16 border-solid border-0 border-b-2 border-border-product-page">
+          <div>
+            <h3 className="m-0 mb-8 font-bold text-4xl">Danh mục sản phẩm</h3>
+          </div>
+          <div className="pb-6">
+            <Swiper
+              navigation={true}
+              modules={[Pagination, Navigation]}
+              slidesPerView={5}
+              spaceBetween={35}
+              breakpoints={{
+                375: {
+                  slidesPerView: 2,
+                  spaceBetween: 20,
+                },
+                640: {
+                  slidesPerView: 2,
+                  spaceBetween: 20,
+                },
+                768: {
+                  slidesPerView: 3,
+                  spaceBetween: 40,
+                },
+                1024: {
+                  slidesPerView: 5,
+                  spaceBetween: 40,
+                },
+              }}
+              className="mySwiper"
+            >
+              {currentCategory &&
+                currentCategory.collections.length > 0 &&
+                currentCategory.collections.map((collection: collection) => {
+                  return collection.productCategories.map((item) => {
+                    return item.thumbnail ? (
+                      <SwiperSlide>
+                        <Link to="">
+                          <img
+                            className="common-img-slide"
+                            src={item.thumbnail}
+                            alt=""
+                          />
+                          <div className="mt-8">
+                            <span className="text-xl text-name-product">
+                              {item.name}
+                            </span>
+                          </div>
+                        </Link>
+                      </SwiperSlide>
+                    ) : (
+                      <></>
+                    );
+                  });
+                })}
+            </Swiper>
+          </div>
+        </section>
+      )}
       <section className="mb-16 ">
         <div>
           <h3 className="m-0 mb-8 font-bold text-4xl">Áo phông</h3>

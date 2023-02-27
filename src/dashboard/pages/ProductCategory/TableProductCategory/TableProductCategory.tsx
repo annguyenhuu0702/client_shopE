@@ -28,6 +28,7 @@ import {
   productCategoryState,
 } from '../../../../redux/slice/productCategorySlice';
 import { productCategory } from '../../../../types/productCategory';
+import { removeTextBetweenParentheses } from '../../../../utils';
 
 const TableProductCategory: React.FC = () => {
   const dispatch = useDispatch();
@@ -38,19 +39,40 @@ const TableProductCategory: React.FC = () => {
   const navigate = useNavigate();
   const columns = [
     {
+      title: 'Hình ảnh',
+      width: '100px',
+      render: (text: string, record: productCategory) => {
+        return record.thumbnail !== '' ? (
+          <div className="flex justify-center cursor-text">
+            <img
+              src={record.thumbnail}
+              alt=""
+              className="w-20 h-14 object-cover"
+            />
+          </div>
+        ) : (
+          <></>
+        );
+      },
+    },
+    {
       title: 'Tên',
-      dataIndex: 'name',
+      render: (text: string, record: productCategory) => {
+        return (
+          <React.Fragment>
+            {removeTextBetweenParentheses(record.name)}
+          </React.Fragment>
+        );
+      },
     },
     {
       title: 'Bộ sưu tập',
-      // dataIndex: 'collectionId',
       render: (text: string, record: productCategory) => {
         return <React.Fragment>{record.collection?.name}</React.Fragment>;
       },
     },
     {
       title: 'Ngày tạo',
-      // dataIndex: 'createdAt',
       render: (text: string, record: any) => {
         let date = moment(record.createdAt).format('MM/DD/YYYY');
         return <React.Fragment>{date}</React.Fragment>;
@@ -230,6 +252,7 @@ const TableProductCategory: React.FC = () => {
             columns={columns}
             pagination={false}
             expandable={{ showExpandColumn: false }}
+            size="middle"
           />
         </Col>
       </Row>

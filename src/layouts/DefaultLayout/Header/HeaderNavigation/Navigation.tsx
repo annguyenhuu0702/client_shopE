@@ -1,6 +1,5 @@
 import React, { useEffect } from 'react';
 import styles from './__navigation.module.scss';
-
 import { faAngleDown } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import classNames from 'classnames/bind';
@@ -11,21 +10,80 @@ import {
   categorySelector,
   categoryState,
 } from '../../../../redux/slice/categorySlice';
+import { category } from '../../../../types/category';
+import { collection } from '../../../../types/collection';
+import { productCategory } from '../../../../types/productCategory';
+import { Col, Row } from 'antd';
+import { removeTextBetweenParentheses } from '../../../../utils';
 
 const cx = classNames.bind(styles);
 
 const HeaderNavigation: React.FC = () => {
   const dispatch = useDispatch();
   const { categories }: categoryState = useSelector(categorySelector);
-  // useEffect(() => {
-  //   dispatch(categoryActions.getAllCategory({}));
-  // }, [dispatch]);
+  useEffect(() => {
+    dispatch(categoryActions.getAllCategory({ collections: true }));
+  }, [dispatch]);
 
   return (
     <section className={cx('navigation')}>
       <div className={cx('menu')}>
         <ul className={cx('list-item')}>
-          <li className={cx('item')}>
+          {categories &&
+            [...categories.rows].reverse().map((category: category) => {
+              return (
+                <li className={cx('item')} key={category.id}>
+                  <Link
+                    to={`/${category.slug}`}
+                    className={cx('group-category')}
+                  >
+                    {category.name}
+                  </Link>
+                  <Row
+                    className={cx(
+                      `${
+                        category.collections.length > 0 ? 'block-category' : ''
+                      }`
+                    )}
+                  >
+                    {[...category.collections]
+                      .reverse()
+                      .map((collection: collection) => {
+                        return (
+                          <Col
+                            xl={6}
+                            className={cx('wrap-children')}
+                            key={collection.id}
+                          >
+                            <Link
+                              to={`/${collection.slug}`}
+                              className={cx('category')}
+                            >
+                              {removeTextBetweenParentheses(collection.name)}
+                            </Link>
+                            <ul className={cx('child-category')}>
+                              {[...collection.productCategories]
+                                .reverse()
+                                .map((item: productCategory) => {
+                                  return (
+                                    <li key={item.id}>
+                                      <Link to={`/${item.slug}`}>
+                                        {removeTextBetweenParentheses(
+                                          item.name
+                                        )}
+                                      </Link>
+                                    </li>
+                                  );
+                                })}
+                            </ul>
+                          </Col>
+                        );
+                      })}
+                  </Row>
+                </li>
+              );
+            })}
+          {/* <li className={cx('item')}>
             <Link to="/" className={cx('group-category')}>
               Trang chủ
             </Link>
@@ -64,7 +122,7 @@ const HeaderNavigation: React.FC = () => {
                 />
               </div>
             </div>
-          </li>
+          </li> */}
         </ul>
       </div>
     </section>

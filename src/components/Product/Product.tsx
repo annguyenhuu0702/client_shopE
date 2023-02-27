@@ -171,7 +171,7 @@ const Product: React.FC = () => {
         )}
         <div className={cx('name')}>
           <Link to="">
-            <span className="hover:text-red-600 transition ease-in-out delay-75">
+            <span className="hover:text-btn-order transition ease-in-out delay-75">
               Giày chạy bộ nam hoka march
             </span>
           </Link>

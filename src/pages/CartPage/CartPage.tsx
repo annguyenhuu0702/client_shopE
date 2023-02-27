@@ -143,7 +143,7 @@ const CartPage: React.FC = () => {
             </div>
             <div className="mb-10 max-lg:mb-8">
               <button
-                className="bg-btn-order w-full flex items-center justify-center uppercase py-6 text-black text-2xl border-none outline-none rounded-xl cursor-pointer hover:bg-hover-btn-order"
+                className="bg-btn-order w-full flex items-center justify-center uppercase py-6 text-white text-2xl border-none outline-none rounded-xl cursor-pointer hover:bg-hover-btn-order"
                 onClick={() => {
                   navigate(routes.checkOut);
                 }}

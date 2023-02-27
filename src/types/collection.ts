@@ -1,6 +1,7 @@
 import React from 'react';
 import { category } from './category';
 import { queryParams, tokenPayload } from './common';
+import { productCategory } from './productCategory';
 
 export interface collection {
   key?: React.Key | string | number;
@@ -10,6 +11,7 @@ export interface collection {
   thumbnail: string;
   description: string;
   categoryId: number;
+  productCategories: productCategory[];
   category: category;
   deletedAt: Date;
   createdAt: string;

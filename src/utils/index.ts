@@ -1,4 +1,5 @@
 import slugify from 'slugify';
+
 export const castToVND = (price: string | number) => {
   if (!price) return;
   price = price.toLocaleString('vi', { style: 'currency', currency: 'VND' });
@@ -14,4 +15,8 @@ export const configSlugify = (text: string) => {
     locale: 'vi', // language code of the locale to use
     trim: true, // trim leading and trailing replacement chars, defaults to `true`
   });
+};
+
+export const removeTextBetweenParentheses = (text: string) => {
+  return text.replace(/ *\([^)]*\) */g, '');
 };

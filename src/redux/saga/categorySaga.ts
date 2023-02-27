@@ -28,6 +28,26 @@ function* getAllCategorySaga({
   }
 }
 
+function* getCategoryBySlugSaga({
+  payload,
+}: PayloadAction<getAllCategoryParams>): any {
+  try {
+    const res = yield call(() => {
+      return categoryApi.getAll({
+        collections: true,
+        slug: payload.slug,
+      });
+    });
+    const { data, status } = res;
+    if (status === STATUS_CODE.SUCCESS) {
+      yield put(categoryActions.getCategoryBySlugSuccess(data.data.rows[0]));
+    }
+  } catch (err) {
+    console.log(err);
+    yield put(categoryActions.getCategoryBySlugFailed());
+  }
+}
+
 function* createCategorySaga({
   payload,
 }: PayloadAction<tokenPayloadData<createCategory>>): any {
@@ -124,6 +144,7 @@ function* deleteCategorySaga({ payload }: PayloadAction<deleteParams>): any {
 function* categorySaga() {
   yield takeEvery('category/createCategory', createCategorySaga);
   yield takeEvery('category/getAllCategory', getAllCategorySaga);
+  yield takeEvery('category/getCategoryBySlug', getCategoryBySlugSaga);
   yield takeEvery('category/editCategory', editCategorySaga);
   yield takeEvery('category/deleteCategory', deleteCategorySaga);
 }

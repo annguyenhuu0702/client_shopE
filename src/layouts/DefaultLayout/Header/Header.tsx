@@ -5,7 +5,12 @@ import HeaderTop from './HeaderTop';
 const Header: React.FC = () => {
   return (
     <React.Fragment>
-      <header style={{ background: '#12283e' }} className="max-sm:hidden">
+      <header
+        style={{
+          background: '#12283e',
+        }}
+        className="max-sm:hidden"
+      >
         <div className="p-50">
           <div className="header-container">
             <HeaderTop />

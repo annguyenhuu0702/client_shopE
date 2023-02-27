@@ -9,7 +9,7 @@ export interface category {
   slug: string;
   thumbnail: string;
   description: string;
-  collections: collection;
+  collections: collection[];
   deletedAt: Date;
   createdAt: string;
   updatedAt: string;
@@ -34,5 +34,7 @@ export interface deleteCategory extends tokenPayload {
 }
 
 export interface getAllCategoryParams extends queryParams {
+  collections?: boolean;
   name?: string;
+  slug?: string;
 }

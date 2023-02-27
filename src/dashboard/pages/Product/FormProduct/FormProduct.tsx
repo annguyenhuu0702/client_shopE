@@ -35,6 +35,7 @@ import {
   productSelector,
   productState,
 } from '../../../../redux/slice/productSlice';
+import { URL_API } from '../../../../constants';
 
 const { Content } = Layout;
 
@@ -80,6 +81,9 @@ const FormProduct: React.FC = () => {
 
   const [loading, setLoading] = useState(false);
   const [imageUrl, setImageUrl] = useState<string>();
+  const [pathImg, setPathImg] = useState<string>(
+    currentProduct ? currentProduct.thumbnail : ''
+  );
 
   const handleChangeUpload: UploadProps['onChange'] = (
     info: UploadChangeParam<UploadFile>
@@ -90,6 +94,7 @@ const FormProduct: React.FC = () => {
     }
     if (info.file.status === 'done') {
       // Get this url from response in real world.
+      setPathImg(info.file.response.data.secure_url);
       getBase64(info.file.originFileObj as RcFile, (url) => {
         setLoading(false);
         setImageUrl(url);
@@ -120,10 +125,9 @@ const FormProduct: React.FC = () => {
       price: values.price,
       priceSale: values.priceSale,
       description: values.description,
-      thumbnail: values.thumbnail,
+      thumbnail: pathImg,
     };
     if (!currentProduct) {
-      console.log('ngáo à');
       dispatch(
         productActions.createProduct({
           token: user.accessToken,
@@ -180,6 +184,10 @@ const FormProduct: React.FC = () => {
     }
   }, [id, dispatch, form]);
 
+  useEffect(() => {
+    setPathImg(currentProduct ? currentProduct.thumbnail : '');
+  }, [currentProduct]);
+
   useTitle(currentProduct ? 'Sửa sản phẩm' : 'Thêm sản phẩm');
 
   return (
@@ -198,7 +206,6 @@ const FormProduct: React.FC = () => {
               autoComplete="off"
               labelAlign="left"
             >
-              {/* <div> */}
               <Form.Item
                 label="Tên"
                 name="name"
@@ -251,20 +258,23 @@ const FormProduct: React.FC = () => {
               </Form.Item>
               <Form.Item label="Hình ảnh">
                 <Upload
-                  // multiple
-                  name="thumbnail"
+                  name="image"
                   listType="picture-card"
                   className="avatar-uploader"
                   showUploadList={false}
-                  action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
+                  action={`${URL_API}/upload/single`}
                   beforeUpload={beforeUpload}
                   onChange={handleChangeUpload}
                 >
-                  {imageUrl ? (
+                  {pathImg ? (
                     <img
-                      src={imageUrl}
+                      src={pathImg}
                       alt="avatar"
-                      style={{ width: '100%' }}
+                      style={{
+                        width: '90px',
+                        height: '90px',
+                        objectFit: 'cover',
+                      }}
                     />
                   ) : (
                     uploadButton
@@ -276,28 +286,18 @@ const FormProduct: React.FC = () => {
                   textAlign: 'center',
                 }}
                 wrapperCol={{ span: 14 }}
-                shouldUpdate
               >
-                {() => (
-                  <Button
-                    type="primary"
-                    htmlType="submit"
-                    style={{
-                      width: '200px',
-                    }}
-                    size="large"
-                    disabled={
-                      !form.isFieldsTouched(false) ||
-                      form
-                        .getFieldsError()
-                        .filter(({ errors }) => errors.length).length > 0
-                    }
-                  >
-                    {currentProduct ? 'Sửa' : 'Thêm'}
-                  </Button>
-                )}
+                <Button
+                  type="primary"
+                  htmlType="submit"
+                  style={{
+                    width: '200px',
+                  }}
+                  size="large"
+                >
+                  {currentProduct ? 'Sửa' : 'Thêm'}
+                </Button>
               </Form.Item>
-              {/* </div> */}
             </Form>
           </div>
         </div>

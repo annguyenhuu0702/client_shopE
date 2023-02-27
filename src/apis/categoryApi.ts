@@ -2,10 +2,13 @@ import { AxiosResponse } from 'axios';
 import instance, { apiCallerWithToken } from '../config/configAxios';
 import { URL_API } from '../constants';
 import { AppDispatch } from '../redux/store';
-import { createCategory, updateCategory } from '../types/category';
-import { queryParams } from '../types/common';
+import {
+  createCategory,
+  getAllCategoryParams,
+  updateCategory,
+} from '../types/category';
 
-const getAll = (params?: queryParams) => {
+const getAll = (params?: getAllCategoryParams) => {
   return instance.get(`${URL_API}/category/getAll`, {
     params,
   });
@@ -13,6 +16,10 @@ const getAll = (params?: queryParams) => {
 
 const getById = (id: string) => {
   return instance.get(`${URL_API}/category/getById/${id}`);
+};
+
+const getBySlug = (categorySlug: string) => {
+  return instance.get(`${URL_API}/category/getBySlug/${categorySlug}`);
 };
 
 const create = (
@@ -50,6 +57,7 @@ const deleteCategory = (
 export const categoryApi = {
   create,
   getAll,
+  getBySlug,
   getById,
   update,
   deleteCategory,

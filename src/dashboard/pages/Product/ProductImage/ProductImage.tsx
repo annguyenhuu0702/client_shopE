@@ -113,8 +113,6 @@ const ModalProductImage = () => {
     }
   };
 
-  console.log(variantValues);
-
   useEffect(() => {
     (async () => {
       try {

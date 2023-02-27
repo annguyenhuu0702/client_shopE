@@ -54,13 +54,27 @@ const TableProduct: React.FC = () => {
 
   const columns = [
     {
+      title: 'Hình ảnh',
+      width: '100px',
+      render: (text: string, record: product) => {
+        return record.thumbnail !== '' ? (
+          <div className="flex justify-center cursor-text">
+            <img
+              src={record.thumbnail}
+              alt=""
+              className="w-20 h-14 object-cover"
+            />
+          </div>
+        ) : (
+          <></>
+        );
+      },
+    },
+    {
       title: 'Tên sản phẩm',
       dataIndex: 'name',
     },
-    // {
-    //   title: 'Bí danh',
-    //   dataIndex: 'slug',
-    // },
+
     {
       title: 'Danh mục sản phẩm',
       dataIndex: 'productCategoryId',
@@ -70,7 +84,6 @@ const TableProduct: React.FC = () => {
     },
     {
       title: 'Hình ảnh',
-      // dataIndex: 'image',
       render: (text: string, record: product) => {
         return (
           <span
@@ -281,6 +294,7 @@ const TableProduct: React.FC = () => {
             columns={columns}
             pagination={false}
             expandable={{ showExpandColumn: false }}
+            size="middle"
           />
         </Col>
       </Row>

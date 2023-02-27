@@ -285,6 +285,7 @@ const TableUser: React.FC = () => {
             loading={isLoading}
             columns={columns}
             pagination={false}
+            size="middle"
           />
         </Col>
       </Row>

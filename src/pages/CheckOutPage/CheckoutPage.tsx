@@ -320,7 +320,7 @@ const CheckoutPage: React.FC = () => {
                 <Form.Item className="mb-0 bg-btn-order rounded-none">
                   <button
                     type="submit"
-                    className=" bg-btn-order flex items-center justify-center uppercase py-6 px-12 text-black text-2xl border-none outline-none rounded-xl cursor-pointer hover:bg-hover-btn-order hover:rounded-none"
+                    className=" bg-btn-order flex items-center justify-center uppercase py-6 px-12 text-white text-2xl border-none outline-none rounded-xl cursor-pointer hover:bg-hover-btn-order hover:rounded-none"
                   >
                     Đặt hàng
                   </button>

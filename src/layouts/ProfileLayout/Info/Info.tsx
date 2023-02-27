@@ -63,9 +63,10 @@ const InfoUser: React.FC = () => {
             menu.map((item) => {
               return (
                 <li
-                  // className="cursor-pointer bg-item-profile py-4 pl-8"
-                  className={`cursor-pointer py-4 pl-8 ${
-                    location.pathname === item.path ? `bg-item-profile` : ``
+                  className={`cursor-pointer py-4 pl-8 hover:bg-item-profile ${
+                    location.pathname === item.path
+                      ? `bg-item-profile hover:text-btn-order`
+                      : ``
                   }`}
                   key={item.path}
                   onClick={() => {
@@ -74,8 +75,7 @@ const InfoUser: React.FC = () => {
                 >
                   <Link
                     to=""
-                    // className="flex items-center text-2xl text-btn-order hover:text-btn-order"
-                    className={`flex items-center text-2xl ${
+                    className={`flex items-center text-2xl hover:text-btn-order ${
                       location.pathname === item.path
                         ? `text-btn-order hover:text-btn-order`
                         : ``

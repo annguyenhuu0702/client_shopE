@@ -31,5 +31,7 @@ export interface updateProductCategory extends createProductCategory {
 }
 
 export interface getAllProductCategoryParams extends queryParams {
+  collection?: boolean;
+  slug?: string;
   name?: string;
 }

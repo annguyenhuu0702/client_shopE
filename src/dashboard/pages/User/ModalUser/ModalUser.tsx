@@ -29,6 +29,7 @@ import {
   userSelector,
   userState,
 } from '../../../../redux/slice/userSlice';
+import { URL_API } from '../../../../constants';
 
 const getBase64 = (img: RcFile, callback: (url: string) => void) => {
   const reader = new FileReader();
@@ -70,14 +71,17 @@ const ModalUser: React.FC = () => {
   const [gender, setGender] = useState(1);
 
   // disable button when not input data
-  const [disabledSave, setDisabledSave] = useState(true);
-  const handleFormChange = () => {
-    const hasErrors = form.getFieldsError().some(({ errors }) => errors.length);
-    setDisabledSave(hasErrors);
-  };
+  // const [disabledSave, setDisabledSave] = useState(true);
+  // const handleFormChange = () => {
+  //   const hasErrors = form.getFieldsError().some(({ errors }) => errors.length);
+  //   setDisabledSave(hasErrors);
+  // };
 
   const [loading, setLoading] = useState(false);
   const [imageUrl, setImageUrl] = useState<string>();
+  const [pathImg, setPathImg] = useState<string>(
+    currentUser ? currentUser.avatar : ''
+  );
 
   const handleChangeUpload: UploadProps['onChange'] = (
     info: UploadChangeParam<UploadFile>
@@ -88,6 +92,7 @@ const ModalUser: React.FC = () => {
     }
     if (info.file.status === 'done') {
       // Get this url from response in real world.
+      setPathImg(info.file.response.data.secure_url);
       getBase64(info.file.originFileObj as RcFile, (url) => {
         setLoading(false);
         setImageUrl(url);
@@ -113,7 +118,7 @@ const ModalUser: React.FC = () => {
   const onFinish = (values: any) => {
     const formData = {
       email: values.email,
-      avatar: values.avatar,
+      avatar: pathImg,
       fullname: values.fullname,
       password: values.password,
       phone: values.phone,
@@ -153,12 +158,12 @@ const ModalUser: React.FC = () => {
         okText="Lưu"
         cancelText="Quay lại"
         width={1000}
-        okButtonProps={{ disabled: disabledSave }}
+        // okButtonProps={{ disabled: disabledSave }}
       >
         <Form
           initialValues={initialValues}
           form={form}
-          onFieldsChange={handleFormChange}
+          // onFieldsChange={handleFormChange}
           labelCol={{ span: 6 }}
           wrapperCol={{ span: 14 }}
           onFinish={onFinish}
@@ -209,19 +214,23 @@ const ModalUser: React.FC = () => {
 
               <Form.Item label="Avatar">
                 <Upload
-                  name="avatar"
+                  name="image"
                   listType="picture-card"
                   className="avatar-uploader"
                   showUploadList={false}
-                  action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
+                  action={`${URL_API}/upload/single`}
                   beforeUpload={beforeUpload}
                   onChange={handleChangeUpload}
                 >
-                  {imageUrl ? (
+                  {pathImg ? (
                     <img
-                      src={imageUrl}
+                      src={pathImg}
                       alt="avatar"
-                      style={{ width: '100%' }}
+                      style={{
+                        width: '90px',
+                        height: '90px',
+                        objectFit: 'cover',
+                      }}
                     />
                   ) : (
                     uploadButton

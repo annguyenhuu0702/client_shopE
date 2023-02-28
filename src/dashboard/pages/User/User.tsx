@@ -50,8 +50,6 @@ const User: React.FC = () => {
             onChange={(page: number, pageSize: number) => {
               dispatch(userActions.setPage({ page, pageSize }));
             }}
-            // showSizeChanger={true}
-            // pageSizeOptions={[7, 20, 100, 200]}
           />
         </div>
       )}

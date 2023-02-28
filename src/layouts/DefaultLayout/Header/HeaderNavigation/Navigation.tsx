@@ -1,8 +1,6 @@
-import React, { useEffect } from 'react';
-import styles from './__navigation.module.scss';
-import { faAngleDown } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Col, Row } from 'antd';
 import classNames from 'classnames/bind';
+import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import {
@@ -13,8 +11,8 @@ import {
 import { category } from '../../../../types/category';
 import { collection } from '../../../../types/collection';
 import { productCategory } from '../../../../types/productCategory';
-import { Col, Row } from 'antd';
 import { removeTextBetweenParentheses } from '../../../../utils';
+import styles from './__navigation.module.scss';
 
 const cx = classNames.bind(styles);
 

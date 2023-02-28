@@ -278,7 +278,7 @@ const CheckoutPage: React.FC = () => {
                         !form.isFieldsTouched(false) ||
                         !!form
                           .getFieldsError()
-                          .filter(({ errors }) => errors.length).length
+                          .filter(({ errors }: any) => errors.length).length
                       }
                     >
                       Áp dụng

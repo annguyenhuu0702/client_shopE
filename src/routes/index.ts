@@ -112,7 +112,7 @@ export const publicRoute: route[] = [
     layout: DefaultLayout,
   },
   {
-    path: routes.productCategory,
+    path: routes.categoryPage,
     element: ProductCategoryPage,
     layout: DefaultLayout,
   },

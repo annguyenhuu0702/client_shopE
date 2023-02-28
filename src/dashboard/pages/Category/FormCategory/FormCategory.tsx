@@ -72,7 +72,6 @@ const FormCategory: React.FC = () => {
       return;
     }
     if (info.file.status === 'done') {
-      console.log(info);
       // Get this url from response in real world.
       setPathImg(info.file.response.data.secure_url);
       getBase64(info.file.originFileObj as RcFile, (url) => {

@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import { Breadcrumb, Col, Row } from 'antd';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Pagination, Navigation } from 'swiper';
@@ -14,11 +14,18 @@ import {
 } from '../../redux/slice/categorySlice';
 import { collection } from '../../types/collection';
 import { useTitle } from '../../hooks/useTitle';
+import ProductCategoryPage from '../ProductCategoryPage';
+import { routes } from '../../config/routes';
+import { removeTextBetweenParentheses } from '../../utils';
 
 const CategoryPage: React.FC = () => {
   const dispatch = useDispatch();
   const { categorySlug } = useParams();
-  const { currentCategory } = useSelector(categorySelector);
+  const { categories, currentCategory } = useSelector(categorySelector);
+
+  const checkCategoryPage = useMemo(() => {
+    return categories.rows.find((category) => categorySlug === category.slug);
+  }, [categories, categorySlug]);
 
   useEffect(() => {
     categorySlug &&
@@ -31,19 +38,21 @@ const CategoryPage: React.FC = () => {
   }, [dispatch, categorySlug]);
   useTitle(currentCategory?.name ? currentCategory?.name : '');
 
-  const countProductCategory = () => {
+  const countProductCategory = useMemo(() => {
     return currentCategory
       ? currentCategory.collections.reduce((prev: any, current: any) => {
           return prev + current.productCategories.length;
         }, 0)
       : 0;
-  };
+  }, [currentCategory]);
+
+  if (!checkCategoryPage) return <ProductCategoryPage />;
   return (
     <main className="px-20 max-sm:px-4">
       <section className="my-8">
         <Breadcrumb>
           <Breadcrumb.Item>
-            <Link to="/">Trang chủ</Link>
+            <Link to={routes.home}>Trang chủ</Link>
           </Breadcrumb.Item>
           <Breadcrumb.Item>{currentCategory?.name}</Breadcrumb.Item>
         </Breadcrumb>
@@ -53,7 +62,7 @@ const CategoryPage: React.FC = () => {
           <img className="common-img" src={currentCategory?.thumbnail} alt="" />
         </div>
       </section>
-      {countProductCategory() > 0 && (
+      {countProductCategory > 0 && (
         <section className="mb-16 border-solid border-0 border-b-2 border-border-product-page">
           <div>
             <h3 className="m-0 mb-8 font-bold text-4xl">Danh mục sản phẩm</h3>
@@ -90,7 +99,7 @@ const CategoryPage: React.FC = () => {
                   return collection.productCategories.map((item) => {
                     return item.thumbnail ? (
                       <SwiperSlide>
-                        <Link to="">
+                        <Link to={`/${item.slug}`}>
                           <img
                             className="common-img-slide"
                             src={item.thumbnail}
@@ -98,7 +107,7 @@ const CategoryPage: React.FC = () => {
                           />
                           <div className="mt-8">
                             <span className="text-xl text-name-product">
-                              {item.name}
+                              {removeTextBetweenParentheses(item.name)}
                             </span>
                           </div>
                         </Link>

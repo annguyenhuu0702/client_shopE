@@ -10,7 +10,6 @@ export const routes = {
   productDetail: '/product-detail',
   cart: '/cart',
   categoryPage: '/:categorySlug',
-  productCategory: '/product-category',
   checkOut: '/checkout',
 
   // admin

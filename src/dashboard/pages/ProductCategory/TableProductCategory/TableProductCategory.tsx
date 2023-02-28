@@ -28,7 +28,10 @@ import {
   productCategoryState,
 } from '../../../../redux/slice/productCategorySlice';
 import { productCategory } from '../../../../types/productCategory';
-import { removeTextBetweenParentheses } from '../../../../utils';
+import {
+  removeParenthesis,
+  removeTextBetweenParentheses,
+} from '../../../../utils';
 
 const TableProductCategory: React.FC = () => {
   const dispatch = useDispatch();
@@ -58,24 +61,20 @@ const TableProductCategory: React.FC = () => {
     {
       title: 'Tên',
       render: (text: string, record: productCategory) => {
-        return (
-          <React.Fragment>
-            {removeTextBetweenParentheses(record.name)}
-          </React.Fragment>
-        );
+        return <div>{removeTextBetweenParentheses(record.name)}</div>;
       },
     },
     {
       title: 'Bộ sưu tập',
       render: (text: string, record: productCategory) => {
-        return <React.Fragment>{record.collection?.name}</React.Fragment>;
+        return <div>{removeParenthesis(record.collection?.name)}</div>;
       },
     },
     {
       title: 'Ngày tạo',
       render: (text: string, record: any) => {
         let date = moment(record.createdAt).format('MM/DD/YYYY');
-        return <React.Fragment>{date}</React.Fragment>;
+        return <div>{date}</div>;
       },
     },
     {
@@ -199,8 +198,9 @@ const TableProductCategory: React.FC = () => {
                   htmlType="submit"
                   disabled={
                     !form.isFieldsTouched(false) ||
-                    form.getFieldsError().filter(({ errors }) => errors.length)
-                      .length > 0
+                    form
+                      .getFieldsError()
+                      .filter(({ errors }: any) => errors.length).length > 0
                   }
                 >
                   Tìm kiếm

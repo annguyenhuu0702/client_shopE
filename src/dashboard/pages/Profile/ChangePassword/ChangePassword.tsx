@@ -77,13 +77,15 @@ const ChangePassword: React.FC = () => {
       <Form.Item
         label="Confirm Password"
         name="confirmpassword"
+        dependencies={['confirmpassword']}
+        hasFeedback
         rules={[
           {
             required: true,
             message: 'Please confirm your password!',
           },
-          ({ getFieldValue }) => ({
-            validator(_, value) {
+          ({ getFieldValue }: any) => ({
+            validator(_: any, value: any) {
               if (!value || getFieldValue('newpassword') === value) {
                 return Promise.resolve();
               }
@@ -104,7 +106,7 @@ const ChangePassword: React.FC = () => {
             size="large"
             disabled={
               !form.isFieldsTouched(false) ||
-              !!form.getFieldsError().filter(({ errors }) => errors.length)
+              !!form.getFieldsError().filter(({ errors }: any) => errors.length)
                 .length
             }
           >

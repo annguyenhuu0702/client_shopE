@@ -1,7 +1,7 @@
 import { LoadingOutlined, PlusOutlined } from '@ant-design/icons';
 import { Col, Form, message, Modal, Row, Select, Upload } from 'antd';
-import type { UploadChangeParam } from 'antd/es/upload';
 import type { RcFile, UploadFile, UploadProps } from 'antd/es/upload/interface';
+import { UploadChangeParam } from 'antd/lib/upload';
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { productImageApi } from '../../../../apis/productImage';
@@ -186,7 +186,7 @@ const ModalProductImage = () => {
                   </span>
                   <Select
                     className="w-full"
-                    onChange={(value) => {
+                    onChange={(value: any) => {
                       setPathImgs((state) =>
                         state.map((s: any) =>
                           s.path === item.path

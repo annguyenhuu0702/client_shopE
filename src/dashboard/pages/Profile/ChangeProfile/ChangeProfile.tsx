@@ -97,7 +97,7 @@ const ChangeProfile: React.FC = () => {
             htmlType="submit"
             disabled={
               !form.isFieldsTouched(false) ||
-              !!form.getFieldsError().filter(({ errors }) => errors.length)
+              !!form.getFieldsError().filter(({ errors }: any) => errors.length)
                 .length
             }
           >

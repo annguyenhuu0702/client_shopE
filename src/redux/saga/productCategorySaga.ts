@@ -29,6 +29,30 @@ function* getAllProductCategorySaga({
   }
 }
 
+function* getProductCategoryBySlugSaga({
+  payload,
+}: PayloadAction<getAllProductCategoryParams>): any {
+  try {
+    const res = yield call(() => {
+      return productCategoryApi.getAll({
+        slug: payload.slug,
+        collection: true,
+      });
+    });
+    const { data, status } = res;
+    if (status === STATUS_CODE.SUCCESS) {
+      yield put(
+        productCategoryActions.getProductCategoryBySlugSuccess(
+          data.data.rows[0]
+        )
+      );
+    }
+  } catch (err) {
+    console.log(err);
+    yield put(productCategoryActions.getProductCategoryBySlugFailed());
+  }
+}
+
 function* createProductCategorySaga({
   payload,
 }: PayloadAction<tokenPayloadData<createProductCategory>>): any {
@@ -138,6 +162,11 @@ function* productCategorySaga() {
     'productCategory/getAllProductCategory',
     getAllProductCategorySaga
   );
+  yield takeEvery(
+    'productCategory/getProductCategoryBySlug',
+    getProductCategoryBySlugSaga
+  );
+
   yield takeEvery(
     'productCategory/editProductCategory',
     editProductCategorySaga

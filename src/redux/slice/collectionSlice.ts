@@ -64,6 +64,21 @@ const CollectionSlice = createSlice({
       state.isLoading = false;
       state.isError = true;
     },
+    getCollectionBySlug: (
+      state,
+      action: PayloadAction<getAllCollectionParams>
+    ) => {
+      state.isLoading = true;
+    },
+    getCollectionBySlugSuccess: (state, action: PayloadAction<collection>) => {
+      state.isLoading = false;
+      state.isError = false;
+      state.currentCollection = action.payload;
+    },
+    getCollectionBySlugFailed: (state) => {
+      state.isLoading = false;
+      state.isError = true;
+    },
     createCollection: (
       state,
       action: PayloadAction<tokenPayloadData<createCollection>>

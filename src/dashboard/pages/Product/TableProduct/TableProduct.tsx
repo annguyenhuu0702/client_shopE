@@ -79,7 +79,7 @@ const TableProduct: React.FC = () => {
       title: 'Danh mục sản phẩm',
       dataIndex: 'productCategoryId',
       render: (text: string, record: product) => {
-        return <React.Fragment>{record?.productCategory?.name}</React.Fragment>;
+        return <div>{record?.productCategory?.name}</div>;
       },
     },
     {
@@ -113,7 +113,7 @@ const TableProduct: React.FC = () => {
       // dataIndex: 'createdAt',
       render: (text: string, record: product) => {
         let date = moment(record.createdAt).format('MM/DD/YYYY');
-        return <React.Fragment>{date}</React.Fragment>;
+        return <div>{date}</div>;
       },
     },
     {
@@ -241,8 +241,9 @@ const TableProduct: React.FC = () => {
                   htmlType="submit"
                   disabled={
                     !form.isFieldsTouched(false) ||
-                    form.getFieldsError().filter(({ errors }) => errors.length)
-                      .length > 0
+                    form
+                      .getFieldsError()
+                      .filter(({ errors }: any) => errors.length).length > 0
                   }
                 >
                   Tìm kiếm

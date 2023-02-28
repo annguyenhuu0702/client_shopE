@@ -61,7 +61,11 @@ const TableUser: React.FC = () => {
                 alt=""
               />
             ) : (
-              <img src={record.avatar} alt="" />
+              <img
+                className="w-20 h-14 object-cover"
+                src={record.avatar}
+                alt=""
+              />
             )}
           </React.Fragment>
         );
@@ -230,8 +234,9 @@ const TableUser: React.FC = () => {
                   htmlType="submit"
                   disabled={
                     !form.isFieldsTouched(false) ||
-                    form.getFieldsError().filter(({ errors }) => errors.length)
-                      .length > 0
+                    form
+                      .getFieldsError()
+                      .filter(({ errors }: any) => errors.length).length > 0
                   }
                 >
                   Tìm kiếm

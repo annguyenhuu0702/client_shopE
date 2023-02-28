@@ -1,150 +1,162 @@
-import React from 'react';
-import { Breadcrumb, Col, Row, Pagination } from 'antd';
-import { Link } from 'react-router-dom';
+import { Breadcrumb, Col, Pagination, Row } from 'antd';
+import React, { useEffect, useMemo } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { Link, useParams } from 'react-router-dom';
 import Product from '../../components/Product';
+import { routes } from '../../config/routes';
+import { useTitle } from '../../hooks/useTitle';
+import {
+  collectionActions,
+  collectionSelector,
+} from '../../redux/slice/collectionSlice';
+import {
+  productCategoryActions,
+  productCategorySelector,
+} from '../../redux/slice/productCategorySlice';
+import { collection } from '../../types/collection';
+import { productCategory } from '../../types/productCategory';
+import { removeTextBetweenParentheses } from '../../utils';
 const ProductCategoryPage: React.FC = () => {
+  const { categorySlug } = useParams();
+  const { currentCollection } = useSelector(collectionSelector);
+  const { currentProductCategory } = useSelector(productCategorySelector);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(
+      collectionActions.getCollectionBySlug({
+        slug: categorySlug,
+        productCategories: true,
+      })
+    );
+  }, [dispatch, categorySlug]);
+
+  useEffect(() => {
+    dispatch(
+      productCategoryActions.getProductCategoryBySlug({
+        slug: categorySlug,
+        collection: true,
+      })
+    );
+  }, [dispatch, categorySlug]);
+
+  const category = useMemo(() => {
+    return currentCollection
+      ? currentCollection.category
+      : currentProductCategory?.collection.category;
+  }, [currentCollection, currentProductCategory?.collection.category]);
+
+  useTitle(
+    currentCollection
+      ? currentCollection?.name
+      : currentProductCategory
+      ? currentProductCategory?.name
+      : ''
+  );
+
   return (
     <main className="px-20 max-sm:px-4">
       <section className="my-8">
-        <Breadcrumb>
-          <Breadcrumb.Item>
-            <a href=" ">Trang chủ</a>
-          </Breadcrumb.Item>
-          <Breadcrumb.Item>
-            <a href=" ">Nam</a>
-          </Breadcrumb.Item>
-          <Breadcrumb.Item>Sản phẩm mới</Breadcrumb.Item>
-        </Breadcrumb>
+        {currentCollection ? (
+          <Breadcrumb>
+            <Breadcrumb.Item>
+              <Link to={routes.home}>Trang chủ</Link>
+            </Breadcrumb.Item>
+            <Breadcrumb.Item>
+              <Link to={`/${currentCollection?.category.slug}`}>
+                {currentCollection?.category.name}
+              </Link>
+            </Breadcrumb.Item>
+            <Breadcrumb.Item>
+              {removeTextBetweenParentheses(
+                currentCollection ? currentCollection.name : ''
+              )}
+            </Breadcrumb.Item>
+          </Breadcrumb>
+        ) : (
+          <Breadcrumb>
+            <Breadcrumb.Item>
+              <Link to={routes.home}>Trang chủ</Link>
+            </Breadcrumb.Item>
+            <Breadcrumb.Item>
+              <Link
+                to={`/${
+                  currentProductCategory &&
+                  currentProductCategory.collection.category.slug
+                }`}
+              >
+                {currentProductCategory &&
+                  currentProductCategory.collection.category.name}
+              </Link>
+            </Breadcrumb.Item>
+            <Breadcrumb.Item>
+              <Link
+                to={`/${
+                  currentProductCategory &&
+                  currentProductCategory.collection.slug
+                }`}
+              >
+                {currentProductCategory &&
+                  removeTextBetweenParentheses(
+                    currentProductCategory.collection.name
+                  )}
+              </Link>
+            </Breadcrumb.Item>
+            <Breadcrumb.Item>
+              {removeTextBetweenParentheses(
+                currentProductCategory ? currentProductCategory.name : ''
+              )}
+            </Breadcrumb.Item>
+          </Breadcrumb>
+        )}
       </section>
       <section>
         <Row>
           <Col xl={4} md={6} xs={24}>
             <div>
               <ul className="list-none m-0">
-                <li className="mb-10">
-                  <Link
-                    to=""
-                    className="hover:text-red-600 transition ease-in-out delay-75 text-2xl text-name-product font-bold"
-                  >
-                    Sản phẩm mới
-                  </Link>
-                </li>
-                <li className="mb-10">
-                  <Link
-                    to=""
-                    className="hover:text-red-600 transition ease-in-out delay-75 text-2xl text-name-product font-bold "
-                  >
-                    Áo quần
-                  </Link>
-                  <ul className="list-none m-0 mt-6">
-                    <li className="mb-6">
-                      <Link
-                        to=""
-                        className="hover:text-red-600 transition ease-in-out delay-75 text-2xl text-name-product"
-                      >
-                        Áo ngắn tay
-                      </Link>
-                    </li>
-                    <li className="mb-6">
-                      <Link
-                        to=""
-                        className="hover:text-red-600 transition ease-in-out delay-75 text-2xl text-name-product"
-                      >
-                        Áo ngắn tay
-                      </Link>
-                    </li>
-                    <li className="mb-6">
-                      <Link
-                        to=""
-                        className="hover:text-red-600 transition ease-in-out delay-75 text-2xl text-name-product"
-                      >
-                        Áo ngắn tay
-                      </Link>
-                    </li>
-                    <li className="mb-6">
-                      <Link
-                        to=""
-                        className="hover:text-red-600 transition ease-in-out delay-75 text-2xl text-name-product"
-                      >
-                        Áo ngắn tay
-                      </Link>
-                    </li>
-                    <li className="mb-6">
-                      <Link
-                        to=""
-                        className="hover:text-red-600 transition ease-in-out delay-75 text-2xl text-name-product"
-                      >
-                        Áo ngắn tay
-                      </Link>
-                    </li>
-                    <li className="mb-6">
-                      <Link
-                        to=""
-                        className="hover:text-red-600 transition ease-in-out delay-75 text-2xl text-name-product"
-                      >
-                        Áo ngắn tay
-                      </Link>
-                    </li>
-                    <li className="mb-6">
-                      <Link
-                        to=""
-                        className="hover:text-red-600 transition ease-in-out delay-75 text-2xl text-name-product"
-                      >
-                        Áo ngắn tay
-                      </Link>
-                    </li>
-                    <li className="mb-6">
-                      <Link
-                        to=""
-                        className="hover:text-red-600 transition ease-in-out delay-75 text-2xl text-name-product"
-                      >
-                        Áo ngắn tay
-                      </Link>
-                    </li>
-                    <li className="mb-6">
-                      <Link
-                        to=""
-                        className="hover:text-red-600 transition ease-in-out delay-75 text-2xl text-name-product"
-                      >
-                        Áo ngắn tay
-                      </Link>
-                    </li>
-                  </ul>
-                </li>
-                <li className="mb-10">
-                  <Link
-                    to=""
-                    className="hover:text-red-600 transition ease-in-out delay-75 text-2xl text-name-product font-bold"
-                  >
-                    Phụ kiện
-                  </Link>
-                  <ul className="list-none m-0 mt-6">
-                    <li className="mb-6">
-                      <Link
-                        to=""
-                        className="hover:text-red-600 transition ease-in-out delay-75 text-2xl text-name-product"
-                      >
-                        Phụ kiện
-                      </Link>
-                    </li>
-                    <li className="mb-6">
-                      <Link
-                        to=""
-                        className="hover:text-red-600 transition ease-in-out delay-75 text-2xl text-name-product"
-                      >
-                        Đồ dùng cá nhân
-                      </Link>
-                    </li>
-                  </ul>
-                </li>
-                <li className="mb-10">
-                  <Link
-                    to=""
-                    className="hover:text-red-600 transition ease-in-out delay-75  text-2xl text-name-product font-bold"
-                  >
-                    Giá tốt
-                  </Link>
-                </li>
+                {category &&
+                  [...category.collections]
+                    .reverse()
+                    .map((collection: collection) => {
+                      return (
+                        <li className="mb-10" key={collection.id}>
+                          <Link
+                            to={`/${collection.slug}`}
+                            className={`hover:text-red-600 transition ease-in-out delay-75 text-2xl font-bold ${
+                              categorySlug === collection.slug ||
+                              collection.productCategories.find(
+                                (item) => item.slug === categorySlug
+                              )
+                                ? 'text-red-600'
+                                : 'text-name-product'
+                            }`}
+                          >
+                            {removeTextBetweenParentheses(collection.name)}
+                          </Link>
+                          <ul className="list-none m-0 mt-6">
+                            {collection.productCategories.map(
+                              (item: productCategory) => {
+                                return (
+                                  <li className="mb-6" key={item.id}>
+                                    <Link
+                                      to={`/${item.slug}`}
+                                      className={`hover:text-red-600 transition ease-in-out delay-75 text-2xl  ${
+                                        categorySlug === item.slug
+                                          ? 'text-red-600'
+                                          : 'text-name-product'
+                                      }`}
+                                    >
+                                      {removeTextBetweenParentheses(item.name)}
+                                    </Link>
+                                  </li>
+                                );
+                              }
+                            )}
+                          </ul>
+                        </li>
+                      );
+                    })}
               </ul>
             </div>
           </Col>

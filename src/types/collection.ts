@@ -38,5 +38,7 @@ export interface deleteCollection extends tokenPayload {
 }
 
 export interface getAllCollectionParams extends queryParams {
+  productCategories?: boolean;
   name?: string;
+  slug?: string;
 }

@@ -27,6 +27,7 @@ import {
 } from '../../../../redux/slice/collectionSlice';
 import { collectionApi } from '../../../../apis/collectionApi';
 import { collection } from '../../../../types/collection';
+import { removeTextBetweenParentheses } from '../../../../utils';
 
 const TableCollection: React.FC = () => {
   const dispatch = useDispatch();
@@ -55,19 +56,22 @@ const TableCollection: React.FC = () => {
     // },
     {
       title: 'Tên',
-      dataIndex: 'name',
+      // dataIndex: 'name',
+      render: (text: string, record: any) => {
+        return <div>{removeTextBetweenParentheses(record?.name)}</div>;
+      },
     },
     {
       title: 'Danh mục',
       render: (text: string, record: any) => {
-        return <React.Fragment>{record?.category?.name}</React.Fragment>;
+        return <div>{record?.category?.name}</div>;
       },
     },
     {
       title: 'Ngày tạo',
       render: (text: string, record: any) => {
         let date = moment(record.createdAt).format('MM/DD/YYYY');
-        return <React.Fragment>{date}</React.Fragment>;
+        return <div>{date}</div>;
       },
     },
     {
@@ -190,8 +194,9 @@ const TableCollection: React.FC = () => {
                   htmlType="submit"
                   disabled={
                     !form.isFieldsTouched(false) ||
-                    form.getFieldsError().filter(({ errors }) => errors.length)
-                      .length > 0
+                    form
+                      .getFieldsError()
+                      .filter(({ errors }: any) => errors.length).length > 0
                   }
                 >
                   Tìm kiếm

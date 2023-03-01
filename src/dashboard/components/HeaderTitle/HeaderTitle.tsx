@@ -9,6 +9,7 @@ import {
   authState,
 } from '../../../redux/slice/authSlice';
 import { Link } from 'react-router-dom';
+import { routes } from '../../../config/routes';
 
 const cx = classNames.bind(styles);
 
@@ -35,7 +36,7 @@ const HeaderTitle: React.FC<Props> = ({ title }: Props) => {
         {user && (
           <div className={cx('profile')}>
             <Link to="/admin/profile">My Account</Link>
-            <Link to="/" onClick={handleLogout}>
+            <Link to={routes.home} onClick={handleLogout}>
               Logout
             </Link>
           </div>

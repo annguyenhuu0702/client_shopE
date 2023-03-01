@@ -84,7 +84,11 @@ const HeaderTop: React.FC = () => {
                     </Link>
                   </div>
                   <div className="block-child">
-                    <Link to="/" className="text" onClick={handleLogout}>
+                    <Link
+                      to={routes.home}
+                      className="text"
+                      onClick={handleLogout}
+                    >
                       Đăng xuất
                     </Link>
                   </div>

@@ -132,6 +132,21 @@ const authSlice = createSlice({
       state.isLoading = false;
       state.isError = true;
     },
+
+    changePasswordUser: (
+      state,
+      action: PayloadAction<tokenPayloadData<changePasswordDto>>
+    ) => {
+      state.isLoading = true;
+    },
+    changePasswordUserSuccess: (state) => {
+      state.isLoading = false;
+      state.isError = false;
+    },
+    changePasswordUserFailed: (state) => {
+      state.isLoading = false;
+      state.isError = true;
+    },
   },
 });
 

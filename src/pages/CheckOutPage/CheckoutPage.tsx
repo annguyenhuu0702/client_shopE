@@ -273,7 +273,7 @@ const CheckoutPage: React.FC = () => {
                     <Button
                       type="primary"
                       size="large"
-                      className="flex items-center text-center justify-center w-44  text-white"
+                      className="flex items-center justify-center w-44 text-white"
                       disabled={
                         !form.isFieldsTouched(false) ||
                         !!form

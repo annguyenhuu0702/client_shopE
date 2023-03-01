@@ -88,9 +88,9 @@ const TableUser: React.FC = () => {
       dataIndex: 'gender',
       render: (text: string, record: user) => {
         return (
-          <React.Fragment>
+          <div>
             {record.gender === true ? <span>Nam</span> : <span>Nữ</span>}
-          </React.Fragment>
+          </div>
         );
       },
     },
@@ -99,7 +99,7 @@ const TableUser: React.FC = () => {
       dataIndex: 'createdAt',
       render: (text: string, record: user) => {
         let date = moment(record.createdAt).format('MM/DD/YYYY');
-        return <React.Fragment>{date}</React.Fragment>;
+        return <div>{date}</div>;
       },
     },
     {

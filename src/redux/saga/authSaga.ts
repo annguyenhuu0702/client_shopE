@@ -167,11 +167,45 @@ function* changeEmailSaga({
   }
 }
 
+function* changePasswordUserSaga({
+  payload,
+}: PayloadAction<tokenPayloadData<changePasswordDto>>): any {
+  try {
+    const { token, dispatch, data, navigate } = payload;
+    const res = yield call(() => {
+      return authApi.changePassword(token, dispatch, data);
+    });
+    const { status } = res;
+    if (status === STATUS_CODE.SUCCESS) {
+      yield put(authActions.changePasswordUserSuccess());
+      if (navigate) {
+        navigate('/');
+      }
+      notification.success({
+        message: 'Thành công',
+        description: 'Thay đổi mật khẩu thành công',
+        placement: 'bottomRight',
+        duration: 3,
+      });
+    }
+  } catch (error: any) {
+    yield put(authActions.changePasswordUserFailed());
+    notification.error({
+      message: 'Thất bại',
+      description: 'Lỗi rồi!',
+      placement: 'bottomRight',
+      duration: 3,
+    });
+    console.log(error);
+  }
+}
+
 function* authSaga() {
   yield takeEvery('auth/register', registerSaga);
   yield takeEvery('auth/login', loginSaga);
   yield takeEvery('auth/changeProfile', changeProfileSaga);
   yield takeEvery('auth/changePassword', changePasswordSaga);
+  yield takeEvery('auth/changePasswordUser', changePasswordUserSaga);
   yield takeEvery('auth/changeEmail', changeEmailSaga);
 }
 

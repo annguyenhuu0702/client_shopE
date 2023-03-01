@@ -51,7 +51,7 @@ const ChangePassword: React.FC = () => {
       size="large"
     >
       <Form.Item
-        label="Current Password"
+        label="Mật khẩu hiện tại"
         name="currentpassword"
         rules={[
           {
@@ -63,7 +63,7 @@ const ChangePassword: React.FC = () => {
         <Input.Password />
       </Form.Item>
       <Form.Item
-        label="New Password"
+        label="Mật khẩu mới"
         name="newpassword"
         rules={[
           {
@@ -75,7 +75,7 @@ const ChangePassword: React.FC = () => {
         <Input.Password />
       </Form.Item>
       <Form.Item
-        label="Confirm Password"
+        label="Xác nhận mật khẩu"
         name="confirmpassword"
         dependencies={['confirmpassword']}
         hasFeedback
@@ -89,9 +89,7 @@ const ChangePassword: React.FC = () => {
               if (!value || getFieldValue('newpassword') === value) {
                 return Promise.resolve();
               }
-              return Promise.reject(
-                new Error('The two passwords that you entered do not match!')
-              );
+              return Promise.reject(new Error('Mật khẩu chưa trùng khớp!'));
             },
           }),
         ]}
@@ -110,7 +108,7 @@ const ChangePassword: React.FC = () => {
                 .length
             }
           >
-            Submit
+            Lưu
           </Button>
         )}
       </Form.Item>

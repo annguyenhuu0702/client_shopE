@@ -68,7 +68,7 @@ const ChangeEmail: React.FC = () => {
                 .length
             }
           >
-            Submit
+            Lưu
           </Button>
         )}
       </Form.Item>

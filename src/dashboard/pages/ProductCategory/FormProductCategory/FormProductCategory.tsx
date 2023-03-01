@@ -10,6 +10,7 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
 import { productCategoryApi } from '../../../../apis/productCategoryApi';
+import { URL_API } from '../../../../constants';
 import { useTitle } from '../../../../hooks/useTitle';
 import { authSelector, authState } from '../../../../redux/slice/authSlice';
 import {
@@ -72,6 +73,9 @@ const FormProductCategory: React.FC = () => {
 
   const [loading, setLoading] = useState(false);
   const [imageUrl, setImageUrl] = useState<string>();
+  const [pathImg, setPathImg] = useState<string>(
+    currentProductCategory ? currentProductCategory.thumbnail : ''
+  );
 
   const handleChangeUpload: UploadProps['onChange'] = (
     info: UploadChangeParam<UploadFile>
@@ -82,6 +86,7 @@ const FormProductCategory: React.FC = () => {
     }
     if (info.file.status === 'done') {
       // Get this url from response in real world.
+      setPathImg(info.file.response.data.secure_url);
       getBase64(info.file.originFileObj as RcFile, (url) => {
         setLoading(false);
         setImageUrl(url);
@@ -101,12 +106,11 @@ const FormProductCategory: React.FC = () => {
   };
 
   const onFinish = (values: any) => {
-    console.log(values);
     const formData = {
       name: values.name,
       description: values.description,
       collectionId: values.collectionId,
-      thumbnail: values.thumbnail,
+      thumbnail: pathImg,
       slug: configSlugify(values.name),
     };
     if (currentProductCategory === null) {
@@ -162,6 +166,10 @@ const FormProductCategory: React.FC = () => {
       console.log(error);
     }
   }, [id, dispatch, form]);
+
+  useEffect(() => {
+    setPathImg(currentProductCategory ? currentProductCategory.thumbnail : '');
+  }, [currentProductCategory]);
 
   useTitle(
     currentProductCategory ? 'Sửa danh mục sản phẩm' : 'Thêm danh mục sản phẩm'
@@ -232,19 +240,23 @@ const FormProductCategory: React.FC = () => {
                 </Form.Item>
                 <Form.Item label="Hình ảnh">
                   <Upload
-                    name="thumbnail"
+                    name="image"
                     listType="picture-card"
                     className="avatar-uploader"
                     showUploadList={false}
-                    action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
+                    action={`${URL_API}/upload/single`}
                     beforeUpload={beforeUpload}
                     onChange={handleChangeUpload}
                   >
-                    {imageUrl ? (
+                    {pathImg ? (
                       <img
-                        src={imageUrl}
+                        src={pathImg}
                         alt="avatar"
-                        style={{ width: '100%' }}
+                        style={{
+                          width: '90px',
+                          height: '90px',
+                          objectFit: 'cover',
+                        }}
                       />
                     ) : (
                       uploadButton
@@ -256,26 +268,17 @@ const FormProductCategory: React.FC = () => {
                     textAlign: 'center',
                   }}
                   wrapperCol={{ span: 14 }}
-                  shouldUpdate
                 >
-                  {() => (
-                    <Button
-                      type="primary"
-                      htmlType="submit"
-                      style={{
-                        width: '200px',
-                      }}
-                      size="large"
-                      disabled={
-                        !form.isFieldsTouched(false) ||
-                        form
-                          .getFieldsError()
-                          .filter(({ errors }) => errors.length).length > 0
-                      }
-                    >
-                      {currentProductCategory ? 'Sửa' : 'Thêm'}
-                    </Button>
-                  )}
+                  <Button
+                    type="primary"
+                    htmlType="submit"
+                    style={{
+                      width: '200px',
+                    }}
+                    size="large"
+                  >
+                    {currentProductCategory ? 'Sửa' : 'Thêm'}
+                  </Button>
                 </Form.Item>
               </div>
             </Form>

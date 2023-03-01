@@ -13,6 +13,7 @@ import { useTitle } from '../../../../hooks/useTitle';
 import { authSelector, authState } from '../../../../redux/slice/authSlice';
 
 import { collectionApi } from '../../../../apis/collectionApi';
+import { URL_API } from '../../../../constants';
 import {
   categoryActions,
   categorySelector,
@@ -68,6 +69,9 @@ const FormCollection: React.FC = () => {
 
   const [loading, setLoading] = useState(false);
   const [imageUrl, setImageUrl] = useState<string>();
+  const [pathImg, setPathImg] = useState<string>(
+    currentCollection ? currentCollection.thumbnail : ''
+  );
 
   const handleChangeUpload: UploadProps['onChange'] = (
     info: UploadChangeParam<UploadFile>
@@ -78,6 +82,7 @@ const FormCollection: React.FC = () => {
     }
     if (info.file.status === 'done') {
       // Get this url from response in real world.
+      setPathImg(info.file.response.data.secure_url);
       getBase64(info.file.originFileObj as RcFile, (url) => {
         setLoading(false);
         setImageUrl(url);
@@ -101,7 +106,7 @@ const FormCollection: React.FC = () => {
       name: values.name,
       categoryId: values.categoryId,
       description: values.description,
-      thumbnail: values.thumbnail,
+      thumbnail: pathImg,
       slug: configSlugify(values.name),
     };
     if (currentCollection === null) {
@@ -146,7 +151,7 @@ const FormCollection: React.FC = () => {
           dispatch(collectionActions.setCollection(data));
           form.setFieldsValue({
             name: data.name,
-            categoryId: data.category.name,
+            categoryId: data.category.id,
             description: data.description,
             thumbnail: data.thumbnail,
           });
@@ -157,6 +162,10 @@ const FormCollection: React.FC = () => {
       console.log(error);
     }
   }, [id, dispatch, form]);
+
+  useEffect(() => {
+    setPathImg(currentCollection ? currentCollection.thumbnail : '');
+  }, [currentCollection]);
 
   useTitle(currentCollection ? 'Sửa bộ sưu tập' : 'Thêm bộ sưu tập');
 
@@ -222,19 +231,23 @@ const FormCollection: React.FC = () => {
                 </Form.Item>
                 <Form.Item label="Hình ảnh">
                   <Upload
-                    name="thumbnail"
+                    name="image"
                     listType="picture-card"
                     className="avatar-uploader"
                     showUploadList={false}
-                    action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
+                    action={`${URL_API}/upload/single`}
                     beforeUpload={beforeUpload}
                     onChange={handleChangeUpload}
                   >
-                    {imageUrl ? (
+                    {pathImg ? (
                       <img
-                        src={imageUrl}
+                        src={pathImg}
                         alt="avatar"
-                        style={{ width: '100%' }}
+                        style={{
+                          width: '90px',
+                          height: '90px',
+                          objectFit: 'cover',
+                        }}
                       />
                     ) : (
                       uploadButton
@@ -246,26 +259,17 @@ const FormCollection: React.FC = () => {
                     textAlign: 'center',
                   }}
                   wrapperCol={{ span: 14 }}
-                  shouldUpdate
                 >
-                  {() => (
-                    <Button
-                      type="primary"
-                      htmlType="submit"
-                      style={{
-                        width: '200px',
-                      }}
-                      size="large"
-                      disabled={
-                        !form.isFieldsTouched(false) ||
-                        form
-                          .getFieldsError()
-                          .filter(({ errors }) => errors.length).length > 0
-                      }
-                    >
-                      {currentCollection ? 'Sửa' : 'Thêm'}
-                    </Button>
-                  )}
+                  <Button
+                    type="primary"
+                    htmlType="submit"
+                    style={{
+                      width: '200px',
+                    }}
+                    size="large"
+                  >
+                    {currentCollection ? 'Sửa' : 'Thêm'}
+                  </Button>
                 </Form.Item>
               </div>
             </Form>

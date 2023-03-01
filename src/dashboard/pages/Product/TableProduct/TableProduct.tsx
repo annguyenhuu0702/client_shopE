@@ -47,35 +47,49 @@ const TableProduct: React.FC = () => {
 
   const navigate = useNavigate();
 
-  const handleModal = () => {
+  const handleModal = (record: product) => {
+    dispatch(productActions.setProduct(record));
     dispatch(modalActions.showModal('Hình ảnh sản phẩm'));
   };
 
   const columns = [
     {
+      title: 'Hình ảnh',
+      width: '100px',
+      render: (text: string, record: product) => {
+        return record.thumbnail !== '' ? (
+          <div className="flex justify-center cursor-text">
+            <img
+              src={record.thumbnail}
+              alt=""
+              className="w-20 h-14 object-cover"
+            />
+          </div>
+        ) : (
+          <></>
+        );
+      },
+    },
+    {
       title: 'Tên sản phẩm',
       dataIndex: 'name',
     },
-    // {
-    //   title: 'Bí danh',
-    //   dataIndex: 'slug',
-    // },
+
     {
       title: 'Danh mục sản phẩm',
       dataIndex: 'productCategoryId',
       render: (text: string, record: product) => {
-        return <React.Fragment>{record?.productCategory?.name}</React.Fragment>;
+        return <div>{record?.productCategory?.name}</div>;
       },
     },
     {
       title: 'Hình ảnh',
-      // dataIndex: 'image',
-      render: () => {
+      render: (text: string, record: product) => {
         return (
           <span
             className="cursor-pointer uppercase text-red-500"
             onClick={() => {
-              handleModal();
+              handleModal(record);
             }}
           >
             Thiết lập
@@ -99,7 +113,7 @@ const TableProduct: React.FC = () => {
       // dataIndex: 'createdAt',
       render: (text: string, record: product) => {
         let date = moment(record.createdAt).format('MM/DD/YYYY');
-        return <React.Fragment>{date}</React.Fragment>;
+        return <div>{date}</div>;
       },
     },
     {
@@ -227,8 +241,9 @@ const TableProduct: React.FC = () => {
                   htmlType="submit"
                   disabled={
                     !form.isFieldsTouched(false) ||
-                    form.getFieldsError().filter(({ errors }) => errors.length)
-                      .length > 0
+                    form
+                      .getFieldsError()
+                      .filter(({ errors }: any) => errors.length).length > 0
                   }
                 >
                   Tìm kiếm
@@ -280,6 +295,7 @@ const TableProduct: React.FC = () => {
             columns={columns}
             pagination={false}
             expandable={{ showExpandColumn: false }}
+            size="middle"
           />
         </Col>
       </Row>

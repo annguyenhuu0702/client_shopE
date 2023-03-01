@@ -39,7 +39,7 @@
 
         display: flex;
         align-items: center;
-        padding: 0 16px 0 0;
+        padding: 0 24px 0 0;
 
         .icon {
           width: 12px;
@@ -54,25 +54,24 @@
           position: absolute;
           background: $white-color;
           width: 1200px;
-          top: calc(100% + 10px);
           left: 0;
+          top: calc(100% + 10px);
           z-index: 10;
           padding: 30px 16px;
 
           .wrap-children {
             padding: 0 20px 0 0;
-            flex: 1;
             .category {
               display: block;
               text-transform: uppercase;
-              color: $text-category;
-              border-bottom: 2px solid $text-category;
+              color: #11006f;
+              font-weight: 600;
             }
 
             .child-category {
               list-style: none;
               padding: 0;
-              margin-top: 20px;
+              margin: 10px 0;
               li {
                 padding: 8px 0;
                 a {
@@ -80,19 +79,10 @@
                   color: $black-color;
 
                   &:hover {
-                    color: $green-color;
+                    color: #facf17;
                   }
                 }
               }
-            }
-          }
-
-          .banner {
-            width: 40%;
-            img {
-              width: 100%;
-              object-fit: cover;
-              margin: 6px 0;
             }
           }
         }

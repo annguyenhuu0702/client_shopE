@@ -27,6 +27,7 @@ import {
 } from '../../../../redux/slice/collectionSlice';
 import { collectionApi } from '../../../../apis/collectionApi';
 import { collection } from '../../../../types/collection';
+import { removeTextBetweenParentheses } from '../../../../utils';
 
 const TableCollection: React.FC = () => {
   const dispatch = useDispatch();
@@ -36,28 +37,45 @@ const TableCollection: React.FC = () => {
   const { user }: authState = useSelector(authSelector);
   const navigate = useNavigate();
   const columns = [
+    // {
+    //   title: 'Hình ảnh',
+    //   width: '100px',
+    //   render: (text: string, record: collection) => {
+    //     return record.thumbnail !== '' ? (
+    //       <div className="flex justify-center cursor-text">
+    //         <img
+    //           src={record.thumbnail}
+    //           alt=""
+    //           className="w-20 h-14 object-cover"
+    //         />
+    //       </div>
+    //     ) : (
+    //       <></>
+    //     );
+    //   },
+    // },
     {
       title: 'Tên',
-      dataIndex: 'name',
+      // dataIndex: 'name',
+      render: (text: string, record: any) => {
+        return <div>{removeTextBetweenParentheses(record?.name)}</div>;
+      },
     },
     {
       title: 'Danh mục',
-      // dataIndex: 'categoryId',
       render: (text: string, record: any) => {
-        return <React.Fragment>{record?.category?.name}</React.Fragment>;
+        return <div>{record?.category?.name}</div>;
       },
     },
     {
       title: 'Ngày tạo',
-      // dataIndex: 'createdAt',
       render: (text: string, record: any) => {
         let date = moment(record.createdAt).format('MM/DD/YYYY');
-        return <React.Fragment>{date}</React.Fragment>;
+        return <div>{date}</div>;
       },
     },
     {
       title: 'Hành động',
-      // dataIndex: 'action',
       render: (text: string, record: any) => {
         return (
           <Space size="middle">
@@ -176,8 +194,9 @@ const TableCollection: React.FC = () => {
                   htmlType="submit"
                   disabled={
                     !form.isFieldsTouched(false) ||
-                    form.getFieldsError().filter(({ errors }) => errors.length)
-                      .length > 0
+                    form
+                      .getFieldsError()
+                      .filter(({ errors }: any) => errors.length).length > 0
                   }
                 >
                   Tìm kiếm
@@ -229,6 +248,7 @@ const TableCollection: React.FC = () => {
             columns={columns}
             pagination={false}
             expandable={{ showExpandColumn: false }}
+            size="middle"
           />
         </Col>
       </Row>

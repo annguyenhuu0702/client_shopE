@@ -9,7 +9,6 @@ export interface productCategory {
   slug: string;
   thumbnail: string;
   description: string;
-  // categoryId: number;
   collectionId: number;
   collection: collection;
   deletedAt: Date;
@@ -23,7 +22,6 @@ export interface createProductCategory {
   slug: string;
   thumbnail: string;
   description: string;
-  // categoryId: number;
   collectionId: number;
   resetValues?: Function;
 }
@@ -33,5 +31,7 @@ export interface updateProductCategory extends createProductCategory {
 }
 
 export interface getAllProductCategoryParams extends queryParams {
+  collection?: boolean;
+  slug?: string;
   name?: string;
 }

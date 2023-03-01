@@ -1,6 +1,4 @@
 import React from 'react';
-//import 'antd/dist/antd.css';
-
 import { Button, Form, Input } from 'antd';
 import { useDispatch } from 'react-redux';
 import { authActions } from '../../redux/slice/authSlice';
@@ -20,7 +18,7 @@ const Register: React.FC = () => {
   };
   useTitle('Register');
   return (
-    <main className="auth">
+    <main className="auth max-sm:mt-24">
       <div className="p-50 max-sm:p-0">
         <div className="container-auth">
           <div className="title">
@@ -58,7 +56,7 @@ const Register: React.FC = () => {
                 },
                 {
                   type: 'email',
-                  message: 'Please enter a valid email!',
+                  message: 'Vui lòng nhập email hợp lệ!',
                 },
               ]}
             >

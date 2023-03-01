@@ -2,8 +2,15 @@ export const routes = {
   home: '/',
   register: '/register',
   login: '/login',
-  productDetail: '/:slug',
+  profile: '/account',
+  myOrder: '/account/my-order',
+  changePassword: '/account/change-password',
+  accumulatedPoints: '/account/accumulated-points',
+  favoriteProduct: '/account/favorite-product',
+  productDetail: '/product-detail',
   cart: '/cart',
+  categoryPage: '/:categorySlug',
+  checkOut: '/checkout',
 
   // admin
   admin: '/admin',

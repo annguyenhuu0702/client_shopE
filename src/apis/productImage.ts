@@ -6,13 +6,13 @@ import { queryParams } from '../types/common';
 import { createProductImage, updateProductImage } from '../types/productImage';
 
 const getAll = (params?: queryParams) => {
-  return instance.get(`${URL_API}/productImage/getAll`, {
+  return instance.get(`productImage/getAll`, {
     params,
   });
 };
 
 const getById = (id: string) => {
-  return instance.get(`${URL_API}/productImage/getById/${id}`);
+  return instance.get(`productImage/getById/${id}`);
 };
 
 const create = (
@@ -21,7 +21,18 @@ const create = (
   data: createProductImage
 ): Promise<AxiosResponse> => {
   return apiCallerWithToken(token, dispatch).post(
-    `${URL_API}/productImage/create`,
+    `productImage/createMany`,
+    data
+  );
+};
+
+const createMany = (
+  token: string | null,
+  dispatch: AppDispatch,
+  data: createProductImage[]
+): Promise<AxiosResponse> => {
+  return apiCallerWithToken(token, dispatch).post(
+    `productImage/createMany`,
     data
   );
 };
@@ -32,7 +43,7 @@ const update = (
   data: updateProductImage
 ): Promise<AxiosResponse> => {
   return apiCallerWithToken(token, dispatch).put(
-    `${URL_API}/productImage/update/${data.id}`,
+    `productImage/update/${data.id}`,
     data
   );
 };
@@ -43,7 +54,7 @@ const deleteProductImage = (
   id: number
 ): Promise<AxiosResponse> => {
   return apiCallerWithToken(token, dispatch).delete(
-    `${URL_API}/productImage/delete/${id}`
+    `productImage/delete/${id}`
   );
 };
 
@@ -53,4 +64,5 @@ export const productImageApi = {
   getById,
   update,
   deleteProductImage,
+  createMany,
 };

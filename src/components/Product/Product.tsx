@@ -1,7 +1,5 @@
 import React, { useState } from 'react';
-//import 'antd/dist/antd.css';
 import styles from './__product.module.scss';
-
 import { faHeart, faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Image, Modal, Tooltip } from 'antd';
@@ -66,19 +64,21 @@ const Product: React.FC = () => {
                   className={cx('my-swiper')}
                   pagination={{ clickable: true }}
                 >
-                  <SwiperSlide>
-                    <Image
-                      src="https://cdn.shopify.com/s/files/1/0456/5070/6581/products/UXC72WA-2_x450.jpg?v=1657686129"
-                      alt=""
-                      className={cx('img')}
-                    />
+                  <SwiperSlide className="max-sm:flex max-sm:items-center max-lg:flex max-lg:items-center">
+                    <div>
+                      <Image
+                        src="https://cdn.shopify.com/s/files/1/0456/5070/6581/products/UXC72WA-2_x450.jpg?v=1657686129"
+                        alt=""
+                      />
+                    </div>
                   </SwiperSlide>
-                  <SwiperSlide>
-                    <Image
-                      src="https://cdn.shopify.com/s/files/1/0456/5070/6581/products/UXC72WA-3_x450.jpg?v=1657686130"
-                      alt=""
-                      className={cx('img')}
-                    />
+                  <SwiperSlide className="max-sm:flex max-sm:items-center max-lg:flex max-lg:items-center">
+                    <div>
+                      <Image
+                        src="https://cdn.shopify.com/s/files/1/0456/5070/6581/products/UXC72WA-3_x450.jpg?v=1657686130"
+                        alt=""
+                      />
+                    </div>
                   </SwiperSlide>
                 </Swiper>
               </div>
@@ -93,7 +93,7 @@ const Product: React.FC = () => {
                   <span className={cx('sale')}>{castToVND(100000)}</span>
                 </div>
                 <div className={cx('colors')}>
-                  <h3>Màu sắc</h3>
+                  <h3>Màu sắc:</h3>
                   <div className={cx('wrap')}>
                     <div
                       className={cx('color', {
@@ -111,7 +111,7 @@ const Product: React.FC = () => {
                   </div>
                 </div>
                 <div className={cx('sizes')}>
-                  <h3>Kích thước</h3>
+                  <h3>Kích thước:</h3>
                   <div className={cx('wrap')}>
                     <div
                       className={cx('size', {
@@ -125,12 +125,6 @@ const Product: React.FC = () => {
                     </div>
                     <div className={cx('size')}>
                       <span>US6</span>
-                    </div>
-                    <div className={cx('size')}>
-                      <span>US7</span>
-                    </div>
-                    <div className={cx('size')}>
-                      <span>US8</span>
                     </div>
                   </div>
                 </div>
@@ -177,7 +171,7 @@ const Product: React.FC = () => {
         )}
         <div className={cx('name')}>
           <Link to="">
-            <span className=" hover:text-red-600 transition ease-in-out delay-75">
+            <span className="hover:text-btn-order transition ease-in-out delay-75">
               Giày chạy bộ nam hoka march
             </span>
           </Link>

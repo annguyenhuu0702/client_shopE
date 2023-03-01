@@ -57,6 +57,18 @@ const CategorySlice = createSlice({
       state.categories.rows = action.payload.rows;
       state.categories.count = action.payload.count;
     },
+    getCategoryBySlug: (state, action: PayloadAction<getAllCategoryParams>) => {
+      state.isLoading = true;
+    },
+    getCategoryBySlugSuccess: (state, action: PayloadAction<category>) => {
+      state.isLoading = false;
+      state.isError = false;
+      state.currentCategory = action.payload;
+    },
+    getCategoryBySlugFailed: (state) => {
+      state.isLoading = false;
+      state.isError = true;
+    },
     getAllCategoryFailed: (state) => {
       state.isLoading = false;
       state.isError = true;

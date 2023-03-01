@@ -2,20 +2,20 @@
 @import "../../styles/mixin.module.scss";
 
 .item {
-  // position: relative;
+  position: relative;
   .img {
     position: relative;
-    // &::after {
-    //   content: "";
-    //   display: block;
-    //   padding-bottom: 100%;
-    // }
+    &::after {
+      content: "";
+      display: block;
+      padding-bottom: 130%;
+    }
     overflow: hidden;
     a {
       display: block;
 
       img {
-        // position: absolute;
+        position: absolute;
         width: 100%;
         height: 100%;
         object-fit: cover;
@@ -34,7 +34,7 @@
     cursor: pointer;
     transition: ease-in-out 0.3s;
     &:hover {
-      background: $green-color;
+      background: #fcaf17;
       color: $white-color;
     }
 
@@ -50,15 +50,16 @@
     margin: 4px 0;
     a {
       font-size: 1.4rem;
-      color: $black-color;
+      color: #333f48;
       display: -webkit-box;
-      -webkit-line-clamp: 2;
+      -webkit-line-clamp: 1;
       -webkit-box-orient: vertical;
       overflow: hidden;
     }
   }
 
   .price {
+    font-weight: 600;
     font-size: 1.4rem;
     display: flex;
     justify-content: space-between;
@@ -68,7 +69,7 @@
     .price-old {
       text-decoration: line-through;
       color: $root-price;
-      font-weight: 400;
+      font-weight: 600;
     }
   }
 
@@ -122,7 +123,7 @@
   .right {
     width: 60%;
     .name {
-      margin-bottom: 30px;
+      margin-bottom: 10px;
       @include mobile {
         margin-bottom: 10px;
       }
@@ -138,7 +139,7 @@
     }
     .price {
       display: flex;
-      margin-bottom: 30px;
+      margin-bottom: 10px;
       @include mobile {
         margin-bottom: 10px;
       }
@@ -155,7 +156,7 @@
     }
     .colors,
     .sizes {
-      margin-bottom: 30px;
+      margin-bottom: 10px;
       @include mobile {
         margin-bottom: 10px;
       }
@@ -174,12 +175,12 @@
           align-items: center;
           justify-content: center;
           border: 1px solid #d2d1d4;
-          margin-right: 10px;
+          margin-right: 8px;
           margin-top: 10px;
           border-radius: 5px;
           min-width: 40px;
           height: 40px;
-          padding: 14px 20px;
+          padding: 14px;
           cursor: pointer;
           span {
             display: block;

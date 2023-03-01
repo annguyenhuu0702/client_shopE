@@ -1,6 +1,61 @@
 @import "./variable.module.scss";
 @import "./mixin.module.scss";
 
+.swiper {
+  width: 100%;
+  height: 100%;
+}
+
+.swiper-slide {
+  text-align: center;
+  font-size: 18px;
+}
+
+.swiper-button-prev {
+  top: 44% !important;
+  border-radius: 50%;
+  background: $white-color;
+  width: 46px !important;
+  height: 46px !important;
+  transform: rotate(180deg);
+  background-image: url("https://res.cloudinary.com/diot4imoq/image/upload/v1676777019/canifa/download_u883yz.svg");
+  background-repeat: no-repeat;
+  // background-size: 100% auto;
+  background-position: center;
+
+  @include tablet {
+    top: 40% !important;
+  }
+
+  @include mobile {
+    top: 40% !important;
+  }
+}
+
+.swiper-button-next {
+  top: 44% !important;
+  border-radius: 50%;
+  background: $white-color;
+  width: 46px !important;
+  height: 46px !important;
+  background-image: url("https://res.cloudinary.com/diot4imoq/image/upload/v1676777019/canifa/download_u883yz.svg");
+  background-repeat: no-repeat;
+  // background-size: 100% auto;
+  background-position: center;
+
+  @include tablet {
+    top: 40% !important;
+  }
+
+  @include mobile {
+    top: 40% !important;
+  }
+}
+
+.swiper-button-next::after {
+  display: none;
+}
+
 .p-50 {
   padding: 0 50px;
 
@@ -20,6 +75,12 @@
   @include tablet {
     padding: 0 50px;
   }
+}
+
+.ant-drawer-title {
+  text-align: center !important;
+  font-size: 2.4rem !important;
+  font-weight: bold !important;
 }
 
 // hover header language and account home page
@@ -116,6 +177,13 @@
   object-fit: cover;
 }
 
+.common-img-slide {
+  border-radius: 50%;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
 // common title home-page
 
 .common-title {
@@ -123,6 +191,10 @@
   font-weight: 700;
   font-size: 2.4rem;
   line-height: 36px;
+
+  @include mobile {
+    margin: 24px 0 8px 0;
+  }
 }
 
 .custom-input {
@@ -246,6 +318,9 @@
 // common auth
 .auth {
   margin: 20px 0;
+  @include mobile {
+    margin: 0;
+  }
 }
 
 .ant-select:not(.ant-select-customize-input) .ant-select-selector,

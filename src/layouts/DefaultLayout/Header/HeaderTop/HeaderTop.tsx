@@ -17,6 +17,7 @@ import {
   authState,
 } from '../../../../redux/slice/authSlice';
 import Navigation from '../HeaderNavigation';
+import { routes } from '../../../../config/routes';
 
 const cx = classNames.bind(styles);
 
@@ -32,13 +33,13 @@ const HeaderTop: React.FC = () => {
   };
 
   const redirectCart = () => {
-    navigate('/cart');
+    navigate(routes.cart);
   };
 
   return (
     <section className={cx('header-top')}>
       <div className={cx('left')}>
-        <Link to="/" className={cx('logo')}>
+        <Link to={routes.home} className={cx('logo')}>
           <img
             src="https://res.cloudinary.com/diot4imoq/image/upload/v1661177083/canifa/logo_xju1y6.svg"
             alt="Logo"
@@ -56,10 +57,12 @@ const HeaderTop: React.FC = () => {
           />
         </div>
         <div className={cx('group-icon')}>
-          <div className={cx('store')}>
-            <RiStoreLine />
-          </div>
-          <div className={cx('wish-list')}>
+          <div
+            className={cx('wish-list')}
+            onClick={() => {
+              navigate(routes.favoriteProduct);
+            }}
+          >
             <AiOutlineHeart />
           </div>
           <div className={cx('account')}>
@@ -70,7 +73,11 @@ const HeaderTop: React.FC = () => {
                 <div className="block-hover">
                   <div className="block-child">
                     <Link
-                      to={user.user.role === 'admin' ? '/admin' : '/profile'}
+                      to={
+                        user.user.role === 'admin'
+                          ? '/admin/profile'
+                          : '/account'
+                      }
                       className="text"
                     >
                       Xin chào <b>{user.user.fullname}</b>
@@ -85,12 +92,12 @@ const HeaderTop: React.FC = () => {
               ) : (
                 <div className="block-hover">
                   <div className="block-child">
-                    <Link to="/login" className="text">
+                    <Link to={routes.login} className="text">
                       Đăng nhập
                     </Link>
                   </div>
                   <div className="block-child">
-                    <Link to="/register" className="text">
+                    <Link to={routes.register} className="text">
                       Đăng ký
                     </Link>
                   </div>

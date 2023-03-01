@@ -1,7 +1,5 @@
 import React from 'react';
-//import 'antd/dist/antd.css';
 import styles from './__login.module.scss';
-
 import classNames from 'classnames/bind';
 import { Button, Form, Input } from 'antd';
 import { Link, useNavigate } from 'react-router-dom';
@@ -23,7 +21,7 @@ const Login: React.FC = () => {
   };
   useTitle('Login');
   return (
-    <main className="auth">
+    <main className="auth max-sm:mt-24">
       <div className="p-50 max-sm:p-0">
         <div className="container-auth">
           <div className="title">
@@ -46,8 +44,11 @@ const Login: React.FC = () => {
                 rules={[
                   {
                     required: true,
+                    message: 'Vui lòng nhập email!',
+                  },
+                  {
                     type: 'email',
-                    message: 'Please enter a valid email address',
+                    message: 'Vui lòng nhập email hợp lệ!',
                   },
                 ]}
               >
@@ -60,7 +61,7 @@ const Login: React.FC = () => {
                 rules={[
                   {
                     required: true,
-                    message: 'Please enter a password',
+                    message: 'Vui lòng nhập mật khẩu!',
                   },
                 ]}
               >

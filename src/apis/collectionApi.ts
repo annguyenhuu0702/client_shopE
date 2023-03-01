@@ -2,10 +2,13 @@ import { AxiosResponse } from 'axios';
 import instance, { apiCallerWithToken } from '../config/configAxios';
 import { URL_API } from '../constants';
 import { AppDispatch } from '../redux/store';
-import { createCollection, updateCollection } from '../types/collection';
-import { queryParams } from '../types/common';
+import {
+  createCollection,
+  getAllCollectionParams,
+  updateCollection,
+} from '../types/collection';
 
-const getAll = (params?: queryParams) => {
+const getAll = (params?: getAllCollectionParams) => {
   return instance.get(`${URL_API}/collection/getAll`, {
     params,
   });

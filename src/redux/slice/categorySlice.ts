@@ -10,6 +10,7 @@ import { RootState } from '../store';
 
 export interface categoryState {
   categories: resCategory;
+  categoriesHeader: resCategory;
   currentCategory: category | null;
   page: number;
   pageSize: number;
@@ -24,6 +25,10 @@ export interface resCategory {
 
 const initialState: categoryState = {
   categories: {
+    rows: [],
+    count: 0,
+  },
+  categoriesHeader: {
     rows: [],
     count: 0,
   },
@@ -57,6 +62,29 @@ const CategorySlice = createSlice({
       state.categories.rows = action.payload.rows;
       state.categories.count = action.payload.count;
     },
+    getAllCategoryFailed: (state) => {
+      state.isLoading = false;
+      state.isError = true;
+    },
+    getAllCategoryHeader: (
+      state,
+      action: PayloadAction<getAllCategoryParams>
+    ) => {
+      state.isLoading = true;
+    },
+    getAllCategoryHeaderSuccess: (
+      state,
+      action: PayloadAction<resCategory>
+    ) => {
+      state.isLoading = false;
+      state.isError = false;
+      state.categoriesHeader.rows = action.payload.rows;
+      state.categoriesHeader.count = action.payload.count;
+    },
+    getAllCategoryHeaderFailed: (state) => {
+      state.isLoading = false;
+      state.isError = true;
+    },
     getCategoryBySlug: (state, action: PayloadAction<getAllCategoryParams>) => {
       state.isLoading = true;
     },
@@ -69,10 +97,7 @@ const CategorySlice = createSlice({
       state.isLoading = false;
       state.isError = true;
     },
-    getAllCategoryFailed: (state) => {
-      state.isLoading = false;
-      state.isError = true;
-    },
+
     createCategory: (
       state,
       action: PayloadAction<tokenPayloadData<createCategory>>

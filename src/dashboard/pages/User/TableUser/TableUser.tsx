@@ -53,11 +53,8 @@ const TableUser: React.FC = () => {
           <React.Fragment>
             {!record.avatar ? (
               <img
-                style={{
-                  width: '30px',
-                  height: '30px',
-                }}
-                src="https://res.cloudinary.com/diot4imoq/image/upload/v1659164349/supersports/1200px-Breezeicons-actions-22-im-user.svg_ophigj.png"
+                className="w-20 h-14 object-cover"
+                src="https://res.cloudinary.com/diot4imoq/image/upload/v1677655323/canifa/user_jmlojj.jpg"
                 alt=""
               />
             ) : (

@@ -3,12 +3,15 @@ import { useTitle } from '../../hooks/useTitle';
 import { Button, Col, DatePicker, Form, Input, Radio, Row, Select } from 'antd';
 import type { RadioChangeEvent } from 'antd';
 import province from '../../province.json';
-import { useSelector } from 'react-redux';
-import { authSelector } from '../../redux/slice/authSlice';
+import { useDispatch, useSelector } from 'react-redux';
+import { authActions, authSelector } from '../../redux/slice/authSlice';
 import moment from 'moment';
+import { useNavigate } from 'react-router-dom';
 
 const ProfilePage: React.FC = () => {
   const { user } = useSelector(authSelector);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
   const [form] = Form.useForm();
 
   const [districts, setDistricts] = useState([]);
@@ -53,7 +56,18 @@ const ProfilePage: React.FC = () => {
   };
 
   const onFinish = (values: any) => {
-    console.log('Success:', values);
+    const data = {
+      ...values,
+      birthday: new Date(moment(values.birthday).format('MM/DD/YYYY')),
+    };
+    dispatch(
+      authActions.changeProfileClient({
+        token: user.accessToken,
+        dispatch,
+        data,
+        navigate,
+      })
+    );
   };
 
   const onFinishFailed = (errorInfo: any) => {
@@ -152,60 +166,56 @@ const ProfilePage: React.FC = () => {
               </Form.Item>
             </Col>
             <Col xl={8} md={8} xs={24}>
-              {districts.length > 0 && (
-                <Form.Item
-                  className="mb-4"
-                  label="Quận huyện:"
-                  name="district"
-                  rules={[
-                    {
-                      required: true,
-                      message: 'Vui lòng không bỏ trống!',
-                    },
-                  ]}
-                >
-                  <Select
-                    allowClear
-                    showSearch
-                    onChange={handleChangeDistrict}
-                    options={
-                      districts &&
-                      districts.map((item: any) => ({
-                        value: item.name,
-                        label: item.name,
-                      }))
-                    }
-                  />
-                </Form.Item>
-              )}
+              <Form.Item
+                className="mb-4"
+                label="Quận huyện:"
+                name="district"
+                rules={[
+                  {
+                    required: true,
+                    message: 'Vui lòng không bỏ trống!',
+                  },
+                ]}
+              >
+                <Select
+                  allowClear
+                  showSearch
+                  onChange={handleChangeDistrict}
+                  options={
+                    districts &&
+                    districts.map((item: any) => ({
+                      value: item.name,
+                      label: item.name,
+                    }))
+                  }
+                />
+              </Form.Item>
             </Col>
             <Col xl={8} md={8} xs={24}>
-              {wards.length > 0 && (
-                <Form.Item
-                  className="mb-4"
-                  label="Phường xã:"
-                  name="ward"
-                  rules={[
-                    {
-                      required: true,
-                      message: 'Vui lòng không bỏ trống!',
-                    },
-                  ]}
-                >
-                  <Select
-                    allowClear
-                    showSearch
-                    onChange={handleChangeWard}
-                    options={
-                      wards &&
-                      wards.map((item: any) => ({
-                        value: item.name,
-                        label: item.name,
-                      }))
-                    }
-                  />
-                </Form.Item>
-              )}
+              <Form.Item
+                className="mb-4"
+                label="Phường xã:"
+                name="ward"
+                rules={[
+                  {
+                    required: true,
+                    message: 'Vui lòng không bỏ trống!',
+                  },
+                ]}
+              >
+                <Select
+                  allowClear
+                  showSearch
+                  onChange={handleChangeWard}
+                  options={
+                    wards &&
+                    wards.map((item: any) => ({
+                      value: item.name,
+                      label: item.name,
+                    }))
+                  }
+                />
+              </Form.Item>
             </Col>
           </Col>
         </Row>

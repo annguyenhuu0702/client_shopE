@@ -98,6 +98,29 @@ const authSlice = createSlice({
       state.isLoading = false;
       state.isError = true;
     },
+    changeProfileClient: (
+      state,
+      action: PayloadAction<tokenPayloadData<changeProfileDto>>
+    ) => {
+      state.isLoading = true;
+    },
+    changeProfileClientSuccess: (
+      state,
+      action: PayloadAction<changeProfileDto>
+    ) => {
+      state.isLoading = false;
+      state.isError = false;
+      if (state.user.user) {
+        state.user.user = {
+          ...state.user.user,
+          ...action.payload,
+        };
+      }
+    },
+    changeProfileClientFailed: (state) => {
+      state.isLoading = false;
+      state.isError = true;
+    },
     changePassword: (
       state,
       action: PayloadAction<tokenPayloadData<changePasswordDto>>
@@ -132,7 +155,6 @@ const authSlice = createSlice({
       state.isLoading = false;
       state.isError = true;
     },
-
     changePasswordUser: (
       state,
       action: PayloadAction<tokenPayloadData<changePasswordDto>>

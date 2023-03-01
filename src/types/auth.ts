@@ -13,6 +13,11 @@ export interface changeProfileDto {
   fullname: string;
   birthday: Date;
   gender: boolean;
+  phone?: string;
+  email?: string;
+  city?: string;
+  district?: string;
+  ward?: string;
 }
 
 export interface changePasswordDto {

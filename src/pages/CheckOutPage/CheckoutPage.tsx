@@ -18,8 +18,6 @@ import { routes } from '../../config/routes';
 import { useTitle } from '../../hooks/useTitle';
 import province from '../../province.json';
 
-const { TextArea } = Input;
-
 const CheckoutPage: React.FC = () => {
   const [form] = Form.useForm();
   const [value, setValue] = useState(0);
@@ -77,7 +75,7 @@ const CheckoutPage: React.FC = () => {
   useTitle('Thủ tục thanh toán');
 
   return (
-    <main className="p-50 my-20 max-lg:px-40 max-sm:px-6 max-sm:mt-24">
+    <main className="p-50 mt-20 max-lg:px-40 max-sm:px-6 max-sm:mt-24">
       <Form
         name="checkout"
         layout="vertical"
@@ -147,59 +145,9 @@ const CheckoutPage: React.FC = () => {
                     }
                   />
                 </Form.Item>
-                {districts.length > 0 && (
-                  <Form.Item
-                    label="Quận huyện"
-                    name="district"
-                    rules={[
-                      {
-                        required: true,
-                        message: 'Vui lòng không bỏ trống!',
-                      },
-                    ]}
-                  >
-                    <Select
-                      allowClear
-                      showSearch
-                      onChange={handleChangeDistrict}
-                      options={
-                        districts &&
-                        districts.map((item: any) => ({
-                          value: item.name,
-                          label: item.name,
-                        }))
-                      }
-                    />
-                  </Form.Item>
-                )}
-                {wards.length > 0 && (
-                  <Form.Item
-                    label="Phường xã"
-                    name="ward"
-                    rules={[
-                      {
-                        required: true,
-                        message: 'Vui lòng không bỏ trống!',
-                      },
-                    ]}
-                  >
-                    <Select
-                      allowClear
-                      showSearch
-                      onChange={handleChangeWard}
-                      options={
-                        wards &&
-                        wards.map((item: any) => ({
-                          value: item.name,
-                          label: item.name,
-                        }))
-                      }
-                    />
-                  </Form.Item>
-                )}
                 <Form.Item
-                  label="Địa chỉ"
-                  name="street"
+                  label="Quận huyện"
+                  name="district"
                   rules={[
                     {
                       required: true,
@@ -207,7 +155,44 @@ const CheckoutPage: React.FC = () => {
                     },
                   ]}
                 >
-                  <TextArea rows={3} />
+                  <Select
+                    allowClear
+                    showSearch
+                    onChange={handleChangeDistrict}
+                    options={
+                      districts &&
+                      districts.map((item: any) => ({
+                        value: item.name,
+                        label: item.name,
+                      }))
+                    }
+                  />
+                </Form.Item>
+                <Form.Item
+                  label="Phường xã"
+                  name="ward"
+                  rules={[
+                    {
+                      required: true,
+                      message: 'Vui lòng không bỏ trống!',
+                    },
+                  ]}
+                >
+                  <Select
+                    allowClear
+                    showSearch
+                    onChange={handleChangeWard}
+                    options={
+                      wards &&
+                      wards.map((item: any) => ({
+                        value: item.name,
+                        label: item.name,
+                      }))
+                    }
+                  />
+                </Form.Item>
+                <Form.Item label="Địa chỉ khác" name="street">
+                  <Input />
                 </Form.Item>
               </Col>
               <Col xl={12} md={16} xs={24}>

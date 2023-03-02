@@ -21,11 +21,13 @@ import { removeTextBetweenParentheses } from '../../utils';
 const CategoryPage: React.FC = () => {
   const dispatch = useDispatch();
   const { categorySlug } = useParams();
-  const { categories, currentCategory } = useSelector(categorySelector);
+  const { categoriesHeader, currentCategory } = useSelector(categorySelector);
 
   const checkCategoryPage = useMemo(() => {
-    return categories.rows.find((category) => categorySlug === category.slug);
-  }, [categories, categorySlug]);
+    return categoriesHeader.rows.find(
+      (category) => categorySlug === category.slug
+    );
+  }, [categoriesHeader, categorySlug]);
 
   useEffect(() => {
     categorySlug &&
@@ -48,8 +50,8 @@ const CategoryPage: React.FC = () => {
 
   if (!checkCategoryPage) return <ProductCategoryPage />;
   return (
-    <main className="px-20 max-sm:px-4">
-      <section className="my-8">
+    <main className="px-20 max-sm:px-4 max-sm:mt-24">
+      <section className="my-8 max-sm:my-4">
         <Breadcrumb>
           <Breadcrumb.Item>
             <Link to={routes.home}>Trang chủ</Link>

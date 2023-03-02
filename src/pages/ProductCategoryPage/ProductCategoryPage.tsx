@@ -1,7 +1,9 @@
-import { Breadcrumb, Col, Pagination, Row } from 'antd';
+import { Breadcrumb, Col, Pagination, Popover, Row, Select } from 'antd';
 import React, { useEffect, useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, useParams } from 'react-router-dom';
+import { BsSortDown } from 'react-icons/bs';
+import { AiOutlineFilter } from 'react-icons/ai';
 import Product from '../../components/Product';
 import { routes } from '../../config/routes';
 import { useTitle } from '../../hooks/useTitle';
@@ -16,6 +18,8 @@ import {
 import { collection } from '../../types/collection';
 import { productCategory } from '../../types/productCategory';
 import { removeTextBetweenParentheses } from '../../utils';
+import ContentFilter from './ContentFilter';
+
 const ProductCategoryPage: React.FC = () => {
   const { categorySlug } = useParams();
   const { currentCollection } = useSelector(collectionSelector);
@@ -55,8 +59,8 @@ const ProductCategoryPage: React.FC = () => {
   );
 
   return (
-    <main className="px-20 max-sm:px-4">
-      <section className="my-8">
+    <main className="px-20 max-sm:mt-24 max-sm:px-4">
+      <section className="my-8 flex justify-between max-sm:hidden">
         {currentCollection ? (
           <Breadcrumb>
             <Breadcrumb.Item>
@@ -109,6 +113,27 @@ const ProductCategoryPage: React.FC = () => {
             </Breadcrumb.Item>
           </Breadcrumb>
         )}
+        <div className="flex w-96 gap-4 max-lg:hidden">
+          <Popover
+            content={<ContentFilter />}
+            trigger="click"
+            placement="bottomLeft"
+          >
+            <div className="w-1/2 flex items-center justify-center cursor-pointer text-red-500 font-semibold text-2xl bg-bg-layout-profile px-6 py-4">
+              <span>Bộ lọc</span>
+              <span className="flex items-center pl-4">
+                <AiOutlineFilter />
+              </span>
+            </div>
+          </Popover>
+
+          <div className="w-1/2 flex items-center justify-center cursor-pointer text-red-500 font-semibold text-2xl bg-bg-layout-profile px-6 py-4">
+            <span>Sắp xếp</span>
+            <span className="flex items-center pl-4">
+              <BsSortDown />
+            </span>
+          </div>
+        </div>
       </section>
       <section>
         <Row>

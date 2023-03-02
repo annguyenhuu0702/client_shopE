@@ -19,9 +19,11 @@ module.exports = {
         'border-layout-cart': '#e8e8e8',
         'bg-layout-profile': '#f8f8f8',
         'item-profile': '#FEEEEA',
+        'option-filter': '#63b1bc',
       },
       width: {
         45: '45rem',
+        1000: '1000px',
       },
     },
   },

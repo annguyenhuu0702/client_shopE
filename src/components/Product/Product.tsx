@@ -39,7 +39,7 @@ const Product: React.FC = () => {
           <Link to="">
             <img
               // className="common-img"
-              src="https://res.cloudinary.com/diot4imoq/image/upload/v1662016045/canifa/2ls22s018-sy038-2-thumb_n882ft.jpg"
+              src="https://res.cloudinary.com/diot4imoq/image/upload/v1677746503/canifa/idegklmolvo1sd1pddci.webp"
               alt=""
             />
           </Link>

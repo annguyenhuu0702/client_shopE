@@ -1,12 +1,13 @@
 import { Drawer, Form, Input } from 'antd';
-import React, { useState } from 'react';
-import { BsBag, BsList, BsSearch } from 'react-icons/bs';
+import React, { useEffect, useState } from 'react';
 import { AiOutlineLogin } from 'react-icons/ai';
+import { BsBag, BsList, BsSearch } from 'react-icons/bs';
 import { FaRegRegistered } from 'react-icons/fa';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { routes } from '../../../../config/routes';
 
 const HeaderMobile: React.FC = () => {
+  const location = useLocation();
   const [open, setOpen] = useState(false);
   const [isSearch, setIsSearch] = useState(false);
   const navigate = useNavigate();
@@ -26,6 +27,10 @@ const HeaderMobile: React.FC = () => {
   const handleShowSearch = () => {
     setIsSearch(true);
   };
+
+  useEffect(() => {
+    setOpen(false);
+  }, [location.pathname]);
 
   const onSearch = (value: string) => console.log(value);
   return (

@@ -7,17 +7,16 @@ import classNames from 'classnames/bind';
 import { AiOutlineHeart } from 'react-icons/ai';
 import { BiUserCircle } from 'react-icons/bi';
 import { HiOutlineShoppingBag } from 'react-icons/hi';
-import { RiStoreLine } from 'react-icons/ri';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
 import { authApi } from '../../../../apis/authApi';
+import { routes } from '../../../../config/routes';
 import {
   authActions,
   authSelector,
   authState,
 } from '../../../../redux/slice/authSlice';
 import Navigation from '../HeaderNavigation';
-import { routes } from '../../../../config/routes';
 
 const cx = classNames.bind(styles);
 

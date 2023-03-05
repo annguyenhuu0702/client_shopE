@@ -46,8 +46,6 @@ const ProductCategory: React.FC = () => {
             onChange={(page: number, pageSize: number) => {
               dispatch(productCategoryActions.setPage({ page, pageSize }));
             }}
-            // showSizeChanger={true}
-            // pageSizeOptions={[7, 50, 100, 200]}
           />
         </div>
       )}

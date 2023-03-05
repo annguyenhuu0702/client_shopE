@@ -8,7 +8,7 @@ export interface productImage {
   productId: number;
   variantValueId: number;
   path: string;
-  product: product;
+  // product: product;
   deletedAt: Date;
   createdAt: string;
   updatedAt: string;
@@ -17,8 +17,13 @@ export interface productImage {
 
 export interface createProductImage {
   productId: number;
-  variantValueId: number;
-  path: string;
+  pathImgs: Array<{
+    variantValueId: number;
+    path: string;
+  }>;
+  listId: number[];
+  thumbnail: string;
+  updateImages: productImage[];
   resetValues?: Function;
 }
 
@@ -28,4 +33,5 @@ export interface updateProductImage extends createProductImage {
 
 export interface getAllProductImageParams extends queryParams {
   name?: string;
+  productId?: string;
 }

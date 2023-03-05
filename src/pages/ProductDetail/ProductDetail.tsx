@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Breadcrumb, Button, Col, Row } from 'antd';
-import { Link } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css';
 import 'swiper/css/pagination';
@@ -14,6 +14,8 @@ import {
 } from 'react-icons/ai';
 
 const ProductDetail: React.FC = () => {
+  const { slug } = useParams();
+  console.log(slug);
   const [isWishlist, setIsWishlist] = useState<boolean>(false);
   const [indexColor, setIndexColor] = useState<number>();
   const [indexSize, setIndexSize] = useState<number>();

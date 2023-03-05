@@ -8,6 +8,7 @@ import { Spin } from 'antd';
 import { authActions } from './redux/slice/authSlice';
 import { authApi } from './apis/authApi';
 import { authState, authSelector } from './redux/slice/authSlice';
+import ScrollToTop from './hooks/useScrollToTop';
 
 const App = () => {
   const dispatch = useDispatch();
@@ -75,6 +76,7 @@ const App = () => {
       }
     >
       <div className="app overflow-hidden">
+        <ScrollToTop />
         <Routes>
           {showPrivateRoter()}
           {showRoutes(publicRoute)}

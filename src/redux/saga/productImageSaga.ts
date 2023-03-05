@@ -35,7 +35,7 @@ function* createProductImageSaga({
   try {
     const { token, dispatch, data, navigate } = payload;
     const res = yield call(() => {
-      return productImageApi.create(token, dispatch, data);
+      return productImageApi.createMany(token, dispatch, data);
     });
     const { data: newData, status } = res;
     if (status === STATUS_CODE.CREATED) {
@@ -63,39 +63,39 @@ function* createProductImageSaga({
   }
 }
 
-function* editProductImageSaga({
-  payload,
-}: PayloadAction<tokenPayloadData<productImage>>): any {
-  try {
-    const { token, dispatch, data, navigate } = payload;
-    const res = yield call(() => {
-      return productImageApi.update(token, dispatch, data);
-    });
-    const { status } = res;
-    if (status === STATUS_CODE.SUCCESS) {
-      yield put(productImageActions.editProductImageSuccess(data));
-      if (data.resetValues) {
-        data.resetValues();
-      }
-      navigate(routes.productCategoryAdmin);
-      notification.success({
-        message: 'Thành công',
-        description: 'Sửa thành công',
-        placement: 'bottomRight',
-        duration: 3,
-      });
-    }
-  } catch (err) {
-    console.log(err);
-    yield put(productImageActions.editProductImageFailed());
-    notification.error({
-      message: 'Thất bại',
-      description: 'Lỗi rồi!',
-      placement: 'bottomRight',
-      duration: 3,
-    });
-  }
-}
+// function* editProductImageSaga({
+//   payload,
+// }: PayloadAction<tokenPayloadData<productImage>>): any {
+//   try {
+//     const { token, dispatch, data, navigate } = payload;
+//     const res = yield call(() => {
+//       return productImageApi.update(token, dispatch, data);
+//     });
+//     const { status } = res;
+//     if (status === STATUS_CODE.SUCCESS) {
+//       yield put(productImageActions.editProductImageSuccess(data));
+//       if (data.resetValues) {
+//         data.resetValues();
+//       }
+//       navigate(routes.productCategoryAdmin);
+//       notification.success({
+//         message: 'Thành công',
+//         description: 'Sửa thành công',
+//         placement: 'bottomRight',
+//         duration: 3,
+//       });
+//     }
+//   } catch (err) {
+//     console.log(err);
+//     yield put(productImageActions.editProductImageFailed());
+//     notification.error({
+//       message: 'Thất bại',
+//       description: 'Lỗi rồi!',
+//       placement: 'bottomRight',
+//       duration: 3,
+//     });
+//   }
+// }
 
 function* deleteProductImageSaga({
   payload,
@@ -130,7 +130,7 @@ function* deleteProductImageSaga({
 function* productImageSaga() {
   yield takeEvery('productImage/createProductImage', createProductImageSaga);
   yield takeEvery('productImage/getAllProductImage', getAllProductImageSaga);
-  yield takeEvery('productImage/editProductImage', editProductImageSaga);
+  // yield takeEvery('productImage/editProductImage', editProductImageSaga);
   yield takeEvery('productImage/deleteProductImage', deleteProductImageSaga);
 }
 

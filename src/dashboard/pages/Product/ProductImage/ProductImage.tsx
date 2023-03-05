@@ -2,7 +2,7 @@ import { LoadingOutlined, PlusOutlined } from '@ant-design/icons';
 import { Col, Form, message, Modal, Row, Select, Upload } from 'antd';
 import type { RcFile, UploadFile, UploadProps } from 'antd/es/upload/interface';
 import { UploadChangeParam } from 'antd/lib/upload';
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState, useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { productImageApi } from '../../../../apis/productImage';
 import { variantValueApi } from '../../../../apis/variantValueApi';
@@ -12,8 +12,14 @@ import {
   modalActions,
   modalSelector,
 } from '../../../../redux/slice/modalSlice';
+import {
+  productImageActions,
+  productImageSelector,
+} from '../../../../redux/slice/productImageSlice';
 import { productSelector } from '../../../../redux/slice/productSlice';
 import { variantValue } from '../../../../types/variantValue';
+import { AiFillDelete, AiFillCheckSquare } from 'react-icons/ai';
+import { productImage } from '../../../../types/productImage';
 
 const getBase64 = (img: RcFile, callback: (url: string) => void) => {
   const reader = new FileReader();
@@ -33,54 +39,89 @@ const beforeUpload = (file: RcFile) => {
   return isJpgOrPng && isLt2M;
 };
 
-const ModalProductImage = () => {
+const ModalProductImage: React.FC = () => {
   const dispatch = useDispatch();
   const [form] = Form.useForm();
   const { user } = useSelector(authSelector);
   const { isModal, title } = useSelector(modalSelector);
   const { currentProduct } = useSelector(productSelector);
+  const { productImages } = useSelector(productImageSelector);
+
   const [loading, setLoading] = useState(false);
+
   const [imageUrl, setImageUrl] = useState<string>();
+
+  // lúc thêm ảnh
   const [pathImgs, setPathImgs] = useState<
     Array<{
       path: string;
-      variantValueId: number | null;
+      variantValueId: number;
     }>
   >([]);
+
+  // sửa ảnh
+  const [updateImages, setUpdateImages] = useState<productImage[]>([]);
+
   const [variantValues, setVariantValues] = useState<variantValue[]>([]);
+
+  const [listId, setListId] = useState<number[]>([]);
+  const [thumbnail, setThumbnail] = useState<string>('');
+
+  const getVariantColors = useMemo(() => {
+    return variantValues.filter((item) => item.variantId === 2);
+  }, [variantValues]);
 
   const handleOk = () => {
     form.submit();
-    console.log('helo');
   };
 
   const handleCancel = () => {
     dispatch(modalActions.hideModal());
   };
 
-  console.log('currentProduct:', currentProduct);
-
   const onFinish = async (values: any) => {
-    try {
-      if (currentProduct) {
-        const { data } = await productImageApi.createMany(
-          user.accessToken,
-          dispatch,
-          pathImgs.map((item: any) => ({
-            ...item,
-            productId: currentProduct.id,
-          }))
-        );
-        console.log('data', data);
+    console.log({ listId, updateImages, pathImgs, thumbnail });
+    if (currentProduct) {
+      try {
+        await productImageApi.createMany(user.accessToken, dispatch, {
+          pathImgs,
+          productId: currentProduct.id,
+          listId,
+          updateImages,
+          thumbnail,
+        });
         dispatch(modalActions.hideModal());
+      } catch (error) {
+        console.log(error);
       }
-    } catch (error) {
-      console.log(error);
     }
   };
 
   const onFinishFailed = (errorInfo: any) => {
     console.log('Failed:', errorInfo);
+  };
+  const handleChangColors = (value: any, item: any) => {
+    setUpdateImages((state) =>
+      state.map((s: any) =>
+        s.path === item.path ? { ...s, variantValueId: value } : s
+      )
+    );
+  };
+
+  const handleSelectThumbnail = (path: string) => {
+    setThumbnail(path);
+  };
+
+  const handleDeleteImage = (id: number) => {
+    setListId((state) => {
+      return [...state, id];
+    });
+  };
+
+  const handleDeleteImageOnUpload = (path: string) => {
+    setPathImgs((state) => {
+      return state.filter((item) => item.path !== path);
+    });
   };
 
   const handleChange: UploadProps['onChange'] = (
@@ -94,12 +135,6 @@ const ModalProductImage = () => {
     }
     if (info.file.status === 'done') {
       // Get this url from response in real world.
-      console.log(
-        info.fileList.map((file: any) => ({
-          path: file.response,
-          variantValueId: null,
-        })) as any
-      );
       setPathImgs(
         info.fileList.map((file: any) => ({
           path: file.response.data[0].secure_url,
@@ -125,6 +160,21 @@ const ModalProductImage = () => {
       }
     })();
   }, []);
+
+  useEffect(() => {
+    if (currentProduct) {
+      dispatch(
+        productImageActions.getAllProductImage({
+          productId: `${currentProduct?.id}`,
+        })
+      );
+      setThumbnail(currentProduct.thumbnail);
+    }
+  }, [dispatch, currentProduct]);
+
+  useEffect(() => {
+    setUpdateImages(productImages.rows);
+  }, [productImages]);
 
   const uploadButton = (
     <div>
@@ -167,9 +217,10 @@ const ModalProductImage = () => {
           </Upload>
         </Form.Item>
         <Row gutter={[16, 16]}>
+          {/* lúc upload ảnh thì cái này chạy */}
           {pathImgs.map((item: any) => {
             return (
-              <Col key={item.path} xs={6}>
+              <Col key={item.path} xl={6}>
                 <div className="overflow-hidden">
                   <div
                     className="h-0 relative"
@@ -196,7 +247,7 @@ const ModalProductImage = () => {
                       );
                     }}
                   >
-                    {variantValues.map((variantValue) => (
+                    {getVariantColors.map((variantValue) => (
                       <Select.Option
                         key={variantValue.id}
                         value={variantValue.id}
@@ -206,9 +257,94 @@ const ModalProductImage = () => {
                     ))}
                   </Select>
                 </div>
+                <div className="mt-2 flex justify-between">
+                  <span
+                    className="text-3xl"
+                    onClick={() => {
+                      handleDeleteImageOnUpload(item.path);
+                    }}
+                  >
+                    <AiFillDelete />
+                  </span>
+                  {item.path === thumbnail ? (
+                    <></>
+                  ) : (
+                    <span
+                      className="text-3xl"
+                      onClick={() => {
+                        handleSelectThumbnail(item.path);
+                      }}
+                    >
+                      <AiFillCheckSquare />
+                    </span>
+                  )}
+                </div>
               </Col>
             );
           })}
+          {/* có productImage thì cái này chạy */}
+          {productImages.rows.length > 0 &&
+            productImages.rows.map((item: any, index: number) => {
+              if (listId.includes(item.id))
+                return <React.Fragment key={item.id}></React.Fragment>;
+              return (
+                <Col key={item.path} xl={6}>
+                  <div className="overflow-hidden">
+                    <div
+                      className="h-0 relative"
+                      style={{
+                        paddingBottom: '130%',
+                      }}
+                    >
+                      <img src={item.path} alt="" className="w-full" />
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-2 mt-2">
+                    <span style={{ whiteSpace: 'nowrap', fontSize: '12px' }}>
+                      Chọn màu
+                    </span>
+                    <Select
+                      value={updateImages[index]?.variantValueId}
+                      className="w-full"
+                      onChange={(value: any) => {
+                        handleChangColors(value, item);
+                      }}
+                    >
+                      {getVariantColors.map((variantValue) => (
+                        <Select.Option
+                          key={variantValue.id}
+                          value={variantValue.id}
+                        >
+                          {variantValue.name}
+                        </Select.Option>
+                      ))}
+                    </Select>
+                  </div>
+                  <div className="mt-2 flex justify-between">
+                    <span
+                      className="text-3xl"
+                      onClick={() => {
+                        handleDeleteImage(item.id);
+                      }}
+                    >
+                      <AiFillDelete />
+                    </span>
+                    {item.path === thumbnail ? (
+                      <></>
+                    ) : (
+                      <span
+                        className="text-3xl"
+                        onClick={() => {
+                          handleSelectThumbnail(item.path);
+                        }}
+                      >
+                        <AiFillCheckSquare />
+                      </span>
+                    )}
+                  </div>
+                </Col>
+              );
+            })}
         </Row>
       </Form>
     </Modal>

@@ -39,23 +39,23 @@ import { URL_API } from '../../../../constants';
 
 const { Content } = Layout;
 
-const getBase64 = (img: RcFile, callback: (url: string) => void) => {
-  const reader = new FileReader();
-  reader.addEventListener('load', () => callback(reader.result as string));
-  reader.readAsDataURL(img);
-};
+// const getBase64 = (img: RcFile, callback: (url: string) => void) => {
+//   const reader = new FileReader();
+//   reader.addEventListener('load', () => callback(reader.result as string));
+//   reader.readAsDataURL(img);
+// };
 
-const beforeUpload = (file: RcFile) => {
-  const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png';
-  if (!isJpgOrPng) {
-    message.error('You can only upload JPG/PNG file!');
-  }
-  const isLt2M = file.size / 1024 / 1024 < 2;
-  if (!isLt2M) {
-    message.error('Image must smaller than 2MB!');
-  }
-  return isJpgOrPng && isLt2M;
-};
+// const beforeUpload = (file: RcFile) => {
+//   const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png';
+//   if (!isJpgOrPng) {
+//     message.error('You can only upload JPG/PNG file!');
+//   }
+//   const isLt2M = file.size / 1024 / 1024 < 2;
+//   if (!isLt2M) {
+//     message.error('Image must smaller than 2MB!');
+//   }
+//   return isJpgOrPng && isLt2M;
+// };
 
 const FormProduct: React.FC = () => {
   const { productCategories, page }: productCategoryState = useSelector(
@@ -79,35 +79,35 @@ const FormProduct: React.FC = () => {
   const [form] = Form.useForm();
   const dispatch = useDispatch();
 
-  const [loading, setLoading] = useState(false);
-  const [imageUrl, setImageUrl] = useState<string>();
-  const [pathImg, setPathImg] = useState<string>(
-    currentProduct ? currentProduct.thumbnail : ''
-  );
+  // const [loading, setLoading] = useState(false);
+  // const [imageUrl, setImageUrl] = useState<string>();
+  // const [pathImg, setPathImg] = useState<string>(
+  //   currentProduct ? currentProduct.thumbnail : ''
+  // );
 
-  const handleChangeUpload: UploadProps['onChange'] = (
-    info: UploadChangeParam<UploadFile>
-  ) => {
-    if (info.file.status === 'uploading') {
-      setLoading(true);
-      return;
-    }
-    if (info.file.status === 'done') {
-      // Get this url from response in real world.
-      setPathImg(info.file.response.data.secure_url);
-      getBase64(info.file.originFileObj as RcFile, (url) => {
-        setLoading(false);
-        setImageUrl(url);
-      });
-    }
-  };
+  // const handleChangeUpload: UploadProps['onChange'] = (
+  //   info: UploadChangeParam<UploadFile>
+  // ) => {
+  //   if (info.file.status === 'uploading') {
+  //     setLoading(true);
+  //     return;
+  //   }
+  //   if (info.file.status === 'done') {
+  //     // Get this url from response in real world.
+  //     setPathImg(info.file.response.data.secure_url);
+  //     getBase64(info.file.originFileObj as RcFile, (url) => {
+  //       setLoading(false);
+  //       setImageUrl(url);
+  //     });
+  //   }
+  // };
 
-  const uploadButton = (
-    <div>
-      {loading ? <LoadingOutlined /> : <PlusOutlined />}
-      <div style={{ marginTop: 8 }}>Upload</div>
-    </div>
-  );
+  // const uploadButton = (
+  //   <div>
+  //     {loading ? <LoadingOutlined /> : <PlusOutlined />}
+  //     <div style={{ marginTop: 8 }}>Upload</div>
+  //   </div>
+  // );
 
   const resetValues = () => {
     form.setFieldsValue(initialValues);
@@ -125,7 +125,7 @@ const FormProduct: React.FC = () => {
       price: values.price,
       priceSale: values.priceSale,
       description: values.description,
-      thumbnail: pathImg,
+      thumbnail: '',
     };
     if (!currentProduct) {
       dispatch(
@@ -153,12 +153,7 @@ const FormProduct: React.FC = () => {
   };
 
   useEffect(() => {
-    dispatch(
-      productCategoryActions.getAllProductCategory({
-        p: page,
-        limit: 7,
-      })
-    );
+    dispatch(productCategoryActions.getAllProductCategory({}));
   }, [dispatch, page]);
 
   useEffect(() => {
@@ -184,9 +179,9 @@ const FormProduct: React.FC = () => {
     }
   }, [id, dispatch, form]);
 
-  useEffect(() => {
-    setPathImg(currentProduct ? currentProduct.thumbnail : '');
-  }, [currentProduct]);
+  // useEffect(() => {
+  //   setPathImg(currentProduct ? currentProduct.thumbnail : '');
+  // }, [currentProduct]);
 
   useTitle(currentProduct ? 'Sửa sản phẩm' : 'Thêm sản phẩm');
 
@@ -256,7 +251,7 @@ const FormProduct: React.FC = () => {
               <Form.Item label="Mô tả" name="description">
                 <TextArea rows={4} />
               </Form.Item>
-              <Form.Item label="Hình ảnh">
+              {/* <Form.Item label="Hình ảnh">
                 <Upload
                   name="image"
                   listType="picture-card"
@@ -280,7 +275,7 @@ const FormProduct: React.FC = () => {
                     uploadButton
                   )}
                 </Upload>
-              </Form.Item>
+              </Form.Item> */}
               <Form.Item
                 style={{
                   textAlign: 'center',

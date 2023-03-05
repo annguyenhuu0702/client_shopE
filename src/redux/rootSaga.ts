@@ -5,6 +5,7 @@ import userSaga from './saga/userSaga';
 import collectionSaga from './saga/collectionSaga';
 import productCategorySaga from './saga/productCategorySaga';
 import productSaga from './saga/productSaga';
+import productImageSaga from './saga/productImageSaga';
 
 function* rootSaga() {
   yield all([
@@ -14,6 +15,7 @@ function* rootSaga() {
     collectionSaga(),
     productCategorySaga(),
     productSaga(),
+    productImageSaga(),
   ]);
 }
 

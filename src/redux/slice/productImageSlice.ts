@@ -87,26 +87,26 @@ const productImageSlice = createSlice({
       state.isLoading = false;
       state.isError = true;
     },
-    editProductImage: (
-      state,
-      action: PayloadAction<tokenPayloadData<updateProductImage>>
-    ) => {
-      state.isLoading = true;
-    },
-    editProductImageSuccess: (state, action: PayloadAction<productImage>) => {
-      state.isLoading = false;
-      state.isError = false;
-      const index = state.productImages.rows.findIndex(
-        (item) => item.id === action.payload.id
-      );
-      if (index !== -1) {
-        state.productImages.rows[index] = action.payload;
-      }
-    },
-    editProductImageFailed: (state) => {
-      state.isLoading = false;
-      state.isError = false;
-    },
+    // editProductImage: (
+    //   state,
+    //   action: PayloadAction<tokenPayloadData<updateProductImage>>
+    // ) => {
+    //   state.isLoading = true;
+    // },
+    // editProductImageSuccess: (state, action: PayloadAction<productImage>) => {
+    //   state.isLoading = false;
+    //   state.isError = false;
+    //   const index = state.productImages.rows.findIndex(
+    //     (item) => item.id === action.payload.id
+    //   );
+    //   if (index !== -1) {
+    //     state.productImages.rows[index] = action.payload;
+    //   }
+    // },
+    // editProductImageFailed: (state) => {
+    //   state.isLoading = false;
+    //   state.isError = false;
+    // },
     deleteProductImage: (state, action: PayloadAction<deleteParams>) => {
       state.isLoading = true;
     },

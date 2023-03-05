@@ -23,12 +23,14 @@ const CategoryPage: React.FC = () => {
   const { categorySlug } = useParams();
   const { categoriesHeader, currentCategory } = useSelector(categorySelector);
 
+  // check xem đang ở category hay productpage
   const checkCategoryPage = useMemo(() => {
     return categoriesHeader.rows.find(
       (category) => categorySlug === category.slug
     );
   }, [categoriesHeader, categorySlug]);
 
+  // banner
   useEffect(() => {
     categorySlug &&
       dispatch(
@@ -40,6 +42,7 @@ const CategoryPage: React.FC = () => {
   }, [dispatch, categorySlug]);
   useTitle(currentCategory?.name ? currentCategory?.name : '');
 
+  // check productcategory để hiển thị slide
   const countProductCategory = useMemo(() => {
     return currentCategory
       ? currentCategory.collections.reduce((prev: any, current: any) => {
@@ -76,7 +79,7 @@ const CategoryPage: React.FC = () => {
               slidesPerView={5}
               spaceBetween={35}
               breakpoints={{
-                375: {
+                340: {
                   slidesPerView: 2,
                   spaceBetween: 20,
                 },

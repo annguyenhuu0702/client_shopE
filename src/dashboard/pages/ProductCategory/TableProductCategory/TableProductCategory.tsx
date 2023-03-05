@@ -67,7 +67,8 @@ const TableProductCategory: React.FC = () => {
     {
       title: 'Bộ sưu tập',
       render: (text: string, record: productCategory) => {
-        return <div>{removeParenthesis(record.collection?.name)}</div>;
+        // return <div>{removeParenthesis(record.collection?.name)}</div>;
+        return <div>{record.collection?.name}</div>;
       },
     },
     {

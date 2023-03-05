@@ -18,14 +18,14 @@ const ProfilePage: React.FC = () => {
   const [wards, setWards] = useState([]);
   const [gender, setGender] = useState(true);
   const initialValue = {
-    fullname: user.user?.fullname,
-    phone: user.user?.phone,
-    email: user.user?.email,
-    city: user.user?.city,
-    district: user.user?.district,
-    ward: user.user?.ward,
-    birthday: moment(user.user?.birthday),
-    gender: user.user?.gender,
+    fullname: user ? user.user?.fullname : '',
+    phone: user ? user.user?.phone : '',
+    email: user ? user.user?.email : '',
+    city: user ? user.user?.city : '',
+    district: user ? user.user?.district : '',
+    ward: user ? user.user?.ward : '',
+    birthday: user ? moment(user.user?.birthday) : '',
+    gender: user ? user.user?.gender : true,
   };
   const onChange = (e: RadioChangeEvent) => {
     setGender(e.target.value);

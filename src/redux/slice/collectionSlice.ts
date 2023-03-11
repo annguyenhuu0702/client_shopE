@@ -15,6 +15,7 @@ export interface collectionState {
   pageSize: number;
   isLoading: boolean;
   isError: boolean;
+  currentCollectionClient: collection | null;
 }
 
 export interface resCollection {
@@ -23,6 +24,7 @@ export interface resCollection {
 }
 
 const initialState: collectionState = {
+  // admin
   collections: {
     rows: [],
     count: 0,
@@ -32,6 +34,8 @@ const initialState: collectionState = {
   currentCollection: null,
   isLoading: false,
   isError: false,
+  // client
+  currentCollectionClient: null,
 };
 
 const CollectionSlice = createSlice({
@@ -64,18 +68,21 @@ const CollectionSlice = createSlice({
       state.isLoading = false;
       state.isError = true;
     },
-    getCollectionBySlug: (
+    getCollectionBySlugClient: (
       state,
       action: PayloadAction<getAllCollectionParams>
     ) => {
       state.isLoading = true;
     },
-    getCollectionBySlugSuccess: (state, action: PayloadAction<collection>) => {
+    getCollectionBySlugClientSuccess: (
+      state,
+      action: PayloadAction<collection>
+    ) => {
       state.isLoading = false;
       state.isError = false;
-      state.currentCollection = action.payload;
+      state.currentCollectionClient = action.payload;
     },
-    getCollectionBySlugFailed: (state) => {
+    getCollectionBySlugClientFailed: (state) => {
       state.isLoading = false;
       state.isError = true;
     },

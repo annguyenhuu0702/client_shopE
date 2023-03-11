@@ -29,7 +29,7 @@ function* getAllProductCategorySaga({
   }
 }
 
-function* getProductCategoryBySlugSaga({
+function* getProductCategoryBySlugClientSaga({
   payload,
 }: PayloadAction<getAllProductCategoryParams>): any {
   try {
@@ -42,14 +42,14 @@ function* getProductCategoryBySlugSaga({
     const { data, status } = res;
     if (status === STATUS_CODE.SUCCESS) {
       yield put(
-        productCategoryActions.getProductCategoryBySlugSuccess(
+        productCategoryActions.getProductCategoryBySlugClientSuccess(
           data.data.rows[0]
         )
       );
     }
   } catch (err) {
     console.log(err);
-    yield put(productCategoryActions.getProductCategoryBySlugFailed());
+    yield put(productCategoryActions.getProductCategoryBySlugClientFailed());
   }
 }
 
@@ -163,8 +163,8 @@ function* productCategorySaga() {
     getAllProductCategorySaga
   );
   yield takeEvery(
-    'productCategory/getProductCategoryBySlug',
-    getProductCategoryBySlugSaga
+    'productCategory/getProductCategoryBySlugClient',
+    getProductCategoryBySlugClientSaga
   );
 
   yield takeEvery(

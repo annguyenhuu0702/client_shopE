@@ -18,18 +18,18 @@ const cx = classNames.bind(styles);
 
 const HeaderNavigation: React.FC = () => {
   const dispatch = useDispatch();
-  const { categoriesHeader }: categoryState = useSelector(categorySelector);
+  const { categoriesClient }: categoryState = useSelector(categorySelector);
 
   useEffect(() => {
-    dispatch(categoryActions.getAllCategoryHeader({ collections: true }));
+    dispatch(categoryActions.getAllCategoryClient({ collections: true }));
   }, [dispatch]);
 
   return (
     <section className={cx('navigation')}>
       <div className={cx('menu')}>
         <ul className={cx('list-item')}>
-          {categoriesHeader &&
-            [...categoriesHeader.rows].reverse().map((category: category) => {
+          {categoriesClient &&
+            [...categoriesClient.rows].reverse().map((category: category) => {
               return (
                 <li className={cx('item')} key={category.id}>
                   <Link

@@ -10,12 +10,13 @@ import { RootState } from '../store';
 
 export interface categoryState {
   categories: resCategory;
-  categoriesHeader: resCategory;
   currentCategory: category | null;
   page: number;
   pageSize: number;
   isLoading: boolean;
   isError: boolean;
+  categoriesClient: resCategory;
+  currentCategoryClient: category | null;
 }
 
 export interface resCategory {
@@ -24,11 +25,8 @@ export interface resCategory {
 }
 
 const initialState: categoryState = {
+  // admin
   categories: {
-    rows: [],
-    count: 0,
-  },
-  categoriesHeader: {
     rows: [],
     count: 0,
   },
@@ -37,6 +35,13 @@ const initialState: categoryState = {
   currentCategory: null,
   isLoading: false,
   isError: false,
+
+  // client
+  categoriesClient: {
+    rows: [],
+    count: 0,
+  },
+  currentCategoryClient: null,
 };
 
 const CategorySlice = createSlice({
@@ -66,22 +71,22 @@ const CategorySlice = createSlice({
       state.isLoading = false;
       state.isError = true;
     },
-    getAllCategoryHeader: (
+    getAllCategoryClient: (
       state,
       action: PayloadAction<getAllCategoryParams>
     ) => {
       state.isLoading = true;
     },
-    getAllCategoryHeaderSuccess: (
+    getAllCategoryClientSuccess: (
       state,
       action: PayloadAction<resCategory>
     ) => {
       state.isLoading = false;
       state.isError = false;
-      state.categoriesHeader.rows = action.payload.rows;
-      state.categoriesHeader.count = action.payload.count;
+      state.categoriesClient.rows = action.payload.rows;
+      state.categoriesClient.count = action.payload.count;
     },
-    getAllCategoryHeaderFailed: (state) => {
+    getAllCategoryClientFailed: (state) => {
       state.isLoading = false;
       state.isError = true;
     },
@@ -91,7 +96,7 @@ const CategorySlice = createSlice({
     getCategoryBySlugSuccess: (state, action: PayloadAction<category>) => {
       state.isLoading = false;
       state.isError = false;
-      state.currentCategory = action.payload;
+      state.currentCategoryClient = action.payload;
     },
     getCategoryBySlugFailed: (state) => {
       state.isLoading = false;

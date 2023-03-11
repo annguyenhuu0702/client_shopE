@@ -22,22 +22,25 @@ import ContentFilter from './ContentFilter';
 
 const ProductCategoryPage: React.FC = () => {
   const { categorySlug } = useParams();
-  const { currentCollection } = useSelector(collectionSelector);
-  const { currentProductCategory } = useSelector(productCategorySelector);
+  const { currentCollectionClient } = useSelector(collectionSelector);
+  const { currentProductCategoryClient } = useSelector(productCategorySelector);
   const dispatch = useDispatch();
 
+  // lấy collection  để render sidebar bên trái
   useEffect(() => {
     dispatch(
-      collectionActions.getCollectionBySlug({
+      collectionActions.getCollectionBySlugClient({
         slug: categorySlug,
         productCategories: true,
       })
     );
   }, [dispatch, categorySlug]);
 
+  // lấy productCategory  để render sidebar bên trái
+
   useEffect(() => {
     dispatch(
-      productCategoryActions.getProductCategoryBySlug({
+      productCategoryActions.getProductCategoryBySlugClient({
         slug: categorySlug,
         collection: true,
       })
@@ -45,35 +48,38 @@ const ProductCategoryPage: React.FC = () => {
   }, [dispatch, categorySlug]);
 
   const category = useMemo(() => {
-    return currentCollection
-      ? currentCollection.category
-      : currentProductCategory?.collection.category;
-  }, [currentCollection, currentProductCategory?.collection.category]);
+    return currentCollectionClient
+      ? currentCollectionClient.category
+      : currentProductCategoryClient?.collection.category;
+  }, [
+    currentCollectionClient,
+    currentProductCategoryClient?.collection.category,
+  ]);
 
   useTitle(
-    currentCollection
-      ? currentCollection?.name
-      : currentProductCategory
-      ? currentProductCategory?.name
+    currentCollectionClient
+      ? currentCollectionClient?.name
+      : currentProductCategoryClient
+      ? currentProductCategoryClient?.name
       : ''
   );
 
   return (
     <main className="px-20 max-sm:mt-24 max-sm:px-4">
       <section className="my-8 flex justify-between max-sm:hidden">
-        {currentCollection ? (
+        {currentCollectionClient ? (
           <Breadcrumb>
             <Breadcrumb.Item>
               <Link to={routes.home}>Trang chủ</Link>
             </Breadcrumb.Item>
             <Breadcrumb.Item>
-              <Link to={`/${currentCollection?.category.slug}`}>
-                {currentCollection?.category.name}
+              <Link to={`/${currentCollectionClient?.category.slug}`}>
+                {currentCollectionClient?.category.name}
               </Link>
             </Breadcrumb.Item>
             <Breadcrumb.Item>
               {removeTextBetweenParentheses(
-                currentCollection ? currentCollection.name : ''
+                currentCollectionClient ? currentCollectionClient.name : ''
               )}
             </Breadcrumb.Item>
           </Breadcrumb>
@@ -85,30 +91,32 @@ const ProductCategoryPage: React.FC = () => {
             <Breadcrumb.Item>
               <Link
                 to={`/${
-                  currentProductCategory &&
-                  currentProductCategory.collection.category.slug
+                  currentProductCategoryClient &&
+                  currentProductCategoryClient.collection.category.slug
                 }`}
               >
-                {currentProductCategory &&
-                  currentProductCategory.collection.category.name}
+                {currentProductCategoryClient &&
+                  currentProductCategoryClient.collection.category.name}
               </Link>
             </Breadcrumb.Item>
             <Breadcrumb.Item>
               <Link
                 to={`/${
-                  currentProductCategory &&
-                  currentProductCategory.collection.slug
+                  currentProductCategoryClient &&
+                  currentProductCategoryClient.collection.slug
                 }`}
               >
-                {currentProductCategory &&
+                {currentProductCategoryClient &&
                   removeTextBetweenParentheses(
-                    currentProductCategory.collection.name
+                    currentProductCategoryClient.collection.name
                   )}
               </Link>
             </Breadcrumb.Item>
             <Breadcrumb.Item>
               {removeTextBetweenParentheses(
-                currentProductCategory ? currentProductCategory.name : ''
+                currentProductCategoryClient
+                  ? currentProductCategoryClient.name
+                  : ''
               )}
             </Breadcrumb.Item>
           </Breadcrumb>

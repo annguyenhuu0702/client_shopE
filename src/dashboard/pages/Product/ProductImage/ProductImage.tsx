@@ -127,8 +127,6 @@ const ModalProductImage: React.FC = () => {
   const handleChange: UploadProps['onChange'] = (
     info: UploadChangeParam<UploadFile>
   ) => {
-    console.log(info);
-
     if (info.file.status === 'uploading') {
       setLoading(true);
       return;

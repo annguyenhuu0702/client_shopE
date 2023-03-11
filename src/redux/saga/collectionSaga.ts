@@ -29,7 +29,7 @@ function* getAllCollectionSaga({
   }
 }
 
-function* getCollectionBySlugSaga({
+function* getCollectionBySlugClientSaga({
   payload,
 }: PayloadAction<getAllCollectionParams>): any {
   try {
@@ -42,12 +42,12 @@ function* getCollectionBySlugSaga({
     const { data, status } = res;
     if (status === STATUS_CODE.SUCCESS) {
       yield put(
-        collectionActions.getCollectionBySlugSuccess(data.data.rows[0])
+        collectionActions.getCollectionBySlugClientSuccess(data.data.rows[0])
       );
     }
   } catch (err) {
     console.log(err);
-    yield put(collectionActions.getCollectionBySlugFailed());
+    yield put(collectionActions.getCollectionBySlugClientFailed());
   }
 }
 
@@ -150,7 +150,10 @@ function* deleteCollectionSaga({ payload }: PayloadAction<deleteParams>): any {
 function* categorySaga() {
   yield takeEvery('collection/createCollection', createCollectionSaga);
   yield takeEvery('collection/getAllCollection', getAllCollectionSaga);
-  yield takeEvery('collection/getCollectionBySlug', getCollectionBySlugSaga);
+  yield takeEvery(
+    'collection/getCollectionBySlugClient',
+    getCollectionBySlugClientSaga
+  );
   yield takeEvery('collection/editCollection', editCollectionSaga);
   yield takeEvery('collection/deleteCollection', deleteCollectionSaga);
 }

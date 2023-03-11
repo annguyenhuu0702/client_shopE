@@ -21,14 +21,15 @@ import { removeTextBetweenParentheses } from '../../utils';
 const CategoryPage: React.FC = () => {
   const dispatch = useDispatch();
   const { categorySlug } = useParams();
-  const { categoriesHeader, currentCategory } = useSelector(categorySelector);
+  const { categoriesClient, currentCategoryClient } =
+    useSelector(categorySelector);
 
   // check xem đang ở category hay productpage
   const checkCategoryPage = useMemo(() => {
-    return categoriesHeader.rows.find(
+    return categoriesClient.rows.find(
       (category) => categorySlug === category.slug
     );
-  }, [categoriesHeader, categorySlug]);
+  }, [categoriesClient, categorySlug]);
 
   // banner
   useEffect(() => {
@@ -40,16 +41,16 @@ const CategoryPage: React.FC = () => {
         })
       );
   }, [dispatch, categorySlug]);
-  useTitle(currentCategory?.name ? currentCategory?.name : '');
+  useTitle(currentCategoryClient?.name ? currentCategoryClient?.name : '');
 
   // check productcategory để hiển thị slide
   const countProductCategory = useMemo(() => {
-    return currentCategory
-      ? currentCategory.collections.reduce((prev: any, current: any) => {
+    return currentCategoryClient
+      ? currentCategoryClient.collections.reduce((prev: any, current: any) => {
           return prev + current.productCategories.length;
         }, 0)
       : 0;
-  }, [currentCategory]);
+  }, [currentCategoryClient]);
 
   if (!checkCategoryPage) return <ProductCategoryPage />;
   return (
@@ -59,12 +60,16 @@ const CategoryPage: React.FC = () => {
           <Breadcrumb.Item>
             <Link to={routes.home}>Trang chủ</Link>
           </Breadcrumb.Item>
-          <Breadcrumb.Item>{currentCategory?.name}</Breadcrumb.Item>
+          <Breadcrumb.Item>{currentCategoryClient?.name}</Breadcrumb.Item>
         </Breadcrumb>
       </section>
       <section className="mb-16">
         <div>
-          <img className="common-img" src={currentCategory?.thumbnail} alt="" />
+          <img
+            className="common-img"
+            src={currentCategoryClient?.thumbnail}
+            alt=""
+          />
         </div>
       </section>
       {countProductCategory > 0 && (
@@ -98,30 +103,32 @@ const CategoryPage: React.FC = () => {
               }}
               className="mySwiper"
             >
-              {currentCategory &&
-                currentCategory.collections.length > 0 &&
-                currentCategory.collections.map((collection: collection) => {
-                  return collection.productCategories.map((item) => {
-                    return item.thumbnail ? (
-                      <SwiperSlide>
-                        <Link to={`/${item.slug}`}>
-                          <img
-                            className="common-img-slide"
-                            src={item.thumbnail}
-                            alt=""
-                          />
-                          <div className="mt-8">
-                            <span className="text-xl text-name-product">
-                              {removeTextBetweenParentheses(item.name)}
-                            </span>
-                          </div>
-                        </Link>
-                      </SwiperSlide>
-                    ) : (
-                      <></>
-                    );
-                  });
-                })}
+              {currentCategoryClient &&
+                currentCategoryClient.collections.length > 0 &&
+                currentCategoryClient.collections.map(
+                  (collection: collection) => {
+                    return collection.productCategories.map((item) => {
+                      return item.thumbnail ? (
+                        <SwiperSlide>
+                          <Link to={`/${item.slug}`}>
+                            <img
+                              className="common-img-slide"
+                              src={item.thumbnail}
+                              alt=""
+                            />
+                            <div className="mt-8">
+                              <span className="text-xl text-name-product">
+                                {removeTextBetweenParentheses(item.name)}
+                              </span>
+                            </div>
+                          </Link>
+                        </SwiperSlide>
+                      ) : (
+                        <></>
+                      );
+                    });
+                  }
+                )}
             </Swiper>
           </div>
         </section>

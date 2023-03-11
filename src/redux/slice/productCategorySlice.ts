@@ -15,6 +15,7 @@ export interface productCategoryState {
   pageSize: number;
   isLoading: boolean;
   isError: boolean;
+  currentProductCategoryClient: productCategory | null;
 }
 
 export interface resProductCategory {
@@ -23,6 +24,7 @@ export interface resProductCategory {
 }
 
 const initialState: productCategoryState = {
+  // admin
   productCategories: {
     rows: [],
     count: 0,
@@ -32,6 +34,8 @@ const initialState: productCategoryState = {
   currentProductCategory: null,
   isLoading: false,
   isError: false,
+  // client
+  currentProductCategoryClient: null,
 };
 
 const ProductCategorySlice = createSlice({
@@ -70,21 +74,21 @@ const ProductCategorySlice = createSlice({
       state.isLoading = false;
       state.isError = true;
     },
-    getProductCategoryBySlug: (
+    getProductCategoryBySlugClient: (
       state,
       action: PayloadAction<getAllProductCategoryParams>
     ) => {
       state.isLoading = true;
     },
-    getProductCategoryBySlugSuccess: (
+    getProductCategoryBySlugClientSuccess: (
       state,
       action: PayloadAction<productCategory>
     ) => {
       state.isLoading = false;
       state.isError = false;
-      state.currentProductCategory = action.payload;
+      state.currentProductCategoryClient = action.payload;
     },
-    getProductCategoryBySlugFailed: (state) => {
+    getProductCategoryBySlugClientFailed: (state) => {
       state.isLoading = false;
       state.isError = true;
     },

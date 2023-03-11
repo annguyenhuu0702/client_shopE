@@ -8,6 +8,7 @@ import { routes } from '../../../../config/routes';
 
 const HeaderMobile: React.FC = () => {
   const location = useLocation();
+
   const [open, setOpen] = useState(false);
   const [isSearch, setIsSearch] = useState(false);
   const navigate = useNavigate();
@@ -33,6 +34,7 @@ const HeaderMobile: React.FC = () => {
   }, [location.pathname]);
 
   const onSearch = (value: string) => console.log(value);
+
   return (
     <div className="hidden max-sm:block fixed bg-white w-full z-50">
       <div className="flex justify-between items-center px-4 py-6">

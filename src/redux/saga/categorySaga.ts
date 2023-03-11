@@ -28,7 +28,7 @@ function* getAllCategorySaga({
   }
 }
 
-function* getAllCategoryHeaderSaga({
+function* getAllCategoryClientSaga({
   payload,
 }: PayloadAction<getAllCategoryParams>): any {
   try {
@@ -37,11 +37,11 @@ function* getAllCategoryHeaderSaga({
     });
     const { data, status } = res;
     if (status === STATUS_CODE.SUCCESS) {
-      yield put(categoryActions.getAllCategoryHeaderSuccess(data.data));
+      yield put(categoryActions.getAllCategoryClientSuccess(data.data));
     }
   } catch (err) {
     console.log(err);
-    yield put(categoryActions.getAllCategoryHeaderFailed());
+    yield put(categoryActions.getAllCategoryClientFailed());
   }
 }
 
@@ -161,10 +161,10 @@ function* deleteCategorySaga({ payload }: PayloadAction<deleteParams>): any {
 function* categorySaga() {
   yield takeEvery('category/createCategory', createCategorySaga);
   yield takeEvery('category/getAllCategory', getAllCategorySaga);
-  yield takeEvery('category/getAllCategoryHeader', getAllCategoryHeaderSaga);
-  yield takeEvery('category/getCategoryBySlug', getCategoryBySlugSaga);
   yield takeEvery('category/editCategory', editCategorySaga);
   yield takeEvery('category/deleteCategory', deleteCategorySaga);
+  yield takeEvery('category/getAllCategoryClient', getAllCategoryClientSaga);
+  yield takeEvery('category/getCategoryBySlug', getCategoryBySlugSaga);
 }
 
 export default categorySaga;

@@ -28,23 +28,6 @@ function* getAllCategorySaga({
   }
 }
 
-function* getAllCategoryClientSaga({
-  payload,
-}: PayloadAction<getAllCategoryParams>): any {
-  try {
-    const res = yield call(() => {
-      return categoryApi.getAll(payload);
-    });
-    const { data, status } = res;
-    if (status === STATUS_CODE.SUCCESS) {
-      yield put(categoryActions.getAllCategoryClientSuccess(data.data));
-    }
-  } catch (err) {
-    console.log(err);
-    yield put(categoryActions.getAllCategoryClientFailed());
-  }
-}
-
 function* getCategoryBySlugSaga({
   payload,
 }: PayloadAction<getAllCategoryParams>): any {
@@ -155,6 +138,23 @@ function* deleteCategorySaga({ payload }: PayloadAction<deleteParams>): any {
       placement: 'bottomRight',
       duration: 3,
     });
+  }
+}
+
+function* getAllCategoryClientSaga({
+  payload,
+}: PayloadAction<getAllCategoryParams>): any {
+  try {
+    const res = yield call(() => {
+      return categoryApi.getAll(payload);
+    });
+    const { data, status } = res;
+    if (status === STATUS_CODE.SUCCESS) {
+      yield put(categoryActions.getAllCategoryClientSuccess(data.data));
+    }
+  } catch (err) {
+    console.log(err);
+    yield put(categoryActions.getAllCategoryClientFailed());
   }
 }
 

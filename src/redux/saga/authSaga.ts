@@ -101,39 +101,6 @@ function* changeProfileSaga({
   }
 }
 
-function* changeProfileClientSaga({
-  payload,
-}: PayloadAction<tokenPayloadData<changeProfileDto>>): any {
-  try {
-    const { token, dispatch, data, navigate } = payload;
-    const res = yield call(() => {
-      return authApi.changeProfile(token, dispatch, data);
-    });
-    const { status } = res;
-    if (status === STATUS_CODE.SUCCESS) {
-      yield put(authActions.changeProfileClientSuccess(data));
-      if (navigate) {
-        navigate('/');
-      }
-      notification.success({
-        message: 'Thành công',
-        description: 'Thay đổi thông tin thành công',
-        placement: 'bottomRight',
-        duration: 3,
-      });
-    }
-  } catch (error: any) {
-    yield put(authActions.changeProfileClientFailed());
-    notification.error({
-      message: 'Thất bại',
-      description: 'Lỗi rồi!',
-      placement: 'bottomRight',
-      duration: 3,
-    });
-    console.log(error);
-  }
-}
-
 function* changePasswordSaga({
   payload,
 }: PayloadAction<tokenPayloadData<changePasswordDto>>): any {
@@ -159,7 +126,7 @@ function* changePasswordSaga({
     yield put(authActions.changePasswordFailed());
     notification.error({
       message: 'Thất bại',
-      description: 'Lỗi rồi!',
+      description: 'Vui lòng kiểm tra lại mật khẩu của bạn!',
       placement: 'bottomRight',
       duration: 3,
     });
@@ -200,6 +167,39 @@ function* changeEmailSaga({
   }
 }
 
+function* changeProfileClientSaga({
+  payload,
+}: PayloadAction<tokenPayloadData<changeProfileDto>>): any {
+  try {
+    const { token, dispatch, data, navigate } = payload;
+    const res = yield call(() => {
+      return authApi.changeProfile(token, dispatch, data);
+    });
+    const { status } = res;
+    if (status === STATUS_CODE.SUCCESS) {
+      yield put(authActions.changeProfileClientSuccess(data));
+      if (navigate) {
+        navigate('/');
+      }
+      notification.success({
+        message: 'Thành công',
+        description: 'Thay đổi thông tin thành công',
+        placement: 'bottomRight',
+        duration: 3,
+      });
+    }
+  } catch (error: any) {
+    yield put(authActions.changeProfileClientFailed());
+    notification.error({
+      message: 'Thất bại',
+      description: 'Lỗi rồi!',
+      placement: 'bottomRight',
+      duration: 3,
+    });
+    console.log(error);
+  }
+}
+
 function* changePasswordUserSaga({
   payload,
 }: PayloadAction<tokenPayloadData<changePasswordDto>>): any {
@@ -225,7 +225,7 @@ function* changePasswordUserSaga({
     yield put(authActions.changePasswordUserFailed());
     notification.error({
       message: 'Thất bại',
-      description: 'Lỗi rồi!',
+      description: 'Vui lòng kiểm tra lại mật khẩu của bạn!',
       placement: 'bottomRight',
       duration: 3,
     });

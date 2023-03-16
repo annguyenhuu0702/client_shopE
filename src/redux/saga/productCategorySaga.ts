@@ -29,30 +29,6 @@ function* getAllProductCategorySaga({
   }
 }
 
-function* getProductCategoryBySlugClientSaga({
-  payload,
-}: PayloadAction<getAllProductCategoryParams>): any {
-  try {
-    const res = yield call(() => {
-      return productCategoryApi.getAll({
-        slug: payload.slug,
-        collection: true,
-      });
-    });
-    const { data, status } = res;
-    if (status === STATUS_CODE.SUCCESS) {
-      yield put(
-        productCategoryActions.getProductCategoryBySlugClientSuccess(
-          data.data.rows[0]
-        )
-      );
-    }
-  } catch (err) {
-    console.log(err);
-    yield put(productCategoryActions.getProductCategoryBySlugClientFailed());
-  }
-}
-
 function* createProductCategorySaga({
   payload,
 }: PayloadAction<tokenPayloadData<createProductCategory>>): any {
@@ -150,6 +126,30 @@ function* deleteProductCategorySaga({
       placement: 'bottomRight',
       duration: 3,
     });
+  }
+}
+
+function* getProductCategoryBySlugClientSaga({
+  payload,
+}: PayloadAction<getAllProductCategoryParams>): any {
+  try {
+    const res = yield call(() => {
+      return productCategoryApi.getAll({
+        slug: payload.slug,
+        collection: true,
+      });
+    });
+    const { data, status } = res;
+    if (status === STATUS_CODE.SUCCESS) {
+      yield put(
+        productCategoryActions.getProductCategoryBySlugClientSuccess(
+          data.data.rows[0]
+        )
+      );
+    }
+  } catch (err) {
+    console.log(err);
+    yield put(productCategoryActions.getProductCategoryBySlugClientFailed());
   }
 }
 

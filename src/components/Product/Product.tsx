@@ -12,10 +12,18 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import { castToVND } from '../../utils';
 
 import { MinusOutlined, PlusOutlined } from '@ant-design/icons';
+import { product } from '../../types/product';
+import Item from 'antd/es/list/Item';
+import { productImage } from '../../types/productImage';
 
 const cx = classNames.bind(styles);
 
-const Product: React.FC = () => {
+interface Props {
+  product?: product;
+}
+
+const Product: React.FC<Props> = ({ product }) => {
+  console.log(product);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [qtt, setQtt] = useState<number>(1);
   const [isActiveSize, setIsActiveSize] = useState<boolean>(false);
@@ -32,14 +40,15 @@ const Product: React.FC = () => {
   const handleCancel = () => {
     setIsModalVisible(false);
   };
+  if (!product) return <></>;
   return (
     <React.Fragment>
       <div className={cx('item')}>
         <div className={cx('img')}>
-          <Link to="">
+          <Link to={`/san-pham/${product.slug}`}>
             <img
               // className="common-img"
-              src="https://res.cloudinary.com/diot4imoq/image/upload/v1677746503/canifa/idegklmolvo1sd1pddci.webp"
+              src={product.thumbnail}
               alt=""
             />
           </Link>
@@ -62,35 +71,35 @@ const Product: React.FC = () => {
                 <Swiper
                   modules={[Pagination]}
                   className={cx('my-swiper')}
-                  pagination={{ clickable: true }}
+                  // pagination={{ clickable: true }}
                 >
-                  <SwiperSlide className="max-sm:flex max-sm:items-center max-lg:flex max-lg:items-center">
-                    <div>
-                      <Image
-                        src="https://cdn.shopify.com/s/files/1/0456/5070/6581/products/UXC72WA-2_x450.jpg?v=1657686129"
-                        alt=""
-                      />
-                    </div>
-                  </SwiperSlide>
-                  <SwiperSlide className="max-sm:flex max-sm:items-center max-lg:flex max-lg:items-center">
-                    <div>
-                      <Image
-                        src="https://cdn.shopify.com/s/files/1/0456/5070/6581/products/UXC72WA-3_x450.jpg?v=1657686130"
-                        alt=""
-                      />
-                    </div>
-                  </SwiperSlide>
+                  {product.productImages.map((item: productImage) => {
+                    return (
+                      <SwiperSlide
+                        className="max-sm:flex max-sm:items-center max-lg:flex max-lg:items-center"
+                        key={item.id}
+                      >
+                        <div>
+                          <Image src={item.path} alt="" />
+                        </div>
+                      </SwiperSlide>
+                    );
+                  })}
                 </Swiper>
               </div>
               <div className={cx('right')}>
                 <div className={cx('name')}>
-                  <Link to="">
-                    Giày Thời Trang Nam New Balance XC-72 Shifted Lifestyle
-                  </Link>
+                  <Link to={`/san-pham/${product.slug}`}>{product.name}</Link>
                 </div>
                 <div className={cx('price')}>
-                  <span className={cx('current')}>{castToVND(3295000)}</span>
-                  <span className={cx('sale')}>{castToVND(100000)}</span>
+                  <span className={cx('current')}>
+                    {castToVND(product.price)}
+                  </span>
+                  {product.priceSale > 0 && (
+                    <span className={cx('sale')}>
+                      {castToVND(product.priceSale)}
+                    </span>
+                  )}
                 </div>
                 <div className={cx('colors')}>
                   <h3>Màu sắc:</h3>
@@ -170,15 +179,19 @@ const Product: React.FC = () => {
           </Modal>
         )}
         <div className={cx('name')}>
-          <Link to="">
+          <Link to={`/san-pham/${product.slug}`}>
             <span className="hover:text-btn-order transition ease-in-out delay-75">
-              Giày chạy bộ nam hoka march
+              {product.name}
             </span>
           </Link>
         </div>
         <div className={cx('price')}>
-          <span>{castToVND(570000)}</span>
-          <span className={cx('price-old')}>{castToVND(123000000)}</span>
+          <span>{castToVND(product.price)}</span>
+          {product.priceSale > 0 && (
+            <span className={cx('price-old')}>
+              {castToVND(product.priceSale)}
+            </span>
+          )}
         </div>
         <div className={cx('tags-name')}>
           <div className={cx('wish-list')}>
@@ -187,9 +200,13 @@ const Product: React.FC = () => {
             </Tooltip>
           </div>
         </div>
-        <div className={cx('tags-percent')}>
-          <span>-10%</span>
-        </div>
+        {product.priceSale !== 0 && (
+          <div className={cx('tags-percent')}>
+            <span>
+              -{Math.floor((product.priceSale / product.price) * 100)}%
+            </span>
+          </div>
+        )}
       </div>
     </React.Fragment>
   );

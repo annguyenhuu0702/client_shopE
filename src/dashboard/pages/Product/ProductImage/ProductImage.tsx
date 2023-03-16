@@ -2,7 +2,12 @@ import { LoadingOutlined, PlusOutlined } from '@ant-design/icons';
 import { Col, Form, message, Modal, Row, Select, Upload } from 'antd';
 import type { RcFile, UploadFile, UploadProps } from 'antd/es/upload/interface';
 import { UploadChangeParam } from 'antd/lib/upload';
-import React, { useEffect, useState, useMemo } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
+import {
+  // AiFillCheckSquare,
+  AiFillDelete,
+  AiOutlineCheck,
+} from 'react-icons/ai';
 import { useDispatch, useSelector } from 'react-redux';
 import { productImageApi } from '../../../../apis/productImage';
 import { variantValueApi } from '../../../../apis/variantValueApi';
@@ -16,10 +21,12 @@ import {
   productImageActions,
   productImageSelector,
 } from '../../../../redux/slice/productImageSlice';
-import { productSelector } from '../../../../redux/slice/productSlice';
-import { variantValue } from '../../../../types/variantValue';
-import { AiFillDelete, AiFillCheckSquare } from 'react-icons/ai';
+import {
+  productActions,
+  productSelector,
+} from '../../../../redux/slice/productSlice';
 import { productImage } from '../../../../types/productImage';
+import { variantValue } from '../../../../types/variantValue';
 
 const getBase64 = (img: RcFile, callback: (url: string) => void) => {
   const reader = new FileReader();
@@ -66,6 +73,7 @@ const ModalProductImage: React.FC = () => {
 
   const [listId, setListId] = useState<number[]>([]);
   const [thumbnail, setThumbnail] = useState<string>('');
+  const [deleteThumbnail, setDeleteThumbnail] = useState<boolean>(false);
 
   const getVariantColors = useMemo(() => {
     return variantValues.filter((item) => item.variantId === 2);
@@ -91,6 +99,22 @@ const ModalProductImage: React.FC = () => {
           thumbnail,
         });
         dispatch(modalActions.hideModal());
+        if (deleteThumbnail) {
+          dispatch(
+            productActions.updateThumbnail({
+              id: currentProduct.id,
+              thumbnail: '',
+            })
+          );
+        }
+        if (currentProduct?.thumbnail !== thumbnail) {
+          dispatch(
+            productActions.updateThumbnail({
+              id: currentProduct.id,
+              thumbnail,
+            })
+          );
+        }
       } catch (error) {
         console.log(error);
       }
@@ -112,7 +136,10 @@ const ModalProductImage: React.FC = () => {
     setThumbnail(path);
   };
 
-  const handleDeleteImage = (id: number) => {
+  const handleDeleteImage = (id: number, path: string) => {
+    if (currentProduct && path === currentProduct.thumbnail) {
+      setDeleteThumbnail(true);
+    }
     setListId((state) => {
       return [...state, id];
     });
@@ -123,7 +150,6 @@ const ModalProductImage: React.FC = () => {
       return state.filter((item) => item.path !== path);
     });
   };
-
   const handleChange: UploadProps['onChange'] = (
     info: UploadChangeParam<UploadFile>
   ) => {
@@ -133,12 +159,16 @@ const ModalProductImage: React.FC = () => {
     }
     if (info.file.status === 'done') {
       // Get this url from response in real world.
-      setPathImgs(
-        info.fileList.map((file: any) => ({
-          path: file.response.data[0].secure_url,
-          variantValueId: null,
-        })) as any
-      );
+      try {
+        if (info.fileList.length > 0 && info.fileList[0].response) {
+          setPathImgs(
+            info.fileList.map((file: any, index) => ({
+              path: file.response.data[0].secure_url,
+              variantValueId: null,
+            })) as any
+          );
+        }
+      } catch (error) {}
       getBase64(info.file.originFileObj as RcFile, (url) => {
         setLoading(false);
         setImageUrl(url);
@@ -186,7 +216,7 @@ const ModalProductImage: React.FC = () => {
       open={isModal}
       centered
       destroyOnClose
-      width={1000}
+      width="70vw"
       okText="Lưu"
       cancelText="Quay lại"
       onOk={handleOk}
@@ -257,7 +287,7 @@ const ModalProductImage: React.FC = () => {
                 </div>
                 <div className="mt-2 flex justify-between">
                   <span
-                    className="text-3xl"
+                    className="w-10 h-10 bg-red-600 text-white flex items-center justify-center rounded-md cursor-pointer"
                     onClick={() => {
                       handleDeleteImageOnUpload(item.path);
                     }}
@@ -268,12 +298,12 @@ const ModalProductImage: React.FC = () => {
                     <></>
                   ) : (
                     <span
-                      className="text-3xl"
+                      className="w-10 h-10 bg-green-600 text-white flex items-center justify-center rounded-md cursor-pointer"
                       onClick={() => {
                         handleSelectThumbnail(item.path);
                       }}
                     >
-                      <AiFillCheckSquare />
+                      <AiOutlineCheck />
                     </span>
                   )}
                 </div>
@@ -320,9 +350,9 @@ const ModalProductImage: React.FC = () => {
                   </div>
                   <div className="mt-2 flex justify-between">
                     <span
-                      className="text-3xl"
+                      className="w-10 h-10 bg-red-600 text-white flex items-center justify-center rounded-md cursor-pointer"
                       onClick={() => {
-                        handleDeleteImage(item.id);
+                        handleDeleteImage(item.id, item.path);
                       }}
                     >
                       <AiFillDelete />
@@ -331,12 +361,12 @@ const ModalProductImage: React.FC = () => {
                       <></>
                     ) : (
                       <span
-                        className="text-3xl"
+                        className="w-10 h-10 bg-green-600 text-white flex items-center justify-center rounded-md cursor-pointer"
                         onClick={() => {
                           handleSelectThumbnail(item.path);
                         }}
                       >
-                        <AiFillCheckSquare />
+                        <AiOutlineCheck />
                       </span>
                     )}
                   </div>

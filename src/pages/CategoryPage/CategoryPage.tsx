@@ -44,13 +44,13 @@ const CategoryPage: React.FC = () => {
   useTitle(currentCategoryClient?.name ? currentCategoryClient?.name : '');
 
   // check productcategory để hiển thị slide
-  const countProductCategory = useMemo(() => {
-    return currentCategoryClient
-      ? currentCategoryClient.collections.reduce((prev: any, current: any) => {
-          return prev + current.productCategories.length;
-        }, 0)
-      : 0;
-  }, [currentCategoryClient]);
+  // const countProductCategory = useMemo(() => {
+  //   return currentCategoryClient
+  //     ? currentCategoryClient.collections.reduce((prev: any, current: any) => {
+  //         return prev + current.productCategories.length;
+  //       }, 0)
+  //     : 0;
+  // }, [currentCategoryClient]);
 
   if (!checkCategoryPage) return <ProductCategoryPage />;
   return (
@@ -72,7 +72,7 @@ const CategoryPage: React.FC = () => {
           />
         </div>
       </section>
-      {countProductCategory > 0 && (
+      {/* {countProductCategory > 0 && (
         <section className="mb-16 border-solid border-0 border-b-2 border-border-product-page">
           <div>
             <h3 className="m-0 mb-8 font-bold text-4xl">Danh mục sản phẩm</h3>
@@ -132,7 +132,7 @@ const CategoryPage: React.FC = () => {
             </Swiper>
           </div>
         </section>
-      )}
+      )} */}
       <section className="mb-16 ">
         <div>
           <h3 className="m-0 mb-8 font-bold text-4xl">Áo phông</h3>

@@ -2,10 +2,13 @@ import { AxiosResponse } from 'axios';
 import instance, { apiCallerWithToken } from '../config/configAxios';
 import { URL_API } from '../constants';
 import { AppDispatch } from '../redux/store';
-import { queryParams } from '../types/common';
-import { createProduct, updateProduct } from '../types/product';
+import {
+  createProduct,
+  getAllProductParams,
+  updateProduct,
+} from '../types/product';
 
-const getAll = (params?: queryParams) => {
+const getAll = (params?: getAllProductParams) => {
   return instance.get(`${URL_API}/product/getAll`, {
     params,
   });

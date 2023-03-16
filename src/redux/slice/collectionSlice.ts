@@ -68,24 +68,7 @@ const CollectionSlice = createSlice({
       state.isLoading = false;
       state.isError = true;
     },
-    getCollectionBySlugClient: (
-      state,
-      action: PayloadAction<getAllCollectionParams>
-    ) => {
-      state.isLoading = true;
-    },
-    getCollectionBySlugClientSuccess: (
-      state,
-      action: PayloadAction<collection>
-    ) => {
-      state.isLoading = false;
-      state.isError = false;
-      state.currentCollectionClient = action.payload;
-    },
-    getCollectionBySlugClientFailed: (state) => {
-      state.isLoading = false;
-      state.isError = true;
-    },
+
     createCollection: (
       state,
       action: PayloadAction<tokenPayloadData<createCollection>>
@@ -141,6 +124,25 @@ const CollectionSlice = createSlice({
       }
     },
     deleteCollectionFailed: (state) => {
+      state.isLoading = false;
+      state.isError = true;
+    },
+
+    getCollectionBySlugClient: (
+      state,
+      action: PayloadAction<getAllCollectionParams>
+    ) => {
+      state.isLoading = true;
+    },
+    getCollectionBySlugClientSuccess: (
+      state,
+      action: PayloadAction<collection>
+    ) => {
+      state.isLoading = false;
+      state.isError = false;
+      state.currentCollectionClient = action.payload;
+    },
+    getCollectionBySlugClientFailed: (state) => {
       state.isLoading = false;
       state.isError = true;
     },

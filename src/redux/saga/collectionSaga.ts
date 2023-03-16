@@ -29,28 +29,6 @@ function* getAllCollectionSaga({
   }
 }
 
-function* getCollectionBySlugClientSaga({
-  payload,
-}: PayloadAction<getAllCollectionParams>): any {
-  try {
-    const res = yield call(() => {
-      return collectionApi.getAll({
-        slug: payload.slug,
-        productCategories: true,
-      });
-    });
-    const { data, status } = res;
-    if (status === STATUS_CODE.SUCCESS) {
-      yield put(
-        collectionActions.getCollectionBySlugClientSuccess(data.data.rows[0])
-      );
-    }
-  } catch (err) {
-    console.log(err);
-    yield put(collectionActions.getCollectionBySlugClientFailed());
-  }
-}
-
 function* createCollectionSaga({
   payload,
 }: PayloadAction<tokenPayloadData<createCollection>>): any {
@@ -144,6 +122,28 @@ function* deleteCollectionSaga({ payload }: PayloadAction<deleteParams>): any {
       placement: 'bottomRight',
       duration: 3,
     });
+  }
+}
+
+function* getCollectionBySlugClientSaga({
+  payload,
+}: PayloadAction<getAllCollectionParams>): any {
+  try {
+    const res = yield call(() => {
+      return collectionApi.getAll({
+        slug: payload.slug,
+        productCategories: true,
+      });
+    });
+    const { data, status } = res;
+    if (status === STATUS_CODE.SUCCESS) {
+      yield put(
+        collectionActions.getCollectionBySlugClientSuccess(data.data.rows[0])
+      );
+    }
+  } catch (err) {
+    console.log(err);
+    yield put(collectionActions.getCollectionBySlugClientFailed());
   }
 }
 

@@ -16,6 +16,14 @@ export interface productState {
   pageSize: number;
   isLoading: boolean;
   isError: boolean;
+
+  // client
+  productsClient: resProduct;
+  currentProductClient: product | null;
+  pageClient: number;
+  pageSizeClient: number;
+  isLoadingClient: boolean;
+  isErrorClient: boolean;
 }
 
 export interface resProduct {
@@ -33,6 +41,16 @@ const initialState: productState = {
   currentProduct: null,
   isLoading: false,
   isError: false,
+  // client
+  productsClient: {
+    rows: [],
+    count: 0,
+  },
+  currentProductClient: null,
+  pageClient: 1,
+  pageSizeClient: 12,
+  isLoadingClient: false,
+  isErrorClient: false,
 };
 
 const ProductSlice = createSlice({
@@ -119,6 +137,43 @@ const ProductSlice = createSlice({
     deleteProductFailed: (state) => {
       state.isLoading = false;
       state.isError = true;
+    },
+    updateThumbnail: (
+      state,
+      { payload }: PayloadAction<{ id: number; thumbnail: string }>
+    ) => {
+      const { id, thumbnail } = payload;
+
+      const index = state.products.rows.findIndex((item) => item.id === id);
+      if (index !== -1) {
+        state.products.rows[index].thumbnail = thumbnail;
+        if (state.currentProduct) {
+          state.currentProduct.thumbnail = thumbnail;
+        }
+      }
+    },
+    getAllProductClient: (
+      state,
+      action: PayloadAction<getAllProductParams>
+    ) => {
+      state.isLoadingClient = true;
+    },
+    getAllProductClientSuccess: (state, action: PayloadAction<resProduct>) => {
+      state.isLoadingClient = false;
+      state.isErrorClient = false;
+      state.productsClient.rows = action.payload.rows;
+      state.productsClient.count = action.payload.count;
+    },
+    getAllProductClientFailed: (state) => {
+      state.isLoading = false;
+      state.isError = true;
+    },
+    setPageClient: (
+      state,
+      action: PayloadAction<{ page: number; pageSize: number }>
+    ) => {
+      state.pageClient = action.payload.page;
+      state.pageSizeClient = action.payload.pageSize;
     },
   },
 });

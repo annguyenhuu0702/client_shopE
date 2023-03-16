@@ -41,23 +41,23 @@ const TableProductCategory: React.FC = () => {
   const { user }: authState = useSelector(authSelector);
   const navigate = useNavigate();
   const columns = [
-    {
-      title: 'Hình ảnh',
-      width: '100px',
-      render: (text: string, record: productCategory) => {
-        return record.thumbnail !== '' ? (
-          <div className="flex justify-center cursor-text">
-            <img
-              src={record.thumbnail}
-              alt=""
-              className="w-20 h-14 object-cover"
-            />
-          </div>
-        ) : (
-          <></>
-        );
-      },
-    },
+    // {
+    //   title: 'Hình ảnh',
+    //   width: '100px',
+    //   render: (text: string, record: productCategory) => {
+    //     return record.thumbnail !== '' ? (
+    //       <div className="flex justify-center cursor-text">
+    //         <img
+    //           src={record.thumbnail}
+    //           alt=""
+    //           className="w-20 h-14 object-cover"
+    //         />
+    //       </div>
+    //     ) : (
+    //       <></>
+    //     );
+    //   },
+    // },
     {
       title: 'Tên',
       render: (text: string, record: productCategory) => {

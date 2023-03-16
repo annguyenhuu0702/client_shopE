@@ -74,24 +74,7 @@ const ProductCategorySlice = createSlice({
       state.isLoading = false;
       state.isError = true;
     },
-    getProductCategoryBySlugClient: (
-      state,
-      action: PayloadAction<getAllProductCategoryParams>
-    ) => {
-      state.isLoading = true;
-    },
-    getProductCategoryBySlugClientSuccess: (
-      state,
-      action: PayloadAction<productCategory>
-    ) => {
-      state.isLoading = false;
-      state.isError = false;
-      state.currentProductCategoryClient = action.payload;
-    },
-    getProductCategoryBySlugClientFailed: (state) => {
-      state.isLoading = false;
-      state.isError = true;
-    },
+
     createProductCategory: (
       state,
       action: PayloadAction<tokenPayloadData<createProductCategory>>
@@ -156,6 +139,25 @@ const ProductCategorySlice = createSlice({
       }
     },
     deleteProductCategoryFailed: (state) => {
+      state.isLoading = false;
+      state.isError = true;
+    },
+
+    getProductCategoryBySlugClient: (
+      state,
+      action: PayloadAction<getAllProductCategoryParams>
+    ) => {
+      state.isLoading = true;
+    },
+    getProductCategoryBySlugClientSuccess: (
+      state,
+      action: PayloadAction<productCategory>
+    ) => {
+      state.isLoading = false;
+      state.isError = false;
+      state.currentProductCategoryClient = action.payload;
+    },
+    getProductCategoryBySlugClientFailed: (state) => {
       state.isLoading = false;
       state.isError = true;
     },

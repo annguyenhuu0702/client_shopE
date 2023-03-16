@@ -71,25 +71,7 @@ const CategorySlice = createSlice({
       state.isLoading = false;
       state.isError = true;
     },
-    getAllCategoryClient: (
-      state,
-      action: PayloadAction<getAllCategoryParams>
-    ) => {
-      state.isLoading = true;
-    },
-    getAllCategoryClientSuccess: (
-      state,
-      action: PayloadAction<resCategory>
-    ) => {
-      state.isLoading = false;
-      state.isError = false;
-      state.categoriesClient.rows = action.payload.rows;
-      state.categoriesClient.count = action.payload.count;
-    },
-    getAllCategoryClientFailed: (state) => {
-      state.isLoading = false;
-      state.isError = true;
-    },
+
     getCategoryBySlug: (state, action: PayloadAction<getAllCategoryParams>) => {
       state.isLoading = true;
     },
@@ -158,6 +140,26 @@ const CategorySlice = createSlice({
       }
     },
     deleteCategoryFailed: (state) => {
+      state.isLoading = false;
+      state.isError = true;
+    },
+
+    getAllCategoryClient: (
+      state,
+      action: PayloadAction<getAllCategoryParams>
+    ) => {
+      state.isLoading = true;
+    },
+    getAllCategoryClientSuccess: (
+      state,
+      action: PayloadAction<resCategory>
+    ) => {
+      state.isLoading = false;
+      state.isError = false;
+      state.categoriesClient.rows = action.payload.rows;
+      state.categoriesClient.count = action.payload.count;
+    },
+    getAllCategoryClientFailed: (state) => {
       state.isLoading = false;
       state.isError = true;
     },

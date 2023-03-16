@@ -121,11 +121,29 @@ function* deleteProductSaga({ payload }: PayloadAction<deleteParams>): any {
   }
 }
 
+function* getAllProductClientSaga({
+  payload,
+}: PayloadAction<getAllProductParams>): any {
+  try {
+    const res = yield call(() => {
+      return productApi.getAll(payload);
+    });
+    const { data, status } = res;
+    if (status === STATUS_CODE.SUCCESS) {
+      yield put(productActions.getAllProductClientSuccess(data.data));
+    }
+  } catch (err) {
+    console.log(err);
+    yield put(productActions.getAllProductClientFailed());
+  }
+}
+
 function* productSaga() {
   yield takeEvery('product/createProduct', createProductSaga);
   yield takeEvery('product/getAllProduct', getAllProductSaga);
   yield takeEvery('product/editProduct', editProductSaga);
   yield takeEvery('product/deleteProduct', deleteProductSaga);
+  yield takeEvery('product/getAllProductClient', getAllProductClientSaga);
 }
 
 export default productSaga;

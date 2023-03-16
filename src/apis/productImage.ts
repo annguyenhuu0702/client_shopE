@@ -4,7 +4,6 @@ import { AppDispatch } from '../redux/store';
 import {
   createProductImage,
   getAllProductImageParams,
-  updateProductImage,
 } from '../types/productImage';
 
 const getAll = (params?: getAllProductImageParams) => {
@@ -28,31 +27,8 @@ const createMany = (
   );
 };
 
-const update = (
-  token: string | null,
-  dispatch: AppDispatch,
-  data: updateProductImage
-): Promise<AxiosResponse> => {
-  return apiCallerWithToken(token, dispatch).put(
-    `productImage/update/${data.id}`,
-    data
-  );
-};
-
-const deleteProductImage = (
-  token: string | null,
-  dispatch: AppDispatch,
-  id: number
-): Promise<AxiosResponse> => {
-  return apiCallerWithToken(token, dispatch).delete(
-    `productImage/delete/${id}`
-  );
-};
-
 export const productImageApi = {
   getAll,
   getById,
-  update,
-  deleteProductImage,
   createMany,
 };

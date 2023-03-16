@@ -1,6 +1,8 @@
 import React from 'react';
 import { queryParams, tokenPayload } from './common';
 import { productCategory } from './productCategory';
+import { productImage } from './productImage';
+import { productVariant } from './productVariant';
 
 export interface product {
   key?: React.Key | string | number;
@@ -17,6 +19,8 @@ export interface product {
   updatedAt: string;
   resetValues?: Function;
   productCategory: productCategory;
+  productImages: productImage[];
+  // productVariants: productVariant;
 }
 
 export interface createProduct {
@@ -41,4 +45,6 @@ export interface deleteProduct extends tokenPayload {
 
 export interface getAllProductParams extends queryParams {
   name?: string;
+  slug?: string;
+  otherSlug?: string;
 }

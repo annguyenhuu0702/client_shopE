@@ -19,12 +19,26 @@ import { collection } from '../../types/collection';
 import { productCategory } from '../../types/productCategory';
 import { removeTextBetweenParentheses } from '../../utils';
 import ContentFilter from './ContentFilter';
+import {
+  productActions,
+  productSelector,
+} from '../../redux/slice/productSlice';
 
 const ProductCategoryPage: React.FC = () => {
   const { categorySlug } = useParams();
   const { currentCollectionClient } = useSelector(collectionSelector);
   const { currentProductCategoryClient } = useSelector(productCategorySelector);
   const dispatch = useDispatch();
+  const { productsClient, pageClient, pageSizeClient } =
+    useSelector(productSelector);
+
+  useTitle(
+    currentCollectionClient
+      ? currentCollectionClient?.name
+      : currentProductCategoryClient
+      ? currentProductCategoryClient?.name
+      : ''
+  );
 
   // lấy collection  để render sidebar bên trái
   useEffect(() => {
@@ -56,13 +70,16 @@ const ProductCategoryPage: React.FC = () => {
     currentProductCategoryClient?.collection.category,
   ]);
 
-  useTitle(
-    currentCollectionClient
-      ? currentCollectionClient?.name
-      : currentProductCategoryClient
-      ? currentProductCategoryClient?.name
-      : ''
-  );
+  // lấy sản phẩm theo slug
+  useEffect(() => {
+    dispatch(
+      productActions.getAllProductClient({
+        p: pageClient,
+        limit: 12,
+        otherSlug: categorySlug,
+      })
+    );
+  }, [categorySlug, dispatch, pageClient]);
 
   return (
     <main className="px-20 max-sm:mt-24 max-sm:px-4">
@@ -193,41 +210,42 @@ const ProductCategoryPage: React.FC = () => {
               </ul>
             </div>
           </Col>
-          <Col xl={20} md={18} xs={24}>
-            <Row gutter={[16, 16]}>
-              <Col xl={6} md={8} xs={12}>
-                <Product />
-              </Col>
-              <Col xl={6} md={8} xs={12}>
-                <Product />
-              </Col>
-              <Col xl={6} md={8} xs={12}>
-                <Product />
-              </Col>
-              <Col xl={6} md={8} xs={12}>
-                <Product />
-              </Col>
-              <Col xl={6} md={8} xs={12}>
-                <Product />
-              </Col>
-              <Col xl={6} md={8} xs={12}>
-                <Product />
-              </Col>
-              <Col xl={6} md={8} xs={12}>
-                <Product />
-              </Col>
-              <Col xl={6} md={8} xs={12}>
-                <Product />
-              </Col>
-              <Col xl={6} md={8} xs={12}>
-                <Product />
-              </Col>
-            </Row>
-          </Col>
+          {productsClient.rows.length > 0 ? (
+            <Col xl={20} md={18} xs={24}>
+              <Row gutter={[16, 16]}>
+                {productsClient.rows.map((item) => {
+                  return (
+                    <Col xl={6} md={8} xs={12} key={item.id}>
+                      <Product product={item} />
+                    </Col>
+                  );
+                })}
+              </Row>
+              <section className="pb-12 mt-4 flex justify-end">
+                <Pagination
+                  pageSize={pageSizeClient}
+                  current={pageClient}
+                  total={productsClient.count}
+                  onChange={(page: number, pageSize: number) => {
+                    dispatch(productActions.setPageClient({ page, pageSize }));
+                    window.scroll({
+                      behavior: 'smooth',
+                      top: 0,
+                    });
+                  }}
+                />
+              </section>
+            </Col>
+          ) : (
+            <Col xl={20} md={18} xs={24}>
+              <div className="flex items-center justify-center">
+                <span className="text-3xl font-semibold">
+                  Sản phẩm này tạm thời hết hàng!
+                </span>
+              </div>
+            </Col>
+          )}
         </Row>
-      </section>
-      <section className="pb-12 mt-4 flex justify-end">
-        <Pagination defaultCurrent={1} total={50} />
       </section>
     </main>
   );

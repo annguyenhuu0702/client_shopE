@@ -7,7 +7,7 @@ import {
   ProfileLayout,
 } from '../layouts';
 
-import { route } from '../types/route';
+import { IRoute } from '../types/route';
 
 const HomePage = lazy(() => import('../pages/HomePage'));
 const Login = lazy(() => import('../pages/Login'));
@@ -55,7 +55,7 @@ const FormProduct = lazy(
 
 const NotFound = lazy(() => import('../pages/NotFound/NotFound'));
 
-export const publicRoute: route[] = [
+export const publicRoute: IRoute[] = [
   {
     path: '*',
     element: NotFound,
@@ -129,7 +129,7 @@ export const publicRoute: route[] = [
 ];
 
 //admin
-export const privateRoute: route[] = [
+export const privateRoute: IRoute[] = [
   {
     path: routes.admin,
     element: Statistical,

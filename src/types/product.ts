@@ -1,10 +1,9 @@
 import React from 'react';
-import { queryParams, tokenPayload } from './common';
-import { productCategory } from './productCategory';
-import { productImage } from './productImage';
-import { productVariant } from './productVariant';
+import { queryParams } from './common';
+import { IProductCategory } from './productCategory';
+import { IProductImage } from './productImage';
 
-export interface product {
+export interface IProduct {
   key?: React.Key | string | number;
   id: number;
   productCategoryId: number;
@@ -18,12 +17,12 @@ export interface product {
   createdAt: string;
   updatedAt: string;
   resetValues?: Function;
-  productCategory: productCategory;
-  productImages: productImage[];
+  productCategory: IProductCategory;
+  productImages: IProductImage[];
   // productVariants: productVariant;
 }
 
-export interface createProduct {
+export interface ICreateProduct {
   productCategoryId: number;
   name: string;
   slug: string;
@@ -34,16 +33,11 @@ export interface createProduct {
   resetValues?: Function;
 }
 
-export interface updateProduct extends createProduct {
+export interface IUpdateProduct extends ICreateProduct {
   id: number;
 }
 
-export interface deleteProduct extends tokenPayload {
-  id: number;
-  params?: queryParams;
-}
-
-export interface getAllProductParams extends queryParams {
+export interface IGetAllProductParams extends queryParams {
   name?: string;
   slug?: string;
   otherSlug?: string;

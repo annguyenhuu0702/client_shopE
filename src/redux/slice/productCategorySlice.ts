@@ -1,25 +1,25 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { deleteParams, tokenPayloadData } from '../../types/common';
 import {
-  createProductCategory,
-  getAllProductCategoryParams,
-  productCategory,
-  updateProductCategory,
+  IProductCategory,
+  ICreateProductCategory,
+  IUpdateProductCategory,
+  IGetAllProductCategoryParams,
 } from '../../types/productCategory';
 import { RootState } from '../store';
 
 export interface productCategoryState {
   productCategories: resProductCategory;
-  currentProductCategory: productCategory | null;
+  currentProductCategory: IProductCategory | null;
   page: number;
   pageSize: number;
   isLoading: boolean;
   isError: boolean;
-  currentProductCategoryClient: productCategory | null;
+  currentProductCategoryClient: IProductCategory | null;
 }
 
 export interface resProductCategory {
-  rows: productCategory[];
+  rows: IProductCategory[];
   count: number;
 }
 
@@ -51,13 +51,13 @@ const ProductCategorySlice = createSlice({
     },
     setProductCategory: (
       state,
-      action: PayloadAction<productCategory | null>
+      action: PayloadAction<IProductCategory | null>
     ) => {
       state.currentProductCategory = action.payload;
     },
     getAllProductCategory: (
       state,
-      action: PayloadAction<getAllProductCategoryParams>
+      action: PayloadAction<IGetAllProductCategoryParams>
     ) => {
       state.isLoading = true;
     },
@@ -77,13 +77,13 @@ const ProductCategorySlice = createSlice({
 
     createProductCategory: (
       state,
-      action: PayloadAction<tokenPayloadData<createProductCategory>>
+      action: PayloadAction<tokenPayloadData<ICreateProductCategory>>
     ) => {
       state.isLoading = true;
     },
     createProductCategorySuccess: (
       state,
-      action: PayloadAction<productCategory>
+      action: PayloadAction<IProductCategory>
     ) => {
       state.isLoading = false;
       state.isError = false;
@@ -103,13 +103,13 @@ const ProductCategorySlice = createSlice({
     },
     editProductCategory: (
       state,
-      action: PayloadAction<tokenPayloadData<updateProductCategory>>
+      action: PayloadAction<tokenPayloadData<IUpdateProductCategory>>
     ) => {
       state.isLoading = true;
     },
     editProductCategorySuccess: (
       state,
-      action: PayloadAction<productCategory>
+      action: PayloadAction<IProductCategory>
     ) => {
       state.isLoading = false;
       state.isError = false;
@@ -145,13 +145,13 @@ const ProductCategorySlice = createSlice({
 
     getProductCategoryBySlugClient: (
       state,
-      action: PayloadAction<getAllProductCategoryParams>
+      action: PayloadAction<IGetAllProductCategoryParams>
     ) => {
       state.isLoading = true;
     },
     getProductCategoryBySlugClientSuccess: (
       state,
-      action: PayloadAction<productCategory>
+      action: PayloadAction<IProductCategory>
     ) => {
       state.isLoading = false;
       state.isError = false;

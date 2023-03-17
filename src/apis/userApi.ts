@@ -3,7 +3,7 @@ import { apiCallerWithToken } from '../config/configAxios';
 import { URL_API } from '../constants';
 import { AppDispatch } from '../redux/store';
 import { queryParams } from '../types/common';
-import { createUser, updateUser } from '../types/user';
+import { ICreateUser, IUpdateUser } from '../types/user';
 
 const getAll = (
   token: string | null,
@@ -18,7 +18,7 @@ const getAll = (
 const create = (
   token: string | null,
   dispatch: AppDispatch,
-  user: createUser
+  user: ICreateUser
 ): Promise<AxiosResponse> => {
   return apiCallerWithToken(token, dispatch).post(
     `${URL_API}/user/create`,
@@ -29,7 +29,7 @@ const create = (
 const update = (
   token: string | null,
   dispatch: AppDispatch,
-  user: updateUser
+  user: IUpdateUser
 ): Promise<AxiosResponse> => {
   return apiCallerWithToken(token, dispatch).put(
     `${URL_API}/user/update/${user.id}`,

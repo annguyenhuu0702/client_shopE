@@ -26,7 +26,7 @@ import {
   collectionState,
 } from '../../../../redux/slice/collectionSlice';
 import { collectionApi } from '../../../../apis/collectionApi';
-import { collection } from '../../../../types/collection';
+import { ICollection } from '../../../../types/collection';
 import { removeTextBetweenParentheses } from '../../../../utils';
 
 const TableCollection: React.FC = () => {
@@ -146,7 +146,7 @@ const TableCollection: React.FC = () => {
         const data = await collectionApi.getAll();
         let wb = utils.book_new();
         let ws = utils.json_to_sheet(
-          data.data.data.rows.map((item: collection) => ({
+          data.data.data.rows.map((item: ICollection) => ({
             name: item.name,
             category: item.category.name,
             createdAt: moment(item.createdAt).format('MM/DD/YYYY'),
@@ -238,7 +238,7 @@ const TableCollection: React.FC = () => {
       <Row className="common-content-table">
         <Col xl={24} md={24} xs={24}>
           <Table
-            dataSource={collections.rows.map((item: collection) => {
+            dataSource={collections.rows.map((item: ICollection) => {
               return {
                 ...item,
                 key: item.id,

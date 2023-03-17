@@ -1,16 +1,15 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { deleteParams, tokenPayloadData } from '../../types/common';
+import { tokenPayloadData } from '../../types/common';
 import {
-  createProductImage,
-  getAllProductImageParams,
-  productImage,
-  updateProductImage,
+  ICreateProductImage,
+  IGetAllProductImageParams,
+  IProductImage,
 } from '../../types/productImage';
 import { RootState } from '../store';
 
 export interface productImageState {
   productImages: resProductImage;
-  currentProductImage: productImage | null;
+  currentProductImage: IProductImage | null;
   page: number;
   pageSize: number;
   isLoading: boolean;
@@ -18,7 +17,7 @@ export interface productImageState {
 }
 
 export interface resProductImage {
-  rows: productImage[];
+  rows: IProductImage[];
   count: number;
 }
 
@@ -45,12 +44,12 @@ const productImageSlice = createSlice({
       state.page = action.payload.page;
       state.pageSize = action.payload.pageSize;
     },
-    setProductImage: (state, action: PayloadAction<productImage | null>) => {
+    setProductImage: (state, action: PayloadAction<IProductImage | null>) => {
       state.currentProductImage = action.payload;
     },
     getAllProductImage: (
       state,
-      action: PayloadAction<getAllProductImageParams>
+      action: PayloadAction<IGetAllProductImageParams>
     ) => {
       state.isLoading = true;
     },
@@ -69,11 +68,14 @@ const productImageSlice = createSlice({
     },
     createProductImage: (
       state,
-      action: PayloadAction<tokenPayloadData<createProductImage>>
+      action: PayloadAction<tokenPayloadData<ICreateProductImage>>
     ) => {
       state.isLoading = true;
     },
-    createProductImageSuccess: (state, action: PayloadAction<productImage>) => {
+    createProductImageSuccess: (
+      state,
+      action: PayloadAction<IProductImage>
+    ) => {
       state.isLoading = false;
       state.isError = false;
       state.productImages.rows.unshift(action.payload);

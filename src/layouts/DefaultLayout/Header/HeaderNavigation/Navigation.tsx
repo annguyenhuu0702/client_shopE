@@ -8,9 +8,9 @@ import {
   categorySelector,
   categoryState,
 } from '../../../../redux/slice/categorySlice';
-import { category } from '../../../../types/category';
-import { collection } from '../../../../types/collection';
-import { productCategory } from '../../../../types/productCategory';
+import { ICategory } from '../../../../types/category';
+import { ICollection } from '../../../../types/collection';
+import { IProductCategory } from '../../../../types/productCategory';
 import { removeTextBetweenParentheses } from '../../../../utils';
 import styles from './__navigation.module.scss';
 
@@ -29,7 +29,7 @@ const HeaderNavigation: React.FC = () => {
       <div className={cx('menu')}>
         <ul className={cx('list-item')}>
           {categoriesClient &&
-            [...categoriesClient.rows].reverse().map((category: category) => {
+            [...categoriesClient.rows].reverse().map((category: ICategory) => {
               return (
                 <li className={cx('item')} key={category.id}>
                   <Link
@@ -47,7 +47,7 @@ const HeaderNavigation: React.FC = () => {
                   >
                     {[...category.collections]
                       .reverse()
-                      .map((collection: collection) => {
+                      .map((collection: ICollection) => {
                         return (
                           <Col
                             xl={6}
@@ -63,7 +63,7 @@ const HeaderNavigation: React.FC = () => {
                             <ul className={cx('child-category')}>
                               {[...collection.productCategories]
                                 .reverse()
-                                .map((item: productCategory) => {
+                                .map((item: IProductCategory) => {
                                   return (
                                     <li key={item.id}>
                                       <Link to={`/${item.slug}`}>

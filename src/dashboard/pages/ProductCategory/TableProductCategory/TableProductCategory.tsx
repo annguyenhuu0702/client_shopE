@@ -27,7 +27,7 @@ import {
   productCategorySelector,
   productCategoryState,
 } from '../../../../redux/slice/productCategorySlice';
-import { productCategory } from '../../../../types/productCategory';
+import { IProductCategory } from '../../../../types/productCategory';
 import {
   removeParenthesis,
   removeTextBetweenParentheses,
@@ -60,13 +60,13 @@ const TableProductCategory: React.FC = () => {
     // },
     {
       title: 'Tên',
-      render: (text: string, record: productCategory) => {
+      render: (text: string, record: IProductCategory) => {
         return <div>{removeTextBetweenParentheses(record.name)}</div>;
       },
     },
     {
       title: 'Bộ sưu tập',
-      render: (text: string, record: productCategory) => {
+      render: (text: string, record: IProductCategory) => {
         // return <div>{removeParenthesis(record.collection?.name)}</div>;
         return <div>{record.collection?.name}</div>;
       },
@@ -151,7 +151,7 @@ const TableProductCategory: React.FC = () => {
         const data = await productCategoryApi.getAll();
         let wb = utils.book_new();
         let ws = utils.json_to_sheet(
-          data.data.data.rows.map((item: productCategory) => ({
+          data.data.data.rows.map((item: IProductCategory) => ({
             name: item.name,
             collection: item.collection.name,
             createdAt: moment(item.createdAt).format('MM/DD/YYYY'),
@@ -243,7 +243,7 @@ const TableProductCategory: React.FC = () => {
       <Row className="common-content-table">
         <Col xl={24} md={24} xs={24}>
           <Table
-            dataSource={productCategories.rows.map((item: productCategory) => {
+            dataSource={productCategories.rows.map((item: IProductCategory) => {
               return {
                 ...item,
                 key: item.id,

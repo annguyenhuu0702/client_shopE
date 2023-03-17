@@ -6,15 +6,15 @@ import { routes } from '../../config/routes';
 import { STATUS_CODE } from '../../constants';
 import { deleteParams, tokenPayloadData } from '../../types/common';
 import {
-  createProductCategory,
-  getAllProductCategoryParams,
-  productCategory,
+  IProductCategory,
+  ICreateProductCategory,
+  IGetAllProductCategoryParams,
 } from '../../types/productCategory';
 import { productCategoryActions } from '../slice/productCategorySlice';
 
 function* getAllProductCategorySaga({
   payload,
-}: PayloadAction<getAllProductCategoryParams>): any {
+}: PayloadAction<IGetAllProductCategoryParams>): any {
   try {
     const res = yield call(() => {
       return productCategoryApi.getAll(payload);
@@ -31,7 +31,7 @@ function* getAllProductCategorySaga({
 
 function* createProductCategorySaga({
   payload,
-}: PayloadAction<tokenPayloadData<createProductCategory>>): any {
+}: PayloadAction<tokenPayloadData<ICreateProductCategory>>): any {
   try {
     const { token, dispatch, data, navigate } = payload;
     const res = yield call(() => {
@@ -67,7 +67,7 @@ function* createProductCategorySaga({
 
 function* editProductCategorySaga({
   payload,
-}: PayloadAction<tokenPayloadData<productCategory>>): any {
+}: PayloadAction<tokenPayloadData<IProductCategory>>): any {
   try {
     const { token, dispatch, data, navigate } = payload;
     const res = yield call(() => {
@@ -131,7 +131,7 @@ function* deleteProductCategorySaga({
 
 function* getProductCategoryBySlugClientSaga({
   payload,
-}: PayloadAction<getAllProductCategoryParams>): any {
+}: PayloadAction<IGetAllProductCategoryParams>): any {
   try {
     const res = yield call(() => {
       return productCategoryApi.getAll({

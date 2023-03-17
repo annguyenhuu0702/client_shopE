@@ -1,34 +1,32 @@
 import React from 'react';
 import { queryParams } from './common';
-import { product } from './product';
-import { variantValue } from './variantValue';
+import { IVariantValue } from './variantValue';
 
-export interface productVariant {
+export interface IProductVariant {
   key: React.Key | number | string;
   id: number;
   productId: number;
   slug: string;
   inventory: number;
-  product: product;
-  variantValues: variantValue[];
+  variantValues: IVariantValue[];
   deletedAt: Date;
   createdAt: string;
   updatedAt: string;
   resetValues?: Function;
 }
 
-export interface createProductVariant {
+export interface ICreateProductVariant {
   productId: number;
   slug: string;
   inventory: number;
-  variantValues: variantValue[];
+  variantValues: IVariantValue[];
   resetValues?: Function;
 }
 
-export interface updateProductVariant extends createProductVariant {
+export interface IUpdateProductVariant extends ICreateProductVariant {
   id: number;
 }
 
-export interface getAllProductProductVariantParams extends queryParams {
+export interface IGetAllProductProductVariantParams extends queryParams {
   name?: string;
 }

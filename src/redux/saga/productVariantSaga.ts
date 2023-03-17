@@ -6,15 +6,15 @@ import { routes } from '../../config/routes';
 import { STATUS_CODE } from '../../constants';
 import { deleteParams, tokenPayloadData } from '../../types/common';
 import {
-  createProductVariant,
-  getAllProductProductVariantParams,
-  productVariant,
+  ICreateProductVariant,
+  IGetAllProductProductVariantParams,
+  IProductVariant,
 } from '../../types/productVariant';
 import { productVariantActions } from '../slice/productVariantSlice';
 
 function* getAllProductVariantSaga({
   payload,
-}: PayloadAction<getAllProductProductVariantParams>): any {
+}: PayloadAction<IGetAllProductProductVariantParams>): any {
   try {
     const res = yield call(() => {
       return productVariantApi.getAll(payload);
@@ -31,7 +31,7 @@ function* getAllProductVariantSaga({
 
 function* createProductVariantSaga({
   payload,
-}: PayloadAction<tokenPayloadData<createProductVariant>>): any {
+}: PayloadAction<tokenPayloadData<ICreateProductVariant>>): any {
   try {
     const { token, dispatch, data, navigate } = payload;
     const res = yield call(() => {
@@ -67,7 +67,7 @@ function* createProductVariantSaga({
 
 function* editProductVariantSaga({
   payload,
-}: PayloadAction<tokenPayloadData<productVariant>>): any {
+}: PayloadAction<tokenPayloadData<IProductVariant>>): any {
   try {
     const { token, dispatch, data, navigate } = payload;
     const res = yield call(() => {

@@ -1,17 +1,17 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { deleteParams, tokenPayloadData } from '../../types/common';
 import {
-  createProductVariant,
-  getAllProductProductVariantParams,
-  productVariant,
-  updateProductVariant,
+  ICreateProductVariant,
+  IUpdateProductVariant,
+  IGetAllProductProductVariantParams,
+  IProductVariant,
 } from '../../types/productVariant';
 
 import { RootState } from '../store';
 
 export interface productVariantState {
   productVariants: resProductVariant;
-  currentProductVariant: productVariant | null;
+  currentProductVariant: IProductVariant | null;
   page: number;
   pageSize: number;
   isLoading: boolean;
@@ -19,7 +19,7 @@ export interface productVariantState {
 }
 
 export interface resProductVariant {
-  rows: productVariant[];
+  rows: IProductVariant[];
   count: number;
 }
 
@@ -48,13 +48,13 @@ const productVariantSlice = createSlice({
     },
     setProductVariant: (
       state,
-      action: PayloadAction<productVariant | null>
+      action: PayloadAction<IProductVariant | null>
     ) => {
       state.currentProductVariant = action.payload;
     },
     getAllProductVariant: (
       state,
-      action: PayloadAction<getAllProductProductVariantParams>
+      action: PayloadAction<IGetAllProductProductVariantParams>
     ) => {
       state.isLoading = true;
     },
@@ -73,13 +73,13 @@ const productVariantSlice = createSlice({
     },
     createProductVariant: (
       state,
-      action: PayloadAction<tokenPayloadData<createProductVariant>>
+      action: PayloadAction<tokenPayloadData<ICreateProductVariant>>
     ) => {
       state.isLoading = true;
     },
     createProductVariantSuccess: (
       state,
-      action: PayloadAction<productVariant>
+      action: PayloadAction<IProductVariant>
     ) => {
       state.isLoading = false;
       state.isError = false;
@@ -99,13 +99,13 @@ const productVariantSlice = createSlice({
     },
     editProductVariant: (
       state,
-      action: PayloadAction<tokenPayloadData<updateProductVariant>>
+      action: PayloadAction<tokenPayloadData<IUpdateProductVariant>>
     ) => {
       state.isLoading = true;
     },
     editProductVariantSuccess: (
       state,
-      action: PayloadAction<productVariant>
+      action: PayloadAction<IProductVariant>
     ) => {
       state.isLoading = false;
       state.isError = false;

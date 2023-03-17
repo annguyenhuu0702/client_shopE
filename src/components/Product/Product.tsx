@@ -12,18 +12,16 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import { castToVND } from '../../utils';
 
 import { MinusOutlined, PlusOutlined } from '@ant-design/icons';
-import { product } from '../../types/product';
-import Item from 'antd/es/list/Item';
-import { productImage } from '../../types/productImage';
+import { IProduct } from '../../types/product';
+import { IProductImage } from '../../types/productImage';
 
 const cx = classNames.bind(styles);
 
 interface Props {
-  product?: product;
+  product?: IProduct;
 }
 
 const Product: React.FC<Props> = ({ product }) => {
-  console.log(product);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [qtt, setQtt] = useState<number>(1);
   const [isActiveSize, setIsActiveSize] = useState<boolean>(false);
@@ -73,7 +71,7 @@ const Product: React.FC<Props> = ({ product }) => {
                   className={cx('my-swiper')}
                   // pagination={{ clickable: true }}
                 >
-                  {product.productImages.map((item: productImage) => {
+                  {product.productImages.map((item: IProductImage) => {
                     return (
                       <SwiperSlide
                         className="max-sm:flex max-sm:items-center max-lg:flex max-lg:items-center"

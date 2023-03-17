@@ -1,26 +1,26 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import {
-  category,
-  createCategory,
-  getAllCategoryParams,
-  updateCategory,
+  ICategory,
+  ICreateCategory,
+  IUpdateCategory,
+  IGetAllCategoryParams,
 } from '../../types/category';
 import { deleteParams, tokenPayloadData } from '../../types/common';
 import { RootState } from '../store';
 
 export interface categoryState {
   categories: resCategory;
-  currentCategory: category | null;
+  currentCategory: ICategory | null;
   page: number;
   pageSize: number;
   isLoading: boolean;
   isError: boolean;
   categoriesClient: resCategory;
-  currentCategoryClient: category | null;
+  currentCategoryClient: ICategory | null;
 }
 
 export interface resCategory {
-  rows: category[];
+  rows: ICategory[];
   count: number;
 }
 
@@ -55,10 +55,10 @@ const CategorySlice = createSlice({
       state.page = action.payload.page;
       state.pageSize = action.payload.pageSize;
     },
-    setCategory: (state, action: PayloadAction<category | null>) => {
+    setCategory: (state, action: PayloadAction<ICategory | null>) => {
       state.currentCategory = action.payload;
     },
-    getAllCategory: (state, action: PayloadAction<getAllCategoryParams>) => {
+    getAllCategory: (state, action: PayloadAction<IGetAllCategoryParams>) => {
       state.isLoading = true;
     },
     getAllCategorySuccess: (state, action: PayloadAction<resCategory>) => {
@@ -72,10 +72,13 @@ const CategorySlice = createSlice({
       state.isError = true;
     },
 
-    getCategoryBySlug: (state, action: PayloadAction<getAllCategoryParams>) => {
+    getCategoryBySlug: (
+      state,
+      action: PayloadAction<IGetAllCategoryParams>
+    ) => {
       state.isLoading = true;
     },
-    getCategoryBySlugSuccess: (state, action: PayloadAction<category>) => {
+    getCategoryBySlugSuccess: (state, action: PayloadAction<ICategory>) => {
       state.isLoading = false;
       state.isError = false;
       state.currentCategoryClient = action.payload;
@@ -87,11 +90,11 @@ const CategorySlice = createSlice({
 
     createCategory: (
       state,
-      action: PayloadAction<tokenPayloadData<createCategory>>
+      action: PayloadAction<tokenPayloadData<ICreateCategory>>
     ) => {
       state.isLoading = true;
     },
-    createCategorySuccess: (state, action: PayloadAction<category>) => {
+    createCategorySuccess: (state, action: PayloadAction<ICategory>) => {
       state.isLoading = false;
       state.isError = false;
       state.categories.rows.unshift(action.payload);
@@ -107,11 +110,11 @@ const CategorySlice = createSlice({
     },
     editCategory: (
       state,
-      action: PayloadAction<tokenPayloadData<updateCategory>>
+      action: PayloadAction<tokenPayloadData<IUpdateCategory>>
     ) => {
       state.isLoading = true;
     },
-    editCategorySuccess: (state, action: PayloadAction<category>) => {
+    editCategorySuccess: (state, action: PayloadAction<ICategory>) => {
       state.isLoading = false;
       state.isError = false;
       const index = state.categories.rows.findIndex(
@@ -146,7 +149,7 @@ const CategorySlice = createSlice({
 
     getAllCategoryClient: (
       state,
-      action: PayloadAction<getAllCategoryParams>
+      action: PayloadAction<IGetAllCategoryParams>
     ) => {
       state.isLoading = true;
     },

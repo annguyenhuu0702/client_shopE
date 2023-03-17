@@ -3,12 +3,12 @@ import instance, { apiCallerWithToken } from '../config/configAxios';
 import { URL_API } from '../constants';
 import { AppDispatch } from '../redux/store';
 import {
-  createProductCategory,
-  getAllProductCategoryParams,
-  updateProductCategory,
+  ICreateProductCategory,
+  IUpdateProductCategory,
+  IGetAllProductCategoryParams,
 } from '../types/productCategory';
 
-const getAll = (params?: getAllProductCategoryParams) => {
+const getAll = (params?: IGetAllProductCategoryParams) => {
   return instance.get(`${URL_API}/productCategory/getAll`, {
     params,
   });
@@ -21,7 +21,7 @@ const getById = (id: string) => {
 const create = (
   token: string | null,
   dispatch: AppDispatch,
-  data: createProductCategory
+  data: ICreateProductCategory
 ): Promise<AxiosResponse> => {
   return apiCallerWithToken(token, dispatch).post(
     `${URL_API}/productCategory/create`,
@@ -32,7 +32,7 @@ const create = (
 const update = (
   token: string | null,
   dispatch: AppDispatch,
-  data: updateProductCategory
+  data: IUpdateProductCategory
 ): Promise<AxiosResponse> => {
   return apiCallerWithToken(token, dispatch).put(
     `${URL_API}/productCategory/update/${data.id}`,

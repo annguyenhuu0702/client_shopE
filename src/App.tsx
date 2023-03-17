@@ -1,7 +1,7 @@
 import { useDispatch, useSelector } from 'react-redux';
 import { Routes, Route } from 'react-router-dom';
 import { publicRoute, privateRoute } from './routes';
-import { route } from './types/route';
+import { IRoute } from './types/route';
 import jwtDecoded from 'jwt-decode';
 import React, { Suspense, useEffect } from 'react';
 import { Spin } from 'antd';
@@ -40,10 +40,10 @@ const App = () => {
     }
   };
 
-  function showRoutes(routes: route[]): React.ReactElement {
+  function showRoutes(routes: IRoute[]): React.ReactElement {
     return (
       <React.Fragment>
-        {routes.map((route: route, index: number): React.ReactElement => {
+        {routes.map((route: IRoute, index: number): React.ReactElement => {
           let Layout = route.layout || React.Fragment;
           const Page = route.element;
           return (

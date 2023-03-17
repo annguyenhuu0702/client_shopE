@@ -1,17 +1,17 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { deleteParams, tokenPayloadData } from '../../types/common';
 import {
-  createProduct,
-  getAllProductParams,
-  product,
-  updateProduct,
+  IProduct,
+  ICreateProduct,
+  IUpdateProduct,
+  IGetAllProductParams,
 } from '../../types/product';
 
 import { RootState } from '../store';
 
 export interface productState {
   products: resProduct;
-  currentProduct: product | null;
+  currentProduct: IProduct | null;
   page: number;
   pageSize: number;
   isLoading: boolean;
@@ -19,7 +19,7 @@ export interface productState {
 
   // client
   productsClient: resProduct;
-  currentProductClient: product | null;
+  currentProductClient: IProduct | null;
   pageClient: number;
   pageSizeClient: number;
   isLoadingClient: boolean;
@@ -27,7 +27,7 @@ export interface productState {
 }
 
 export interface resProduct {
-  rows: product[];
+  rows: IProduct[];
   count: number;
 }
 
@@ -64,10 +64,10 @@ const ProductSlice = createSlice({
       state.page = action.payload.page;
       state.pageSize = action.payload.pageSize;
     },
-    setProduct: (state, action: PayloadAction<product | null>) => {
+    setProduct: (state, action: PayloadAction<IProduct | null>) => {
       state.currentProduct = action.payload;
     },
-    getAllProduct: (state, action: PayloadAction<getAllProductParams>) => {
+    getAllProduct: (state, action: PayloadAction<IGetAllProductParams>) => {
       state.isLoading = true;
     },
     getAllProductSuccess: (state, action: PayloadAction<resProduct>) => {
@@ -82,11 +82,11 @@ const ProductSlice = createSlice({
     },
     createProduct: (
       state,
-      action: PayloadAction<tokenPayloadData<createProduct>>
+      action: PayloadAction<tokenPayloadData<ICreateProduct>>
     ) => {
       state.isLoading = true;
     },
-    createProductSuccess: (state, action: PayloadAction<product>) => {
+    createProductSuccess: (state, action: PayloadAction<IProduct>) => {
       state.isLoading = false;
       state.isError = false;
       state.products.rows.unshift(action.payload);
@@ -102,11 +102,11 @@ const ProductSlice = createSlice({
     },
     editProduct: (
       state,
-      action: PayloadAction<tokenPayloadData<updateProduct>>
+      action: PayloadAction<tokenPayloadData<IUpdateProduct>>
     ) => {
       state.isLoading = true;
     },
-    editProductSuccess: (state, action: PayloadAction<product>) => {
+    editProductSuccess: (state, action: PayloadAction<IProduct>) => {
       state.isLoading = false;
       state.isError = false;
       const index = state.products.rows.findIndex(
@@ -154,7 +154,7 @@ const ProductSlice = createSlice({
     },
     getAllProductClient: (
       state,
-      action: PayloadAction<getAllProductParams>
+      action: PayloadAction<IGetAllProductParams>
     ) => {
       state.isLoadingClient = true;
     },

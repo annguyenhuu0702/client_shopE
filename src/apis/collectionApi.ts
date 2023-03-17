@@ -3,12 +3,12 @@ import instance, { apiCallerWithToken } from '../config/configAxios';
 import { URL_API } from '../constants';
 import { AppDispatch } from '../redux/store';
 import {
-  createCollection,
-  getAllCollectionParams,
-  updateCollection,
+  ICreateCollection,
+  IGetAllCollectionParams,
+  IUpdateCollection,
 } from '../types/collection';
 
-const getAll = (params?: getAllCollectionParams) => {
+const getAll = (params?: IGetAllCollectionParams) => {
   return instance.get(`${URL_API}/collection/getAll`, {
     params,
   });
@@ -21,7 +21,7 @@ const getById = (id: string) => {
 const create = (
   token: string | null,
   dispatch: AppDispatch,
-  data: createCollection
+  data: ICreateCollection
 ): Promise<AxiosResponse> => {
   return apiCallerWithToken(token, dispatch).post(
     `${URL_API}/collection/create`,
@@ -32,7 +32,7 @@ const create = (
 const update = (
   token: string | null,
   dispatch: AppDispatch,
-  data: updateCollection
+  data: IUpdateCollection
 ): Promise<AxiosResponse> => {
   return apiCallerWithToken(token, dispatch).put(
     `${URL_API}/collection/update/${data.id}`,

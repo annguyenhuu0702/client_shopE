@@ -6,14 +6,14 @@ import { routes } from '../../config/routes';
 import { STATUS_CODE } from '../../constants';
 import { tokenPayloadData } from '../../types/common';
 import {
-  createProductImage,
-  getAllProductImageParams,
+  ICreateProductImage,
+  IGetAllProductImageParams,
 } from '../../types/productImage';
 import { productImageActions } from '../slice/productImageSlice';
 
 function* getAllProductImageSaga({
   payload,
-}: PayloadAction<getAllProductImageParams>): any {
+}: PayloadAction<IGetAllProductImageParams>): any {
   try {
     const res = yield call(() => {
       return productImageApi.getAll(payload);
@@ -30,7 +30,7 @@ function* getAllProductImageSaga({
 
 function* createProductImageSaga({
   payload,
-}: PayloadAction<tokenPayloadData<createProductImage>>): any {
+}: PayloadAction<tokenPayloadData<ICreateProductImage>>): any {
   try {
     const { token, dispatch, data, navigate } = payload;
     const res = yield call(() => {

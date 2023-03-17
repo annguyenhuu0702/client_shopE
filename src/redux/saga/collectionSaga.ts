@@ -4,9 +4,9 @@ import { call, put, takeEvery } from 'redux-saga/effects';
 import { collectionApi } from '../../apis/collectionApi';
 import { STATUS_CODE } from '../../constants';
 import {
-  collection,
-  createCollection,
-  getAllCollectionParams,
+  ICollection,
+  ICreateCollection,
+  IGetAllCollectionParams,
 } from '../../types/collection';
 import { deleteParams, tokenPayloadData } from '../../types/common';
 import { collectionActions } from '../slice/collectionSlice';
@@ -14,7 +14,7 @@ import { routes } from '../../config/routes';
 
 function* getAllCollectionSaga({
   payload,
-}: PayloadAction<getAllCollectionParams>): any {
+}: PayloadAction<IGetAllCollectionParams>): any {
   try {
     const res = yield call(() => {
       return collectionApi.getAll(payload);
@@ -31,7 +31,7 @@ function* getAllCollectionSaga({
 
 function* createCollectionSaga({
   payload,
-}: PayloadAction<tokenPayloadData<createCollection>>): any {
+}: PayloadAction<tokenPayloadData<ICreateCollection>>): any {
   try {
     const { token, dispatch, data, navigate } = payload;
     const res = yield call(() => {
@@ -65,7 +65,7 @@ function* createCollectionSaga({
 
 function* editCollectionSaga({
   payload,
-}: PayloadAction<tokenPayloadData<collection>>): any {
+}: PayloadAction<tokenPayloadData<ICollection>>): any {
   try {
     const { token, dispatch, data, navigate } = payload;
     const res = yield call(() => {
@@ -127,7 +127,7 @@ function* deleteCollectionSaga({ payload }: PayloadAction<deleteParams>): any {
 
 function* getCollectionBySlugClientSaga({
   payload,
-}: PayloadAction<getAllCollectionParams>): any {
+}: PayloadAction<IGetAllCollectionParams>): any {
   try {
     const res = yield call(() => {
       return collectionApi.getAll({

@@ -4,8 +4,8 @@ import { URL_API } from '../constants';
 import { AppDispatch } from '../redux/store';
 import { queryParams } from '../types/common';
 import {
-  createProductVariant,
-  updateProductVariant,
+  ICreateProductVariant,
+  IUpdateProductVariant,
 } from '../types/productVariant';
 
 const getAll = (params?: queryParams) => {
@@ -21,7 +21,7 @@ const getById = (id: string) => {
 const create = (
   token: string | null,
   dispatch: AppDispatch,
-  data: createProductVariant
+  data: ICreateProductVariant
 ): Promise<AxiosResponse> => {
   return apiCallerWithToken(token, dispatch).post(
     `${URL_API}/productImage/create`,
@@ -32,7 +32,7 @@ const create = (
 const update = (
   token: string | null,
   dispatch: AppDispatch,
-  data: updateProductVariant
+  data: IUpdateProductVariant
 ): Promise<AxiosResponse> => {
   return apiCallerWithToken(token, dispatch).put(
     `${URL_API}/productImage/update/${data.id}`,

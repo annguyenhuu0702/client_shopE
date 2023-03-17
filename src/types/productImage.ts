@@ -1,21 +1,19 @@
 import React from 'react';
 import { queryParams } from './common';
-import { product } from './product';
 
-export interface productImage {
+export interface IProductImage {
   key: React.Key | number | string;
   id: number;
   productId: number;
   variantValueId: number;
   path: string;
-  // product: product;
   deletedAt: Date;
   createdAt: string;
   updatedAt: string;
   resetValues?: Function;
 }
 
-export interface createProductImage {
+export interface ICreateProductImage {
   productId: number;
   pathImgs: Array<{
     variantValueId: number;
@@ -23,15 +21,15 @@ export interface createProductImage {
   }>;
   listId: number[];
   thumbnail: string;
-  updateImages: productImage[];
+  updateImages: IProductImage[];
   resetValues?: Function;
 }
 
-export interface updateProductImage extends createProductImage {
+export interface IUpdateProductImage extends ICreateProductImage {
   id: number;
 }
 
-export interface getAllProductImageParams extends queryParams {
+export interface IGetAllProductImageParams extends queryParams {
   name?: string;
   productId?: string;
 }

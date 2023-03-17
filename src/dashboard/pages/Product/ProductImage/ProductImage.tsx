@@ -3,11 +3,7 @@ import { Col, Form, message, Modal, Row, Select, Upload } from 'antd';
 import type { RcFile, UploadFile, UploadProps } from 'antd/es/upload/interface';
 import { UploadChangeParam } from 'antd/lib/upload';
 import React, { useEffect, useMemo, useState } from 'react';
-import {
-  // AiFillCheckSquare,
-  AiFillDelete,
-  AiOutlineCheck,
-} from 'react-icons/ai';
+import { AiFillDelete, AiOutlineCheck } from 'react-icons/ai';
 import { useDispatch, useSelector } from 'react-redux';
 import { productImageApi } from '../../../../apis/productImage';
 import { variantValueApi } from '../../../../apis/variantValueApi';
@@ -25,8 +21,8 @@ import {
   productActions,
   productSelector,
 } from '../../../../redux/slice/productSlice';
-import { productImage } from '../../../../types/productImage';
-import { variantValue } from '../../../../types/variantValue';
+import { IProductImage } from '../../../../types/productImage';
+import { IVariantValue } from '../../../../types/variantValue';
 
 const getBase64 = (img: RcFile, callback: (url: string) => void) => {
   const reader = new FileReader();
@@ -67,9 +63,9 @@ const ModalProductImage: React.FC = () => {
   >([]);
 
   // sửa ảnh
-  const [updateImages, setUpdateImages] = useState<productImage[]>([]);
+  const [updateImages, setUpdateImages] = useState<IProductImage[]>([]);
 
-  const [variantValues, setVariantValues] = useState<variantValue[]>([]);
+  const [variantValues, setVariantValues] = useState<IVariantValue[]>([]);
 
   const [listId, setListId] = useState<number[]>([]);
   const [thumbnail, setThumbnail] = useState<string>('');

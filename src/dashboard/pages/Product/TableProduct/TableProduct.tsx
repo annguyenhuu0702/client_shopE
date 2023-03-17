@@ -30,7 +30,7 @@ import {
   productSelector,
   productState,
 } from '../../../../redux/slice/productSlice';
-import { product } from '../../../../types/product';
+import { IProduct } from '../../../../types/product';
 import ModalProductImage from '../ProductImage/ProductImage';
 
 const TableProduct: React.FC = () => {
@@ -47,7 +47,7 @@ const TableProduct: React.FC = () => {
 
   const navigate = useNavigate();
 
-  const handleModal = (record: product) => {
+  const handleModal = (record: IProduct) => {
     dispatch(productActions.setProduct(record));
     dispatch(modalActions.showModal('Hình ảnh sản phẩm'));
   };
@@ -56,7 +56,7 @@ const TableProduct: React.FC = () => {
     {
       title: 'Hình ảnh',
       width: '100px',
-      render: (text: string, record: product) => {
+      render: (text: string, record: IProduct) => {
         return record.thumbnail !== '' ? (
           <div className="flex justify-center cursor-text">
             <img
@@ -78,13 +78,13 @@ const TableProduct: React.FC = () => {
     {
       title: 'Danh mục sản phẩm',
       dataIndex: 'productCategoryId',
-      render: (text: string, record: product) => {
+      render: (text: string, record: IProduct) => {
         return <div>{record?.productCategory?.name}</div>;
       },
     },
     {
       title: 'Hình ảnh',
-      render: (text: string, record: product) => {
+      render: (text: string, record: IProduct) => {
         return (
           <span
             className="cursor-pointer uppercase text-red-500"
@@ -111,7 +111,7 @@ const TableProduct: React.FC = () => {
     {
       title: 'Ngày tạo',
       // dataIndex: 'createdAt',
-      render: (text: string, record: product) => {
+      render: (text: string, record: IProduct) => {
         let date = moment(record.createdAt).format('MM/DD/YYYY');
         return <div>{date}</div>;
       },
@@ -119,7 +119,7 @@ const TableProduct: React.FC = () => {
     {
       title: 'Hành động',
       // dataIndex: 'action',
-      render: (text: string, record: product) => {
+      render: (text: string, record: IProduct) => {
         return (
           <Space size="middle">
             <EditOutlined
@@ -189,7 +189,7 @@ const TableProduct: React.FC = () => {
         const data = await productApi.getAll();
         let wb = utils.book_new();
         let ws = utils.json_to_sheet(
-          data.data.data.rows.map((item: product) => ({
+          data.data.data.rows.map((item: IProduct) => ({
             name: item.name,
             productCategoryId: item.productCategoryId,
             price: item.price,
@@ -285,7 +285,7 @@ const TableProduct: React.FC = () => {
       <Row className="common-content-table">
         <Col xl={24} md={24} xs={24}>
           <Table
-            dataSource={products.rows.map((item: product) => {
+            dataSource={products.rows.map((item: IProduct) => {
               return {
                 ...item,
                 key: item.id,

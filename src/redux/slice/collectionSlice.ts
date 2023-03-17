@@ -1,25 +1,25 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import {
-  collection,
-  createCollection,
-  getAllCollectionParams,
-  updateCollection,
+  ICollection,
+  ICreateCollection,
+  IGetAllCollectionParams,
+  IUpdateCollection,
 } from '../../types/collection';
 import { deleteParams, tokenPayloadData } from '../../types/common';
 import { RootState } from '../store';
 
 export interface collectionState {
   collections: resCollection;
-  currentCollection: collection | null;
+  currentCollection: ICollection | null;
   page: number;
   pageSize: number;
   isLoading: boolean;
   isError: boolean;
-  currentCollectionClient: collection | null;
+  currentCollectionClient: ICollection | null;
 }
 
 export interface resCollection {
-  rows: collection[];
+  rows: ICollection[];
   count: number;
 }
 
@@ -49,12 +49,12 @@ const CollectionSlice = createSlice({
       state.page = action.payload.page;
       state.pageSize = action.payload.pageSize;
     },
-    setCollection: (state, action: PayloadAction<collection | null>) => {
+    setCollection: (state, action: PayloadAction<ICollection | null>) => {
       state.currentCollection = action.payload;
     },
     getAllCollection: (
       state,
-      action: PayloadAction<getAllCollectionParams>
+      action: PayloadAction<IGetAllCollectionParams>
     ) => {
       state.isLoading = true;
     },
@@ -71,11 +71,11 @@ const CollectionSlice = createSlice({
 
     createCollection: (
       state,
-      action: PayloadAction<tokenPayloadData<createCollection>>
+      action: PayloadAction<tokenPayloadData<ICreateCollection>>
     ) => {
       state.isLoading = true;
     },
-    createCollectionSuccess: (state, action: PayloadAction<collection>) => {
+    createCollectionSuccess: (state, action: PayloadAction<ICollection>) => {
       state.isLoading = false;
       state.isError = false;
       state.collections.rows.unshift(action.payload);
@@ -91,11 +91,11 @@ const CollectionSlice = createSlice({
     },
     editCollection: (
       state,
-      action: PayloadAction<tokenPayloadData<updateCollection>>
+      action: PayloadAction<tokenPayloadData<IUpdateCollection>>
     ) => {
       state.isLoading = true;
     },
-    editCollectionSuccess: (state, action: PayloadAction<collection>) => {
+    editCollectionSuccess: (state, action: PayloadAction<ICollection>) => {
       state.isLoading = false;
       state.isError = false;
       const index = state.collections.rows.findIndex(
@@ -130,13 +130,13 @@ const CollectionSlice = createSlice({
 
     getCollectionBySlugClient: (
       state,
-      action: PayloadAction<getAllCollectionParams>
+      action: PayloadAction<IGetAllCollectionParams>
     ) => {
       state.isLoading = true;
     },
     getCollectionBySlugClientSuccess: (
       state,
-      action: PayloadAction<collection>
+      action: PayloadAction<ICollection>
     ) => {
       state.isLoading = false;
       state.isError = false;

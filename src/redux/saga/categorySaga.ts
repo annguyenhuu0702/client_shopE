@@ -4,16 +4,16 @@ import { call, put, takeEvery } from 'redux-saga/effects';
 import { categoryApi } from '../../apis/categoryApi';
 import { STATUS_CODE } from '../../constants';
 import {
-  category,
-  createCategory,
-  getAllCategoryParams,
+  ICategory,
+  ICreateCategory,
+  IGetAllCategoryParams,
 } from '../../types/category';
 import { deleteParams, tokenPayloadData } from '../../types/common';
 import { categoryActions } from '../slice/categorySlice';
 
 function* getAllCategorySaga({
   payload,
-}: PayloadAction<getAllCategoryParams>): any {
+}: PayloadAction<IGetAllCategoryParams>): any {
   try {
     const res = yield call(() => {
       return categoryApi.getAll(payload);
@@ -30,7 +30,7 @@ function* getAllCategorySaga({
 
 function* getCategoryBySlugSaga({
   payload,
-}: PayloadAction<getAllCategoryParams>): any {
+}: PayloadAction<IGetAllCategoryParams>): any {
   try {
     const res = yield call(() => {
       return categoryApi.getAll({
@@ -50,7 +50,7 @@ function* getCategoryBySlugSaga({
 
 function* createCategorySaga({
   payload,
-}: PayloadAction<tokenPayloadData<createCategory>>): any {
+}: PayloadAction<tokenPayloadData<ICreateCategory>>): any {
   try {
     const { token, dispatch, data, navigate } = payload;
     const res = yield call(() => {
@@ -84,7 +84,7 @@ function* createCategorySaga({
 
 function* editCategorySaga({
   payload,
-}: PayloadAction<tokenPayloadData<category>>): any {
+}: PayloadAction<tokenPayloadData<ICategory>>): any {
   try {
     const { token, dispatch, data, navigate } = payload;
     const res = yield call(() => {
@@ -143,7 +143,7 @@ function* deleteCategorySaga({ payload }: PayloadAction<deleteParams>): any {
 
 function* getAllCategoryClientSaga({
   payload,
-}: PayloadAction<getAllCategoryParams>): any {
+}: PayloadAction<IGetAllCategoryParams>): any {
   try {
     const res = yield call(() => {
       return categoryApi.getAll(payload);

@@ -30,7 +30,7 @@ import {
   userActions,
   userSelector,
 } from '../../../../redux/slice/userSlice';
-import { user } from '../../../../types/user';
+import { IUser } from '../../../../types/user';
 import ModalUser from '../ModalUser';
 import { authSelector, authState } from '../../../../redux/slice/authSlice';
 
@@ -48,7 +48,7 @@ const TableUser: React.FC = () => {
     {
       title: 'Hình ảnh',
       dataIndex: 'avatar',
-      render: (text: string, record: user) => {
+      render: (text: string, record: IUser) => {
         return (
           <React.Fragment>
             {!record.avatar ? (
@@ -83,7 +83,7 @@ const TableUser: React.FC = () => {
     {
       title: 'Giới tính',
       dataIndex: 'gender',
-      render: (text: string, record: user) => {
+      render: (text: string, record: IUser) => {
         return (
           <div>
             {record.gender === true ? <span>Nam</span> : <span>Nữ</span>}
@@ -94,7 +94,7 @@ const TableUser: React.FC = () => {
     {
       title: 'Ngày tạo',
       dataIndex: 'createdAt',
-      render: (text: string, record: user) => {
+      render: (text: string, record: IUser) => {
         let date = moment(record.createdAt).format('MM/DD/YYYY');
         return <div>{date}</div>;
       },
@@ -102,7 +102,7 @@ const TableUser: React.FC = () => {
     {
       title: 'Hành động',
       dataIndex: 'action',
-      render: (text: string, record: user) => {
+      render: (text: string, record: IUser) => {
         return (
           <Space size="middle">
             <EditOutlined
@@ -128,7 +128,7 @@ const TableUser: React.FC = () => {
     },
   ];
 
-  const handleEditUser = (record: user) => {
+  const handleEditUser = (record: IUser) => {
     dispatch(modalActions.showModal('Edit user'));
     dispatch(userActions.setUser(record));
   };
@@ -176,7 +176,7 @@ const TableUser: React.FC = () => {
         const data = await userApi.getAll(user.accessToken, dispatch);
         let wb = utils.book_new();
         let ws = utils.json_to_sheet(
-          data.data.data.rows.map((item: user) => ({
+          data.data.data.rows.map((item: IUser) => ({
             fullname: item.fullname,
             email: item.email,
             phone: item.phone,
@@ -277,7 +277,7 @@ const TableUser: React.FC = () => {
           <Table
             dataSource={
               users &&
-              users.rows.map((item: user) => {
+              users.rows.map((item: IUser) => {
                 return {
                   ...item,
                   key: item.id,

@@ -1,7 +1,7 @@
 import React from 'react';
 import { queryParams, tokenPayload } from './common';
 
-export interface user {
+export interface IUser {
   id: number;
   createdAt: Date;
   updatedAt: Date;
@@ -20,7 +20,7 @@ export interface user {
   resetValues?: Function;
 }
 
-export interface createUser {
+export interface ICreateUser {
   email: string;
   password: string;
   avatar: string;
@@ -30,7 +30,7 @@ export interface createUser {
   resetValues?: Function;
 }
 
-export interface updateUser {
+export interface IUpdateUser {
   id: number;
   email: string;
   avatar: string;
@@ -40,16 +40,16 @@ export interface updateUser {
   resetValues?: Function;
 }
 
-export interface deleteUser extends tokenPayload {
-  id: number;
-  params?: queryParams;
+// export interface deleteUser extends tokenPayload {
+//   id: number;
+//   params?: queryParams;
+// }
+
+export interface IGetAllUser extends tokenPayload {
+  params?: IGetAllUserParams;
 }
 
-export interface getAllUser extends tokenPayload {
-  params?: getAllUserParams;
-}
-
-export interface getAllUserParams extends queryParams {
+export interface IGetAllUserParams extends queryParams {
   fullname?: string;
   email?: string;
   phone?: string;

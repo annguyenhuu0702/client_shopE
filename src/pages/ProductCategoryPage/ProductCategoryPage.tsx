@@ -15,8 +15,8 @@ import {
   productCategoryActions,
   productCategorySelector,
 } from '../../redux/slice/productCategorySlice';
-import { collection } from '../../types/collection';
-import { productCategory } from '../../types/productCategory';
+import { ICollection } from '../../types/collection';
+import { IProductCategory } from '../../types/productCategory';
 import { removeTextBetweenParentheses } from '../../utils';
 import ContentFilter from './ContentFilter';
 import {
@@ -168,7 +168,7 @@ const ProductCategoryPage: React.FC = () => {
                 {category &&
                   [...category.collections]
                     .reverse()
-                    .map((collection: collection) => {
+                    .map((collection: ICollection) => {
                       return (
                         <li className="mb-10" key={collection.id}>
                           <Link
@@ -186,7 +186,7 @@ const ProductCategoryPage: React.FC = () => {
                           </Link>
                           <ul className="list-none m-0 mt-6">
                             {collection.productCategories.map(
-                              (item: productCategory) => {
+                              (item: IProductCategory) => {
                                 return (
                                   <li className="mb-6" key={item.id}>
                                     <Link

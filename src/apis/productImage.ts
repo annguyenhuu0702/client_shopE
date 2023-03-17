@@ -2,11 +2,11 @@ import { AxiosResponse } from 'axios';
 import instance, { apiCallerWithToken } from '../config/configAxios';
 import { AppDispatch } from '../redux/store';
 import {
-  createProductImage,
-  getAllProductImageParams,
+  ICreateProductImage,
+  IGetAllProductImageParams,
 } from '../types/productImage';
 
-const getAll = (params?: getAllProductImageParams) => {
+const getAll = (params?: IGetAllProductImageParams) => {
   return instance.get(`productImage/getAll`, {
     params,
   });
@@ -19,7 +19,7 @@ const getById = (id: string) => {
 const createMany = (
   token: string | null,
   dispatch: AppDispatch,
-  data: createProductImage
+  data: ICreateProductImage
 ): Promise<AxiosResponse> => {
   return apiCallerWithToken(token, dispatch).post(
     `productImage/createMany`,

@@ -26,7 +26,7 @@ import {
   categorySelector,
   categoryState,
 } from '../../../../redux/slice/categorySlice';
-import { category } from '../../../../types/category';
+import { ICategory } from '../../../../types/category';
 
 const TableCategory: React.FC = () => {
   const dispatch = useDispatch();
@@ -39,7 +39,7 @@ const TableCategory: React.FC = () => {
     {
       title: 'Hình ảnh',
       width: '100px',
-      render: (text: string, record: category) => {
+      render: (text: string, record: ICategory) => {
         return record.thumbnail !== '' ? (
           <div className="flex justify-center cursor-text">
             <img
@@ -59,14 +59,14 @@ const TableCategory: React.FC = () => {
     },
     {
       title: 'Ngày tạo',
-      render: (text: string, record: category) => {
+      render: (text: string, record: ICategory) => {
         let date = moment(record.createdAt).format('MM/DD/YYYY');
         return <div>{date}</div>;
       },
     },
     {
       title: 'Hành động',
-      render: (text: string, record: category) => {
+      render: (text: string, record: ICategory) => {
         return (
           <Space size="middle">
             <EditOutlined
@@ -136,7 +136,7 @@ const TableCategory: React.FC = () => {
         const data = await categoryApi.getAll();
         let wb = utils.book_new();
         let ws = utils.json_to_sheet(
-          data.data.data.rows.map((item: category) => ({
+          data.data.data.rows.map((item: ICategory) => ({
             name: item.name,
 
             createdAt: moment(item.createdAt).format('MM/DD/YYYY'),
@@ -228,7 +228,7 @@ const TableCategory: React.FC = () => {
       <Row className="common-content-table">
         <Col xl={24} md={24} xs={24}>
           <Table
-            dataSource={categories.rows.map((item: category) => {
+            dataSource={categories.rows.map((item: ICategory) => {
               return {
                 ...item,
                 key: item.id,

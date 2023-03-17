@@ -1,6 +1,6 @@
 import { queryParams } from './common';
 
-export interface variantValue {
+export interface IVariantValue {
   id: number;
   name: string;
   variantId: number;
@@ -9,6 +9,6 @@ export interface variantValue {
   deletedAt: Date;
 }
 
-export interface getAllVariantValue extends queryParams {
+export interface IGetAllVariantValue extends queryParams {
   variantName?: string;
 }

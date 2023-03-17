@@ -12,7 +12,7 @@ import {
   categoryActions,
   categorySelector,
 } from '../../redux/slice/categorySlice';
-import { collection } from '../../types/collection';
+import { ICollection } from '../../types/collection';
 import { useTitle } from '../../hooks/useTitle';
 import ProductCategoryPage from '../ProductCategoryPage';
 import { routes } from '../../config/routes';

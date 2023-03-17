@@ -14,7 +14,7 @@ const { Content } = Layout;
 
 const Category: React.FC = () => {
   const dispatch = useDispatch();
-  const { page, categories, pageSize }: categoryState =
+  const { page, pageSize, categories }: categoryState =
     useSelector(categorySelector);
 
   useEffect(() => {

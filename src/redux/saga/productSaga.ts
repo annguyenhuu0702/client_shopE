@@ -5,15 +5,15 @@ import { productApi } from '../../apis/productApi';
 import { STATUS_CODE } from '../../constants';
 import { deleteParams, tokenPayloadData } from '../../types/common';
 import {
-  createProduct,
-  getAllProductParams,
-  product,
+  IProduct,
+  ICreateProduct,
+  IGetAllProductParams,
 } from '../../types/product';
 import { productActions } from '../slice/productSlice';
 
 function* getAllProductSaga({
   payload,
-}: PayloadAction<getAllProductParams>): any {
+}: PayloadAction<IGetAllProductParams>): any {
   try {
     const res = yield call(() => {
       return productApi.getAll(payload);
@@ -30,7 +30,7 @@ function* getAllProductSaga({
 
 function* createProductSaga({
   payload,
-}: PayloadAction<tokenPayloadData<createProduct>>): any {
+}: PayloadAction<tokenPayloadData<ICreateProduct>>): any {
   try {
     const { token, dispatch, data, navigate } = payload;
     const res = yield call(() => {
@@ -64,7 +64,7 @@ function* createProductSaga({
 
 function* editProductSaga({
   payload,
-}: PayloadAction<tokenPayloadData<product>>): any {
+}: PayloadAction<tokenPayloadData<IProduct>>): any {
   try {
     const { token, dispatch, data, navigate } = payload;
     const res = yield call(() => {
@@ -123,7 +123,7 @@ function* deleteProductSaga({ payload }: PayloadAction<deleteParams>): any {
 
 function* getAllProductClientSaga({
   payload,
-}: PayloadAction<getAllProductParams>): any {
+}: PayloadAction<IGetAllProductParams>): any {
   try {
     const res = yield call(() => {
       return productApi.getAll(payload);

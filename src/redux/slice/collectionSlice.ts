@@ -75,15 +75,9 @@ const CollectionSlice = createSlice({
     ) => {
       state.isLoading = true;
     },
-    createCollectionSuccess: (state, action: PayloadAction<ICollection>) => {
+    createCollectionSuccess: (state) => {
       state.isLoading = false;
       state.isError = false;
-      state.collections.rows.unshift(action.payload);
-      state.collections.count += 1;
-      state.page = 1;
-      if (state.collections.rows.length > 7) {
-        state.collections.rows.splice(state.collections.rows.length - 1, 1);
-      }
     },
     createCollectionFailed: (state) => {
       state.isLoading = false;
@@ -95,33 +89,20 @@ const CollectionSlice = createSlice({
     ) => {
       state.isLoading = true;
     },
-    editCollectionSuccess: (state, action: PayloadAction<ICollection>) => {
+    editCollectionSuccess: (state) => {
       state.isLoading = false;
       state.isError = false;
-      const index = state.collections.rows.findIndex(
-        (item) => item.id === action.payload.id
-      );
-      if (index !== -1) {
-        state.collections.rows[index] = action.payload;
-      }
     },
     editCollectionFailed: (state) => {
       state.isLoading = false;
-      state.isError = false;
+      state.isError = true;
     },
     deleteCollection: (state, action: PayloadAction<deleteParams>) => {
       state.isLoading = true;
     },
-    deleteCollectionSuccess: (state, action: PayloadAction<number>) => {
+    deleteCollectionSuccess: (state) => {
       state.isError = false;
       state.isLoading = false;
-      state.collections.rows = state.collections.rows.filter(
-        (item) => item.id !== action.payload
-      );
-      state.collections.count -= 1;
-      if (state.collections.rows.length === 0) {
-        state.page = state.page - 1;
-      }
     },
     deleteCollectionFailed: (state) => {
       state.isLoading = false;

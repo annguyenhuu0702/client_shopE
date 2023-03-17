@@ -56,9 +56,9 @@ function* createCategorySaga({
     const res = yield call(() => {
       return categoryApi.create(token, dispatch, data);
     });
-    const { data: newData, status } = res;
+    const { status } = res;
     if (status === STATUS_CODE.CREATED) {
-      yield put(categoryActions.createCategorySuccess(newData.data));
+      yield put(categoryActions.createCategorySuccess());
       if (data.resetValues) {
         data.resetValues();
       }
@@ -92,7 +92,7 @@ function* editCategorySaga({
     });
     const { status } = res;
     if (status === STATUS_CODE.SUCCESS) {
-      yield put(categoryActions.editCategorySuccess(data));
+      yield put(categoryActions.editCategorySuccess());
       if (data.resetValues) {
         data.resetValues();
       }
@@ -124,7 +124,7 @@ function* deleteCategorySaga({ payload }: PayloadAction<deleteParams>): any {
     });
     const { status } = res;
     if (status === STATUS_CODE.SUCCESS) {
-      yield put(categoryActions.deleteCategorySuccess(id));
+      yield put(categoryActions.deleteCategorySuccess());
       yield put(
         categoryActions.getAllCategory({ p: params?.p, limit: params?.limit })
       );

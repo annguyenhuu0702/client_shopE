@@ -79,7 +79,7 @@ const TableProduct: React.FC = () => {
       title: 'Danh mục sản phẩm',
       dataIndex: 'productCategoryId',
       render: (text: string, record: IProduct) => {
-        return <div>{record?.productCategory?.name}</div>;
+        return <div>{record.productCategory.name}</div>;
       },
     },
     {
@@ -99,7 +99,6 @@ const TableProduct: React.FC = () => {
     },
     {
       title: 'Biến thể',
-      // dataIndex: 'productVariant',
       render: () => {
         return (
           <span className="cursor-pointer uppercase text-red-500">
@@ -110,7 +109,6 @@ const TableProduct: React.FC = () => {
     },
     {
       title: 'Ngày tạo',
-      // dataIndex: 'createdAt',
       render: (text: string, record: IProduct) => {
         let date = moment(record.createdAt).format('MM/DD/YYYY');
         return <div>{date}</div>;

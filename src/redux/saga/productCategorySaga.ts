@@ -37,11 +37,10 @@ function* createProductCategorySaga({
     const res = yield call(() => {
       return productCategoryApi.create(token, dispatch, data);
     });
-    const { data: newData, status } = res;
+    const { status } = res;
     if (status === STATUS_CODE.CREATED) {
-      yield put(
-        productCategoryActions.createProductCategorySuccess(newData.data)
-      );
+      yield put(productCategoryActions.createProductCategorySuccess());
+
       if (data.resetValues) {
         data.resetValues();
       }
@@ -75,7 +74,8 @@ function* editProductCategorySaga({
     });
     const { status } = res;
     if (status === STATUS_CODE.SUCCESS) {
-      yield put(productCategoryActions.editProductCategorySuccess(data));
+      yield put(productCategoryActions.editProductCategorySuccess());
+
       if (data.resetValues) {
         data.resetValues();
       }
@@ -109,7 +109,7 @@ function* deleteProductCategorySaga({
     });
     const { status } = res;
     if (status === STATUS_CODE.SUCCESS) {
-      yield put(productCategoryActions.deleteProductCategorySuccess(id));
+      yield put(productCategoryActions.deleteProductCategorySuccess());
       yield put(
         productCategoryActions.getAllProductCategory({
           p: params?.p,

@@ -36,9 +36,10 @@ function* createProductImageSaga({
     const res = yield call(() => {
       return productImageApi.createMany(token, dispatch, data);
     });
-    const { data: newData, status } = res;
+    const { status } = res;
     if (status === STATUS_CODE.CREATED) {
-      yield put(productImageActions.createProductImageSuccess(newData.data));
+      yield put(productImageActions.createProductImageSuccess());
+
       if (data.resetValues) {
         data.resetValues();
       }

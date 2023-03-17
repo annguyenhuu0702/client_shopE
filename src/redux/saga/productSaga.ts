@@ -36,9 +36,10 @@ function* createProductSaga({
     const res = yield call(() => {
       return productApi.create(token, dispatch, data);
     });
-    const { data: newData, status } = res;
+    const { status } = res;
     if (status === STATUS_CODE.CREATED) {
-      yield put(productActions.createProductSuccess(newData.data));
+      yield put(productActions.createProductSuccess());
+
       if (data.resetValues) {
         data.resetValues();
       }
@@ -72,7 +73,8 @@ function* editProductSaga({
     });
     const { status } = res;
     if (status === STATUS_CODE.SUCCESS) {
-      yield put(productActions.editProductSuccess(data));
+      yield put(productActions.editProductSuccess());
+
       if (data.resetValues) {
         data.resetValues();
       }
@@ -104,7 +106,7 @@ function* deleteProductSaga({ payload }: PayloadAction<deleteParams>): any {
     });
     const { status } = res;
     if (status === STATUS_CODE.SUCCESS) {
-      yield put(productActions.deleteProductSuccess(id));
+      yield put(productActions.deleteProductSuccess());
       yield put(
         productActions.getAllProduct({ p: params?.p, limit: params?.limit })
       );

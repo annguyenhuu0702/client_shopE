@@ -81,21 +81,9 @@ const ProductCategorySlice = createSlice({
     ) => {
       state.isLoading = true;
     },
-    createProductCategorySuccess: (
-      state,
-      action: PayloadAction<IProductCategory>
-    ) => {
+    createProductCategorySuccess: (state) => {
       state.isLoading = false;
       state.isError = false;
-      state.productCategories.rows.unshift(action.payload);
-      state.productCategories.count += 1;
-      state.page = 1;
-      if (state.productCategories.rows.length > 7) {
-        state.productCategories.rows.splice(
-          state.productCategories.rows.length - 1,
-          1
-        );
-      }
     },
     createProductCategoryFailed: (state) => {
       state.isLoading = false;
@@ -107,36 +95,20 @@ const ProductCategorySlice = createSlice({
     ) => {
       state.isLoading = true;
     },
-    editProductCategorySuccess: (
-      state,
-      action: PayloadAction<IProductCategory>
-    ) => {
+    editProductCategorySuccess: (state) => {
       state.isLoading = false;
       state.isError = false;
-      const index = state.productCategories.rows.findIndex(
-        (item) => item.id === action.payload.id
-      );
-      if (index !== -1) {
-        state.productCategories.rows[index] = action.payload;
-      }
     },
     editProductCategoryFailed: (state) => {
       state.isLoading = false;
-      state.isError = false;
+      state.isError = true;
     },
     deleteProductCategory: (state, action: PayloadAction<deleteParams>) => {
       state.isLoading = true;
     },
-    deleteProductCategorySuccess: (state, action: PayloadAction<number>) => {
+    deleteProductCategorySuccess: (state) => {
       state.isError = false;
       state.isLoading = false;
-      state.productCategories.rows = state.productCategories.rows.filter(
-        (item) => item.id !== action.payload
-      );
-      state.productCategories.count -= 1;
-      if (state.productCategories.rows.length === 0) {
-        state.page = state.page - 1;
-      }
     },
     deleteProductCategoryFailed: (state) => {
       state.isLoading = false;

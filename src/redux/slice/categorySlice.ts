@@ -94,15 +94,9 @@ const CategorySlice = createSlice({
     ) => {
       state.isLoading = true;
     },
-    createCategorySuccess: (state, action: PayloadAction<ICategory>) => {
+    createCategorySuccess: (state) => {
       state.isLoading = false;
       state.isError = false;
-      state.categories.rows.unshift(action.payload);
-      state.categories.count += 1;
-      state.page = 1;
-      if (state.categories.rows.length > 7) {
-        state.categories.rows.splice(state.categories.rows.length - 1, 1);
-      }
     },
     createCategoryFailed: (state) => {
       state.isLoading = false;
@@ -114,33 +108,20 @@ const CategorySlice = createSlice({
     ) => {
       state.isLoading = true;
     },
-    editCategorySuccess: (state, action: PayloadAction<ICategory>) => {
+    editCategorySuccess: (state) => {
       state.isLoading = false;
       state.isError = false;
-      const index = state.categories.rows.findIndex(
-        (item) => item.id === action.payload.id
-      );
-      if (index !== -1) {
-        state.categories.rows[index] = action.payload;
-      }
     },
     editCategoryFailed: (state) => {
       state.isLoading = false;
-      state.isError = false;
+      state.isError = true;
     },
     deleteCategory: (state, action: PayloadAction<deleteParams>) => {
       state.isLoading = true;
     },
-    deleteCategorySuccess: (state, action: PayloadAction<number>) => {
+    deleteCategorySuccess: (state) => {
       state.isError = false;
       state.isLoading = false;
-      state.categories.rows = state.categories.rows.filter(
-        (item) => item.id !== action.payload
-      );
-      state.categories.count -= 1;
-      if (state.categories.rows.length === 0) {
-        state.page = state.page - 1;
-      }
     },
     deleteCategoryFailed: (state) => {
       state.isLoading = false;

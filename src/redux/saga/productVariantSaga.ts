@@ -37,11 +37,10 @@ function* createProductVariantSaga({
     const res = yield call(() => {
       return productVariantApi.create(token, dispatch, data);
     });
-    const { data: newData, status } = res;
+    const { status } = res;
     if (status === STATUS_CODE.CREATED) {
-      yield put(
-        productVariantActions.createProductVariantSuccess(newData.data)
-      );
+      yield put(productVariantActions.createProductVariantSuccess());
+
       if (data.resetValues) {
         data.resetValues();
       }
@@ -75,7 +74,7 @@ function* editProductVariantSaga({
     });
     const { status } = res;
     if (status === STATUS_CODE.SUCCESS) {
-      yield put(productVariantActions.editProductVariantSuccess(data));
+      yield put(productVariantActions.editProductVariantSuccess());
       if (data.resetValues) {
         data.resetValues();
       }
@@ -109,7 +108,7 @@ function* deleteProductVariantSaga({
     });
     const { status } = res;
     if (status === STATUS_CODE.SUCCESS) {
-      yield put(productVariantActions.deleteProductVariantSuccess(id));
+      yield put(productVariantActions.deleteProductVariantSuccess());
       yield put(
         productVariantActions.getAllProductVariant({
           p: params?.p,

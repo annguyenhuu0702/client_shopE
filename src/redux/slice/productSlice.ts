@@ -86,15 +86,9 @@ const ProductSlice = createSlice({
     ) => {
       state.isLoading = true;
     },
-    createProductSuccess: (state, action: PayloadAction<IProduct>) => {
+    createProductSuccess: (state) => {
       state.isLoading = false;
       state.isError = false;
-      state.products.rows.unshift(action.payload);
-      state.products.count += 1;
-      state.page = 1;
-      if (state.products.rows.length > 7) {
-        state.products.rows.splice(state.products.rows.length - 1, 1);
-      }
     },
     createProductFailed: (state) => {
       state.isLoading = false;
@@ -106,33 +100,20 @@ const ProductSlice = createSlice({
     ) => {
       state.isLoading = true;
     },
-    editProductSuccess: (state, action: PayloadAction<IProduct>) => {
+    editProductSuccess: (state) => {
       state.isLoading = false;
       state.isError = false;
-      const index = state.products.rows.findIndex(
-        (item) => item.id === action.payload.id
-      );
-      if (index !== -1) {
-        state.products.rows[index] = action.payload;
-      }
     },
     editProductFailed: (state) => {
       state.isLoading = false;
-      state.isError = false;
+      state.isError = true;
     },
     deleteProduct: (state, action: PayloadAction<deleteParams>) => {
       state.isLoading = true;
     },
-    deleteProductSuccess: (state, action: PayloadAction<number>) => {
+    deleteProductSuccess: (state) => {
       state.isError = false;
       state.isLoading = false;
-      state.products.rows = state.products.rows.filter(
-        (item) => item.id !== action.payload
-      );
-      state.products.count -= 1;
-      if (state.products.rows.length === 0) {
-        state.page = state.page - 1;
-      }
     },
     deleteProductFailed: (state) => {
       state.isLoading = false;

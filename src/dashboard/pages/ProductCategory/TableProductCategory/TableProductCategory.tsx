@@ -67,13 +67,12 @@ const TableProductCategory: React.FC = () => {
     {
       title: 'Bộ sưu tập',
       render: (text: string, record: IProductCategory) => {
-        // return <div>{removeParenthesis(record.collection?.name)}</div>;
-        return <div>{record.collection?.name}</div>;
+        return <div>{removeParenthesis(record.collection.name)}</div>;
       },
     },
     {
       title: 'Ngày tạo',
-      render: (text: string, record: any) => {
+      render: (text: string, record: IProductCategory) => {
         let date = moment(record.createdAt).format('MM/DD/YYYY');
         return <div>{date}</div>;
       },

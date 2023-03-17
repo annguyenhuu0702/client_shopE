@@ -37,9 +37,9 @@ function* createCollectionSaga({
     const res = yield call(() => {
       return collectionApi.create(token, dispatch, data);
     });
-    const { data: newData, status } = res;
+    const { status } = res;
     if (status === STATUS_CODE.CREATED) {
-      yield put(collectionActions.createCollectionSuccess(newData.data));
+      yield put(collectionActions.createCollectionSuccess());
       if (data.resetValues) {
         data.resetValues();
       }
@@ -73,7 +73,8 @@ function* editCollectionSaga({
     });
     const { status } = res;
     if (status === STATUS_CODE.SUCCESS) {
-      yield put(collectionActions.editCollectionSuccess(data));
+      yield put(collectionActions.editCollectionSuccess());
+
       if (data.resetValues) {
         data.resetValues();
       }
@@ -105,7 +106,7 @@ function* deleteCollectionSaga({ payload }: PayloadAction<deleteParams>): any {
     });
     const { status } = res;
     if (status === STATUS_CODE.SUCCESS) {
-      yield put(collectionActions.deleteCollectionSuccess(id));
+      yield put(collectionActions.deleteCollectionSuccess());
       yield put(
         collectionActions.getAllCollection({
           p: params?.p,

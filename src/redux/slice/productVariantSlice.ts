@@ -77,21 +77,9 @@ const productVariantSlice = createSlice({
     ) => {
       state.isLoading = true;
     },
-    createProductVariantSuccess: (
-      state,
-      action: PayloadAction<IProductVariant>
-    ) => {
+    createProductVariantSuccess: (state) => {
       state.isLoading = false;
       state.isError = false;
-      state.productVariants.rows.unshift(action.payload);
-      state.productVariants.count += 1;
-      state.page = 1;
-      if (state.productVariants.rows.length > 7) {
-        state.productVariants.rows.splice(
-          state.productVariants.rows.length - 1,
-          1
-        );
-      }
     },
     createProductVariantFailed: (state) => {
       state.isLoading = false;
@@ -103,36 +91,20 @@ const productVariantSlice = createSlice({
     ) => {
       state.isLoading = true;
     },
-    editProductVariantSuccess: (
-      state,
-      action: PayloadAction<IProductVariant>
-    ) => {
+    editProductVariantSuccess: (state) => {
       state.isLoading = false;
       state.isError = false;
-      const index = state.productVariants.rows.findIndex(
-        (item) => item.id === action.payload.id
-      );
-      if (index !== -1) {
-        state.productVariants.rows[index] = action.payload;
-      }
     },
     editProductVariantFailed: (state) => {
       state.isLoading = false;
-      state.isError = false;
+      state.isError = true;
     },
     deleteProductVariant: (state, action: PayloadAction<deleteParams>) => {
       state.isLoading = true;
     },
-    deleteProductVariantSuccess: (state, action: PayloadAction<number>) => {
+    deleteProductVariantSuccess: (state) => {
       state.isError = false;
       state.isLoading = false;
-      state.productVariants.rows = state.productVariants.rows.filter(
-        (item) => item.id !== action.payload
-      );
-      state.productVariants.count -= 1;
-      if (state.productVariants.rows.length === 0) {
-        state.page = state.page - 1;
-      }
     },
     deleteProductVariantFailed: (state) => {
       state.isLoading = false;

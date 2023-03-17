@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import {
   DeleteOutlined,
   DownloadOutlined,
@@ -36,6 +36,7 @@ const TableCollection: React.FC = () => {
     useSelector(collectionSelector);
   const { user }: authState = useSelector(authSelector);
   const navigate = useNavigate();
+
   const columns = [
     // {
     //   title: 'Hình ảnh',
@@ -56,27 +57,26 @@ const TableCollection: React.FC = () => {
     // },
     {
       title: 'Tên',
-      // dataIndex: 'name',
-      render: (text: string, record: any) => {
-        return <div>{removeTextBetweenParentheses(record?.name)}</div>;
+      render: (text: string, record: ICollection) => {
+        return <div>{removeTextBetweenParentheses(record.name)}</div>;
       },
     },
     {
       title: 'Danh mục',
-      render: (text: string, record: any) => {
-        return <div>{record?.category?.name}</div>;
+      render: (text: string, record: ICollection) => {
+        return <div>{record.category.name}</div>;
       },
     },
     {
       title: 'Ngày tạo',
-      render: (text: string, record: any) => {
+      render: (text: string, record: ICollection) => {
         let date = moment(record.createdAt).format('MM/DD/YYYY');
         return <div>{date}</div>;
       },
     },
     {
       title: 'Hành động',
-      render: (text: string, record: any) => {
+      render: (text: string, record: ICollection) => {
         return (
           <Space size="middle">
             <EditOutlined

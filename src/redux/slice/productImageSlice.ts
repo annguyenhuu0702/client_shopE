@@ -72,18 +72,9 @@ const productImageSlice = createSlice({
     ) => {
       state.isLoading = true;
     },
-    createProductImageSuccess: (
-      state,
-      action: PayloadAction<IProductImage>
-    ) => {
+    createProductImageSuccess: (state) => {
       state.isLoading = false;
       state.isError = false;
-      state.productImages.rows.unshift(action.payload);
-      state.productImages.count += 1;
-      state.page = 1;
-      if (state.productImages.rows.length > 7) {
-        state.productImages.rows.splice(state.productImages.rows.length - 1, 1);
-      }
     },
     createProductImageFailed: (state) => {
       state.isLoading = false;

@@ -46,8 +46,6 @@ const Collection: React.FC = () => {
             onChange={(page: number, pageSize: number) => {
               dispatch(collectionActions.setPage({ page, pageSize }));
             }}
-            // showSizeChanger={true}
-            // pageSizeOptions={[7, 50, 100, 200]}
           />
         </div>
       )}

@@ -26,7 +26,7 @@ export interface ICreateProduct {
   productCategoryId: number;
   name: string;
   slug: string;
-  thumbnail: string;
+  // thumbnail: string;
   description: string;
   price: number;
   priceSale: number;

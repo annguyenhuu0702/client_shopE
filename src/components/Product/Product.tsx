@@ -44,11 +44,7 @@ const Product: React.FC<Props> = ({ product }) => {
       <div className={cx('item')}>
         <div className={cx('img')}>
           <Link to={`/san-pham/${product.slug}`}>
-            <img
-              // className="common-img"
-              src={product.thumbnail}
-              alt=""
-            />
+            <img className="common-img" src={product.thumbnail} alt="" />
           </Link>
         </div>
         <div className={cx('preview')} onClick={showModal}>
@@ -69,9 +65,10 @@ const Product: React.FC<Props> = ({ product }) => {
                 <Swiper
                   modules={[Pagination]}
                   className={cx('my-swiper')}
-                  // pagination={{ clickable: true }}
+                  pagination={{ clickable: true }}
                 >
                   {product.productImages.map((item: IProductImage) => {
+                    console.log(product.productImages);
                     return (
                       <SwiperSlide
                         className="max-sm:flex max-sm:items-center max-lg:flex max-lg:items-center"

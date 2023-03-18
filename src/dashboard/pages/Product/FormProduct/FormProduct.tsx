@@ -125,7 +125,6 @@ const FormProduct: React.FC = () => {
       price: values.price,
       priceSale: values.priceSale,
       description: values.description,
-      thumbnail: '',
     };
     if (!currentProduct) {
       dispatch(

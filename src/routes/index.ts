@@ -112,7 +112,12 @@ export const publicRoute: IRoute[] = [
     layout: DefaultLayout,
   },
   {
-    path: routes.categoryPage,
+    path: routes.collectionPage,
+    element: ProductCategoryPage,
+    layout: DefaultLayout,
+  },
+  {
+    path: routes.productCategoryPage,
     element: ProductCategoryPage,
     layout: DefaultLayout,
   },

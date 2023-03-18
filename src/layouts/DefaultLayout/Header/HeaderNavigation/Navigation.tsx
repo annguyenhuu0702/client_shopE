@@ -33,7 +33,7 @@ const HeaderNavigation: React.FC = () => {
               return (
                 <li className={cx('item')} key={category.id}>
                   <Link
-                    to={`/${category.slug}`}
+                    to={`/category/${category.slug}`}
                     className={cx('group-category')}
                   >
                     {category.name}
@@ -55,7 +55,7 @@ const HeaderNavigation: React.FC = () => {
                             key={collection.id}
                           >
                             <Link
-                              to={`/${collection.slug}`}
+                              to={`/collection/${collection.slug}`}
                               className={cx('category')}
                             >
                               {removeTextBetweenParentheses(collection.name)}
@@ -66,7 +66,9 @@ const HeaderNavigation: React.FC = () => {
                                 .map((item: IProductCategory) => {
                                   return (
                                     <li key={item.id}>
-                                      <Link to={`/${item.slug}`}>
+                                      <Link
+                                        to={`/product-category/${item.slug}`}
+                                      >
                                         {removeTextBetweenParentheses(
                                           item.name
                                         )}

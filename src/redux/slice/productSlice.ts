@@ -124,7 +124,6 @@ const ProductSlice = createSlice({
       { payload }: PayloadAction<{ id: number; thumbnail: string }>
     ) => {
       const { id, thumbnail } = payload;
-
       const index = state.products.rows.findIndex((item) => item.id === id);
       if (index !== -1) {
         state.products.rows[index].thumbnail = thumbnail;

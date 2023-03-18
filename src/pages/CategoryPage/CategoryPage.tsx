@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { Breadcrumb, Col, Row } from 'antd';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Pagination, Navigation } from 'swiper';
@@ -12,35 +12,50 @@ import {
   categoryActions,
   categorySelector,
 } from '../../redux/slice/categorySlice';
+import {
+  productActions,
+  productSelector,
+} from '../../redux/slice/productSlice';
 import { ICollection } from '../../types/collection';
 import { useTitle } from '../../hooks/useTitle';
 import ProductCategoryPage from '../ProductCategoryPage';
 import { routes } from '../../config/routes';
 import { removeTextBetweenParentheses } from '../../utils';
+import { productCategoryActions } from '../../redux/slice/productCategorySlice';
+import { ICategory } from '../../types/category';
 
 const CategoryPage: React.FC = () => {
   const dispatch = useDispatch();
-  const { categorySlug } = useParams();
-  const { categoriesClient, currentCategoryClient } =
-    useSelector(categorySelector);
+  const { slug } = useParams();
+  const { currentCategoryClient } = useSelector(categorySelector);
+  const { productsClient } = useSelector(productSelector);
 
-  // check xem đang ở category hay productpage
-  const checkCategoryPage = useMemo(() => {
-    return categoriesClient.rows.find(
-      (category) => categorySlug === category.slug
-    );
-  }, [categoriesClient, categorySlug]);
+  // render danh mục sản phẩm
+  const renderProductCategory = currentCategoryClient?.collections
+    .map((category: ICollection) => {
+      return category?.productCategories[category.productCategories.length - 1];
+    })
+    .reverse()
+    .splice(0, 4);
 
-  // banner
+  // lấy banner
   useEffect(() => {
-    categorySlug &&
-      dispatch(
-        categoryActions.getCategoryBySlug({
-          collections: true,
-          slug: categorySlug,
-        })
-      );
-  }, [dispatch, categorySlug]);
+    dispatch(
+      categoryActions.getCategoryBySlug({
+        collections: true,
+        slug: slug,
+      })
+    );
+  }, [dispatch, slug]);
+
+  useEffect(() => {
+    dispatch(
+      productActions.getAllProductClient({
+        otherSlug: slug,
+      })
+    );
+  }, [dispatch, slug]);
+
   useTitle(currentCategoryClient?.name ? currentCategoryClient?.name : '');
 
   // check productcategory để hiển thị slide
@@ -52,7 +67,6 @@ const CategoryPage: React.FC = () => {
   //     : 0;
   // }, [currentCategoryClient]);
 
-  if (!checkCategoryPage) return <ProductCategoryPage />;
   return (
     <main className="px-20 max-sm:px-4 max-sm:mt-24">
       <section className="my-8 max-sm:my-4">
@@ -133,7 +147,7 @@ const CategoryPage: React.FC = () => {
           </div>
         </section>
       )} */}
-      <section className="mb-16 ">
+      {/* <section className="mb-16 ">
         <div>
           <h3 className="m-0 mb-8 font-bold text-4xl">Áo phông</h3>
         </div>
@@ -158,85 +172,36 @@ const CategoryPage: React.FC = () => {
             </Link>
           </div>
         </div>
-      </section>
-      <section className="mb-16 ">
-        <div>
-          <h3 className="m-0 mb-8 font-bold text-4xl">Áo phông</h3>
-        </div>
-        <div className="pb-6">
-          <Row gutter={[16, 16]}>
-            <Col xl={6} md={6} xs={12}>
-              <Product />
-            </Col>
-            <Col xl={6} md={6} xs={12}>
-              <Product />
-            </Col>
-            <Col xl={6} md={6} xs={12}>
-              <Product />
-            </Col>
-            <Col xl={6} md={6} xs={12}>
-              <Product />
-            </Col>
-          </Row>
-          <div className="view-all mt-10">
-            <Link to="" className="text">
-              Xem tất cả
-            </Link>
-          </div>
-        </div>
-      </section>
-      <section className="mb-16 ">
-        <div>
-          <h3 className="m-0 mb-8 font-bold text-4xl">Áo phông</h3>
-        </div>
-        <div className="pb-6">
-          <Row gutter={[16, 16]}>
-            <Col xl={6} md={6} xs={12}>
-              <Product />
-            </Col>
-            <Col xl={6} md={6} xs={12}>
-              <Product />
-            </Col>
-            <Col xl={6} md={6} xs={12}>
-              <Product />
-            </Col>
-            <Col xl={6} md={6} xs={12}>
-              <Product />
-            </Col>
-          </Row>
-          <div className="view-all mt-10">
-            <Link to="" className="text">
-              Xem tất cả
-            </Link>
-          </div>
-        </div>
-      </section>
-      <section className="mb-16 ">
-        <div>
-          <h3 className="m-0 mb-8 font-bold text-4xl">Áo phông</h3>
-        </div>
-        <div className="pb-6">
-          <Row gutter={[16, 16]}>
-            <Col xl={6} md={6} xs={12}>
-              <Product />
-            </Col>
-            <Col xl={6} md={6} xs={12}>
-              <Product />
-            </Col>
-            <Col xl={6} md={6} xs={12}>
-              <Product />
-            </Col>
-            <Col xl={6} md={6} xs={12}>
-              <Product />
-            </Col>
-          </Row>
-          <div className="view-all mt-10">
-            <Link to="" className="text">
-              Xem tất cả
-            </Link>
-          </div>
-        </div>
-      </section>
+      </section> */}
+      {renderProductCategory &&
+        renderProductCategory.map((item) => {
+          return (
+            <section className="mb-16 " key={item.id}>
+              <div>
+                <h3 className="m-0 mb-8 font-bold text-4xl">{item.name}</h3>
+              </div>
+              <div className="pb-6">
+                <Row gutter={[16, 16]}>
+                  {productsClient.rows
+                    .filter((product) => product.productCategoryId === item.id)
+                    .splice(0, 4)
+                    .map((product) => {
+                      return (
+                        <Col xl={6} md={8} xs={12} key={product.id}>
+                          <Product product={product} />
+                        </Col>
+                      );
+                    })}
+                </Row>
+                <div className="view-all mt-10">
+                  <Link to={`/product-category/${item.slug}`} className="text">
+                    Xem tất cả
+                  </Link>
+                </div>
+              </div>
+            </section>
+          );
+        })}
     </main>
   );
 };

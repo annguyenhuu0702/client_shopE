@@ -1,7 +1,7 @@
 import { Breadcrumb, Col, Pagination, Popover, Row } from 'antd';
 import React, { useEffect, useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Link, useParams } from 'react-router-dom';
+import { Link, useLocation, useParams } from 'react-router-dom';
 import { BsSortDown } from 'react-icons/bs';
 import { AiOutlineFilter } from 'react-icons/ai';
 import Product from '../../components/Product';
@@ -25,7 +25,8 @@ import {
 } from '../../redux/slice/productSlice';
 
 const ProductCategoryPage: React.FC = () => {
-  const { categorySlug } = useParams();
+  const { slug } = useParams();
+  const location = useLocation();
   const { currentCollectionClient } = useSelector(collectionSelector);
   const { currentProductCategoryClient } = useSelector(productCategorySelector);
   const dispatch = useDispatch();
@@ -33,34 +34,30 @@ const ProductCategoryPage: React.FC = () => {
     useSelector(productSelector);
 
   useTitle(
-    currentCollectionClient
+    location.pathname === `/collection/${slug}`
       ? currentCollectionClient?.name
-      : currentProductCategoryClient
-      ? currentProductCategoryClient?.name
-      : ''
+      : currentProductCategoryClient?.name
   );
 
-  // lấy collection  để render sidebar bên trái
   useEffect(() => {
-    dispatch(
-      collectionActions.getCollectionBySlugClient({
-        slug: categorySlug,
-        productCategories: true,
-      })
-    );
-  }, [dispatch, categorySlug]);
+    if (location.pathname === `/collection/${slug}`) {
+      dispatch(
+        collectionActions.getCollectionBySlugClient({
+          slug: slug,
+          productCategories: true,
+        })
+      );
+    } else {
+      dispatch(
+        productCategoryActions.getProductCategoryBySlugClient({
+          slug: slug,
+          collection: true,
+        })
+      );
+    }
+  }, [dispatch, location.pathname, slug]);
 
-  // lấy productCategory  để render sidebar bên trái
-
-  useEffect(() => {
-    dispatch(
-      productCategoryActions.getProductCategoryBySlugClient({
-        slug: categorySlug,
-        collection: true,
-      })
-    );
-  }, [dispatch, categorySlug]);
-
+  // lấy category để render
   const category = useMemo(() => {
     return currentCollectionClient
       ? currentCollectionClient.category
@@ -76,10 +73,10 @@ const ProductCategoryPage: React.FC = () => {
       productActions.getAllProductClient({
         p: pageClient,
         limit: 12,
-        otherSlug: categorySlug,
+        otherSlug: slug,
       })
     );
-  }, [categorySlug, dispatch, pageClient]);
+  }, [slug, dispatch, pageClient]);
 
   return (
     <main className="px-20 max-sm:mt-24 max-sm:px-4">
@@ -172,11 +169,11 @@ const ProductCategoryPage: React.FC = () => {
                       return (
                         <li className="mb-10" key={collection.id}>
                           <Link
-                            to={`/${collection.slug}`}
+                            to={`/collection/${collection.slug}`}
                             className={`hover:text-red-600 transition ease-in-out delay-75 text-2xl font-bold ${
-                              categorySlug === collection.slug ||
+                              slug === collection.slug ||
                               collection.productCategories.find(
-                                (item) => item.slug === categorySlug
+                                (item) => item.slug === slug
                               )
                                 ? 'text-red-600'
                                 : 'text-name-product'
@@ -190,9 +187,9 @@ const ProductCategoryPage: React.FC = () => {
                                 return (
                                   <li className="mb-6" key={item.id}>
                                     <Link
-                                      to={`/${item.slug}`}
+                                      to={`/product-category/${item.slug}`}
                                       className={`hover:text-red-600 transition ease-in-out delay-75 text-2xl  ${
-                                        categorySlug === item.slug
+                                        slug === item.slug
                                           ? 'text-red-600'
                                           : 'text-name-product'
                                       }`}

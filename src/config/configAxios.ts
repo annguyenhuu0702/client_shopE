@@ -6,7 +6,7 @@ import { authActions } from '../redux/slice/authSlice';
 
 const instance = axios.create({
   baseURL: URL_API,
-  // withCredentials: true,
+  withCredentials: true,
 });
 
 export const decodeToken = (token: string | undefined | null): any => {

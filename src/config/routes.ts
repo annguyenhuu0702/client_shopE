@@ -9,7 +9,9 @@ export const routes = {
   favoriteProduct: '/account/favorite-product',
   productDetail: '/san-pham/:slug',
   cart: '/cart',
-  categoryPage: '/:categorySlug',
+  categoryPage: '/category/:slug',
+  collectionPage: '/collection/:slug',
+  productCategoryPage: '/product-category/:slug',
   checkOut: '/checkout',
 
   // admin

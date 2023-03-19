@@ -26,7 +26,6 @@ export interface ICreateProduct {
   productCategoryId: number;
   name: string;
   slug: string;
-  // thumbnail: string;
   description: string;
   price: number;
   priceSale: number;
@@ -41,4 +40,10 @@ export interface IGetAllProductParams extends queryParams {
   name?: string;
   slug?: string;
   otherSlug?: string;
+}
+
+export interface IGetAllProductByCategory {
+  limitCollection?: number;
+  limitProduct?: number;
+  slug: string;
 }

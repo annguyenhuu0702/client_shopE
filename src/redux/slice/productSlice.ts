@@ -5,9 +5,26 @@ import {
   ICreateProduct,
   IUpdateProduct,
   IGetAllProductParams,
+  IGetAllProductByCategory,
 } from '../../types/product';
+import { IProductCategory } from '../../types/productCategory';
 
 import { RootState } from '../store';
+
+export interface IProductByCategory {
+  products: IProduct[];
+  productCategory: IProductCategory | null;
+}
+
+export interface resProductByCategory {
+  rows: IProductByCategory[];
+  count: number;
+}
+
+export interface resProduct {
+  rows: IProduct[];
+  count: number;
+}
 
 export interface productState {
   products: resProduct;
@@ -24,11 +41,7 @@ export interface productState {
   pageSizeClient: number;
   isLoadingClient: boolean;
   isErrorClient: boolean;
-}
-
-export interface resProduct {
-  rows: IProduct[];
-  count: number;
+  productsByCategory: resProductByCategory;
 }
 
 const initialState: productState = {
@@ -51,6 +64,10 @@ const initialState: productState = {
   pageSizeClient: 12,
   isLoadingClient: false,
   isErrorClient: false,
+  productsByCategory: {
+    rows: [{ productCategory: null, products: [] }],
+    count: 0,
+  },
 };
 
 const ProductSlice = createSlice({
@@ -154,6 +171,25 @@ const ProductSlice = createSlice({
     ) => {
       state.pageClient = action.payload.page;
       state.pageSizeClient = action.payload.pageSize;
+    },
+    getAllProductByCategoryClient: (
+      state,
+      action: PayloadAction<IGetAllProductByCategory>
+    ) => {
+      state.isLoadingClient = true;
+    },
+    getAllProductByCategoryClientSuccess: (
+      state,
+      action: PayloadAction<resProductByCategory>
+    ) => {
+      state.isLoadingClient = false;
+      state.isErrorClient = false;
+      state.productsByCategory.rows = action.payload.rows;
+      state.productsByCategory.count = action.payload.count;
+    },
+    getAllProductByCategoryClientFailed: (state) => {
+      state.isLoading = false;
+      state.isError = true;
     },
   },
 });

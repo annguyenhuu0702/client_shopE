@@ -6,11 +6,20 @@ import {
   ICreateProduct,
   IUpdateProduct,
   IGetAllProductParams,
+  IGetAllProductByCategory,
 } from '../types/product';
 
 const getAll = (params?: IGetAllProductParams) => {
   return instance.get(`${URL_API}/product/getAll`, {
     params,
+  });
+};
+
+const getByCategory = (params: IGetAllProductByCategory) => {
+  const { limitProduct, limitCollection, slug } = params;
+
+  return instance.get(`${URL_API}/product/category/${slug}`, {
+    params: { limitProduct, limitCollection },
   });
 };
 
@@ -56,4 +65,5 @@ export const productApi = {
   getById,
   update,
   deleteProduct,
+  getByCategory,
 };

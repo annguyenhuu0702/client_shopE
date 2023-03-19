@@ -8,6 +8,7 @@ import {
   IProduct,
   ICreateProduct,
   IGetAllProductParams,
+  IGetAllProductByCategory,
 } from '../../types/product';
 import { productActions } from '../slice/productSlice';
 
@@ -140,12 +141,33 @@ function* getAllProductClientSaga({
   }
 }
 
+function* getAllProductByCategoryClientSaga({
+  payload,
+}: PayloadAction<IGetAllProductByCategory>): any {
+  try {
+    const res = yield call(() => {
+      return productApi.getByCategory(payload);
+    });
+    const { data, status } = res;
+    if (status === STATUS_CODE.SUCCESS) {
+      yield put(productActions.getAllProductByCategoryClientSuccess(data.data));
+    }
+  } catch (err) {
+    console.log(err);
+    yield put(productActions.getAllProductByCategoryClientFailed());
+  }
+}
+
 function* productSaga() {
   yield takeEvery('product/createProduct', createProductSaga);
   yield takeEvery('product/getAllProduct', getAllProductSaga);
   yield takeEvery('product/editProduct', editProductSaga);
   yield takeEvery('product/deleteProduct', deleteProductSaga);
   yield takeEvery('product/getAllProductClient', getAllProductClientSaga);
+  yield takeEvery(
+    'product/getAllProductByCategoryClient',
+    getAllProductByCategoryClientSaga
+  );
 }
 
 export default productSaga;

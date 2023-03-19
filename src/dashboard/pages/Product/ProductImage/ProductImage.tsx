@@ -84,7 +84,6 @@ const ModalProductImage: React.FC = () => {
   };
 
   const onFinish = async (values: any) => {
-    console.log({ listId, updateImages, pathImgs, thumbnail });
     if (currentProduct) {
       try {
         await productImageApi.createMany(user.accessToken, dispatch, {
@@ -120,6 +119,7 @@ const ModalProductImage: React.FC = () => {
   const onFinishFailed = (errorInfo: any) => {
     console.log('Failed:', errorInfo);
   };
+
   const handleChangColors = (value: any, item: any) => {
     setUpdateImages((state) =>
       state.map((s: any) =>
@@ -178,6 +178,7 @@ const ModalProductImage: React.FC = () => {
         const { data } = await variantValueApi.getAll({
           variantName: 'Màu sắc',
         });
+
         setVariantValues(data.data.rows);
       } catch (error) {
         console.log(error);

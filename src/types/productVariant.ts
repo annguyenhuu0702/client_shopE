@@ -6,7 +6,7 @@ export interface IProductVariant {
   key: React.Key | number | string;
   id: number;
   productId: number;
-  slug: string;
+  name: string;
   inventory: number;
   variantValues: IVariantValue[];
   deletedAt: Date;
@@ -17,7 +17,7 @@ export interface IProductVariant {
 
 export interface ICreateProductVariant {
   productId: number;
-  slug: string;
+  name: string;
   inventory: number;
   variantValues: IVariantValue[];
   resetValues?: Function;

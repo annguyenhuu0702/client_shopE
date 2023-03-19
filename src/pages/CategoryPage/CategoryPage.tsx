@@ -30,14 +30,6 @@ const CategoryPage: React.FC = () => {
   const { currentCategoryClient } = useSelector(categorySelector);
   const { productsByCategory } = useSelector(productSelector);
 
-  // render danh mục sản phẩm
-  // const renderProductCategory = currentCategoryClient?.collections
-  //   .map((category: ICollection) => {
-  //     return category?.productCategories[category.productCategories.length - 1];
-  //   })
-  //   .reverse()
-  //   .splice(0, 4);
-
   // lấy banner
   useEffect(() => {
     dispatch(

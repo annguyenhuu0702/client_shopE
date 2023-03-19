@@ -15,7 +15,7 @@ import {
   Table,
 } from 'antd';
 import moment from 'moment';
-import React from 'react';
+import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { utils, writeFileXLSX } from 'xlsx';
@@ -32,11 +32,14 @@ import {
 } from '../../../../redux/slice/productSlice';
 import { IProduct } from '../../../../types/product';
 import ModalProductImage from '../ProductImage/ProductImage';
+import ModalProductVariant from '../ProductVariant/ProductVariant';
 
 const TableProduct: React.FC = () => {
   const dispatch = useDispatch();
 
   const [form] = Form.useForm();
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const { products, isLoading, page, pageSize }: productState =
     useSelector(productSelector);
@@ -50,6 +53,11 @@ const TableProduct: React.FC = () => {
   const handleModal = (record: IProduct) => {
     dispatch(productActions.setProduct(record));
     dispatch(modalActions.showModal('Hình ảnh sản phẩm'));
+  };
+
+  const handleModalAddVariant = (record: IProduct) => {
+    dispatch(productActions.setProduct(record));
+    setIsModalOpen(true);
   };
 
   const columns = [
@@ -99,9 +107,14 @@ const TableProduct: React.FC = () => {
     },
     {
       title: 'Biến thể',
-      render: () => {
+      render: (text: string, record: IProduct) => {
         return (
-          <span className="cursor-pointer uppercase text-red-500">
+          <span
+            className="cursor-pointer uppercase text-red-500"
+            onClick={() => {
+              handleModalAddVariant(record);
+            }}
+          >
             Thiết lập
           </span>
         );
@@ -207,6 +220,12 @@ const TableProduct: React.FC = () => {
   return (
     <React.Fragment>
       {isModal && <ModalProductImage />}
+      {isModalOpen && (
+        <ModalProductVariant
+          isModalOpen={isModalOpen}
+          setIsModalOpen={setIsModalOpen}
+        />
+      )}
       <Row className="common-row-cus">
         <Col xl={18} style={{ paddingInline: '5px' }}>
           <Form

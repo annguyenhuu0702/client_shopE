@@ -2,6 +2,7 @@ import { PayloadAction } from '@reduxjs/toolkit';
 import { notification } from 'antd';
 import { call, put, takeEvery } from 'redux-saga/effects';
 import { categoryApi } from '../../apis/categoryApi';
+import { routes } from '../../config/routes';
 import { STATUS_CODE } from '../../constants';
 import {
   ICategory,
@@ -62,7 +63,7 @@ function* createCategorySaga({
       if (data.resetValues) {
         data.resetValues();
       }
-      navigate('/admin/category');
+      navigate(routes.categoryAdmin);
       notification.success({
         message: 'Thành công',
         description: 'Thêm thành công',
@@ -96,7 +97,7 @@ function* editCategorySaga({
       if (data.resetValues) {
         data.resetValues();
       }
-      navigate('/admin/category');
+      navigate(routes.categoryAdmin);
       notification.success({
         message: 'Thành công',
         description: 'Sửa thành công',

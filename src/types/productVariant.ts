@@ -12,7 +12,6 @@ export interface IProductVariant {
   deletedAt: Date;
   createdAt: string;
   updatedAt: string;
-  resetValues?: Function;
 }
 
 export interface ICreateProductVariant {
@@ -20,13 +19,12 @@ export interface ICreateProductVariant {
   name: string;
   inventory: number;
   variantValues: IVariantValue[];
-  resetValues?: Function;
 }
 
 export interface IUpdateProductVariant extends ICreateProductVariant {
   id: number;
 }
 
-export interface IGetAllProductProductVariantParams extends queryParams {
-  name?: string;
+export interface IGetAllProductVariantParams extends queryParams {
+  productId?: number;
 }

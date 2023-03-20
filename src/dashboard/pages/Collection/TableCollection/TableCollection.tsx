@@ -28,6 +28,7 @@ import {
 import { collectionApi } from '../../../../apis/collectionApi';
 import { ICollection } from '../../../../types/collection';
 import { removeTextBetweenParentheses } from '../../../../utils';
+import { routes } from '../../../../config/routes';
 
 const TableCollection: React.FC = () => {
   const dispatch = useDispatch();
@@ -132,7 +133,7 @@ const TableCollection: React.FC = () => {
 
   const handleAddNewCollection = () => {
     dispatch(collectionActions.setCollection(null));
-    navigate('/admin/collection/create');
+    navigate(routes.createCollectionAdmin);
   };
 
   const handleEditCollection = (record: any) => {

@@ -2,7 +2,6 @@ import { PayloadAction } from '@reduxjs/toolkit';
 import { notification } from 'antd';
 import { call, put, takeEvery } from 'redux-saga/effects';
 import { productImageApi } from '../../apis/productImage';
-import { routes } from '../../config/routes';
 import { STATUS_CODE } from '../../constants';
 import { tokenPayloadData } from '../../types/common';
 import {
@@ -32,18 +31,13 @@ function* createProductImageSaga({
   payload,
 }: PayloadAction<tokenPayloadData<ICreateProductImage>>): any {
   try {
-    const { token, dispatch, data, navigate } = payload;
+    const { token, dispatch, data } = payload;
     const res = yield call(() => {
       return productImageApi.createMany(token, dispatch, data);
     });
     const { status } = res;
     if (status === STATUS_CODE.CREATED) {
       yield put(productImageActions.createProductImageSuccess());
-
-      if (data.resetValues) {
-        data.resetValues();
-      }
-      navigate(routes.productCategoryAdmin);
       notification.success({
         message: 'Thành công',
         description: 'Thêm thành công',

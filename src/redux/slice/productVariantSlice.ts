@@ -3,7 +3,7 @@ import { deleteParams, tokenPayloadData } from '../../types/common';
 import {
   ICreateProductVariant,
   IUpdateProductVariant,
-  IGetAllProductProductVariantParams,
+  IGetAllProductVariantParams,
   IProductVariant,
 } from '../../types/productVariant';
 
@@ -54,7 +54,7 @@ const productVariantSlice = createSlice({
     },
     getAllProductVariant: (
       state,
-      action: PayloadAction<IGetAllProductProductVariantParams>
+      action: PayloadAction<IGetAllProductVariantParams>
     ) => {
       state.isLoading = true;
     },
@@ -73,7 +73,7 @@ const productVariantSlice = createSlice({
     },
     createProductVariant: (
       state,
-      action: PayloadAction<tokenPayloadData<ICreateProductVariant>>
+      action: PayloadAction<tokenPayloadData<ICreateProductVariant[]>>
     ) => {
       state.isLoading = true;
     },

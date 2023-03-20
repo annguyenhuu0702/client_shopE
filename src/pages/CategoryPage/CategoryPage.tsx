@@ -52,8 +52,6 @@ const CategoryPage: React.FC = () => {
     }
   }, [dispatch, slug]);
 
-  console.log(productsByCategory);
-
   useTitle(currentCategoryClient?.name ? currentCategoryClient?.name : '');
 
   return (

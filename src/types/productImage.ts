@@ -10,7 +10,6 @@ export interface IProductImage {
   deletedAt: Date;
   createdAt: string;
   updatedAt: string;
-  resetValues?: Function;
 }
 
 export interface ICreateProductImage {
@@ -22,14 +21,8 @@ export interface ICreateProductImage {
   listId: number[];
   thumbnail: string;
   updateImages: IProductImage[];
-  resetValues?: Function;
-}
-
-export interface IUpdateProductImage extends ICreateProductImage {
-  id: number;
 }
 
 export interface IGetAllProductImageParams extends queryParams {
-  name?: string;
   productId?: string;
 }

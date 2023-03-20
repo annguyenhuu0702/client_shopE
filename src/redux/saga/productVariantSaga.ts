@@ -2,19 +2,18 @@ import { PayloadAction } from '@reduxjs/toolkit';
 import { notification } from 'antd';
 import { call, put, takeEvery } from 'redux-saga/effects';
 import { productVariantApi } from '../../apis/productVariant';
-import { routes } from '../../config/routes';
 import { STATUS_CODE } from '../../constants';
 import { deleteParams, tokenPayloadData } from '../../types/common';
 import {
   ICreateProductVariant,
-  IGetAllProductProductVariantParams,
+  IGetAllProductVariantParams,
   IProductVariant,
 } from '../../types/productVariant';
 import { productVariantActions } from '../slice/productVariantSlice';
 
 function* getAllProductVariantSaga({
   payload,
-}: PayloadAction<IGetAllProductProductVariantParams>): any {
+}: PayloadAction<IGetAllProductVariantParams>): any {
   try {
     const res = yield call(() => {
       return productVariantApi.getAll(payload);
@@ -31,20 +30,15 @@ function* getAllProductVariantSaga({
 
 function* createProductVariantSaga({
   payload,
-}: PayloadAction<tokenPayloadData<ICreateProductVariant>>): any {
+}: PayloadAction<tokenPayloadData<ICreateProductVariant[]>>): any {
   try {
-    const { token, dispatch, data, navigate } = payload;
+    const { token, dispatch, data } = payload;
     const res = yield call(() => {
       return productVariantApi.create(token, dispatch, data);
     });
     const { status } = res;
     if (status === STATUS_CODE.CREATED) {
       yield put(productVariantActions.createProductVariantSuccess());
-
-      if (data.resetValues) {
-        data.resetValues();
-      }
-      navigate(routes.productCategoryAdmin);
       notification.success({
         message: 'Thành công',
         description: 'Thêm thành công',
@@ -68,17 +62,13 @@ function* editProductVariantSaga({
   payload,
 }: PayloadAction<tokenPayloadData<IProductVariant>>): any {
   try {
-    const { token, dispatch, data, navigate } = payload;
+    const { token, dispatch, data } = payload;
     const res = yield call(() => {
       return productVariantApi.update(token, dispatch, data);
     });
     const { status } = res;
     if (status === STATUS_CODE.SUCCESS) {
       yield put(productVariantActions.editProductVariantSuccess());
-      if (data.resetValues) {
-        data.resetValues();
-      }
-      navigate(routes.productCategoryAdmin);
       notification.success({
         message: 'Thành công',
         description: 'Sửa thành công',

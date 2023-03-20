@@ -58,7 +58,7 @@ const ProductCategoryPage: React.FC = () => {
   }, [dispatch, location.pathname, slug]);
 
   // lấy category để render
-  const category = useMemo(() => {
+  const renderCategory = useMemo(() => {
     return currentCollectionClient
       ? currentCollectionClient.category
       : currentProductCategoryClient?.collection.category;
@@ -162,8 +162,8 @@ const ProductCategoryPage: React.FC = () => {
           <Col xl={4} md={6} xs={24}>
             <div>
               <ul className="list-none m-0">
-                {category &&
-                  [...category.collections]
+                {renderCategory &&
+                  [...renderCategory.collections]
                     .reverse()
                     .map((collection: ICollection) => {
                       return (

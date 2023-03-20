@@ -10,7 +10,7 @@ export interface IUser {
   city: string;
   ward: string;
   district: string;
-  street: string;
+  address: string;
   birthday: Date;
   avatar: string;
   phone: string;

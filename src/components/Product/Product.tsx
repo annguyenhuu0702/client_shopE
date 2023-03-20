@@ -67,19 +67,20 @@ const Product: React.FC<Props> = ({ product }) => {
                   className={cx('my-swiper')}
                   pagination={{ clickable: true }}
                 >
-                  {product.productImages.map((item: IProductImage) => {
-                    console.log(product.productImages);
-                    return (
-                      <SwiperSlide
-                        className="max-sm:flex max-sm:items-center max-lg:flex max-lg:items-center"
-                        key={item.id}
-                      >
-                        <div>
-                          <Image src={item.path} alt="" />
-                        </div>
-                      </SwiperSlide>
-                    );
-                  })}
+                  {[...product.productImages]
+                    .sort((a, b) => a.variantValueId - b.variantValueId)
+                    .map((item: IProductImage) => {
+                      return (
+                        <SwiperSlide
+                          className="max-sm:flex max-sm:items-center max-lg:flex max-lg:items-center"
+                          key={item.id}
+                        >
+                          <div>
+                            <Image src={item.path} alt="" />
+                          </div>
+                        </SwiperSlide>
+                      );
+                    })}
                 </Swiper>
               </div>
               <div className={cx('right')}>

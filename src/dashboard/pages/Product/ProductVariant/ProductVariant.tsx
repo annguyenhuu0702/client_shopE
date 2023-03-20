@@ -1,8 +1,11 @@
 import { Button, Col, Form, InputNumber, Modal, Row } from 'antd';
 import React, { useState, useEffect, useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { productVariantApi } from '../../../../apis/productVariant';
 import { variantValueApi } from '../../../../apis/variantValueApi';
+import { authSelector } from '../../../../redux/slice/authSlice';
 import { productSelector } from '../../../../redux/slice/productSlice';
+import { productVariantActions } from '../../../../redux/slice/productVariantSlice';
 import { ICreateProductVariant } from '../../../../types/productVariant';
 import { IVariantValue } from '../../../../types/variantValue';
 
@@ -22,6 +25,7 @@ const ModalProductVariant: React.FC<Props> = ({
   const dispatch = useDispatch();
 
   const { currentProduct } = useSelector(productSelector);
+  const { user } = useSelector(authSelector);
 
   const [variantValues, setVariantValues] = useState<IVariantValue[]>([]);
   const [colors, setColors] = useState<IVariantValue[]>([]);
@@ -42,6 +46,14 @@ const ModalProductVariant: React.FC<Props> = ({
 
   const onFinish = async () => {
     console.log('check data>>>>>>>>>', productVariants);
+    dispatch(
+      productVariantActions.createProductVariant({
+        token: user.accessToken,
+        dispatch,
+        data: productVariants,
+      })
+    );
+    setIsModalOpen(false);
   };
 
   const onFinishFailed = (errorInfo: any) => {
@@ -110,6 +122,23 @@ const ModalProductVariant: React.FC<Props> = ({
     };
     getAllVariantValue();
   }, []);
+
+  useEffect(() => {
+    if (currentProduct) {
+      const getAllProductVariant = async () => {
+        try {
+          const { data } = await productVariantApi.getAll({
+            productId: currentProduct.id,
+          });
+          console.log(data);
+          // setProductVariants(data.data.rows);
+        } catch (error) {
+          console.log(error);
+        }
+      };
+      getAllProductVariant();
+    }
+  }, [currentProduct]);
 
   return (
     <div>
@@ -206,7 +235,6 @@ const ModalProductVariant: React.FC<Props> = ({
                     <div>{productVariant.name}</div>
                   </Col>
                   <Col xl={5}>
-                    {/* <Form.Item name="inventory" className="mb-0"> */}
                     <InputNumber
                       className="w-full"
                       value={productVariant.inventory}
@@ -220,7 +248,6 @@ const ModalProductVariant: React.FC<Props> = ({
                         );
                       }}
                     />
-                    {/* </Form.Item> */}
                   </Col>
                 </Row>
               );

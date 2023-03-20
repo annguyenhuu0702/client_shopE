@@ -178,7 +178,6 @@ const ModalProductImage: React.FC = () => {
         const { data } = await variantValueApi.getAll({
           variantName: 'Màu sắc',
         });
-
         setVariantValues(data.data.rows);
       } catch (error) {
         console.log(error);

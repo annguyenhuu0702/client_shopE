@@ -12,10 +12,6 @@ const getAll = (params?: IGetAllProductImageParams) => {
   });
 };
 
-const getById = (id: string) => {
-  return instance.get(`productImage/getById/${id}`);
-};
-
 const createMany = (
   token: string | null,
   dispatch: AppDispatch,
@@ -29,6 +25,5 @@ const createMany = (
 
 export const productImageApi = {
   getAll,
-  getById,
   createMany,
 };

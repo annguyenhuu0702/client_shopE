@@ -1,20 +1,5 @@
-import { LoadingOutlined, PlusOutlined } from '@ant-design/icons';
-import {
-  Button,
-  Form,
-  Input,
-  InputNumber,
-  Layout,
-  message,
-  Select,
-} from 'antd';
-import Upload, {
-  RcFile,
-  UploadChangeParam,
-  UploadFile,
-  UploadProps,
-} from 'antd/lib/upload';
-import React, { useEffect, useState } from 'react';
+import { Button, Form, Input, InputNumber, Layout, Select } from 'antd';
+import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
 import { productApi } from '../../../../apis/productApi';
@@ -35,27 +20,8 @@ import {
   productSelector,
   productState,
 } from '../../../../redux/slice/productSlice';
-import { URL_API } from '../../../../constants';
 
 const { Content } = Layout;
-
-// const getBase64 = (img: RcFile, callback: (url: string) => void) => {
-//   const reader = new FileReader();
-//   reader.addEventListener('load', () => callback(reader.result as string));
-//   reader.readAsDataURL(img);
-// };
-
-// const beforeUpload = (file: RcFile) => {
-//   const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png';
-//   if (!isJpgOrPng) {
-//     message.error('You can only upload JPG/PNG file!');
-//   }
-//   const isLt2M = file.size / 1024 / 1024 < 2;
-//   if (!isLt2M) {
-//     message.error('Image must smaller than 2MB!');
-//   }
-//   return isJpgOrPng && isLt2M;
-// };
 
 const FormProduct: React.FC = () => {
   const { productCategories, page }: productCategoryState = useSelector(
@@ -78,36 +44,6 @@ const FormProduct: React.FC = () => {
 
   const [form] = Form.useForm();
   const dispatch = useDispatch();
-
-  // const [loading, setLoading] = useState(false);
-  // const [imageUrl, setImageUrl] = useState<string>();
-  // const [pathImg, setPathImg] = useState<string>(
-  //   currentProduct ? currentProduct.thumbnail : ''
-  // );
-
-  // const handleChangeUpload: UploadProps['onChange'] = (
-  //   info: UploadChangeParam<UploadFile>
-  // ) => {
-  //   if (info.file.status === 'uploading') {
-  //     setLoading(true);
-  //     return;
-  //   }
-  //   if (info.file.status === 'done') {
-  //     // Get this url from response in real world.
-  //     setPathImg(info.file.response.data.secure_url);
-  //     getBase64(info.file.originFileObj as RcFile, (url) => {
-  //       setLoading(false);
-  //       setImageUrl(url);
-  //     });
-  //   }
-  // };
-
-  // const uploadButton = (
-  //   <div>
-  //     {loading ? <LoadingOutlined /> : <PlusOutlined />}
-  //     <div style={{ marginTop: 8 }}>Upload</div>
-  //   </div>
-  // );
 
   const resetValues = () => {
     form.setFieldsValue(initialValues);
@@ -178,10 +114,6 @@ const FormProduct: React.FC = () => {
     }
   }, [id, dispatch, form]);
 
-  // useEffect(() => {
-  //   setPathImg(currentProduct ? currentProduct.thumbnail : '');
-  // }, [currentProduct]);
-
   useTitle(currentProduct ? 'Sửa sản phẩm' : 'Thêm sản phẩm');
 
   return (
@@ -250,31 +182,6 @@ const FormProduct: React.FC = () => {
               <Form.Item label="Mô tả" name="description">
                 <TextArea rows={4} />
               </Form.Item>
-              {/* <Form.Item label="Hình ảnh">
-                <Upload
-                  name="image"
-                  listType="picture-card"
-                  className="avatar-uploader"
-                  showUploadList={false}
-                  action={`${URL_API}/upload/single`}
-                  beforeUpload={beforeUpload}
-                  onChange={handleChangeUpload}
-                >
-                  {pathImg ? (
-                    <img
-                      src={pathImg}
-                      alt="avatar"
-                      style={{
-                        width: '90px',
-                        height: '90px',
-                        objectFit: 'cover',
-                      }}
-                    />
-                  ) : (
-                    uploadButton
-                  )}
-                </Upload>
-              </Form.Item> */}
               <Form.Item
                 style={{
                   textAlign: 'center',

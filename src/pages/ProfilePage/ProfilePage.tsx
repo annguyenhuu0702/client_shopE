@@ -1,15 +1,54 @@
 import React, { useState } from 'react';
 import { useTitle } from '../../hooks/useTitle';
-import { Button, Col, DatePicker, Form, Input, Radio, Row, Select } from 'antd';
+import { LoadingOutlined, PlusOutlined } from '@ant-design/icons';
+import Upload, {
+  RcFile,
+  UploadChangeParam,
+  UploadFile,
+  UploadProps,
+} from 'antd/lib/upload';
+import {
+  Button,
+  Col,
+  DatePicker,
+  Form,
+  Input,
+  message,
+  Radio,
+  Row,
+  Select,
+} from 'antd';
 import type { RadioChangeEvent } from 'antd';
 import province from '../../province.json';
 import { useDispatch, useSelector } from 'react-redux';
 import { authActions, authSelector } from '../../redux/slice/authSlice';
 import moment from 'moment';
 import { useNavigate } from 'react-router-dom';
+import { URL_API } from '../../constants';
+
+const getBase64 = (img: RcFile, callback: (url: string) => void) => {
+  const reader = new FileReader();
+  reader.addEventListener('load', () => callback(reader.result as string));
+  reader.readAsDataURL(img);
+};
+
+const beforeUpload = (file: RcFile) => {
+  const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png';
+  if (!isJpgOrPng) {
+    message.error('You can only upload JPG/PNG file!');
+  }
+  const isLt2M = file.size / 1024 / 1024 < 2;
+  if (!isLt2M) {
+    message.error('Image must smaller than 2MB!');
+  }
+  return isJpgOrPng && isLt2M;
+};
 
 const ProfilePage: React.FC = () => {
   const { user } = useSelector(authSelector);
+  const [imageUrl, setImageUrl] = useState<string>();
+  const [loading, setLoading] = useState(false);
+  const [pathImg, setPathImg] = useState(user ? user.user?.avatar : '');
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [form] = Form.useForm();
@@ -26,6 +65,7 @@ const ProfilePage: React.FC = () => {
     ward: user ? user.user?.ward : '',
     birthday: user ? moment(user.user?.birthday) : '',
     gender: user ? user.user?.gender : true,
+    avatar: '',
   };
   const onChange = (e: RadioChangeEvent) => {
     setGender(e.target.value);
@@ -58,6 +98,7 @@ const ProfilePage: React.FC = () => {
   const onFinish = (values: any) => {
     const data = {
       ...values,
+      avatar: pathImg,
       birthday: new Date(moment(values.birthday).format('MM/DD/YYYY')),
     };
     dispatch(
@@ -69,6 +110,30 @@ const ProfilePage: React.FC = () => {
       })
     );
   };
+
+  const handleChangeUpload: UploadProps['onChange'] = (
+    info: UploadChangeParam<UploadFile>
+  ) => {
+    if (info.file.status === 'uploading') {
+      setLoading(true);
+      return;
+    }
+    if (info.file.status === 'done') {
+      // Get this url from response in real world.
+      setPathImg(info.file.response.data.secure_url);
+      getBase64(info.file.originFileObj as RcFile, (url) => {
+        setLoading(false);
+        setImageUrl(url);
+      });
+    }
+  };
+
+  const uploadButton = (
+    <div>
+      {loading ? <LoadingOutlined /> : <PlusOutlined />}
+      <div style={{ marginTop: 8 }}>Upload</div>
+    </div>
+  );
 
   const onFinishFailed = (errorInfo: any) => {
     console.log('Failed:', errorInfo);
@@ -256,25 +321,46 @@ const ProfilePage: React.FC = () => {
             </Form.Item>
           </Col>
         </Row>
+        <Row>
+          <Col xl={12} md={24} xs={24}>
+            <Form.Item label="Hình ảnh">
+              <Upload
+                name="image"
+                listType="picture-card"
+                className="avatar-uploader"
+                showUploadList={false}
+                action={`${URL_API}/upload/single`}
+                beforeUpload={beforeUpload}
+                onChange={handleChangeUpload}
+              >
+                {pathImg ? (
+                  <img
+                    src={pathImg}
+                    alt="avatar"
+                    style={{
+                      width: '90px',
+                      height: '90px',
+                      objectFit: 'cover',
+                    }}
+                  />
+                ) : (
+                  uploadButton
+                )}
+              </Upload>
+            </Form.Item>
+          </Col>
+        </Row>
         <Row className="mt-8 max-sm:flex max-sm:justify-center max-lg:flex max-lg:justify-center">
           <Col xl={12} className="flex justify-center">
-            <Form.Item shouldUpdate>
-              {() => (
-                <Button
-                  type="primary"
-                  htmlType="submit"
-                  size="large"
-                  className="flex items-center justify-center w-96 text-white"
-                  disabled={
-                    !form.isFieldsTouched(false) ||
-                    !!form
-                      .getFieldsError()
-                      .filter(({ errors }: any) => errors.length).length
-                  }
-                >
-                  Lưu
-                </Button>
-              )}
+            <Form.Item>
+              <Button
+                type="primary"
+                htmlType="submit"
+                size="large"
+                className="flex items-center justify-center w-96 text-white"
+              >
+                Lưu
+              </Button>
             </Form.Item>
           </Col>
         </Row>

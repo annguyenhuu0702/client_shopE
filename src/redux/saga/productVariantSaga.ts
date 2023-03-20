@@ -3,7 +3,7 @@ import { notification } from 'antd';
 import { call, put, takeEvery } from 'redux-saga/effects';
 import { productVariantApi } from '../../apis/productVariant';
 import { STATUS_CODE } from '../../constants';
-import { deleteParams, tokenPayloadData } from '../../types/common';
+import { tokenPayloadData } from '../../types/common';
 import {
   ICreateProductVariant,
   IGetAllProductVariantParams,
@@ -88,36 +88,6 @@ function* editProductVariantSaga({
   }
 }
 
-function* deleteProductVariantSaga({
-  payload,
-}: PayloadAction<deleteParams>): any {
-  try {
-    const { token, dispatch, id, params } = payload;
-    const res = yield call(() => {
-      return productVariantApi.deleteProductVariant(token, dispatch, id);
-    });
-    const { status } = res;
-    if (status === STATUS_CODE.SUCCESS) {
-      yield put(productVariantActions.deleteProductVariantSuccess());
-      yield put(
-        productVariantActions.getAllProductVariant({
-          p: params?.p,
-          limit: params?.limit,
-        })
-      );
-    }
-  } catch (err) {
-    console.log(err);
-    yield put(productVariantActions.deleteProductVariantFailed());
-    notification.error({
-      message: 'Thất bại',
-      description: 'Lỗi rồi!',
-      placement: 'bottomRight',
-      duration: 3,
-    });
-  }
-}
-
 function* productVariantSaga() {
   yield takeEvery(
     'productVariant/createProductVariant',
@@ -128,10 +98,6 @@ function* productVariantSaga() {
     getAllProductVariantSaga
   );
   yield takeEvery('productVariant/editProductVariant', editProductVariantSaga);
-  yield takeEvery(
-    'productVariant/deleteProductVariant',
-    deleteProductVariantSaga
-  );
 }
 
 export default productVariantSaga;

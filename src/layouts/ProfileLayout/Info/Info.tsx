@@ -50,7 +50,11 @@ const InfoUser: React.FC = () => {
       <div className="p-8">
         <div className="text-center mb-8">
           {user.user?.avatar !== '' ? (
-            <img className="w-40 h-40" src={user.user?.avatar} alt="avatar" />
+            <img
+              className="w-40 h-40 rounded-full"
+              src={user.user?.avatar}
+              alt="avatar"
+            />
           ) : (
             <img
               className="w-40 h-40"

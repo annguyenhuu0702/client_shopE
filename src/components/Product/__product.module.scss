@@ -147,6 +147,7 @@
         display: block;
         font-size: 1.4rem;
         color: $black-color;
+        font-weight: 600;
       }
       .sale {
         margin-left: 16px;
@@ -193,7 +194,6 @@
         .active {
           border: 1px solid $black-color;
           color: $black-color;
-          font-weight: 600;
         }
       }
     }
@@ -203,7 +203,7 @@
         font-weight: 600;
         font-size: 1.2rem;
         text-transform: uppercase;
-        margin: 0;
+        margin: 0 0 6px 0;
       }
       .content {
         display: flex;

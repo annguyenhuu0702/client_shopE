@@ -79,10 +79,12 @@ const ModalProductVariant: React.FC<Props> = ({
     console.log('Failed:', errorInfo);
   };
 
+  // render color
   const getVariantColors = useMemo(() => {
     return variantValues.reverse().filter((item) => item.variantId === 2);
   }, [variantValues]);
 
+  // render size
   const getVariantSizes = useMemo(() => {
     return variantValues.filter((item) => item.variantId === 1);
   }, [variantValues]);
@@ -113,6 +115,7 @@ const ModalProductVariant: React.FC<Props> = ({
     });
   };
 
+  // chuẩn bị data để gửi lên server
   const handleGenerateProductVariants = () => {
     if (currentProduct) {
       const data: ICreateProductVariant[] = [];
@@ -136,6 +139,7 @@ const ModalProductVariant: React.FC<Props> = ({
     }
   };
 
+  // lấy tất cả màu với size để chọn
   useEffect(() => {
     const getAllVariantValue = async () => {
       try {

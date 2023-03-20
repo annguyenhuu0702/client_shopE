@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import styles from './__product.module.scss';
 import { faHeart, faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -15,6 +15,7 @@ import { MinusOutlined, PlusOutlined } from '@ant-design/icons';
 import { IProduct } from '../../types/product';
 import { IProductImage } from '../../types/productImage';
 import { IProductVariant } from '../../types/productVariant';
+import { IVariantValue } from '../../types/variantValue';
 
 const cx = classNames.bind(styles);
 
@@ -24,9 +25,11 @@ interface Props {
 
 const Product: React.FC<Props> = ({ product }) => {
   const [isModalVisible, setIsModalVisible] = useState(false);
-  const [qtt, setQtt] = useState<number>(1);
-  const [isActiveSize, setIsActiveSize] = useState<boolean>(false);
-  const [isActiveColor, setIsActiveColor] = useState<boolean>(false);
+  const [quantity, setQuantity] = useState<number>(1);
+  const [selectedColor, setSelectedColor] = useState<IVariantValue>();
+  const [selectedSize, setSelectedSize] = useState<IVariantValue>();
+  const [colors, setColors] = useState<IVariantValue[]>([]);
+  const [sizes, setSizes] = useState<IVariantValue[]>([]);
 
   const showModal = () => {
     setIsModalVisible(true);
@@ -39,6 +42,40 @@ const Product: React.FC<Props> = ({ product }) => {
   const handleCancel = () => {
     setIsModalVisible(false);
   };
+
+  const handleSelectedColor = (color: IVariantValue) => {
+    setSelectedColor(color);
+  };
+
+  const handleSelectedSize = (size: IVariantValue) => {
+    setSelectedSize(size);
+  };
+
+  useEffect(() => {
+    if (product) {
+      const colors: IVariantValue[] = [];
+      const sizes: IVariantValue[] = [];
+      product.productVariants.forEach((data: IProductVariant) => {
+        data.variantValues?.forEach((variantValue) => {
+          if (variantValue.variantId === 1) {
+            let index = sizes.findIndex((size) => size.id === variantValue.id);
+            if (index === -1) {
+              sizes.push(variantValue);
+            }
+          } else if (variantValue.variantId === 2) {
+            let index = colors.findIndex((size) => size.id === variantValue.id);
+            if (index === -1) {
+              colors.push(variantValue);
+            }
+          }
+        });
+      });
+      sizes.sort((a, b) => a.id - b.id);
+      setColors(colors);
+      setSizes(sizes);
+    }
+  }, [product]);
+
   if (!product) return <></>;
   return (
     <React.Fragment>
@@ -98,62 +135,55 @@ const Product: React.FC<Props> = ({ product }) => {
                     </span>
                   )}
                 </div>
-                <div className={cx('colors')}>
-                  <h3>Màu sắc:</h3>
-                  <div className={cx('wrap')}>
-                    {/* <div
-                      className={cx('color', {
-                        active: isActiveColor,
-                      })}
-                      onClick={() => {
-                        setIsActiveColor(true);
-                      }}
-                    >
-                      <span>WA</span>
-                    </div>
-                    <div className={cx('color')}>
-                      <span>WA</span>
-                    </div> */}
-                    {product.productVariants.map(
-                      (productVariant: IProductVariant) => {
-                        const sortData = [...productVariant.variantValues].sort(
-                          (a, b) => a.variantId - b.variantId
-                        );
-                        console.log(sortData);
+                {colors.length > 0 && (
+                  <div className={cx('colors')}>
+                    <h3>Màu sắc:</h3>
+                    <div className={cx('wrap')}>
+                      {colors.map((color) => {
                         return (
-                          <div className={cx('color')} key={productVariant.id}>
-                            <span>{sortData[1].name}</span>
+                          <div
+                            key={color.id}
+                            className={cx('color')}
+                            onClick={() => {
+                              handleSelectedColor(color);
+                            }}
+                          >
+                            <span>{color.name}</span>
                           </div>
                         );
-                      }
-                    )}
-                  </div>
-                </div>
-                <div className={cx('sizes')}>
-                  <h3>Kích thước:</h3>
-                  <div className={cx('wrap')}>
-                    <div
-                      className={cx('size', {
-                        active: isActiveSize,
                       })}
-                      onClick={() => {
-                        setIsActiveSize(true);
-                      }}
-                    >
-                      <span>US5</span>
-                    </div>
-                    <div className={cx('size')}>
-                      <span>US6</span>
                     </div>
                   </div>
-                </div>
+                )}
+                {sizes.length > 0 && (
+                  <div className={cx('sizes')}>
+                    <h3>Kích thước:</h3>
+                    <div className={cx('wrap')}>
+                      {sizes.map((size) => {
+                        return (
+                          <div
+                            key={size.id}
+                            className={cx('size', {
+                              active: selectedSize?.id === size.id,
+                            })}
+                            onClick={() => {
+                              handleSelectedSize(size);
+                            }}
+                          >
+                            <span>{size.name}</span>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  </div>
+                )}
                 <div className={cx('qtt-cart')}>
                   <h3>Số lượng</h3>
                   <div className={cx('content')}>
                     <div className={cx('input-qtt')}>
                       <input
                         type="text"
-                        value={qtt}
+                        value={quantity}
                         onChange={() => {}}
                         className={cx('value-qtt')}
                       />
@@ -161,8 +191,8 @@ const Product: React.FC<Props> = ({ product }) => {
                         <MinusOutlined
                           className={cx('icon')}
                           onClick={() => {
-                            if (qtt > 1) {
-                              setQtt((prev) => prev - 1);
+                            if (quantity > 1) {
+                              setQuantity((prev) => prev - 1);
                             } else {
                               return 1;
                             }
@@ -171,7 +201,7 @@ const Product: React.FC<Props> = ({ product }) => {
                         <PlusOutlined
                           className={cx('icon')}
                           onClick={() => {
-                            setQtt(qtt + 1);
+                            setQuantity(quantity + 1);
                           }}
                         />
                       </div>

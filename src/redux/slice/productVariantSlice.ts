@@ -1,10 +1,10 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { deleteParams, tokenPayloadData } from '../../types/common';
+import { tokenPayloadData } from '../../types/common';
 import {
   ICreateProductVariant,
-  IUpdateProductVariant,
   IGetAllProductVariantParams,
   IProductVariant,
+  IUpdateProductVariant,
 } from '../../types/productVariant';
 
 import { RootState } from '../store';
@@ -96,17 +96,6 @@ const productVariantSlice = createSlice({
       state.isError = false;
     },
     editProductVariantFailed: (state) => {
-      state.isLoading = false;
-      state.isError = true;
-    },
-    deleteProductVariant: (state, action: PayloadAction<deleteParams>) => {
-      state.isLoading = true;
-    },
-    deleteProductVariantSuccess: (state) => {
-      state.isError = false;
-      state.isLoading = false;
-    },
-    deleteProductVariantFailed: (state) => {
       state.isLoading = false;
       state.isError = true;
     },

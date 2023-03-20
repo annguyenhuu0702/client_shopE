@@ -36,19 +36,8 @@ const update = (
   );
 };
 
-const deleteProductVariant = (
-  token: string | null,
-  dispatch: AppDispatch,
-  id: number
-): Promise<AxiosResponse> => {
-  return apiCallerWithToken(token, dispatch).delete(
-    `${URL_API}/productVariant/delete/${id}`
-  );
-};
-
 export const productVariantApi = {
   create,
   getAll,
   update,
-  deleteProductVariant,
 };

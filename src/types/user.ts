@@ -40,11 +40,6 @@ export interface IUpdateUser {
   resetValues?: Function;
 }
 
-// export interface deleteUser extends tokenPayload {
-//   id: number;
-//   params?: queryParams;
-// }
-
 export interface IGetAllUser extends tokenPayload {
   params?: IGetAllUserParams;
 }

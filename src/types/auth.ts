@@ -18,6 +18,7 @@ export interface changeProfileDto {
   city?: string;
   district?: string;
   ward?: string;
+  avatar?: string;
 }
 
 export interface changePasswordDto {

@@ -7,7 +7,7 @@ import { deleteParams, tokenPayloadData } from '../../types/common';
 import {
   ICreateProductVariant,
   IGetAllProductVariantParams,
-  IProductVariant,
+  IUpdateProductVariant,
 } from '../../types/productVariant';
 import { productVariantActions } from '../slice/productVariantSlice';
 
@@ -60,7 +60,7 @@ function* createProductVariantSaga({
 
 function* editProductVariantSaga({
   payload,
-}: PayloadAction<tokenPayloadData<IProductVariant>>): any {
+}: PayloadAction<tokenPayloadData<IUpdateProductVariant>>): any {
   try {
     const { token, dispatch, data } = payload;
     const res = yield call(() => {

@@ -21,8 +21,9 @@ export interface ICreateProductVariant {
   variantValues: IVariantValue[];
 }
 
-export interface IUpdateProductVariant extends ICreateProductVariant {
-  id: number;
+export interface IUpdateProductVariant {
+  productVariants: ICreateProductVariant[];
+  isProductVariants: IProductVariant[];
 }
 
 export interface IGetAllProductVariantParams extends queryParams {

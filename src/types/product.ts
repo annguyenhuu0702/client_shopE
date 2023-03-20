@@ -2,6 +2,7 @@ import React from 'react';
 import { queryParams } from './common';
 import { IProductCategory } from './productCategory';
 import { IProductImage } from './productImage';
+import { IProductVariant } from './productVariant';
 
 export interface IProduct {
   key?: React.Key | string | number;
@@ -19,7 +20,7 @@ export interface IProduct {
   resetValues?: Function;
   productCategory: IProductCategory;
   productImages: IProductImage[];
-  // productVariants: productVariant;
+  productVariants: IProductVariant[];
 }
 
 export interface ICreateProduct {

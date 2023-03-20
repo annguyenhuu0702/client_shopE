@@ -182,8 +182,9 @@ const ProductCategoryPage: React.FC = () => {
                             {removeTextBetweenParentheses(collection.name)}
                           </Link>
                           <ul className="list-none m-0 mt-6">
-                            {collection.productCategories.map(
-                              (item: IProductCategory) => {
+                            {[...collection.productCategories]
+                              .reverse()
+                              .map((item: IProductCategory) => {
                                 return (
                                   <li className="mb-6" key={item.id}>
                                     <Link
@@ -198,8 +199,7 @@ const ProductCategoryPage: React.FC = () => {
                                     </Link>
                                   </li>
                                 );
-                              }
-                            )}
+                              })}
                           </ul>
                         </li>
                       );

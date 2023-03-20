@@ -14,6 +14,7 @@ import { castToVND } from '../../utils';
 import { MinusOutlined, PlusOutlined } from '@ant-design/icons';
 import { IProduct } from '../../types/product';
 import { IProductImage } from '../../types/productImage';
+import { IProductVariant } from '../../types/productVariant';
 
 const cx = classNames.bind(styles);
 
@@ -100,7 +101,7 @@ const Product: React.FC<Props> = ({ product }) => {
                 <div className={cx('colors')}>
                   <h3>Màu sắc:</h3>
                   <div className={cx('wrap')}>
-                    <div
+                    {/* <div
                       className={cx('color', {
                         active: isActiveColor,
                       })}
@@ -112,7 +113,20 @@ const Product: React.FC<Props> = ({ product }) => {
                     </div>
                     <div className={cx('color')}>
                       <span>WA</span>
-                    </div>
+                    </div> */}
+                    {product.productVariants.map(
+                      (productVariant: IProductVariant) => {
+                        const sortData = [...productVariant.variantValues].sort(
+                          (a, b) => a.variantId - b.variantId
+                        );
+                        console.log(sortData);
+                        return (
+                          <div className={cx('color')} key={productVariant.id}>
+                            <span>{sortData[1].name}</span>
+                          </div>
+                        );
+                      }
+                    )}
                   </div>
                 </div>
                 <div className={cx('sizes')}>

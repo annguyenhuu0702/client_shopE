@@ -31,7 +31,7 @@ const update = (
   data: IUpdateProductVariant
 ): Promise<AxiosResponse> => {
   return apiCallerWithToken(token, dispatch).put(
-    `${URL_API}/productVariant/update/${data.id}`,
+    `${URL_API}/productVariant/update`,
     data
   );
 };

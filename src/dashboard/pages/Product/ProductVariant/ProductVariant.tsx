@@ -6,7 +6,10 @@ import { variantValueApi } from '../../../../apis/variantValueApi';
 import { authSelector } from '../../../../redux/slice/authSlice';
 import { productSelector } from '../../../../redux/slice/productSlice';
 import { productVariantActions } from '../../../../redux/slice/productVariantSlice';
-import { ICreateProductVariant } from '../../../../types/productVariant';
+import {
+  ICreateProductVariant,
+  IProductVariant,
+} from '../../../../types/productVariant';
 import { IVariantValue } from '../../../../types/variantValue';
 
 type Props = {
@@ -34,6 +37,10 @@ const ModalProductVariant: React.FC<Props> = ({
     ICreateProductVariant[]
   >([]);
 
+  const [isProductVariants, setIsProductVariants] = useState<IProductVariant[]>(
+    []
+  );
+
   const [form] = Form.useForm();
 
   const handleOk = () => {
@@ -45,14 +52,26 @@ const ModalProductVariant: React.FC<Props> = ({
   };
 
   const onFinish = async () => {
-    console.log('check data>>>>>>>>>', productVariants);
-    dispatch(
-      productVariantActions.createProductVariant({
-        token: user.accessToken,
-        dispatch,
-        data: productVariants,
-      })
-    );
+    if (isProductVariants.length > 0) {
+      dispatch(
+        productVariantActions.editProductVariant({
+          token: user.accessToken,
+          dispatch,
+          data: {
+            isProductVariants,
+            productVariants,
+          },
+        })
+      );
+    } else {
+      dispatch(
+        productVariantActions.createProductVariant({
+          token: user.accessToken,
+          dispatch,
+          data: productVariants,
+        })
+      );
+    }
     setIsModalOpen(false);
   };
 
@@ -99,12 +118,18 @@ const ModalProductVariant: React.FC<Props> = ({
       const data: ICreateProductVariant[] = [];
       colors.forEach((color) => {
         sizes.forEach((size) => {
-          data.push({
-            productId: currentProduct.id,
-            inventory: 0,
-            name: `${color.name} / ${size.name}`,
-            variantValues: [color, size],
-          });
+          if (
+            !isProductVariants.find(
+              (item) => item.name === `${color.name} / ${size.name}`
+            )
+          ) {
+            data.push({
+              productId: currentProduct.id,
+              inventory: 0,
+              name: `${color.name} / ${size.name}`,
+              variantValues: [color, size],
+            });
+          }
         });
       });
       setProductVariants(data);
@@ -130,8 +155,30 @@ const ModalProductVariant: React.FC<Props> = ({
           const { data } = await productVariantApi.getAll({
             productId: currentProduct.id,
           });
-          console.log(data);
-          // setProductVariants(data.data.rows);
+          setIsProductVariants(data.data.rows);
+          const colors: IVariantValue[] = [];
+          const sizes: IVariantValue[] = [];
+          data.data.rows.forEach((data: IProductVariant) => {
+            data.variantValues?.forEach((variantValue) => {
+              if (variantValue.variantId === 1) {
+                let index = sizes.findIndex(
+                  (size) => size.id === variantValue.id
+                );
+                if (index === -1) {
+                  sizes.push(variantValue);
+                }
+              } else if (variantValue.variantId === 2) {
+                let index = colors.findIndex(
+                  (size) => size.id === variantValue.id
+                );
+                if (index === -1) {
+                  colors.push(variantValue);
+                }
+              }
+            });
+          });
+          setColors(colors);
+          setSizes(sizes);
         } catch (error) {
           console.log(error);
         }
@@ -166,12 +213,11 @@ const ModalProductVariant: React.FC<Props> = ({
               <span className="block mb-2 font-semibold text-2xl">Kích cỡ</span>
               <div>
                 {getVariantSizes.map((item) => {
+                  let active = sizes.find((size) => size.id === item.id);
                   return (
                     <div
                       className={`inline-block text-2xl mb-6 p-4 mr-4 cursor-pointer text-black border border-solid ${
-                        sizes.find((color) => color.id === item.id)
-                          ? 'bg-blue-700 text-white'
-                          : ''
+                        active ? 'bg-blue-700 text-white' : ''
                       }`}
                       key={item.id}
                       onClick={() => {
@@ -186,12 +232,11 @@ const ModalProductVariant: React.FC<Props> = ({
               <span className="block mb-2 font-semibold text-2xl">Màu sắc</span>
               <div>
                 {getVariantColors.map((item) => {
+                  let active = colors.find((color) => color.id === item.id);
                   return (
                     <div
                       className={`inline-block text-2xl mb-6 p-4 mr-4 cursor-pointer text-black border border-solid ${
-                        colors.find((size) => size.id === item.id)
-                          ? 'bg-blue-700 text-white'
-                          : ''
+                        active ? 'bg-blue-700 text-white' : ''
                       }`}
                       key={item.id}
                       onClick={() => {
@@ -230,7 +275,7 @@ const ModalProductVariant: React.FC<Props> = ({
             </Row>
             {productVariants.map((productVariant) => {
               return (
-                <Row key={productVariant.name}>
+                <Row key={productVariant.name} className="mb-2">
                   <Col xl={5} className="flex items-center">
                     <div>{productVariant.name}</div>
                   </Col>
@@ -240,6 +285,31 @@ const ModalProductVariant: React.FC<Props> = ({
                       value={productVariant.inventory}
                       onChange={(value) => {
                         setProductVariants((state) =>
+                          state.map((item) =>
+                            item.name === productVariant.name
+                              ? { ...item, inventory: +`${value}` }
+                              : item
+                          )
+                        );
+                      }}
+                    />
+                  </Col>
+                </Row>
+              );
+            })}
+            {/* có productVariant thì chạy cái này */}
+            {isProductVariants.map((productVariant) => {
+              return (
+                <Row key={productVariant.name} className="mb-2">
+                  <Col xl={5} className="flex items-center">
+                    <div>{productVariant.name}</div>
+                  </Col>
+                  <Col xl={5}>
+                    <InputNumber
+                      className="w-full"
+                      value={productVariant.inventory}
+                      onChange={(value) => {
+                        setIsProductVariants((state) =>
                           state.map((item) =>
                             item.name === productVariant.name
                               ? { ...item, inventory: +`${value}` }

@@ -195,7 +195,7 @@ const ModalUser: React.FC = () => {
               </Form.Item>
               {!currentUser && (
                 <Form.Item
-                  label="Password"
+                  label="Mật khẩu"
                   name="password"
                   rules={[
                     {
@@ -212,7 +212,7 @@ const ModalUser: React.FC = () => {
                 </Form.Item>
               )}
 
-              <Form.Item label="Avatar">
+              <Form.Item label="Hình ảnh">
                 <Upload
                   name="image"
                   listType="picture-card"
@@ -240,7 +240,7 @@ const ModalUser: React.FC = () => {
             </Col>
             <Col xl={12} md={12}>
               <Form.Item
-                label="Fullname"
+                label="Họ tên"
                 name="fullname"
                 rules={[
                   {
@@ -252,7 +252,7 @@ const ModalUser: React.FC = () => {
                 <Input />
               </Form.Item>
               <Form.Item
-                label="Phone"
+                label="SĐT"
                 name="phone"
                 rules={[
                   {
@@ -263,15 +263,15 @@ const ModalUser: React.FC = () => {
               >
                 <Input />
               </Form.Item>
-              <Form.Item label="Gender" name="gender">
+              <Form.Item label="Giới tính" name="gender">
                 <Radio.Group
                   onChange={(e: RadioChangeEvent) => {
                     setGender(e.target.value);
                   }}
                   value={gender}
                 >
-                  <Radio value={true}>Male</Radio>
-                  <Radio value={false}>Female</Radio>
+                  <Radio value={true}>Nam</Radio>
+                  <Radio value={false}>Nữ</Radio>
                 </Radio.Group>
               </Form.Item>
             </Col>

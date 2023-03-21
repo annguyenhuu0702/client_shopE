@@ -1,8 +1,7 @@
-import React from 'react';
 import {
   DeleteOutlined,
-  EditOutlined,
   DownloadOutlined,
+  EditOutlined,
 } from '@ant-design/icons';
 import {
   Button,
@@ -14,25 +13,27 @@ import {
   Select,
   Space,
   Table,
+  Tag,
 } from 'antd';
-
+import { AlignType } from 'rc-table/lib/interface';
+import React from 'react';
 import moment from 'moment';
 import { useDispatch, useSelector } from 'react-redux';
 import { utils, writeFileXLSX } from 'xlsx';
 import { userApi } from '../../../../apis/userApi';
+import { authSelector, authState } from '../../../../redux/slice/authSlice';
 import {
   modalActions,
   modalSelector,
   modalState,
 } from '../../../../redux/slice/modalSlice';
 import {
-  userState,
   userActions,
   userSelector,
+  userState,
 } from '../../../../redux/slice/userSlice';
 import { IUser } from '../../../../types/user';
 import ModalUser from '../ModalUser';
-import { authSelector, authState } from '../../../../redux/slice/authSlice';
 
 const TableUser: React.FC = () => {
   const dispatch = useDispatch();
@@ -48,6 +49,7 @@ const TableUser: React.FC = () => {
     {
       title: 'Hình ảnh',
       dataIndex: 'avatar',
+      width: 80,
       render: (text: string, record: IUser) => {
         return (
           <React.Fragment>
@@ -71,6 +73,20 @@ const TableUser: React.FC = () => {
     {
       title: 'Họ tên',
       dataIndex: 'fullname',
+      render: (text: string, record: IUser) => {
+        return (
+          <div>
+            <span
+              className="cursor-pointer text-blue-500"
+              onClick={() => {
+                handleEditUser(record);
+              }}
+            >
+              {record.fullname}
+            </span>
+          </div>
+        );
+      },
     },
     {
       title: 'Email',
@@ -83,13 +99,24 @@ const TableUser: React.FC = () => {
     {
       title: 'Giới tính',
       dataIndex: 'gender',
+      width: 100,
+      align: 'center' as AlignType,
       render: (text: string, record: IUser) => {
         return (
           <div>
-            {record.gender === true ? <span>Nam</span> : <span>Nữ</span>}
+            {record.gender === true ? (
+              <Tag color="red">Nam</Tag>
+            ) : (
+              <Tag color="green">Nữ</Tag>
+            )}
           </div>
         );
       },
+    },
+    {
+      title: 'Điểm tích lũy',
+      dataIndex: 'accumulatedPoints',
+      align: 'center' as AlignType,
     },
     {
       title: 'Ngày tạo',
@@ -102,6 +129,8 @@ const TableUser: React.FC = () => {
     {
       title: 'Hành động',
       dataIndex: 'action',
+      width: 100,
+      align: 'center' as AlignType,
       render: (text: string, record: IUser) => {
         return (
           <Space size="middle">

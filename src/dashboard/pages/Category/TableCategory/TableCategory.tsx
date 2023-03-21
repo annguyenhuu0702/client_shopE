@@ -38,7 +38,7 @@ const TableCategory: React.FC = () => {
   const columns = [
     {
       title: 'Hình ảnh',
-      width: '100px',
+      width: 100,
       render: (text: string, record: ICategory) => {
         return record.thumbnail !== '' ? (
           <div className="flex justify-center cursor-text">

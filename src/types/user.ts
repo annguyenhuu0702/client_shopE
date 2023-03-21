@@ -6,6 +6,7 @@ export interface IUser {
   createdAt: Date;
   updatedAt: Date;
   fullname: string;
+  deletedAt: Date;
   email: string;
   city: string;
   ward: string;

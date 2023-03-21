@@ -79,15 +79,9 @@ const userSlice = createSlice({
     editUser: (state, action: PayloadAction<tokenPayloadData<IUpdateUser>>) => {
       state.isLoading = true;
     },
-    editUserSuccess: (state, action: PayloadAction<IUser>) => {
+    editUserSuccess: (state) => {
       state.isLoading = false;
       state.isError = false;
-      const index = state.users.rows.findIndex(
-        (item) => item.id === action.payload.id
-      );
-      if (index !== -1) {
-        state.users.rows[index] = action.payload;
-      }
     },
     editUserFailed: (state) => {
       state.isLoading = false;

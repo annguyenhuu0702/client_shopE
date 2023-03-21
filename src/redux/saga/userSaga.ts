@@ -4,7 +4,7 @@ import { call, put, takeEvery } from 'redux-saga/effects';
 import { userApi } from '../../apis/userApi';
 import { STATUS_CODE } from '../../constants';
 import { deleteParams, tokenPayloadData } from '../../types/common';
-import { IUser, ICreateUser, IGetAllUser } from '../../types/user';
+import { ICreateUser, IGetAllUser, IUpdateUser } from '../../types/user';
 import { modalActions } from '../slice/modalSlice';
 import { userActions } from '../slice/userSlice';
 
@@ -54,15 +54,22 @@ function* createUserSaga({
 
 function* editUserSaga({
   payload,
-}: PayloadAction<tokenPayloadData<IUser>>): any {
+}: PayloadAction<tokenPayloadData<IUpdateUser>>): any {
   try {
-    const { token, dispatch, data } = payload;
+    const { token, dispatch, data, params } = payload;
     const res = yield call(() => {
       return userApi.update(token, dispatch, data);
     });
     const { status } = res;
     if (status === STATUS_CODE.SUCCESS) {
-      yield put(userActions.editUserSuccess(data));
+      yield put(userActions.editUserSuccess());
+      yield put(
+        userActions.getAllUser({
+          token,
+          dispatch,
+          params,
+        })
+      );
       if (data.resetValues) {
         data.resetValues();
       }

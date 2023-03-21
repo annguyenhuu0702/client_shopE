@@ -36,7 +36,7 @@ function getItem(
 
 const items: MenuItem[] = [
   getItem('Thống kê', '/admin', <BarChartOutlined />),
-  getItem('Tài khoản', '/admin/user', <UserOutlined />),
+  getItem('Khách hàng', '/admin/user', <UserOutlined />),
   getItem('Danh mục', '/admin/category', <BiCategory />),
   getItem('Bộ sưu tập', '/admin/collection', <BiCollection />),
   getItem('Quản lý sản phẩm', 'qlsanpham', <FontAwesomeIcon icon={faList} />, [

@@ -19,7 +19,7 @@ const User: React.FC = () => {
   const { user }: authState = useSelector(authSelector);
   const { users, page, pageSize }: userState = useSelector(userSelector);
 
-  useTitle('Tài khoản');
+  useTitle('Khách hàng');
 
   useEffect(() => {
     dispatch(
@@ -33,7 +33,7 @@ const User: React.FC = () => {
 
   return (
     <main className="section-common">
-      <HeaderTitle title="Tài khoản" />
+      <HeaderTitle title="Khách hàng" />
       <Content className="common-layout-content-cus">
         <div className="common-content-wrap">
           <div className="common-content">

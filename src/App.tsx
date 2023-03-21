@@ -71,7 +71,7 @@ const App = () => {
             left: '50%',
           }}
         >
-          <Spin size="large" />
+          <Spin />
         </div>
       }
     >

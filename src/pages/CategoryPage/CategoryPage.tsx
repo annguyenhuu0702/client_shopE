@@ -62,7 +62,7 @@ const CategoryPage: React.FC = () => {
           left: '50%',
         }}
       >
-        <Spin size="large" />
+        <Spin />
       </div>
     );
 

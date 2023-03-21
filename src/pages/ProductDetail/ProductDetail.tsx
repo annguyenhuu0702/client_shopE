@@ -20,6 +20,7 @@ import {
 import { useTitle } from '../../hooks/useTitle';
 import { IVariantValue } from '../../types/variantValue';
 import { IProductVariant } from '../../types/productVariant';
+import { IProductImage } from '../../types/productImage';
 
 const ProductDetail: React.FC = () => {
   const { slug } = useParams();
@@ -27,13 +28,23 @@ const ProductDetail: React.FC = () => {
   const { currentProductClient, isLoadingClient } =
     useSelector(productSelector);
   const [isWishlist, setIsWishlist] = useState<boolean>(false);
-  const [selectedColor, setSelectedColor] = useState<IVariantValue>();
-  const [selectedSize, setSelectedSize] = useState<IVariantValue>();
+
   const [isDes, setIsDes] = useState<boolean>(true);
   const [isMaterial, setIsMaterial] = useState<boolean>(false);
   const [isGuide, setIsGuide] = useState<boolean>(false);
+
+  // chọn màu với kích thước
+  const [selectedColor, setSelectedColor] = useState<IVariantValue>();
+  const [selectedSize, setSelectedSize] = useState<IVariantValue>();
+
+  // state render color size
   const [colors, setColors] = useState<IVariantValue[]>([]);
   const [sizes, setSizes] = useState<IVariantValue[]>([]);
+
+  // chọn hình
+  const [selectedImage, setSelectedImage] = useState<string>(() => {
+    return currentProductClient ? currentProductClient.thumbnail : '';
+  });
 
   const handleSelectedColor = (color: IVariantValue) => {
     setSelectedColor(color);
@@ -42,6 +53,11 @@ const ProductDetail: React.FC = () => {
   const handleSelectedSize = (size: IVariantValue) => {
     setSelectedSize(size);
   };
+
+  const handleSelectedImage = (item: IProductImage) => {
+    setSelectedImage(item.path);
+  };
+
   useEffect(() => {
     if (slug) {
       dispatch(
@@ -76,8 +92,17 @@ const ProductDetail: React.FC = () => {
       setSizes(sizes);
     }
   }, [currentProductClient]);
+
+  useEffect(() => {
+    if (currentProductClient) {
+      setSelectedImage(currentProductClient.thumbnail);
+    }
+  }, [currentProductClient]);
+
   useTitle(currentProductClient?.name);
+
   if (!currentProductClient) return <></>;
+
   if (isLoadingClient === true)
     return (
       <div
@@ -87,7 +112,7 @@ const ProductDetail: React.FC = () => {
           left: '50%',
         }}
       >
-        <Spin size="large" />
+        <Spin />
       </div>
     );
   return (
@@ -121,24 +146,61 @@ const ProductDetail: React.FC = () => {
           </section>
           <section>
             <Row gutter={[16, 16]}>
-              <Col xl={12} md={12} xs={24}>
+              <Col xl={10} md={12} xs={24}>
                 <Swiper
-                  modules={[Pagination]}
                   className="my-swiper"
+                  modules={[Pagination]}
                   pagination={{ clickable: true }}
-                >
-                  {currentProductClient.productImages.map((item) => {
-                    return (
-                      <SwiperSlide key={item.id}>
-                        <img
-                          className="common-img"
-                          src={item.path}
-                          alt={currentProductClient.name}
-                        />
-                      </SwiperSlide>
+                  onSlideChange={(swiperCore) => {
+                    const { activeIndex } = swiperCore;
+                    setSelectedImage(
+                      [...currentProductClient.productImages].sort(
+                        (a, b) => a.variantValueId - b.variantValueId
+                      )[activeIndex].path
                     );
-                  })}
+                  }}
+                >
+                  {[...currentProductClient.productImages]
+                    .sort((a, b) => a.variantValueId - b.variantValueId)
+                    .map((item) => {
+                      return (
+                        <SwiperSlide key={item.id}>
+                          <img
+                            className="common-img"
+                            src={selectedImage}
+                            alt={currentProductClient.name}
+                          />
+                        </SwiperSlide>
+                      );
+                    })}
                 </Swiper>
+              </Col>
+              <Col xl={2} md={0} xs={0}>
+                <div className="h-700 overflow-y-auto">
+                  {[...currentProductClient.productImages]
+                    .sort((a, b) => a.variantValueId - b.variantValueId)
+                    .map((item) => {
+                      return (
+                        <div
+                          key={item.id}
+                          className="pb-2 pr-1"
+                          onClick={() => {
+                            handleSelectedImage(item);
+                          }}
+                        >
+                          <img
+                            className={`common-img ${
+                              item.path === selectedImage
+                                ? 'border border-solid'
+                                : ''
+                            }`}
+                            src={item.path}
+                            alt={currentProductClient.name}
+                          />
+                        </div>
+                      );
+                    })}
+                </div>
               </Col>
               <Col xl={12} md={12} xs={24}>
                 <div>
@@ -160,46 +222,52 @@ const ProductDetail: React.FC = () => {
                       </span>
                     )}
                   </div>
-                  <div>
-                    <h3>Màu sắc:</h3>
-                    <div className="flex flex-wrap">
-                      {colors.map((color, index) => {
-                        return (
-                          <span
-                            key={index}
-                            onClick={() => {
-                              handleSelectedColor(color);
-                            }}
-                            className={`w-20 h-20 border-solid border flex text-center items-center justify-center cursor-pointer mr-4 mb-4 ${
-                              selectedColor?.id === color.id ? 'font-bold' : ''
-                            }`}
-                          >
-                            {color.name}
-                          </span>
-                        );
-                      })}
+                  {colors.length > 0 && (
+                    <div>
+                      <h3>Màu sắc:</h3>
+                      <div className="flex flex-wrap">
+                        {colors.map((color, index) => {
+                          return (
+                            <span
+                              key={index}
+                              onClick={() => {
+                                handleSelectedColor(color);
+                              }}
+                              className={`w-20 h-20 border-solid border flex text-center items-center justify-center cursor-pointer mr-4 mb-4 ${
+                                selectedColor?.id === color.id
+                                  ? 'font-bold'
+                                  : ''
+                              }`}
+                            >
+                              {color.name}
+                            </span>
+                          );
+                        })}
+                      </div>
                     </div>
-                  </div>
-                  <div>
-                    <h3>Kích thước:</h3>
-                    <div className="flex flex-wrap">
-                      {sizes.map((size, index) => {
-                        return (
-                          <span
-                            key={index}
-                            onClick={() => {
-                              handleSelectedSize(size);
-                            }}
-                            className={`w-20 h-20 border-solid border flex text-center items-center justify-center cursor-pointer mr-4 mb-4 ${
-                              selectedSize?.id === size.id ? 'font-bold' : ''
-                            }`}
-                          >
-                            {size.name}
-                          </span>
-                        );
-                      })}
+                  )}
+                  {sizes.length > 0 && (
+                    <div>
+                      <h3>Kích thước:</h3>
+                      <div className="flex flex-wrap">
+                        {sizes.map((size, index) => {
+                          return (
+                            <span
+                              key={index}
+                              onClick={() => {
+                                handleSelectedSize(size);
+                              }}
+                              className={`w-20 h-20 border-solid border flex text-center items-center justify-center cursor-pointer mr-4 mb-4 ${
+                                selectedSize?.id === size.id ? 'font-bold' : ''
+                              }`}
+                            >
+                              {size.name}
+                            </span>
+                          );
+                        })}
+                      </div>
                     </div>
-                  </div>
+                  )}
                   <div className="mb-4">
                     <span className="font-bold">Hướng dẫn chọn size:</span>
                   </div>

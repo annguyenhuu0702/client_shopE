@@ -7,7 +7,7 @@ export const routes = {
   changePassword: '/account/change-password',
   accumulatedPoints: '/account/accumulated-points',
   favoriteProduct: '/account/favorite-product',
-  productDetail: '/san-pham/:slug',
+  productDetail: '/:slug',
   cart: '/cart',
   categoryPage: '/category/:slug',
   collectionPage: '/collection/:slug',

@@ -233,6 +233,8 @@ const FormProductCategory: React.FC = () => {
                           })
                         : []
                     }
+                    showSearch
+                    allowClear
                   />
                 </Form.Item>
                 <Form.Item label="Mô tả" name="description">

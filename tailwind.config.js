@@ -20,6 +20,7 @@ module.exports = {
         'bg-layout-profile': '#f8f8f8',
         'item-profile': '#FEEEEA',
         'option-filter': '#63b1bc',
+        'border-variant': '#d2d1d4',
       },
       width: {
         45: '45rem',

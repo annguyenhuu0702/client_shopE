@@ -162,6 +162,8 @@ const FormProduct: React.FC = () => {
                       label: item.name,
                     };
                   })}
+                  showSearch={true}
+                  allowClear
                 />
               </Form.Item>
               <Form.Item

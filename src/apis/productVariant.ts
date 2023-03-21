@@ -1,6 +1,5 @@
 import { AxiosResponse } from 'axios';
 import instance, { apiCallerWithToken } from '../config/configAxios';
-import { URL_API } from '../constants';
 import { AppDispatch } from '../redux/store';
 import {
   ICreateProductVariant,
@@ -9,7 +8,7 @@ import {
 } from '../types/productVariant';
 
 const getAll = (params?: IGetAllProductVariantParams) => {
-  return instance.get(`${URL_API}/productVariant/getAll`, {
+  return instance.get(`productVariant/getAll`, {
     params,
   });
 };
@@ -20,7 +19,7 @@ const create = (
   data: ICreateProductVariant[]
 ): Promise<AxiosResponse> => {
   return apiCallerWithToken(token, dispatch).post(
-    `${URL_API}/productVariant/create`,
+    `productVariant/create`,
     data
   );
 };
@@ -30,10 +29,7 @@ const update = (
   dispatch: AppDispatch,
   data: IUpdateProductVariant
 ): Promise<AxiosResponse> => {
-  return apiCallerWithToken(token, dispatch).put(
-    `${URL_API}/productVariant/update`,
-    data
-  );
+  return apiCallerWithToken(token, dispatch).put(`productVariant/update`, data);
 };
 
 export const productVariantApi = {

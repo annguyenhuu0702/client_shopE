@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import { Breadcrumb, Col, Row } from 'antd';
+import { Breadcrumb, Col, Row, Spin } from 'antd';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Pagination, Navigation } from 'swiper';
 import 'swiper/css';
@@ -28,7 +28,7 @@ const CategoryPage: React.FC = () => {
   const dispatch = useDispatch();
   const { slug } = useParams();
   const { currentCategoryClient } = useSelector(categorySelector);
-  const { productsByCategory } = useSelector(productSelector);
+  const { productsByCategory, isLoadingClient } = useSelector(productSelector);
 
   // lấy banner
   useEffect(() => {
@@ -53,6 +53,7 @@ const CategoryPage: React.FC = () => {
   }, [dispatch, slug]);
 
   useTitle(currentCategoryClient?.name ? currentCategoryClient?.name : '');
+  if (isLoadingClient === true) return <Spin size="large" />;
 
   return (
     <main className="px-20 max-sm:px-4 max-sm:mt-24">

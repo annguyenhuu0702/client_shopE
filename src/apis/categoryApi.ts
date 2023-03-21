@@ -1,6 +1,5 @@
 import { AxiosResponse } from 'axios';
 import instance, { apiCallerWithToken } from '../config/configAxios';
-import { URL_API } from '../constants';
 import { AppDispatch } from '../redux/store';
 import {
   ICreateCategory,
@@ -9,17 +8,17 @@ import {
 } from '../types/category';
 
 const getAll = (params?: IGetAllCategoryParams) => {
-  return instance.get(`${URL_API}/category/getAll`, {
+  return instance.get(`category/getAll`, {
     params,
   });
 };
 
 const getById = (id: string) => {
-  return instance.get(`${URL_API}/category/getById/${id}`);
+  return instance.get(`category/getById/${id}`);
 };
 
 const getBySlug = (categorySlug: string) => {
-  return instance.get(`${URL_API}/category/getBySlug/${categorySlug}`);
+  return instance.get(`category/getBySlug/${categorySlug}`);
 };
 
 const create = (
@@ -27,10 +26,7 @@ const create = (
   dispatch: AppDispatch,
   data: ICreateCategory
 ): Promise<AxiosResponse> => {
-  return apiCallerWithToken(token, dispatch).post(
-    `${URL_API}/category/create`,
-    data
-  );
+  return apiCallerWithToken(token, dispatch).post(`category/create`, data);
 };
 
 const update = (
@@ -39,7 +35,7 @@ const update = (
   data: IUpdateCategory
 ): Promise<AxiosResponse> => {
   return apiCallerWithToken(token, dispatch).put(
-    `${URL_API}/category/update/${data.id}`,
+    `category/update/${data.id}`,
     data
   );
 };
@@ -49,9 +45,7 @@ const deleteCategory = (
   dispatch: AppDispatch,
   id: number
 ): Promise<AxiosResponse> => {
-  return apiCallerWithToken(token, dispatch).delete(
-    `${URL_API}/category/delete/${id}`
-  );
+  return apiCallerWithToken(token, dispatch).delete(`category/delete/${id}`);
 };
 
 export const categoryApi = {

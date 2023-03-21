@@ -48,3 +48,7 @@ export interface IGetAllProductByCategory {
   limitProduct?: number;
   slug: string;
 }
+
+export interface IGetProductBySlug {
+  slug: string;
+}

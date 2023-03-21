@@ -6,6 +6,7 @@ import {
   IUpdateProduct,
   IGetAllProductParams,
   IGetAllProductByCategory,
+  IGetProductBySlug,
 } from '../../types/product';
 import { IProductCategory } from '../../types/productCategory';
 
@@ -162,8 +163,8 @@ const ProductSlice = createSlice({
       state.productsClient.count = action.payload.count;
     },
     getAllProductClientFailed: (state) => {
-      state.isLoading = false;
-      state.isError = true;
+      state.isLoadingClient = false;
+      state.isErrorClient = true;
     },
     setPageClient: (
       state,
@@ -188,8 +189,23 @@ const ProductSlice = createSlice({
       state.productsByCategory.count = action.payload.count;
     },
     getAllProductByCategoryClientFailed: (state) => {
-      state.isLoading = false;
-      state.isError = true;
+      state.isLoadingClient = false;
+      state.isErrorClient = true;
+    },
+    getProductBySlugClient: (
+      state,
+      action: PayloadAction<IGetProductBySlug>
+    ) => {
+      state.isLoadingClient = true;
+    },
+    getProductBySlugClientSuccess: (state, action: PayloadAction<IProduct>) => {
+      state.isLoadingClient = false;
+      state.isErrorClient = false;
+      state.currentProductClient = action.payload;
+    },
+    getProductBySlugClientFailed: (state) => {
+      state.isLoadingClient = false;
+      state.isErrorClient = true;
     },
   },
 });

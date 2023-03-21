@@ -11,7 +11,6 @@ import 'swiper/css/pagination';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { castToVND } from '../../utils';
 
-import { MinusOutlined, PlusOutlined } from '@ant-design/icons';
 import { IProduct } from '../../types/product';
 import { IProductImage } from '../../types/productImage';
 import { IProductVariant } from '../../types/productVariant';
@@ -25,7 +24,6 @@ interface Props {
 
 const Product: React.FC<Props> = ({ product }) => {
   const [isModalVisible, setIsModalVisible] = useState(false);
-  const [quantity, setQuantity] = useState<number>(1);
   const [selectedColor, setSelectedColor] = useState<IVariantValue>();
   const [selectedSize, setSelectedSize] = useState<IVariantValue>();
   const [colors, setColors] = useState<IVariantValue[]>([]);
@@ -52,11 +50,11 @@ const Product: React.FC<Props> = ({ product }) => {
   };
 
   useEffect(() => {
-    if (product) {
+    if (product && product.productVariants) {
       const colors: IVariantValue[] = [];
       const sizes: IVariantValue[] = [];
       product.productVariants.forEach((data: IProductVariant) => {
-        data.variantValues?.forEach((variantValue) => {
+        data.variantValues.forEach((variantValue: IVariantValue) => {
           if (variantValue.variantId === 1) {
             let index = sizes.findIndex((size) => size.id === variantValue.id);
             if (index === -1) {
@@ -81,7 +79,7 @@ const Product: React.FC<Props> = ({ product }) => {
     <React.Fragment>
       <div className={cx('item')}>
         <div className={cx('img')}>
-          <Link to={`/san-pham/${product.slug}`}>
+          <Link to={`/${product.slug}`}>
             <img className="common-img" src={product.thumbnail} alt="" />
           </Link>
         </div>
@@ -123,7 +121,7 @@ const Product: React.FC<Props> = ({ product }) => {
               </div>
               <div className={cx('right')}>
                 <div className={cx('name')}>
-                  <Link to={`/san-pham/${product.slug}`}>{product.name}</Link>
+                  <Link to={`/${product.slug}`}>{product.name}</Link>
                 </div>
                 <div className={cx('price')}>
                   <span className={cx('current')}>
@@ -143,7 +141,9 @@ const Product: React.FC<Props> = ({ product }) => {
                         return (
                           <div
                             key={color.id}
-                            className={cx('color')}
+                            className={cx('color', {
+                              active: selectedColor?.id === color.id,
+                            })}
                             onClick={() => {
                               handleSelectedColor(color);
                             }}
@@ -177,49 +177,18 @@ const Product: React.FC<Props> = ({ product }) => {
                     </div>
                   </div>
                 )}
-                <div className={cx('qtt-cart')}>
-                  <h3>Số lượng</h3>
-                  <div className={cx('content')}>
-                    <div className={cx('input-qtt')}>
-                      <input
-                        type="text"
-                        value={quantity}
-                        onChange={() => {}}
-                        className={cx('value-qtt')}
-                      />
-                      <div className={cx('btn-qtt')}>
-                        <MinusOutlined
-                          className={cx('icon')}
-                          onClick={() => {
-                            if (quantity > 1) {
-                              setQuantity((prev) => prev - 1);
-                            } else {
-                              return 1;
-                            }
-                          }}
-                        />
-                        <PlusOutlined
-                          className={cx('icon')}
-                          onClick={() => {
-                            setQuantity(quantity + 1);
-                          }}
-                        />
-                      </div>
-                    </div>
-                    <div className={cx('btn-add-to-cart')}>
-                      <button>Thêm vào giỏ hàng</button>
-                    </div>
-                  </div>
+                <div className={cx('btn-add-to-cart')}>
+                  <button>Thêm vào giỏ hàng</button>
                 </div>
                 <div className={cx('more-detail')}>
-                  <Link to="">More Details</Link>
+                  <Link to={`/${product.slug}`}>More Details</Link>
                 </div>
               </div>
             </div>
           </Modal>
         )}
         <div className={cx('name')}>
-          <Link to={`/san-pham/${product.slug}`}>
+          <Link to={`/${product.slug}`}>
             <span className="hover:text-btn-order transition ease-in-out delay-75">
               {product.name}
             </span>

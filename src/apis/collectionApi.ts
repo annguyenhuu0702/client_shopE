@@ -1,6 +1,5 @@
 import { AxiosResponse } from 'axios';
 import instance, { apiCallerWithToken } from '../config/configAxios';
-import { URL_API } from '../constants';
 import { AppDispatch } from '../redux/store';
 import {
   ICreateCollection,
@@ -9,13 +8,13 @@ import {
 } from '../types/collection';
 
 const getAll = (params?: IGetAllCollectionParams) => {
-  return instance.get(`${URL_API}/collection/getAll`, {
+  return instance.get(`collection/getAll`, {
     params,
   });
 };
 
 const getById = (id: string) => {
-  return instance.get(`${URL_API}/collection/getById/${id}`);
+  return instance.get(`collection/getById/${id}`);
 };
 
 const create = (
@@ -23,10 +22,7 @@ const create = (
   dispatch: AppDispatch,
   data: ICreateCollection
 ): Promise<AxiosResponse> => {
-  return apiCallerWithToken(token, dispatch).post(
-    `${URL_API}/collection/create`,
-    data
-  );
+  return apiCallerWithToken(token, dispatch).post(`collection/create`, data);
 };
 
 const update = (
@@ -35,7 +31,7 @@ const update = (
   data: IUpdateCollection
 ): Promise<AxiosResponse> => {
   return apiCallerWithToken(token, dispatch).put(
-    `${URL_API}/collection/update/${data.id}`,
+    `collection/update/${data.id}`,
     data
   );
 };
@@ -45,9 +41,7 @@ const deleteCollection = (
   dispatch: AppDispatch,
   id: number
 ): Promise<AxiosResponse> => {
-  return apiCallerWithToken(token, dispatch).delete(
-    `${URL_API}/collection/delete/${id}`
-  );
+  return apiCallerWithToken(token, dispatch).delete(`collection/delete/${id}`);
 };
 
 export const collectionApi = {

@@ -224,6 +224,8 @@ const FormCollection: React.FC = () => {
                           })
                         : []
                     }
+                    showSearch
+                    allowClear
                   />
                 </Form.Item>
 

@@ -1,16 +1,15 @@
 import { AxiosResponse } from 'axios';
 import instance, { apiCallerWithToken } from '../config/configAxios';
-import { URL_API } from '../constants';
 import { AppDispatch } from '../redux/store';
 import {
   ICreateProduct,
-  IUpdateProduct,
-  IGetAllProductParams,
   IGetAllProductByCategory,
+  IGetAllProductParams,
+  IUpdateProduct,
 } from '../types/product';
 
 const getAll = (params?: IGetAllProductParams) => {
-  return instance.get(`${URL_API}/product/getAll`, {
+  return instance.get(`product/getAll`, {
     params,
   });
 };
@@ -18,13 +17,17 @@ const getAll = (params?: IGetAllProductParams) => {
 const getByCategory = (params: IGetAllProductByCategory) => {
   const { limitProduct, limitCollection, slug } = params;
 
-  return instance.get(`${URL_API}/product/category/${slug}`, {
+  return instance.get(`product/category/${slug}`, {
     params: { limitProduct, limitCollection },
   });
 };
 
 const getById = (id: string) => {
-  return instance.get(`${URL_API}/product/getById/${id}`);
+  return instance.get(`product/getById/${id}`);
+};
+
+const getBySlug = (slug: string) => {
+  return instance.get(`product/getBySlug/${slug}`);
 };
 
 const create = (
@@ -32,10 +35,7 @@ const create = (
   dispatch: AppDispatch,
   data: ICreateProduct
 ): Promise<AxiosResponse> => {
-  return apiCallerWithToken(token, dispatch).post(
-    `${URL_API}/product/create`,
-    data
-  );
+  return apiCallerWithToken(token, dispatch).post(`product/create`, data);
 };
 
 const update = (
@@ -44,7 +44,7 @@ const update = (
   data: IUpdateProduct
 ): Promise<AxiosResponse> => {
   return apiCallerWithToken(token, dispatch).put(
-    `${URL_API}/product/update/${data.id}`,
+    `product/update/${data.id}`,
     data
   );
 };
@@ -54,15 +54,14 @@ const deleteProduct = (
   dispatch: AppDispatch,
   id: number
 ): Promise<AxiosResponse> => {
-  return apiCallerWithToken(token, dispatch).delete(
-    `${URL_API}/product/delete/${id}`
-  );
+  return apiCallerWithToken(token, dispatch).delete(`product/delete/${id}`);
 };
 
 export const productApi = {
   create,
   getAll,
   getById,
+  getBySlug,
   update,
   deleteProduct,
   getByCategory,

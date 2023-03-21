@@ -1,4 +1,4 @@
-import { Breadcrumb, Col, Pagination, Popover, Row } from 'antd';
+import { Breadcrumb, Col, Pagination, Popover, Row, Spin } from 'antd';
 import React, { useEffect, useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, useLocation, useParams } from 'react-router-dom';
@@ -30,7 +30,7 @@ const ProductCategoryPage: React.FC = () => {
   const { currentCollectionClient } = useSelector(collectionSelector);
   const { currentProductCategoryClient } = useSelector(productCategorySelector);
   const dispatch = useDispatch();
-  const { productsClient, pageClient, pageSizeClient } =
+  const { productsClient, pageClient, pageSizeClient, isLoadingClient } =
     useSelector(productSelector);
 
   useTitle(
@@ -77,6 +77,8 @@ const ProductCategoryPage: React.FC = () => {
       })
     );
   }, [slug, dispatch, pageClient]);
+
+  if (isLoadingClient === true) return <Spin size="large" />;
 
   return (
     <main className="px-20 max-sm:mt-24 max-sm:px-4">

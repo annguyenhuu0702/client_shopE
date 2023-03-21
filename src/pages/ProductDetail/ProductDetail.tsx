@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { Breadcrumb, Button, Col, Row } from 'antd';
+import React, { useState, useEffect } from 'react';
+import { Breadcrumb, Button, Col, Row, Spin } from 'antd';
 import { Link, useParams } from 'react-router-dom';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css';
@@ -12,19 +12,73 @@ import {
   AiOutlineMinus,
   AiOutlinePlus,
 } from 'react-icons/ai';
+import { useDispatch, useSelector } from 'react-redux';
+import {
+  productActions,
+  productSelector,
+} from '../../redux/slice/productSlice';
+import { useTitle } from '../../hooks/useTitle';
+import { IVariantValue } from '../../types/variantValue';
+import { IProductVariant } from '../../types/productVariant';
 
 const ProductDetail: React.FC = () => {
   const { slug } = useParams();
-  console.log(slug);
+  const dispatch = useDispatch();
+  const { currentProductClient, isLoadingClient } =
+    useSelector(productSelector);
   const [isWishlist, setIsWishlist] = useState<boolean>(false);
-  const [indexColor, setIndexColor] = useState<number>();
-  const [indexSize, setIndexSize] = useState<number>();
+  const [selectedColor, setSelectedColor] = useState<IVariantValue>();
+  const [selectedSize, setSelectedSize] = useState<IVariantValue>();
   const [isDes, setIsDes] = useState<boolean>(true);
   const [isMaterial, setIsMaterial] = useState<boolean>(false);
   const [isGuide, setIsGuide] = useState<boolean>(false);
-  const colors = ['Xanh', 'Đỏ', 'Tím', 'Vàng', 'Lục'];
-  const sizes = [100, 111, 222, 333, 444, 555];
+  const [colors, setColors] = useState<IVariantValue[]>([]);
+  const [sizes, setSizes] = useState<IVariantValue[]>([]);
 
+  const handleSelectedColor = (color: IVariantValue) => {
+    setSelectedColor(color);
+  };
+
+  const handleSelectedSize = (size: IVariantValue) => {
+    setSelectedSize(size);
+  };
+  useEffect(() => {
+    if (slug) {
+      dispatch(
+        productActions.getProductBySlugClient({
+          slug,
+        })
+      );
+    }
+  }, [dispatch, slug]);
+
+  useEffect(() => {
+    if (currentProductClient && currentProductClient.productVariants) {
+      const colors: IVariantValue[] = [];
+      const sizes: IVariantValue[] = [];
+      currentProductClient.productVariants.forEach((data: IProductVariant) => {
+        data.variantValues.forEach((variantValue: IVariantValue) => {
+          if (variantValue.variantId === 1) {
+            let index = sizes.findIndex((size) => size.id === variantValue.id);
+            if (index === -1) {
+              sizes.push(variantValue);
+            }
+          } else if (variantValue.variantId === 2) {
+            let index = colors.findIndex((size) => size.id === variantValue.id);
+            if (index === -1) {
+              colors.push(variantValue);
+            }
+          }
+        });
+      });
+      sizes.sort((a, b) => a.id - b.id);
+      setColors(colors);
+      setSizes(sizes);
+    }
+  }, [currentProductClient]);
+  useTitle(currentProductClient?.name);
+  if (!currentProductClient) return <></>;
+  if (isLoadingClient === true) return <Spin size="large" />;
   return (
     <main className="product-detail mb-12 max-sm:mt-24 max-lg:my-12">
       <div className="p-100 max-sm:px-12">
@@ -35,12 +89,23 @@ const ProductDetail: React.FC = () => {
                 <Link to="/">Trang chủ</Link>
               </Breadcrumb.Item>
               <Breadcrumb.Item>
-                <Link to="/">Nam</Link>
+                <Link
+                  to={`/category/${currentProductClient.productCategory.collection.category.slug}`}
+                >
+                  {
+                    currentProductClient.productCategory.collection.category
+                      .name
+                  }
+                </Link>
               </Breadcrumb.Item>
               <Breadcrumb.Item>
-                <Link to="/">Đồ Mặc nhà</Link>
+                <Link
+                  to={`/product-category/${currentProductClient.productCategory.slug}`}
+                >
+                  {currentProductClient.productCategory.name}
+                </Link>
               </Breadcrumb.Item>
-              <Breadcrumb.Item>Áo mặc nhà nam</Breadcrumb.Item>
+              <Breadcrumb.Item>{currentProductClient.name}</Breadcrumb.Item>
             </Breadcrumb>
           </section>
           <section>
@@ -51,33 +116,23 @@ const ProductDetail: React.FC = () => {
                   className="my-swiper"
                   pagination={{ clickable: true }}
                 >
-                  <SwiperSlide>
-                    <img
-                      className="common-img"
-                      src="https://canifa.com/img/1000/1500/resize/2/l/2ls22s018-sy038-1.jpg"
-                      alt=""
-                    />
-                  </SwiperSlide>
-                  <SwiperSlide>
-                    <img
-                      className="common-img"
-                      src="https://canifa.com/img/1000/1500/resize/2/l/2ls22s018-sy038-2-thumb.jpg"
-                      alt=""
-                    />
-                  </SwiperSlide>
-                  <SwiperSlide>
-                    <img
-                      className="common-img"
-                      src="https://canifa.com/img/1000/1500/resize/2/l/2ls22s018-sy038-110-1-ghep-u.jpg"
-                      alt=""
-                    />
-                  </SwiperSlide>
+                  {currentProductClient.productImages.map((item) => {
+                    return (
+                      <SwiperSlide key={item.id}>
+                        <img
+                          className="common-img"
+                          src={item.path}
+                          alt={currentProductClient.name}
+                        />
+                      </SwiperSlide>
+                    );
+                  })}
                 </Swiper>
               </Col>
               <Col xl={12} md={12} xs={24}>
                 <div>
                   <div className="text-4xl text-name-product font-bold mb-4">
-                    <span>Bộ mặc nhà bé trai</span>
+                    <span>{currentProductClient.name}</span>
                   </div>
                   <div className="text-2xl mb-4">
                     <span>
@@ -85,10 +140,14 @@ const ProductDetail: React.FC = () => {
                     </span>
                   </div>
                   <div className="flex items-center text-3xl mb-4">
-                    <span className="mr-16">{castToVND(200000000)}</span>
-                    <span className="text-root-price line-through">
-                      {castToVND(200000000)}
+                    <span className="mr-16">
+                      {castToVND(currentProductClient.price)}
                     </span>
+                    {currentProductClient.priceSale > 0 && (
+                      <span className="text-root-price line-through">
+                        {castToVND(currentProductClient.priceSale)}
+                      </span>
+                    )}
                   </div>
                   <div>
                     <h3>Màu sắc:</h3>
@@ -98,11 +157,13 @@ const ProductDetail: React.FC = () => {
                           <span
                             key={index}
                             onClick={() => {
-                              setIndexColor(index);
+                              handleSelectedColor(color);
                             }}
-                            className="w-20 h-20 border-solid border border-slate-500 flex text-center items-center justify-center cursor-pointer mr-4 mb-4"
+                            className={`w-20 h-20 border-solid border flex text-center items-center justify-center cursor-pointer mr-4 mb-4 ${
+                              selectedColor?.id === color.id ? 'font-bold' : ''
+                            }`}
                           >
-                            {color}
+                            {color.name}
                           </span>
                         );
                       })}
@@ -116,11 +177,13 @@ const ProductDetail: React.FC = () => {
                           <span
                             key={index}
                             onClick={() => {
-                              setIndexSize(index);
+                              handleSelectedSize(size);
                             }}
-                            className="w-20 h-20 border-solid border border-slate-500 flex text-center items-center justify-center cursor-pointer mr-4 mb-4"
+                            className={`w-20 h-20 border-solid border flex text-center items-center justify-center cursor-pointer mr-4 mb-4 ${
+                              selectedSize?.id === size.id ? 'font-bold' : ''
+                            }`}
                           >
-                            {size}
+                            {size.name}
                           </span>
                         );
                       })}

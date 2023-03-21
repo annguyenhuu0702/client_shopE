@@ -78,7 +78,18 @@ const ProductDetail: React.FC = () => {
   }, [currentProductClient]);
   useTitle(currentProductClient?.name);
   if (!currentProductClient) return <></>;
-  if (isLoadingClient === true) return <Spin size="large" />;
+  if (isLoadingClient === true)
+    return (
+      <div
+        style={{
+          position: 'absolute',
+          top: '50%',
+          left: '50%',
+        }}
+      >
+        <Spin size="large" />
+      </div>
+    );
   return (
     <main className="product-detail mb-12 max-sm:mt-24 max-lg:my-12">
       <div className="p-100 max-sm:px-12">

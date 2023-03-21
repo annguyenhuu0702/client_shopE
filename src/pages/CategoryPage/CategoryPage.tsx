@@ -53,7 +53,18 @@ const CategoryPage: React.FC = () => {
   }, [dispatch, slug]);
 
   useTitle(currentCategoryClient?.name ? currentCategoryClient?.name : '');
-  if (isLoadingClient === true) return <Spin size="large" />;
+  if (isLoadingClient === true)
+    return (
+      <div
+        style={{
+          position: 'absolute',
+          top: '50%',
+          left: '50%',
+        }}
+      >
+        <Spin size="large" />
+      </div>
+    );
 
   return (
     <main className="px-20 max-sm:px-4 max-sm:mt-24">

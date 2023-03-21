@@ -78,7 +78,18 @@ const ProductCategoryPage: React.FC = () => {
     );
   }, [slug, dispatch, pageClient]);
 
-  if (isLoadingClient === true) return <Spin size="large" />;
+  if (isLoadingClient === true)
+    return (
+      <div
+        style={{
+          position: 'absolute',
+          top: '50%',
+          left: '50%',
+        }}
+      >
+        <Spin size="large" />
+      </div>
+    );
 
   return (
     <main className="px-20 max-sm:mt-24 max-sm:px-4">

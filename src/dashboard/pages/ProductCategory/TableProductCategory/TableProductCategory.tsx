@@ -13,6 +13,7 @@ import {
   Select,
   Space,
   Table,
+  Tag,
 } from 'antd';
 import moment from 'moment';
 import React from 'react';
@@ -41,12 +42,17 @@ const TableProductCategory: React.FC = () => {
   const { user }: authState = useSelector(authSelector);
   const navigate = useNavigate();
   const columns = [
+    {
+      title: 'ID',
+      dataIndex: 'id',
+      width: 50,
+    },
     // {
     //   title: 'Hình ảnh',
-    //   width: '100px',
+    //   width: 100,
     //   render: (text: string, record: productCategory) => {
     //     return record.thumbnail !== '' ? (
-    //       <div className="flex justify-center cursor-text">
+    //       <div className="cursor-text">
     //         <img
     //           src={record.thumbnail}
     //           alt=""
@@ -61,13 +67,30 @@ const TableProductCategory: React.FC = () => {
     {
       title: 'Tên',
       render: (text: string, record: IProductCategory) => {
-        return <div>{removeTextBetweenParentheses(record.name)}</div>;
+        return (
+          <div>
+            <span
+              className="cursor-pointer text-blue-600 hover:text-blue-400"
+              onClick={() => {
+                handleEditProductCategory(record);
+              }}
+            >
+              {removeTextBetweenParentheses(record.name)}
+            </span>
+          </div>
+        );
       },
     },
     {
       title: 'Bộ sưu tập',
       render: (text: string, record: IProductCategory) => {
-        return <div>{removeParenthesis(record.collection.name)}</div>;
+        return (
+          <div>
+            <Tag color="green" className="border-0 text-xl">
+              {removeParenthesis(record.collection.name)}
+            </Tag>
+          </div>
+        );
       },
     },
     {
@@ -95,8 +118,8 @@ const TableProductCategory: React.FC = () => {
               onConfirm={() => {
                 confirm(record);
               }}
-              okText="Yes"
-              cancelText="No"
+              okText="Có"
+              cancelText="Không"
             >
               <DeleteOutlined className="common-icon-delete" />
             </Popconfirm>

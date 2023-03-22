@@ -1,4 +1,3 @@
-import React, { useEffect } from 'react';
 import {
   DeleteOutlined,
   DownloadOutlined,
@@ -14,21 +13,23 @@ import {
   Select,
   Space,
   Table,
+  Tag,
 } from 'antd';
 import moment from 'moment';
+import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { utils, writeFileXLSX } from 'xlsx';
+import { collectionApi } from '../../../../apis/collectionApi';
+import { routes } from '../../../../config/routes';
 import { authSelector, authState } from '../../../../redux/slice/authSlice';
 import {
   collectionActions,
   collectionSelector,
   collectionState,
 } from '../../../../redux/slice/collectionSlice';
-import { collectionApi } from '../../../../apis/collectionApi';
 import { ICollection } from '../../../../types/collection';
 import { removeTextBetweenParentheses } from '../../../../utils';
-import { routes } from '../../../../config/routes';
 
 const TableCollection: React.FC = () => {
   const dispatch = useDispatch();
@@ -39,12 +40,17 @@ const TableCollection: React.FC = () => {
   const navigate = useNavigate();
 
   const columns = [
+    {
+      title: 'ID',
+      dataIndex: 'id',
+      width: 50,
+    },
     // {
     //   title: 'Hình ảnh',
-    //   width: '100px',
+    //   width: 100,
     //   render: (text: string, record: collection) => {
     //     return record.thumbnail !== '' ? (
-    //       <div className="flex justify-center cursor-text">
+    //       <div className="cursor-text">
     //         <img
     //           src={record.thumbnail}
     //           alt=""
@@ -59,13 +65,30 @@ const TableCollection: React.FC = () => {
     {
       title: 'Tên',
       render: (text: string, record: ICollection) => {
-        return <div>{removeTextBetweenParentheses(record.name)}</div>;
+        return (
+          <div>
+            <span
+              className="cursor-pointer text-blue-600 hover:text-blue-400"
+              onClick={() => {
+                handleEditCollection(record);
+              }}
+            >
+              {removeTextBetweenParentheses(record.name)}
+            </span>
+          </div>
+        );
       },
     },
     {
       title: 'Danh mục',
       render: (text: string, record: ICollection) => {
-        return <div>{record.category.name}</div>;
+        return (
+          <div>
+            <Tag color="green" className="border-0 text-xl">
+              {record.category.name}
+            </Tag>
+          </div>
+        );
       },
     },
     {
@@ -92,8 +115,8 @@ const TableCollection: React.FC = () => {
               onConfirm={() => {
                 confirm(record);
               }}
-              okText="Yes"
-              cancelText="No"
+              okText="Có"
+              cancelText="Không"
             >
               <DeleteOutlined className="common-icon-delete" />
             </Popconfirm>

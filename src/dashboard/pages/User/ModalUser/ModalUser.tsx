@@ -71,11 +71,11 @@ const ModalUser: React.FC = () => {
   const [gender, setGender] = useState(1);
 
   // disable button when not input data
-  // const [disabledSave, setDisabledSave] = useState(true);
-  // const handleFormChange = () => {
-  //   const hasErrors = form.getFieldsError().some(({ errors }) => errors.length);
-  //   setDisabledSave(hasErrors);
-  // };
+  const [disabledSave, setDisabledSave] = useState(true);
+  const handleFormChange = () => {
+    const hasErrors = form.getFieldsError().some(({ errors }) => errors.length);
+    setDisabledSave(hasErrors);
+  };
 
   const [loading, setLoading] = useState(false);
   const [imageUrl, setImageUrl] = useState<string>();
@@ -158,12 +158,12 @@ const ModalUser: React.FC = () => {
         okText="Lưu"
         cancelText="Quay lại"
         width={1000}
-        // okButtonProps={{ disabled: disabledSave }}
+        okButtonProps={{ disabled: disabledSave }}
       >
         <Form
           initialValues={initialValues}
           form={form}
-          // onFieldsChange={handleFormChange}
+          onFieldsChange={handleFormChange}
           labelCol={{ span: 6 }}
           wrapperCol={{ span: 14 }}
           onFinish={onFinish}

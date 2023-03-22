@@ -266,21 +266,30 @@ const FormProductCategory: React.FC = () => {
                   </Upload>
                 </Form.Item>
                 <Form.Item
+                  shouldUpdate
                   style={{
                     textAlign: 'center',
                   }}
                   wrapperCol={{ span: 14 }}
                 >
-                  <Button
-                    type="primary"
-                    htmlType="submit"
-                    style={{
-                      width: '200px',
-                    }}
-                    size="large"
-                  >
-                    {currentProductCategory ? 'Sửa' : 'Thêm'}
-                  </Button>
+                  {() => (
+                    <Button
+                      type="primary"
+                      htmlType="submit"
+                      disabled={
+                        !form.isFieldsTouched(false) ||
+                        !!form
+                          .getFieldsError()
+                          .filter(({ errors }) => errors.length).length
+                      }
+                      style={{
+                        width: '200px',
+                      }}
+                      size="large"
+                    >
+                      {currentProductCategory ? 'Sửa' : 'Thêm'}
+                    </Button>
+                  )}
                 </Form.Item>
               </div>
             </Form>

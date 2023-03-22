@@ -13,7 +13,10 @@ import {
   Select,
   Space,
   Table,
+  Tag,
 } from 'antd';
+import { AlignType } from 'rc-table/lib/interface';
+
 import moment from 'moment';
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -33,6 +36,7 @@ import {
 import { IProduct } from '../../../../types/product';
 import ModalProductImage from '../ProductImage/ProductImage';
 import ModalProductVariant from '../ProductVariant/ProductVariant';
+import { castToVND } from '../../../../utils';
 
 const TableProduct: React.FC = () => {
   const dispatch = useDispatch();
@@ -62,11 +66,17 @@ const TableProduct: React.FC = () => {
 
   const columns = [
     {
+      title: 'ID',
+      dataIndex: 'id',
+      width: 50,
+    },
+    {
       title: 'Hình ảnh',
-      width: '100px',
+      width: 100,
+      align: 'center' as AlignType,
       render: (text: string, record: IProduct) => {
         return record.thumbnail !== '' ? (
-          <div className="flex justify-center cursor-text">
+          <div className="cursor-text">
             <img
               src={record.thumbnail}
               alt=""
@@ -81,17 +91,39 @@ const TableProduct: React.FC = () => {
     {
       title: 'Tên sản phẩm',
       dataIndex: 'name',
+      render: (text: string, record: IProduct) => {
+        return (
+          <div>
+            <span
+              className="cursor-pointer text-blue-600 hover:text-blue-400"
+              onClick={() => {
+                handleEditProduct(record);
+              }}
+            >
+              {record.name}
+            </span>
+          </div>
+        );
+      },
     },
 
     {
       title: 'Danh mục sản phẩm',
       dataIndex: 'productCategoryId',
       render: (text: string, record: IProduct) => {
-        return <div>{record.productCategory.name}</div>;
+        return (
+          <div>
+            <Tag color="green" className="border-0 text-xl">
+              {record.productCategory.name}
+            </Tag>
+          </div>
+        );
       },
     },
     {
       title: 'Hình ảnh',
+      width: 100,
+      align: 'center' as AlignType,
       render: (text: string, record: IProduct) => {
         return (
           <span
@@ -107,6 +139,8 @@ const TableProduct: React.FC = () => {
     },
     {
       title: 'Biến thể',
+      width: 100,
+      align: 'center' as AlignType,
       render: (text: string, record: IProduct) => {
         return (
           <span
@@ -121,7 +155,22 @@ const TableProduct: React.FC = () => {
       },
     },
     {
+      title: 'Giá',
+      align: 'center' as AlignType,
+      render: (text: string, record: IProduct) => {
+        return (
+          <div>
+            <Tag color="#108ee9" className="text-2xl">
+              {castToVND(record.price)}
+            </Tag>
+          </div>
+        );
+      },
+    },
+    {
       title: 'Ngày tạo',
+      width: 100,
+      align: 'center' as AlignType,
       render: (text: string, record: IProduct) => {
         let date = moment(record.createdAt).format('MM/DD/YYYY');
         return <div>{date}</div>;
@@ -129,7 +178,8 @@ const TableProduct: React.FC = () => {
     },
     {
       title: 'Hành động',
-      // dataIndex: 'action',
+      width: 100,
+      align: 'center' as AlignType,
       render: (text: string, record: IProduct) => {
         return (
           <Space size="middle">
@@ -145,8 +195,8 @@ const TableProduct: React.FC = () => {
               onConfirm={() => {
                 confirm(record);
               }}
-              okText="Yes"
-              cancelText="No"
+              okText="Có"
+              cancelText="Không"
             >
               <DeleteOutlined className="common-icon-delete" />
             </Popconfirm>

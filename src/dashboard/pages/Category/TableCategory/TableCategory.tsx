@@ -27,6 +27,8 @@ import {
   categoryState,
 } from '../../../../redux/slice/categorySlice';
 import { ICategory } from '../../../../types/category';
+import { routes } from '../../../../config/routes';
+import { AlignType } from 'rc-table/lib/interface';
 
 const TableCategory: React.FC = () => {
   const dispatch = useDispatch();
@@ -37,11 +39,17 @@ const TableCategory: React.FC = () => {
   const navigate = useNavigate();
   const columns = [
     {
+      title: 'ID',
+      dataIndex: 'id',
+      width: 50,
+    },
+    {
       title: 'Hình ảnh',
       width: 100,
+      align: 'center' as AlignType,
       render: (text: string, record: ICategory) => {
         return record.thumbnail !== '' ? (
-          <div className="flex justify-center cursor-text">
+          <div className="cursor-text">
             <img
               src={record.thumbnail}
               alt=""
@@ -56,6 +64,20 @@ const TableCategory: React.FC = () => {
     {
       title: 'Tên',
       dataIndex: 'name',
+      render: (text: string, record: ICategory) => {
+        return (
+          <div>
+            <span
+              className="cursor-pointer text-blue-600 hover:text-blue-400"
+              onClick={() => {
+                handleEditCategory(record);
+              }}
+            >
+              {record.name}
+            </span>
+          </div>
+        );
+      },
     },
     {
       title: 'Ngày tạo',
@@ -81,8 +103,8 @@ const TableCategory: React.FC = () => {
               onConfirm={() => {
                 confirm(record);
               }}
-              okText="Yes"
-              cancelText="No"
+              okText="Có"
+              cancelText="Không"
             >
               <DeleteOutlined className="common-icon-delete" />
             </Popconfirm>
@@ -122,7 +144,7 @@ const TableCategory: React.FC = () => {
 
   const handleAddNewCategory = () => {
     dispatch(categoryActions.setCategory(null));
-    navigate('/admin/category/create');
+    navigate(routes.createCategoryAdmin);
   };
 
   const handleEditCategory = (record: any) => {

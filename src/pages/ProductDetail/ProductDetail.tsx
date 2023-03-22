@@ -203,7 +203,7 @@ const ProductDetail: React.FC = () => {
                 </div>
               </Col>
               <Col xl={12} md={12} xs={24}>
-                <div>
+                <div className="ml-10 max-sm:ml-0 max-lg:0">
                   <div className="text-4xl text-name-product font-bold mb-4">
                     <span>{currentProductClient.name}</span>
                   </div>

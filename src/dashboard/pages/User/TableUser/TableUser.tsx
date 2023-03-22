@@ -47,9 +47,15 @@ const TableUser: React.FC = () => {
 
   const columns = [
     {
+      title: 'ID',
+      dataIndex: 'id',
+      width: 50,
+    },
+    {
       title: 'Hình ảnh',
       dataIndex: 'avatar',
-      width: 80,
+      width: 100,
+      align: 'center' as AlignType,
       render: (text: string, record: IUser) => {
         return (
           <React.Fragment>
@@ -77,7 +83,7 @@ const TableUser: React.FC = () => {
         return (
           <div>
             <span
-              className="cursor-pointer text-blue-500"
+              className="cursor-pointer text-blue-600 hover:text-blue-400"
               onClick={() => {
                 handleEditUser(record);
               }}
@@ -105,9 +111,13 @@ const TableUser: React.FC = () => {
         return (
           <div>
             {record.gender === true ? (
-              <Tag color="red">Nam</Tag>
+              <Tag color="red" className="border-0 text-xl">
+                Nam
+              </Tag>
             ) : (
-              <Tag color="green">Nữ</Tag>
+              <Tag color="green" className="border-0 text-xl">
+                Nữ
+              </Tag>
             )}
           </div>
         );
@@ -146,8 +156,8 @@ const TableUser: React.FC = () => {
               onConfirm={() => {
                 confirm(record);
               }}
-              okText="Yes"
-              cancelText="No"
+              okText="Có"
+              cancelText="Không"
             >
               <DeleteOutlined className="common-icon-delete" />
             </Popconfirm>
@@ -158,8 +168,8 @@ const TableUser: React.FC = () => {
   ];
 
   const handleEditUser = (record: IUser) => {
-    dispatch(modalActions.showModal('Edit user'));
     dispatch(userActions.setUser(record));
+    dispatch(modalActions.showModal('Sửa khách hàng'));
   };
 
   const onFinish = (values: any) => {
@@ -195,8 +205,8 @@ const TableUser: React.FC = () => {
   }
 
   const handleAddNewUser = () => {
-    dispatch(modalActions.showModal('Add user'));
     dispatch(userActions.setUser(null));
+    dispatch(modalActions.showModal('Thêm khách hàng'));
   };
 
   const handleExportExcel = () => {
@@ -225,6 +235,7 @@ const TableUser: React.FC = () => {
   return (
     <React.Fragment>
       {isModal && <ModalUser />}
+      {/* <ModalUser /> */}
 
       <Row className="common-row-cus">
         <Col xl={18} style={{ paddingInline: '5px' }}>

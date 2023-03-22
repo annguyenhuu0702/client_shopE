@@ -69,6 +69,7 @@ const Product: React.FC<Props> = ({ product }) => {
         });
       });
       sizes.sort((a, b) => a.id - b.id);
+      colors.sort((a, b) => a.id - b.id);
       setColors(colors);
       setSizes(sizes);
     }
@@ -177,8 +178,12 @@ const Product: React.FC<Props> = ({ product }) => {
                     </div>
                   </div>
                 )}
-                <div className={cx('btn-add-to-cart')}>
-                  <button>Thêm vào giỏ hàng</button>
+                <div>
+                  <div>
+                    <button className="bg-btn-order w-ful flex items-center justify-center uppercase py-6 px-24 text-white text-2xl border-none outline-none rounded-xl cursor-pointer hover:bg-hover-btn-order">
+                      Thêm vào giỏ hàng
+                    </button>
+                  </div>
                 </div>
                 <div className={cx('more-detail')}>
                   <Link to={`/${product.slug}`}>More Details</Link>

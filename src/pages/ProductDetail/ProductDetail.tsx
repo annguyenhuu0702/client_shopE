@@ -88,6 +88,7 @@ const ProductDetail: React.FC = () => {
         });
       });
       sizes.sort((a, b) => a.id - b.id);
+      colors.sort((a, b) => a.id - b.id);
       setColors(colors);
       setSizes(sizes);
     }
@@ -209,7 +210,7 @@ const ProductDetail: React.FC = () => {
                   </div>
                   <div className="text-2xl mb-4">
                     <span>
-                      MÃ SP: <b>2LS22S018</b>
+                      MÃ SP: <b>{currentProductClient.code}</b>
                     </span>
                   </div>
                   <div className="flex items-center text-3xl mb-4">
@@ -225,7 +226,7 @@ const ProductDetail: React.FC = () => {
                   {colors.length > 0 && (
                     <div>
                       <h3>Màu sắc:</h3>
-                      <div className="flex flex-wrap">
+                      <div className="flex flex-wrap gap-4">
                         {colors.map((color, index) => {
                           return (
                             <span
@@ -233,11 +234,11 @@ const ProductDetail: React.FC = () => {
                               onClick={() => {
                                 handleSelectedColor(color);
                               }}
-                              className={`w-20 h-20 border-solid border flex text-center items-center justify-center cursor-pointer mr-4 mb-4 ${
+                              className={
                                 selectedColor?.id === color.id
-                                  ? 'font-bold'
-                                  : ''
-                              }`}
+                                  ? 'min-w-40px h-16 border border-solid flex text-center items-center justify-center cursor-pointer px-4'
+                                  : 'min-w-40px h-16 border border-solid border-border-variant flex text-center items-center justify-center cursor-pointer px-4'
+                              }
                             >
                               {color.name}
                             </span>
@@ -248,8 +249,8 @@ const ProductDetail: React.FC = () => {
                   )}
                   {sizes.length > 0 && (
                     <div>
-                      <h3>Kích thước:</h3>
-                      <div className="flex flex-wrap">
+                      <h3 className="my-2">Kích thước:</h3>
+                      <div className="flex flex-wrap gap-4">
                         {sizes.map((size, index) => {
                           return (
                             <span
@@ -257,9 +258,11 @@ const ProductDetail: React.FC = () => {
                               onClick={() => {
                                 handleSelectedSize(size);
                               }}
-                              className={`w-20 h-20 border-solid border flex text-center items-center justify-center cursor-pointer mr-4 mb-4 ${
-                                selectedSize?.id === size.id ? 'font-bold' : ''
-                              }`}
+                              className={
+                                selectedSize?.id === size.id
+                                  ? 'min-w-40px h-16 border border-solid flex text-center items-center justify-center cursor-pointer px-4'
+                                  : 'min-w-40px h-16 border border-solid border-border-variant flex text-center items-center justify-center cursor-pointer px-4'
+                              }
                             >
                               {size.name}
                             </span>
@@ -268,8 +271,10 @@ const ProductDetail: React.FC = () => {
                       </div>
                     </div>
                   )}
-                  <div className="mb-4">
-                    <span className="font-bold">Hướng dẫn chọn size:</span>
+                  <div className="my-4">
+                    <span className="font-bold cursor-pointer">
+                      Hướng dẫn chọn size:
+                    </span>
                   </div>
                   <div className="mb-4">
                     <div className="flex items-center mb-2">
@@ -287,11 +292,9 @@ const ProductDetail: React.FC = () => {
                     </div>
                   </div>
                   <div className="my-8">
-                    <div className="">
-                      <button className="w-45 border-none outline-none bg-name-product cursor-pointer max-lg:w-96 max-sm:w-96">
-                        <span className="flex justify-center py-6 text-3xl uppercase text-white font-light">
-                          Thêm vào giỏ hàng
-                        </span>
+                    <div>
+                      <button className="bg-btn-order flex items-center justify-center uppercase py-6 px-20 text-white text-2xl border-none outline-none rounded-xl cursor-pointer hover:bg-hover-btn-order">
+                        Thêm vào giỏ hàng
                       </button>
                     </div>
                   </div>

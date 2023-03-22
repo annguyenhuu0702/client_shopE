@@ -12,7 +12,7 @@ import {
   productCategorySelector,
   productCategoryState,
 } from '../../../../redux/slice/productCategorySlice';
-import { configSlugify } from '../../../../utils';
+import { configSlugify, makeid } from '../../../../utils';
 import HeaderTitle from '../../../components/HeaderTitle';
 
 import {
@@ -52,6 +52,9 @@ const FormProduct: React.FC = () => {
   const handleChange = (value: string) => {
     console.log(`selected ${value}`);
   };
+
+  const a = makeid(9);
+  console.log(a);
 
   const onFinish = (values: any) => {
     const formData = {

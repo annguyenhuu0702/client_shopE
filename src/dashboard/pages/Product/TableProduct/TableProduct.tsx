@@ -14,6 +14,7 @@ import {
   Space,
   Table,
   Tag,
+  Typography,
 } from 'antd';
 import { AlignType } from 'rc-table/lib/interface';
 
@@ -37,6 +38,8 @@ import { IProduct } from '../../../../types/product';
 import ModalProductImage from '../ProductImage/ProductImage';
 import ModalProductVariant from '../ProductVariant/ProductVariant';
 import { castToVND } from '../../../../utils';
+
+const { Text } = Typography;
 
 const TableProduct: React.FC = () => {
   const dispatch = useDispatch();
@@ -69,6 +72,12 @@ const TableProduct: React.FC = () => {
       title: 'ID',
       dataIndex: 'id',
       width: 50,
+    },
+    {
+      title: 'Mã sản phẩm',
+      render: (text: string, record: IProduct) => {
+        return <Text mark>{record.code}</Text>;
+      },
     },
     {
       title: 'Hình ảnh',

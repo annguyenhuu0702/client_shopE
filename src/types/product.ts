@@ -9,6 +9,7 @@ export interface IProduct {
   id: number;
   productCategoryId: number;
   name: string;
+  code: string;
   slug: string;
   thumbnail: string;
   description: string;

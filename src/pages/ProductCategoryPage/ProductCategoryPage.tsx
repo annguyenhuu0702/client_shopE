@@ -1,9 +1,9 @@
-import { Breadcrumb, Col, Pagination, Popover, Row, Spin } from 'antd';
+import { Breadcrumb, Col, Pagination, Popover, Row } from 'antd';
 import React, { useEffect, useMemo } from 'react';
+import { AiOutlineFilter } from 'react-icons/ai';
+import { BsSortDown } from 'react-icons/bs';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, useLocation, useParams } from 'react-router-dom';
-import { BsSortDown } from 'react-icons/bs';
-import { AiOutlineFilter } from 'react-icons/ai';
 import Product from '../../components/Product';
 import { routes } from '../../config/routes';
 import { useTitle } from '../../hooks/useTitle';
@@ -15,14 +15,14 @@ import {
   productCategoryActions,
   productCategorySelector,
 } from '../../redux/slice/productCategorySlice';
-import { ICollection } from '../../types/collection';
-import { IProductCategory } from '../../types/productCategory';
-import { removeTextBetweenParentheses } from '../../utils';
-import ContentFilter from './ContentFilter';
 import {
   productActions,
   productSelector,
 } from '../../redux/slice/productSlice';
+import { ICollection } from '../../types/collection';
+import { IProductCategory } from '../../types/productCategory';
+import { removeTextBetweenParentheses } from '../../utils';
+import ContentFilter from './ContentFilter';
 
 const ProductCategoryPage: React.FC = () => {
   const { slug } = useParams();
@@ -30,7 +30,7 @@ const ProductCategoryPage: React.FC = () => {
   const { currentCollectionClient } = useSelector(collectionSelector);
   const { currentProductCategoryClient } = useSelector(productCategorySelector);
   const dispatch = useDispatch();
-  const { productsClient, pageClient, pageSizeClient, isLoadingClient } =
+  const { productsClient, pageClient, pageSizeClient } =
     useSelector(productSelector);
 
   useTitle(
@@ -72,24 +72,11 @@ const ProductCategoryPage: React.FC = () => {
     dispatch(
       productActions.getAllProductClient({
         p: pageClient,
-        limit: 12,
+        limit: pageSizeClient,
         otherSlug: slug,
       })
     );
-  }, [slug, dispatch, pageClient]);
-
-  if (isLoadingClient === true)
-    return (
-      <div
-        style={{
-          position: 'absolute',
-          top: '50%',
-          left: '50%',
-        }}
-      >
-        <Spin />
-      </div>
-    );
+  }, [slug, dispatch, pageClient, pageSizeClient]);
 
   return (
     <main className="px-20 max-sm:mt-24 max-sm:px-4">
@@ -239,8 +226,8 @@ const ProductCategoryPage: React.FC = () => {
                   onChange={(page: number, pageSize: number) => {
                     dispatch(productActions.setPageClient({ page, pageSize }));
                     window.scroll({
-                      behavior: 'smooth',
                       top: 0,
+                      behavior: 'smooth',
                     });
                   }}
                 />

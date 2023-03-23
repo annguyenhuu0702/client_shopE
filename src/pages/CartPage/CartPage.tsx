@@ -1,13 +1,27 @@
 import { Col, Row } from 'antd';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { AiOutlineDelete, AiOutlineMinus, AiOutlinePlus } from 'react-icons/ai';
 import { FaShippingFast } from 'react-icons/fa';
+import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { routes } from '../../config/routes';
 import { useTitle } from '../../hooks/useTitle';
+import { authSelector } from '../../redux/slice/authSlice';
+import { cartActions } from '../../redux/slice/cartSlice';
 import { castToVND } from '../../utils';
 
 const CartPage: React.FC = () => {
+  const { user } = useSelector(authSelector);
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(
+      cartActions.getByUser({
+        token: user.accessToken,
+        dispatch,
+      })
+    );
+  }, [dispatch, user.accessToken]);
+
   const navigate = useNavigate();
   useTitle('Giỏ hàng');
   return (

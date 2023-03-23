@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import styles from './__headerTop.module.scss';
 
 import { SearchOutlined } from '@ant-design/icons';
@@ -17,6 +17,7 @@ import {
   authState,
 } from '../../../../redux/slice/authSlice';
 import Navigation from '../HeaderNavigation';
+import { cartActions } from '../../../../redux/slice/cartSlice';
 
 const cx = classNames.bind(styles);
 
@@ -34,6 +35,15 @@ const HeaderTop: React.FC = () => {
   const redirectCart = () => {
     navigate(routes.cart);
   };
+
+  useEffect(() => {
+    dispatch(
+      cartActions.getByUser({
+        token: user.accessToken,
+        dispatch,
+      })
+    );
+  }, [dispatch, user.accessToken]);
 
   return (
     <section className={cx('header-top')}>

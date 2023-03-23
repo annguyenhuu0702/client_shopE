@@ -28,7 +28,7 @@ const CategoryPage: React.FC = () => {
   const dispatch = useDispatch();
   const { slug } = useParams();
   const { currentCategoryClient } = useSelector(categorySelector);
-  const { productsByCategory, isLoadingClient } = useSelector(productSelector);
+  const { productsByCategory } = useSelector(productSelector);
 
   // lấy banner
   useEffect(() => {
@@ -53,18 +53,6 @@ const CategoryPage: React.FC = () => {
   }, [dispatch, slug]);
 
   useTitle(currentCategoryClient?.name ? currentCategoryClient?.name : '');
-  if (isLoadingClient === true)
-    return (
-      <div
-        style={{
-          position: 'absolute',
-          top: '50%',
-          left: '50%',
-        }}
-      >
-        <Spin />
-      </div>
-    );
 
   return (
     <main className="px-20 max-sm:px-4 max-sm:mt-24">

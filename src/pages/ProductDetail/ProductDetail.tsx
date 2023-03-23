@@ -21,12 +21,14 @@ import { useTitle } from '../../hooks/useTitle';
 import { IVariantValue } from '../../types/variantValue';
 import { IProductVariant } from '../../types/productVariant';
 import { IProductImage } from '../../types/productImage';
+import { cartActions } from '../../redux/slice/cartSlice';
+import { authSelector } from '../../redux/slice/authSlice';
 
 const ProductDetail: React.FC = () => {
+  const { user } = useSelector(authSelector);
   const { slug } = useParams();
   const dispatch = useDispatch();
-  const { currentProductClient, isLoadingClient } =
-    useSelector(productSelector);
+  const { currentProductClient } = useSelector(productSelector);
   const [isWishlist, setIsWishlist] = useState<boolean>(false);
 
   const [isDes, setIsDes] = useState<boolean>(true);
@@ -56,6 +58,32 @@ const ProductDetail: React.FC = () => {
 
   const handleSelectedImage = (item: IProductImage) => {
     setSelectedImage(item.path);
+  };
+
+  const handleAddToCart = () => {
+    if (currentProductClient && selectedColor && selectedSize) {
+      const productVariant = currentProductClient.productVariants.find((item) =>
+        item.variantValues.every(
+          (variantValue) =>
+            variantValue.id === selectedColor.id ||
+            variantValue.id === selectedSize.id
+        )
+      );
+      let formData;
+      if (productVariant) {
+        formData = {
+          productVariantId: productVariant.id,
+          quantity: 1,
+        };
+        dispatch(
+          cartActions.addToCart({
+            token: user.accessToken,
+            dispatch,
+            data: formData,
+          })
+        );
+      }
+    }
   };
 
   useEffect(() => {
@@ -104,18 +132,6 @@ const ProductDetail: React.FC = () => {
 
   if (!currentProductClient) return <></>;
 
-  if (isLoadingClient === true)
-    return (
-      <div
-        style={{
-          position: 'absolute',
-          top: '50%',
-          left: '50%',
-        }}
-      >
-        <Spin />
-      </div>
-    );
   return (
     <main className="product-detail mb-12 max-sm:mt-24 max-lg:my-12">
       <div className="p-100 max-sm:px-12">
@@ -292,7 +308,12 @@ const ProductDetail: React.FC = () => {
                     </div>
                   </div>
                   <div className="my-8">
-                    <div>
+                    <div
+                      className="inline-block"
+                      onClick={() => {
+                        handleAddToCart();
+                      }}
+                    >
                       <button className="bg-btn-order flex items-center justify-center uppercase py-6 px-20 text-white text-2xl border-none outline-none rounded-xl cursor-pointer hover:bg-hover-btn-order">
                         Thêm vào giỏ hàng
                       </button>

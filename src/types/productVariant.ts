@@ -1,5 +1,6 @@
 import React from 'react';
 import { queryParams } from './common';
+import { IProduct } from './product';
 import { IVariantValue } from './variantValue';
 
 export interface IProductVariant {
@@ -9,6 +10,7 @@ export interface IProductVariant {
   name: string;
   inventory: number;
   variantValues: IVariantValue[];
+  product: IProduct;
   deletedAt: Date;
   createdAt: string;
   updatedAt: string;

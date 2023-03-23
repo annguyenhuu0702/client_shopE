@@ -10,7 +10,6 @@ export interface tokenPayloadData<T> {
   dispatch: any;
   data: T;
   navigate?: any;
-  // params?: queryParams;
 }
 
 export interface tokenPayload {

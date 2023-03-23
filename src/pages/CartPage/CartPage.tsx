@@ -3,16 +3,40 @@ import React, { useEffect } from 'react';
 import { AiOutlineDelete, AiOutlineMinus, AiOutlinePlus } from 'react-icons/ai';
 import { FaShippingFast } from 'react-icons/fa';
 import { useDispatch, useSelector } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { routes } from '../../config/routes';
 import { useTitle } from '../../hooks/useTitle';
 import { authSelector } from '../../redux/slice/authSlice';
-import { cartActions } from '../../redux/slice/cartSlice';
+import { cartActions, cartSelector } from '../../redux/slice/cartSlice';
+import { CartItem } from '../../types/cartItem';
 import { castToVND } from '../../utils';
 
 const CartPage: React.FC = () => {
   const { user } = useSelector(authSelector);
+  const { cart } = useSelector(cartSelector);
+  console.log(cart);
   const dispatch = useDispatch();
+
+  const totalPrice = () => {
+    let totalPrice =
+      cart &&
+      cart.cartItems.reduce(
+        (prev, currentValue) =>
+          currentValue.productVariant.product.priceSale > 0
+            ? prev +
+              currentValue.productVariant.product.priceSale *
+                currentValue.quantity
+            : prev +
+              currentValue.productVariant.product.price * currentValue.quantity,
+        0
+      );
+    return totalPrice || 0;
+  };
+
+  const handleDeleteCartItem = (cartItem: CartItem) => {
+    console.log(cartItem.id);
+  };
+
   useEffect(() => {
     dispatch(
       cartActions.getByUser({
@@ -23,6 +47,7 @@ const CartPage: React.FC = () => {
   }, [dispatch, user.accessToken]);
 
   const navigate = useNavigate();
+
   useTitle('Giỏ hàng');
   return (
     <main className="p-50 my-20 max-lg:px-0 max-sm:p-0 max-sm:mt-24 ">
@@ -38,7 +63,9 @@ const CartPage: React.FC = () => {
               </h2>
             </div>
             <div className="pb-8">
-              <h2 className="m-0 text-4xl ">(2) sản phẩm</h2>
+              <h2 className="m-0 text-4xl ">
+                ({cart?.cartItems.length}) sản phẩm
+              </h2>
             </div>
             <div className="w-full">
               <div className="w-full flex items-center text-left bg-name-product text-gray-200 text-2xl p-3 max-sm:hidden">
@@ -47,98 +74,75 @@ const CartPage: React.FC = () => {
                 <span className="w-1/5 uppercase">Số lượng</span>
                 <span className="w-1/5 uppercase">Tổng tiền</span>
               </div>
-              <div className="w-full flex text-lef mt-8 pb-8 border-solid border-0 border-b-2 border-border-layout-cart">
-                <div className="w-2/5 max-lg:mr-2 max-sm:w-3/4">
-                  <div className="flex ">
-                    <div className="w-32">
-                      <img
-                        className="w-full object-cover"
-                        src="https://canifa.com/img/210/300/resize/2/o/2ot22w011-sb148-1-thumb.webp"
-                        alt=""
-                      />
-                    </div>
-                    <div className="w-full pl-4 flex flex-col justify-between">
-                      <div className="text-2xl">
-                        <a
-                          href=" "
-                          className="text-gray-500 max-lg:line-clamp-1 max-sm:line-clamp-1"
-                        >
-                          Áo khoác nỉ có mũ bé trai
-                        </a>
-                      </div>
-                      <div className="text-2xl">
-                        <span className="text-black">90 / Xanh</span>
-                      </div>
-                      <div>
-                        <AiOutlineDelete className="inline-block cursor-pointer hover:text-red-500 " />
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div className="w-1/5 max-sm:hidden">
-                  <span className="text-2xl">{castToVND(499999)}</span>
-                </div>
-                <div className="w-1/5 max-sm:w-1/4 max-sm:flex max-sm:items-start justify-end">
-                  <div className="text-2xl flex items-center justify-left">
-                    <span className="flex rounded-full border border-solid border-gray-400 p-1 mr-6 cursor-pointer">
-                      <AiOutlineMinus />
-                    </span>
-                    <span>2</span>
-                    <span className="flex rounded-full border border-solid border-gray-400 p-1 ml-6 cursor-pointer">
-                      <AiOutlinePlus />
-                    </span>
-                  </div>
-                </div>
-                <div className="w-1/5 max-sm:hidden">
-                  <span className="text-2xl flex">{castToVND(499999)}</span>
-                </div>
-              </div>
-              <div className="w-full flex text-lef mt-8 pb-8 border-solid border-0 border-b-2 border-border-layout-cart">
-                <div className="w-2/5 max-lg:mr-2 max-sm:w-3/4">
-                  <div className="flex ">
-                    <div className="w-32">
-                      <img
-                        className="w-full object-cover"
-                        src="https://canifa.com/img/210/300/resize/2/o/2ot22w011-sb148-1-thumb.webp"
-                        alt=""
-                      />
-                    </div>
-                    <div className="w-full pl-4 flex flex-col justify-between">
-                      <div className="text-2xl">
-                        <a
-                          href=" "
-                          className="text-gray-500 max-lg:line-clamp-1 max-sm:line-clamp-1"
-                        >
-                          Áo khoác nỉ có mũ bé trai
-                        </a>
-                      </div>
-                      <div className="text-2xl">
-                        <span className="text-black">90 / Xanh</span>
-                      </div>
-                      <div>
-                        <AiOutlineDelete className="inline-block cursor-pointer hover:text-red-500 " />
+              {cart &&
+                cart.cartItems.map((cartItem) => {
+                  return (
+                    <div key={cartItem.id}>
+                      <div className="w-full flex text-lef mt-8 pb-8 border-solid border-0 border-b-2 border-border-layout-cart">
+                        <div className="w-2/5 max-lg:mr-2 max-sm:w-3/4">
+                          <div className="flex ">
+                            <div className="w-32">
+                              <img
+                                className="w-full object-cover"
+                                src={
+                                  cartItem.productVariant.product
+                                    .productImages[0].path
+                                }
+                                alt=""
+                              />
+                            </div>
+                            <div className="w-full pl-4 flex flex-col justify-between">
+                              <div className="text-2xl">
+                                <Link
+                                  to={`/${cartItem.productVariant.product.slug}`}
+                                  className="text-gray-700 max-lg:line-clamp-1 max-sm:line-clamp-1"
+                                >
+                                  {cartItem.productVariant.product.name}
+                                </Link>
+                              </div>
+                              <div className="text-2xl">
+                                <span className="text-black">
+                                  {cartItem.productVariant.name}
+                                </span>
+                              </div>
+                              <div
+                                onClick={() => {
+                                  handleDeleteCartItem(cartItem);
+                                }}
+                              >
+                                <AiOutlineDelete className="inline-block cursor-pointer hover:text-red-500 " />
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div className="w-1/5 max-sm:hidden">
+                          <span className="text-2xl">
+                            {castToVND(cartItem.productVariant.product.price)}
+                          </span>
+                        </div>
+                        <div className="w-1/5 max-sm:w-1/4 max-sm:flex max-sm:items-start justify-end">
+                          <div className="text-2xl flex items-center justify-left">
+                            <span className="flex rounded-full border border-solid border-gray-400 p-1 mr-6 cursor-pointer">
+                              <AiOutlineMinus />
+                            </span>
+                            <span>{cartItem.quantity}</span>
+                            <span className="flex rounded-full border border-solid border-gray-400 p-1 ml-6 cursor-pointer">
+                              <AiOutlinePlus />
+                            </span>
+                          </div>
+                        </div>
+                        <div className="w-1/5 max-sm:hidden">
+                          <span className="text-2xl flex">
+                            {castToVND(
+                              cartItem.productVariant.product.price *
+                                cartItem.quantity
+                            )}
+                          </span>
+                        </div>
                       </div>
                     </div>
-                  </div>
-                </div>
-                <div className="w-1/5 max-sm:hidden">
-                  <span className="text-2xl">{castToVND(499999)}</span>
-                </div>
-                <div className="w-1/5 max-sm:w-1/4 max-sm:flex max-sm:items-start justify-end">
-                  <div className="text-2xl flex items-center justify-left">
-                    <span className="flex rounded-full border border-solid border-gray-400 p-1 mr-6 cursor-pointer">
-                      <AiOutlineMinus />
-                    </span>
-                    <span>2</span>
-                    <span className="flex rounded-full border border-solid border-gray-400 p-1 ml-6 cursor-pointer">
-                      <AiOutlinePlus />
-                    </span>
-                  </div>
-                </div>
-                <div className="w-1/5 max-sm:hidden">
-                  <span className="text-2xl flex">{castToVND(499999)}</span>
-                </div>
-              </div>
+                  );
+                })}
             </div>
           </div>
         </Col>
@@ -149,11 +153,11 @@ const CartPage: React.FC = () => {
             </div>
             <div className="flex justify-between text-2xl text-gray-500 mb-4">
               <span>Giá gốc</span>
-              <span>{castToVND(1000000)}</span>
+              <span>{castToVND(totalPrice())}</span>
             </div>
             <div className="flex justify-between text-2xl font-bold mb-16 max-lg:mb-8 ">
               <span>Tổng tiền</span>
-              <span>{castToVND(10000000000)}</span>
+              <span>{castToVND(totalPrice())}</span>
             </div>
             <div className="mb-10 max-lg:mb-8">
               <button
@@ -171,6 +175,7 @@ const CartPage: React.FC = () => {
           </div>
         </Col>
       </Row>
+      {/* mobile */}
       <Row>
         <Col xl={0} md={0} xs={24}>
           <div className="static bottom-0 z-0 bg-bg-cart w-full p-8 mt-8">

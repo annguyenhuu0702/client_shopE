@@ -15,7 +15,6 @@ function* getCartByUserSaga({ payload }: PayloadAction<tokenPayload>): any {
       return cartApi.getByUser(token, dispatch);
     });
     const { data, status } = res;
-    console.log(data);
     if (status === STATUS_CODE.SUCCESS) {
       yield put(cartActions.getByUserSuccess(data.data));
     }
@@ -34,7 +33,6 @@ function* addToCartSaga({
       return cartItemApi.addToCart(token, dispatch, data);
     });
     const { data: newData, status } = res;
-    console.log(newData);
     if (status === STATUS_CODE.CREATED) {
       yield put(cartActions.addToCartSuccess(newData.data));
     }

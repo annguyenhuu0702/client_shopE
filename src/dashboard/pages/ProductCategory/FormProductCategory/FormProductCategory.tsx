@@ -24,6 +24,7 @@ import {
   productCategorySelector,
   productCategoryState,
 } from '../../../../redux/slice/productCategorySlice';
+import { ICollection } from '../../../../types/collection';
 import { configSlugify } from '../../../../utils';
 import HeaderTitle from '../../../components/HeaderTitle';
 
@@ -155,7 +156,7 @@ const FormProductCategory: React.FC = () => {
           dispatch(productCategoryActions.setProductCategory(data));
           form.setFieldsValue({
             name: data.name,
-            collectionId: data.collectionId,
+            collectionId: data.collection && data.collection.name,
             description: data.description,
             thumbnail: data.thumbnail,
           });

@@ -123,7 +123,7 @@ const TableProduct: React.FC = () => {
         return (
           <div>
             <Tag color="green" className="border-0 text-xl">
-              {record.productCategory.name}
+              {record.productCategory && record.productCategory.name}
             </Tag>
           </div>
         );

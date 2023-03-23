@@ -119,7 +119,6 @@ const FormCollection: React.FC = () => {
         })
       );
     } else {
-      console.log(formData);
       dispatch(
         collectionActions.editCollection({
           token: user.accessToken,
@@ -152,7 +151,7 @@ const FormCollection: React.FC = () => {
           dispatch(collectionActions.setCollection(data));
           form.setFieldsValue({
             name: data.name,
-            categoryId: data.categoryId,
+            categoryId: data.category && data.category.name,
             description: data.description,
             thumbnail: data.thumbnail,
           });

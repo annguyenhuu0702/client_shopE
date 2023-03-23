@@ -85,7 +85,7 @@ const TableCollection: React.FC = () => {
         return (
           <div>
             <Tag color="green" className="border-0 text-xl">
-              {record.category.name}
+              {record.category && record.category.name}
             </Tag>
           </div>
         );

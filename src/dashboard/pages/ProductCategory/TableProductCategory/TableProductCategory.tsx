@@ -87,7 +87,7 @@ const TableProductCategory: React.FC = () => {
         return (
           <div>
             <Tag color="green" className="border-0 text-xl">
-              {removeParenthesis(record.collection.name)}
+              {record.collection && removeParenthesis(record.collection.name)}
             </Tag>
           </div>
         );

@@ -53,9 +53,6 @@ const FormProduct: React.FC = () => {
     console.log(`selected ${value}`);
   };
 
-  const a = makeid(9);
-  console.log(a);
-
   const onFinish = (values: any) => {
     const formData = {
       name: values.name,
@@ -103,7 +100,8 @@ const FormProduct: React.FC = () => {
           dispatch(productActions.setProduct(data));
           form.setFieldsValue({
             name: data.name,
-            productCategoryId: data.productCategoryId,
+            productCategoryId:
+              data.productCategory && data.productCategory.name,
             price: data.price,
             priceSale: data.priceSale,
             description: data.description,

@@ -21,10 +21,10 @@ const Collection: React.FC = () => {
     dispatch(
       collectionActions.getAllCollection({
         p: page,
-        limit: 7,
+        limit: pageSize,
       })
     );
-  }, [dispatch, page]);
+  }, [dispatch, page, pageSize]);
 
   useTitle('Bộ sưu tập');
   return (

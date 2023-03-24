@@ -371,7 +371,7 @@ const TableProduct: React.FC = () => {
             columns={columns}
             pagination={false}
             expandable={{ showExpandColumn: false }}
-            size="middle"
+            size="small"
           />
         </Col>
       </Row>

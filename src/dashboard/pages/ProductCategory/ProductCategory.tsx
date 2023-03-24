@@ -21,10 +21,10 @@ const ProductCategory: React.FC = () => {
     dispatch(
       productCategoryActions.getAllProductCategory({
         p: page,
-        limit: 7,
+        limit: pageSize,
       })
     );
-  }, [dispatch, page]);
+  }, [dispatch, page, pageSize]);
 
   useTitle('Danh mục sản phẩm');
   return (

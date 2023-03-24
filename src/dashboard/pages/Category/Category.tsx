@@ -21,10 +21,10 @@ const Category: React.FC = () => {
     dispatch(
       categoryActions.getAllCategory({
         p: page,
-        limit: 7,
+        limit: pageSize,
       })
     );
-  }, [dispatch, page]);
+  }, [dispatch, page, pageSize]);
 
   useTitle('Danh mục');
   return (

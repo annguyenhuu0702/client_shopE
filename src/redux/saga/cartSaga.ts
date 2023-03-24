@@ -1,4 +1,5 @@
 import { PayloadAction } from '@reduxjs/toolkit';
+import { notification } from 'antd';
 import { call, put, takeEvery } from 'redux-saga/effects';
 import { cartApi } from '../../apis/cartApi';
 import { cartItemApi } from '../../apis/cartItemApi';
@@ -35,10 +36,22 @@ function* addToCartSaga({
     const { data: newData, status } = res;
     if (status === STATUS_CODE.CREATED) {
       yield put(cartActions.addToCartSuccess(newData.data));
+      notification.success({
+        message: 'Thành công',
+        description: 'Thêm vào giỏ hàng thành công',
+        placement: 'bottomRight',
+        duration: 3,
+      });
     }
   } catch (err) {
     console.log(err);
     yield put(cartActions.addToCartFailed());
+    notification.error({
+      message: 'Thất bại',
+      description: 'Thêm vào giỏ hàng thất bại',
+      placement: 'bottomRight',
+      duration: 3,
+    });
   }
 }
 

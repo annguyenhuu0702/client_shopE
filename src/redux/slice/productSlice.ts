@@ -51,7 +51,7 @@ const initialState: productState = {
     count: 0,
   },
   page: 1,
-  pageSize: 7,
+  pageSize: 9,
   currentProduct: null,
   isLoading: false,
   isError: false,

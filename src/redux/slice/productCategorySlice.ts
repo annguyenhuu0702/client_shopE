@@ -55,6 +55,12 @@ const ProductCategorySlice = createSlice({
     ) => {
       state.currentProductCategory = action.payload;
     },
+    setProductCategoryClient: (
+      state,
+      action: PayloadAction<IProductCategory | null>
+    ) => {
+      state.currentProductCategoryClient = action.payload;
+    },
     getAllProductCategory: (
       state,
       action: PayloadAction<IGetAllProductCategoryParams>

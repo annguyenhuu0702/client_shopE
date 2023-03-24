@@ -1,33 +1,31 @@
-import React, { useState, useEffect } from 'react';
-import { Breadcrumb, Button, Col, Row, Spin } from 'antd';
-import { Link, useParams } from 'react-router-dom';
-import { Swiper, SwiperSlide } from 'swiper/react';
+import { Breadcrumb, Col, Row } from 'antd';
+import React, { useEffect, useState } from 'react';
+import { AiOutlineCheck, AiOutlineMinus, AiOutlinePlus } from 'react-icons/ai';
+import { Link, useNavigate, useParams } from 'react-router-dom';
+import { Pagination } from 'swiper';
 import 'swiper/css';
 import 'swiper/css/pagination';
-import { Pagination } from 'swiper';
+import { Swiper, SwiperSlide } from 'swiper/react';
 import { castToVND } from '../../utils';
-import {
-  AiOutlineCheck,
-  AiFillHeart,
-  AiOutlineMinus,
-  AiOutlinePlus,
-} from 'react-icons/ai';
+
 import { useDispatch, useSelector } from 'react-redux';
+import { useTitle } from '../../hooks/useTitle';
+import { authSelector } from '../../redux/slice/authSlice';
+import { cartActions } from '../../redux/slice/cartSlice';
 import {
   productActions,
   productSelector,
 } from '../../redux/slice/productSlice';
-import { useTitle } from '../../hooks/useTitle';
-import { IVariantValue } from '../../types/variantValue';
-import { IProductVariant } from '../../types/productVariant';
 import { IProductImage } from '../../types/productImage';
-import { cartActions } from '../../redux/slice/cartSlice';
-import { authSelector } from '../../redux/slice/authSlice';
+import { IProductVariant } from '../../types/productVariant';
+import { IVariantValue } from '../../types/variantValue';
+import ProductRelated from './ProductRelated/ProductRelated';
 
 const ProductDetail: React.FC = () => {
   const { user } = useSelector(authSelector);
   const { slug } = useParams();
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const { currentProductClient } = useSelector(productSelector);
   const [isWishlist, setIsWishlist] = useState<boolean>(false);
 
@@ -47,6 +45,9 @@ const ProductDetail: React.FC = () => {
   const [selectedImage, setSelectedImage] = useState<string>(() => {
     return currentProductClient ? currentProductClient.thumbnail : '';
   });
+
+  // quantity add to cart
+  const [quantity, setQuantity] = useState<number>(1);
 
   const handleSelectedColor = (color: IVariantValue) => {
     setSelectedColor(color);
@@ -73,12 +74,13 @@ const ProductDetail: React.FC = () => {
       if (productVariant) {
         formData = {
           productVariantId: productVariant.id,
-          quantity: 1,
+          quantity: quantity,
         };
         dispatch(
           cartActions.addToCart({
             token: user.accessToken,
             dispatch,
+            navigate,
             data: formData,
           })
         );
@@ -292,6 +294,29 @@ const ProductDetail: React.FC = () => {
                       Hướng dẫn chọn size:
                     </span>
                   </div>
+                  <div className="my-4 flex items-center">
+                    <span
+                      className={`h-16 w-16 border border-solid border-border-variant inline-flex items-center justify-center ${
+                        quantity > 1 ? 'cursor-pointer' : 'cursor-not-allowed'
+                      } `}
+                      onClick={() => {
+                        setQuantity(quantity - 1);
+                      }}
+                    >
+                      <AiOutlineMinus />
+                    </span>
+                    <span className="h-16 min-w-40px border border-solid border-l-0 border-r-0 border-border-variant inline-flex items-center justify-center px-4">
+                      {quantity}
+                    </span>
+                    <span
+                      className="h-16 w-16 border border-solid border-border-variant inline-flex items-center justify-center cursor-pointer"
+                      onClick={() => {
+                        setQuantity(quantity + 1);
+                      }}
+                    >
+                      <AiOutlinePlus />
+                    </span>
+                  </div>
                   <div className="mb-4">
                     <div className="flex items-center mb-2">
                       <AiOutlineCheck />
@@ -409,6 +434,17 @@ const ProductDetail: React.FC = () => {
                 </div>
               </Col>
             </Row>
+          </section>
+          <section className="product-related">
+            <ProductRelated />
+            <div className="view-all my-10">
+              <Link
+                to={`/product-category/${currentProductClient.productCategory.slug}`}
+                className="text"
+              >
+                Xem tất cả
+              </Link>
+            </div>
           </section>
         </div>
       </div>

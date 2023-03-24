@@ -52,6 +52,9 @@ const CollectionSlice = createSlice({
     setCollection: (state, action: PayloadAction<ICollection | null>) => {
       state.currentCollection = action.payload;
     },
+    setCollectionClient: (state, action: PayloadAction<ICollection | null>) => {
+      state.currentCollectionClient = action.payload;
+    },
     getAllCollection: (
       state,
       action: PayloadAction<IGetAllCollectionParams>

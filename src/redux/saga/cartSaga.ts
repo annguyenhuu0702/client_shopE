@@ -3,6 +3,7 @@ import { notification } from 'antd';
 import { call, put, takeEvery } from 'redux-saga/effects';
 import { cartApi } from '../../apis/cartApi';
 import { cartItemApi } from '../../apis/cartItemApi';
+import { routes } from '../../config/routes';
 import { STATUS_CODE } from '../../constants';
 import { createCartItem } from '../../types/cartItem';
 import { tokenPayload, tokenPayloadData } from '../../types/common';
@@ -29,19 +30,20 @@ function* addToCartSaga({
   payload,
 }: PayloadAction<tokenPayloadData<createCartItem>>): any {
   try {
-    const { token, dispatch, data } = payload;
+    const { token, dispatch, navigate, data } = payload;
     const res = yield call(() => {
       return cartItemApi.addToCart(token, dispatch, data);
     });
-    const { data: newData, status } = res;
+    const { status } = res;
     if (status === STATUS_CODE.CREATED) {
-      yield put(cartActions.addToCartSuccess(newData.data));
+      yield put(cartActions.addToCartSuccess());
       notification.success({
         message: 'Thành công',
         description: 'Thêm vào giỏ hàng thành công',
         placement: 'bottomRight',
         duration: 3,
       });
+      navigate(routes.cart);
     }
   } catch (err) {
     console.log(err);

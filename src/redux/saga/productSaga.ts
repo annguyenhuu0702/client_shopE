@@ -41,7 +41,6 @@ function* createProductSaga({
     const { status } = res;
     if (status === STATUS_CODE.CREATED) {
       yield put(productActions.createProductSuccess());
-
       if (data.resetValues) {
         data.resetValues();
       }

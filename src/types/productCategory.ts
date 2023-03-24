@@ -1,6 +1,7 @@
 import React from 'react';
 import { ICollection } from './collection';
 import { queryParams } from './common';
+import { IProduct } from './product';
 
 export interface IProductCategory {
   key?: React.Key | string | number;
@@ -11,6 +12,7 @@ export interface IProductCategory {
   description: string;
   collectionId: number;
   collection: ICollection;
+  products: IProduct[];
   deletedAt: Date;
   createdAt: string;
   updatedAt: string;

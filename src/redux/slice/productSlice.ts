@@ -37,6 +37,7 @@ export interface productState {
 
   // client
   productsClient: resProduct;
+  productsRelatedClient: IProduct[];
   currentProductClient: IProduct | null;
   pageClient: number;
   pageSizeClient: number;
@@ -60,6 +61,7 @@ const initialState: productState = {
     rows: [],
     count: 0,
   },
+  productsRelatedClient: [],
   currentProductClient: null,
   pageClient: 1,
   pageSizeClient: 12,
@@ -198,10 +200,14 @@ const ProductSlice = createSlice({
     ) => {
       state.isLoadingClient = true;
     },
-    getProductBySlugClientSuccess: (state, action: PayloadAction<IProduct>) => {
+    getProductBySlugClientSuccess: (
+      state,
+      action: PayloadAction<{ product: IProduct; productsRelated: IProduct[] }>
+    ) => {
       state.isLoadingClient = false;
       state.isErrorClient = false;
-      state.currentProductClient = action.payload;
+      state.currentProductClient = action.payload.product;
+      state.productsRelatedClient = action.payload.productsRelated;
     },
     getProductBySlugClientFailed: (state) => {
       state.isLoadingClient = false;

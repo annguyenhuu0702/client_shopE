@@ -39,6 +39,7 @@ const ProductCategoryPage: React.FC = () => {
       : currentProductCategoryClient?.name
   );
 
+  // phân biệt gọi collection hay productcategory rồi trả về collection để render category
   useEffect(() => {
     if (location.pathname === `/collection/${slug}`) {
       dispatch(
@@ -47,6 +48,7 @@ const ProductCategoryPage: React.FC = () => {
           productCategories: true,
         })
       );
+      dispatch(productCategoryActions.setProductCategoryClient(null));
     } else {
       dispatch(
         productCategoryActions.getProductCategoryBySlugClient({
@@ -54,6 +56,7 @@ const ProductCategoryPage: React.FC = () => {
           collection: true,
         })
       );
+      dispatch(collectionActions.setCollectionClient(null));
     }
   }, [dispatch, location.pathname, slug]);
 

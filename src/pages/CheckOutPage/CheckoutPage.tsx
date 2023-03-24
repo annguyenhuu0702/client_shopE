@@ -13,10 +13,13 @@ import {
 import React, { useState } from 'react';
 import { AiOutlineRollback } from 'react-icons/ai';
 import { FaMoneyBillAlt } from 'react-icons/fa';
+import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { routes } from '../../config/routes';
 import { useTitle } from '../../hooks/useTitle';
 import province from '../../province.json';
+import { cartSelector } from '../../redux/slice/cartSlice';
+import { castToVND } from '../../utils';
 
 const CheckoutPage: React.FC = () => {
   const [form] = Form.useForm();
@@ -24,6 +27,8 @@ const CheckoutPage: React.FC = () => {
 
   const [districts, setDistricts] = useState([]);
   const [wards, setWards] = useState([]);
+  const { cart } = useSelector(cartSelector);
+  console.log(cart);
 
   const initialValue = {
     fullname: '',
@@ -72,6 +77,25 @@ const CheckoutPage: React.FC = () => {
     console.log('radio checked', e.target.value);
     setValue(e.target.value);
   };
+
+  const totalPrice = () => {
+    let totalPrice =
+      cart &&
+      cart.cartItems.reduce(
+        (prev, currentValue) =>
+          currentValue.productVariant.product.priceSale > 0
+            ? prev +
+              currentValue.productVariant.product.priceSale *
+                currentValue.quantity
+            : prev +
+              currentValue.productVariant.product.price * currentValue.quantity,
+        0
+      );
+    return totalPrice || 0;
+  };
+
+  let shippingCost = totalPrice() > 0 ? castToVND(0) : castToVND(30000);
+
   useTitle('Thủ tục thanh toán');
 
   return (
@@ -226,31 +250,60 @@ const CheckoutPage: React.FC = () => {
               <div className="pb-8 border-solid border-0 border-b-2 border-white">
                 <h2 className="m-0">Đơn hàng (1 sản phẩm)</h2>
               </div>
-              <div className="flex justify-between pt-8">
-                <div className="flex">
-                  <div className="mr-6">
-                    <Badge count={5}>
-                      <img
-                        src="https://bizweb.dktcdn.net/thumb/thumb/100/438/408/products/ao-ba-lo-nu-bln5072-xnh-8-yodyvn.jpg?v=1676609030590"
-                        alt=""
-                      />
-                    </Badge>
-                  </div>
-                  <div className="flex flex-col">
-                    <span className="text-2xl font-semibold">
-                      Áo 2 Dây Nữ Dáng Ôm Tôn Dáng
-                    </span>
-                    <span className="text-xl">Xanh nhạt / S</span>
-                  </div>
-                </div>
-                <div className="flex items-center">
-                  <span className="text-2xl font-semibold">1000</span>
-                </div>
-              </div>
+              {cart &&
+                cart.cartItems.map((cartItem) => {
+                  let images =
+                    cartItem.productVariant.product.productImages.filter(
+                      (item) =>
+                        cartItem.productVariant.variantValues.find(
+                          (variantValue) =>
+                            variantValue.id === item.variantValueId
+                        )
+                    );
+                  images.sort((a, b) => a.id - b.id);
+                  return (
+                    <div
+                      className="flex justify-between pt-8"
+                      key={cartItem.id}
+                    >
+                      <div className="flex">
+                        <div className="mr-6">
+                          <Badge count={cartItem.quantity}>
+                            <img
+                              className="w-28 h-20 object-contain"
+                              src={images[0].path}
+                              alt=""
+                            />
+                          </Badge>
+                        </div>
+                        <div className="flex flex-col">
+                          <span className="text-2xl font-semibold">
+                            {cartItem.productVariant.product.name}
+                          </span>
+                          <span className="text-xl">
+                            {cartItem.productVariant.name}
+                          </span>
+                        </div>
+                      </div>
+                      <div className="flex items-center">
+                        <span className="text-2xl font-semibold">
+                          {castToVND(
+                            cartItem.productVariant.product.priceSale > 0
+                              ? cartItem.productVariant.product.priceSale
+                              : cartItem.productVariant.product.price
+                          )}
+                        </span>
+                      </div>
+                    </div>
+                  );
+                })}
               <div className="flex items-center justify-between mt-8 pb-8 border-solid border-0 border-b-2 border-white">
                 <div className="w-full mr-12">
                   <Form.Item name="coupon" className="mb-0">
-                    <Input size="large" placeholder="Nhập mã giảm giá" />
+                    <Input
+                      size="large"
+                      placeholder="Nhập điểm tích lũy của bạn"
+                    />
                   </Form.Item>
                 </div>
                 <Form.Item className="mb-0" shouldUpdate>
@@ -274,11 +327,11 @@ const CheckoutPage: React.FC = () => {
               <div className="mt-8 pb-8 border-solid border-0 border-b-2 border-white">
                 <div className="flex justify-between items-center text-2xl font-semibold mb-4">
                   <span>Tạm tính</span>
-                  <span>1000000</span>
+                  <span>{castToVND(totalPrice())}</span>
                 </div>
                 <div className="flex justify-between items-center text-2xl font-semibold">
                   <span>Phí vận chuyển</span>
-                  <span>1000000</span>
+                  <span>{shippingCost}</span>
                 </div>
                 <div></div>
               </div>
@@ -286,7 +339,7 @@ const CheckoutPage: React.FC = () => {
                 <div className="flex justify-between items-center ">
                   <span className="text-2xl font-semibold mb-4">Tổng cộng</span>
                   <span className="text-4xl font-semibold mb-4 text-amber-500">
-                    1631132323132
+                    {castToVND(totalPrice() + parseInt(shippingCost))}
                   </span>
                 </div>
               </div>

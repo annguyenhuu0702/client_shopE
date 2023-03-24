@@ -78,7 +78,6 @@ const ProfilePage: React.FC = () => {
     if (checkProvince) {
       setDistricts(checkProvince.districts);
     }
-    console.log(`selected ${value}`);
   };
 
   const handleChangeDistrict = (value: string) => {
@@ -88,7 +87,6 @@ const ProfilePage: React.FC = () => {
     if (checkDistrict) {
       setWards(checkDistrict.wards);
     }
-    console.log(`selected ${value}`);
   };
 
   const handleChangeWard = (value: string) => {
@@ -352,15 +350,23 @@ const ProfilePage: React.FC = () => {
         </Row>
         <Row className="mt-8 max-sm:flex max-sm:justify-center max-lg:flex max-lg:justify-center">
           <Col xl={12} className="flex justify-center">
-            <Form.Item>
-              <Button
-                type="primary"
-                htmlType="submit"
-                size="large"
-                className="flex items-center justify-center w-96 text-white"
-              >
-                Lưu
-              </Button>
+            <Form.Item shouldUpdate>
+              {() => (
+                <Button
+                  type="primary"
+                  htmlType="submit"
+                  size="large"
+                  className="flex items-center justify-center w-96 text-white"
+                  disabled={
+                    !form.isFieldsTouched(false) ||
+                    !!form
+                      .getFieldsError()
+                      .filter(({ errors }) => errors.length).length
+                  }
+                >
+                  Lưu
+                </Button>
+              )}
             </Form.Item>
           </Col>
         </Row>

@@ -1,20 +1,17 @@
 import { Col, Row } from 'antd';
-import React, { useEffect } from 'react';
+import React from 'react';
 import { AiOutlineDelete, AiOutlineMinus, AiOutlinePlus } from 'react-icons/ai';
 import { FaShippingFast } from 'react-icons/fa';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
 import { routes } from '../../config/routes';
 import { useTitle } from '../../hooks/useTitle';
-import { authSelector } from '../../redux/slice/authSlice';
-import { cartActions, cartSelector } from '../../redux/slice/cartSlice';
+import { cartSelector } from '../../redux/slice/cartSlice';
 import { CartItem } from '../../types/cartItem';
 import { castToVND } from '../../utils';
 
 const CartPage: React.FC = () => {
-  const { user } = useSelector(authSelector);
   const { cart } = useSelector(cartSelector);
-  const dispatch = useDispatch();
 
   const totalPrice = () => {
     let totalPrice =
@@ -47,15 +44,6 @@ const CartPage: React.FC = () => {
   const handleDeleteCartItem = (cartItem: CartItem) => {
     console.log(cartItem.id);
   };
-
-  useEffect(() => {
-    dispatch(
-      cartActions.getByUser({
-        token: user.accessToken,
-        dispatch,
-      })
-    );
-  }, [dispatch, user.accessToken]);
 
   const navigate = useNavigate();
 
@@ -136,7 +124,11 @@ const CartPage: React.FC = () => {
                         </div>
                         <div className="w-1/5 max-sm:hidden">
                           <span className="text-2xl">
-                            {castToVND(cartItem.productVariant.product.price)}
+                            {castToVND(
+                              cartItem.productVariant.product.priceSale > 0
+                                ? cartItem.productVariant.product.priceSale
+                                : cartItem.productVariant.product.price
+                            )}
                           </span>
                         </div>
                         <div className="w-1/5 max-sm:justify-end max-sm:w-2/4 max-sm:flex max-sm:items-start max-lg:mr-4">
@@ -157,8 +149,11 @@ const CartPage: React.FC = () => {
                         <div className="w-1/5 max-sm:hidden">
                           <span className="text-2xl flex">
                             {castToVND(
-                              cartItem.productVariant.product.price *
-                                cartItem.quantity
+                              cartItem.productVariant.product.priceSale > 0
+                                ? cartItem.productVariant.product.priceSale *
+                                    cartItem.quantity
+                                : cartItem.productVariant.product.price *
+                                    cartItem.quantity
                             )}
                           </span>
                         </div>

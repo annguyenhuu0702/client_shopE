@@ -53,3 +53,9 @@ export interface IGetAllProductByCategory {
 export interface IGetProductBySlug {
   slug: string;
 }
+
+export interface ICreateFavoriteProduct {
+  productId: number;
+}
+
+export interface IGetAllFavoriteProduct extends queryParams {}

@@ -5,11 +5,11 @@ import { productApi } from '../../apis/productApi';
 import { STATUS_CODE } from '../../constants';
 import { deleteParams, tokenPayloadData } from '../../types/common';
 import {
-  IProduct,
   ICreateProduct,
-  IGetAllProductParams,
   IGetAllProductByCategory,
+  IGetAllProductParams,
   IGetProductBySlug,
+  IProduct,
 } from '../../types/product';
 import { productActions } from '../slice/productSlice';
 

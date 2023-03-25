@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import styles from './__product.module.scss';
 import { faHeart, faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -15,6 +15,8 @@ import { IProduct } from '../../types/product';
 import { IProductImage } from '../../types/productImage';
 import { IProductVariant } from '../../types/productVariant';
 import { IVariantValue } from '../../types/variantValue';
+import { useSelector } from 'react-redux';
+import { favoriteProductSelector } from '../../redux/slice/favoriteProductSlice';
 
 const cx = classNames.bind(styles);
 
@@ -23,6 +25,11 @@ interface Props {
 }
 
 const Product: React.FC<Props> = ({ product }) => {
+  const { products } = useSelector(favoriteProductSelector);
+  const checkFavoriteProduct = useMemo(() => {
+    return products.rows.some((item) => item.productId === product?.id);
+  }, [product?.id, products.rows]);
+
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [selectedColor, setSelectedColor] = useState<IVariantValue>();
   const [selectedSize, setSelectedSize] = useState<IVariantValue>();
@@ -208,10 +215,20 @@ const Product: React.FC<Props> = ({ product }) => {
           )}
         </div>
         <div className={cx('tags-name')}>
-          <div className={cx('wish-list')}>
-            <Tooltip placement="bottomRight" title="Yêu thích">
-              <FontAwesomeIcon icon={faHeart} />
-            </Tooltip>
+          <div
+            className={cx('wish-list', {
+              active: checkFavoriteProduct,
+            })}
+          >
+            {checkFavoriteProduct === true ? (
+              <Tooltip placement="bottomRight" title="Xóa khỏi yêu thích">
+                <FontAwesomeIcon icon={faHeart} />
+              </Tooltip>
+            ) : (
+              <Tooltip placement="bottomRight" title="Yêu thích">
+                <FontAwesomeIcon icon={faHeart} />
+              </Tooltip>
+            )}
           </div>
         </div>
         {product.priceSale !== 0 && (

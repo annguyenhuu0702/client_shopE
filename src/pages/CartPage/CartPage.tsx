@@ -102,7 +102,7 @@ const CartPage: React.FC = () => {
                               <div className="text-2xl">
                                 <Link
                                   to={`/${cartItem.productVariant.product.slug}`}
-                                  className="text-gray-700 max-lg:line-clamp-1 max-sm:line-clamp-1"
+                                  className="text-black max-lg:line-clamp-1 max-sm:line-clamp-1"
                                 >
                                   {cartItem.productVariant.product.name}
                                 </Link>
@@ -123,7 +123,7 @@ const CartPage: React.FC = () => {
                           </div>
                         </div>
                         <div className="w-1/5 max-sm:hidden">
-                          <span className="text-2xl">
+                          <span className="text-2xl font-bold text-red-500">
                             {castToVND(
                               cartItem.productVariant.product.priceSale > 0
                                 ? cartItem.productVariant.product.priceSale
@@ -147,7 +147,7 @@ const CartPage: React.FC = () => {
                           </div>
                         </div>
                         <div className="w-1/5 max-sm:hidden">
-                          <span className="text-2xl flex">
+                          <span className="text-2xl font-bold text-red-500 flex">
                             {castToVND(
                               cartItem.productVariant.product.priceSale > 0
                                 ? cartItem.productVariant.product.priceSale *
@@ -169,13 +169,13 @@ const CartPage: React.FC = () => {
             <div className="mb-4">
               <h3 className="m-0 text-4xl">Đơn hàng</h3>
             </div>
-            <div className="flex justify-between text-2xl text-gray-500 mb-4">
+            <div className="flex justify-between text-2xl mb-4 font-bold">
               <span>Giá gốc</span>
               <span>{castToVND(rootPrice())}</span>
             </div>
-            <div className="flex justify-between text-2xl font-bold mb-16 max-lg:mb-8 ">
+            <div className="flex justify-between text-2xl mb-16 font-bold max-lg:mb-8 ">
               <span>Tổng tiền</span>
-              <span>{castToVND(totalPrice())}</span>
+              <span className=" text-red-600">{castToVND(totalPrice())}</span>
             </div>
             <div className="mb-10 max-lg:mb-8">
               <button
@@ -188,7 +188,7 @@ const CartPage: React.FC = () => {
               </button>
             </div>
             <div>
-              <span>Áp dụng mã giảm giá tại bước tiếp theo</span>
+              <span>Áp dụng điểm tích lũy tại bước tiếp theo</span>
             </div>
           </div>
         </Col>
@@ -214,7 +214,7 @@ const CartPage: React.FC = () => {
               </button>
             </div>
             <div>
-              <span>Áp dụng mã giảm giá tại bước tiếp theo</span>
+              <span>Áp dụng điểm tích lũy tại bước tiếp theo</span>
             </div>
           </div>
         </Col>

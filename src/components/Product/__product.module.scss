@@ -87,6 +87,10 @@
         color: $red-color;
       }
     }
+    .active {
+      color: red;
+      cursor: pointer;
+    }
   }
   .tags-percent {
     position: absolute;

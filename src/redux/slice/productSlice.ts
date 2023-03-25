@@ -1,5 +1,9 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { deleteParams, tokenPayloadData } from '../../types/common';
+import {
+  deleteParams,
+  tokenPayload,
+  tokenPayloadData,
+} from '../../types/common';
 import {
   IProduct,
   ICreateProduct,
@@ -210,6 +214,23 @@ const ProductSlice = createSlice({
       state.productsRelatedClient = action.payload.productsRelated;
     },
     getProductBySlugClientFailed: (state) => {
+      state.isLoadingClient = false;
+      state.isErrorClient = true;
+    },
+    getFavoriteProductByUser: (state, actions: PayloadAction<tokenPayload>) => {
+      state.isLoadingClient = true;
+      state.isErrorClient = false;
+    },
+    getFavoriteProductByUserSuccess: (
+      state,
+      actions: PayloadAction<resProduct>
+    ) => {
+      state.isLoadingClient = true;
+      state.isErrorClient = false;
+      state.productsClient.rows = actions.payload.rows;
+      state.productsClient.count = actions.payload.count;
+    },
+    getFavoriteProductByUserFailed: (state) => {
       state.isLoadingClient = false;
       state.isErrorClient = true;
     },

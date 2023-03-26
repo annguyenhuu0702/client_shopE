@@ -22,11 +22,10 @@ import { useNavigate } from 'react-router-dom';
 import { utils, writeFileXLSX } from 'xlsx';
 import { collectionApi } from '../../../../apis/collectionApi';
 import { routes } from '../../../../config/routes';
-import { authSelector, authState } from '../../../../redux/slice/authSlice';
+import { authSelector } from '../../../../redux/slice/authSlice';
 import {
   collectionActions,
   collectionSelector,
-  collectionState,
 } from '../../../../redux/slice/collectionSlice';
 import { ICollection } from '../../../../types/collection';
 import { removeTextBetweenParentheses } from '../../../../utils';
@@ -34,9 +33,9 @@ import { removeTextBetweenParentheses } from '../../../../utils';
 const TableCollection: React.FC = () => {
   const dispatch = useDispatch();
   const [form] = Form.useForm();
-  const { collections, isLoading, page, pageSize }: collectionState =
+  const { collections, isLoading, page, pageSize } =
     useSelector(collectionSelector);
-  const { user }: authState = useSelector(authSelector);
+  const { user } = useSelector(authSelector);
   const navigate = useNavigate();
 
   const columns = [

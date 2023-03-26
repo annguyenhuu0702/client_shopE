@@ -5,7 +5,6 @@ import { useTitle } from '../../../hooks/useTitle';
 import {
   collectionActions,
   collectionSelector,
-  collectionState,
 } from '../../../redux/slice/collectionSlice';
 import HeaderTitle from '../../components/HeaderTitle';
 import TableCollection from './TableCollection';
@@ -14,8 +13,7 @@ const { Content } = Layout;
 
 const Collection: React.FC = () => {
   const dispatch = useDispatch();
-  const { collections, page, pageSize }: collectionState =
-    useSelector(collectionSelector);
+  const { collections, page, pageSize } = useSelector(collectionSelector);
 
   useEffect(() => {
     dispatch(
@@ -43,6 +41,7 @@ const Collection: React.FC = () => {
             pageSize={pageSize}
             current={page}
             total={collections.count}
+            showSizeChanger={false}
             onChange={(page: number, pageSize: number) => {
               dispatch(collectionActions.setPage({ page, pageSize }));
             }}

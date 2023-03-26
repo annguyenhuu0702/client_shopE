@@ -5,7 +5,6 @@ import { useTitle } from '../../../hooks/useTitle';
 import {
   productCategoryActions,
   productCategorySelector,
-  productCategoryState,
 } from '../../../redux/slice/productCategorySlice';
 import HeaderTitle from '../../components/HeaderTitle';
 import TableProductCategory from './TableProductCategory';
@@ -14,8 +13,9 @@ const { Content } = Layout;
 
 const ProductCategory: React.FC = () => {
   const dispatch = useDispatch();
-  const { productCategories, page, pageSize }: productCategoryState =
-    useSelector(productCategorySelector);
+  const { productCategories, page, pageSize } = useSelector(
+    productCategorySelector
+  );
 
   useEffect(() => {
     dispatch(
@@ -43,6 +43,7 @@ const ProductCategory: React.FC = () => {
             pageSize={pageSize}
             current={page}
             total={productCategories.count}
+            showSizeChanger={false}
             onChange={(page: number, pageSize: number) => {
               dispatch(productCategoryActions.setPage({ page, pageSize }));
             }}

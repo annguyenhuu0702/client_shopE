@@ -10,14 +10,13 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useTitle } from '../../../../hooks/useTitle';
-import { authSelector, authState } from '../../../../redux/slice/authSlice';
+import { authSelector } from '../../../../redux/slice/authSlice';
 
 import { collectionApi } from '../../../../apis/collectionApi';
 import { URL_API } from '../../../../constants';
 import {
   categoryActions,
   categorySelector,
-  categoryState,
 } from '../../../../redux/slice/categorySlice';
 import {
   collectionActions,
@@ -50,12 +49,12 @@ const beforeUpload = (file: RcFile) => {
 const FormCollection: React.FC = () => {
   const navigate = useNavigate();
   const { id } = useParams();
-  const { user }: authState = useSelector(authSelector);
+  const { user } = useSelector(authSelector);
 
   const { currentCollection }: collectionState =
     useSelector(collectionSelector);
 
-  const { categories }: categoryState = useSelector(categorySelector);
+  const { categories } = useSelector(categorySelector);
 
   const initialValues = {
     name: currentCollection ? currentCollection.name : '',

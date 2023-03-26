@@ -2,22 +2,18 @@ import React, { useEffect } from 'react';
 
 import { Layout, Pagination } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
-import { authSelector, authState } from '../../../redux/slice/authSlice';
-import {
-  userState,
-  userActions,
-  userSelector,
-} from '../../../redux/slice/userSlice';
+import { useTitle } from '../../../hooks/useTitle';
+import { authSelector } from '../../../redux/slice/authSlice';
+import { userActions, userSelector } from '../../../redux/slice/userSlice';
 import HeaderTitle from '../../components/HeaderTitle';
 import TableUser from './TableUser';
-import { useTitle } from '../../../hooks/useTitle';
 
 const { Content } = Layout;
 
 const User: React.FC = () => {
   const dispatch = useDispatch();
-  const { user }: authState = useSelector(authSelector);
-  const { users, page, pageSize }: userState = useSelector(userSelector);
+  const { user } = useSelector(authSelector);
+  const { users, page, pageSize } = useSelector(userSelector);
 
   useTitle('Khách hàng');
 
@@ -47,6 +43,7 @@ const User: React.FC = () => {
             pageSize={pageSize}
             current={page}
             total={users.count}
+            showSizeChanger={false}
             onChange={(page: number, pageSize: number) => {
               dispatch(userActions.setPage({ page, pageSize }));
             }}

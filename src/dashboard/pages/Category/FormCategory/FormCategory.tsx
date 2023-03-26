@@ -45,9 +45,9 @@ const beforeUpload = (file: RcFile) => {
 const FormCategory: React.FC = () => {
   const navigate = useNavigate();
   const { id } = useParams();
-  const { user }: authState = useSelector(authSelector);
+  const { user } = useSelector(authSelector);
 
-  const { currentCategory }: categoryState = useSelector(categorySelector);
+  const { currentCategory } = useSelector(categorySelector);
 
   const initialValues = {
     name: currentCategory ? currentCategory.name : '',

@@ -1,8 +1,7 @@
-import React from 'react';
 import {
   DeleteOutlined,
-  EditOutlined,
   DownloadOutlined,
+  EditOutlined,
 } from '@ant-design/icons';
 import {
   Button,
@@ -16,26 +15,26 @@ import {
   Table,
 } from 'antd';
 import moment from 'moment';
+import { AlignType } from 'rc-table/lib/interface';
+import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { utils, writeFileXLSX } from 'xlsx';
 import { categoryApi } from '../../../../apis/categoryApi';
-import { authSelector, authState } from '../../../../redux/slice/authSlice';
+import { routes } from '../../../../config/routes';
+import { authSelector } from '../../../../redux/slice/authSlice';
 import {
   categoryActions,
   categorySelector,
-  categoryState,
 } from '../../../../redux/slice/categorySlice';
 import { ICategory } from '../../../../types/category';
-import { routes } from '../../../../config/routes';
-import { AlignType } from 'rc-table/lib/interface';
 
 const TableCategory: React.FC = () => {
   const dispatch = useDispatch();
   const [form] = Form.useForm();
-  const { categories, isLoading, page, pageSize }: categoryState =
+  const { categories, isLoading, page, pageSize } =
     useSelector(categorySelector);
-  const { user }: authState = useSelector(authSelector);
+  const { user } = useSelector(authSelector);
   const navigate = useNavigate();
   const columns = [
     {

@@ -4,34 +4,30 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
 import { productApi } from '../../../../apis/productApi';
 import { useTitle } from '../../../../hooks/useTitle';
-import { authSelector, authState } from '../../../../redux/slice/authSlice';
+import { authSelector } from '../../../../redux/slice/authSlice';
 
 import TextArea from 'antd/lib/input/TextArea';
 import {
   productCategoryActions,
   productCategorySelector,
-  productCategoryState,
 } from '../../../../redux/slice/productCategorySlice';
-import { configSlugify, makeid } from '../../../../utils';
+import { configSlugify } from '../../../../utils';
 import HeaderTitle from '../../../components/HeaderTitle';
 
 import {
   productActions,
   productSelector,
-  productState,
 } from '../../../../redux/slice/productSlice';
 
 const { Content } = Layout;
 
 const FormProduct: React.FC = () => {
-  const { productCategories, page }: productCategoryState = useSelector(
-    productCategorySelector
-  );
+  const { productCategories, page } = useSelector(productCategorySelector);
   const navigate = useNavigate();
   const { id } = useParams();
-  const { user }: authState = useSelector(authSelector);
+  const { user } = useSelector(authSelector);
 
-  const { currentProduct }: productState = useSelector(productSelector);
+  const { currentProduct } = useSelector(productSelector);
 
   const initialValues = {
     name: currentProduct ? currentProduct.name : '',

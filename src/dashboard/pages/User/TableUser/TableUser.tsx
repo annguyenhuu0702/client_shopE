@@ -15,33 +15,27 @@ import {
   Table,
   Tag,
 } from 'antd';
+import moment from 'moment';
 import { AlignType } from 'rc-table/lib/interface';
 import React from 'react';
-import moment from 'moment';
 import { useDispatch, useSelector } from 'react-redux';
 import { utils, writeFileXLSX } from 'xlsx';
 import { userApi } from '../../../../apis/userApi';
-import { authSelector, authState } from '../../../../redux/slice/authSlice';
+import { authSelector } from '../../../../redux/slice/authSlice';
 import {
   modalActions,
   modalSelector,
-  modalState,
 } from '../../../../redux/slice/modalSlice';
-import {
-  userActions,
-  userSelector,
-  userState,
-} from '../../../../redux/slice/userSlice';
+import { userActions, userSelector } from '../../../../redux/slice/userSlice';
 import { IUser } from '../../../../types/user';
 import ModalUser from '../ModalUser';
 
 const TableUser: React.FC = () => {
   const dispatch = useDispatch();
 
-  const { isModal }: modalState = useSelector(modalSelector);
-  const { users, isLoading, page, pageSize }: userState =
-    useSelector(userSelector);
-  const { user }: authState = useSelector(authSelector);
+  const { isModal } = useSelector(modalSelector);
+  const { users, isLoading, page, pageSize } = useSelector(userSelector);
+  const { user } = useSelector(authSelector);
 
   const [form] = Form.useForm();
 

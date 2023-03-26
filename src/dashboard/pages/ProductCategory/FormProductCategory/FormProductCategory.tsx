@@ -12,19 +12,16 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { productCategoryApi } from '../../../../apis/productCategoryApi';
 import { URL_API } from '../../../../constants';
 import { useTitle } from '../../../../hooks/useTitle';
-import { authSelector, authState } from '../../../../redux/slice/authSlice';
+import { authSelector } from '../../../../redux/slice/authSlice';
 import {
   collectionActions,
   collectionSelector,
-  collectionState,
 } from '../../../../redux/slice/collectionSlice';
 
 import {
   productCategoryActions,
   productCategorySelector,
-  productCategoryState,
 } from '../../../../redux/slice/productCategorySlice';
-import { ICollection } from '../../../../types/collection';
 import { configSlugify } from '../../../../utils';
 import HeaderTitle from '../../../components/HeaderTitle';
 
@@ -51,12 +48,10 @@ const beforeUpload = (file: RcFile) => {
 const FormProductCategory: React.FC = () => {
   const navigate = useNavigate();
   const { id } = useParams();
-  const { user }: authState = useSelector(authSelector);
+  const { user } = useSelector(authSelector);
 
-  const { currentProductCategory }: productCategoryState = useSelector(
-    productCategorySelector
-  );
-  const { collections }: collectionState = useSelector(collectionSelector);
+  const { currentProductCategory } = useSelector(productCategorySelector);
+  const { collections } = useSelector(collectionSelector);
 
   const initialValues = {
     name: currentProductCategory ? currentProductCategory.name : '',

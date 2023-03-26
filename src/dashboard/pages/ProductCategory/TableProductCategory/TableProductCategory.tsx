@@ -22,11 +22,10 @@ import { useNavigate } from 'react-router-dom';
 import { utils, writeFileXLSX } from 'xlsx';
 import { productCategoryApi } from '../../../../apis/productCategoryApi';
 import { routes } from '../../../../config/routes';
-import { authSelector, authState } from '../../../../redux/slice/authSlice';
+import { authSelector } from '../../../../redux/slice/authSlice';
 import {
   productCategoryActions,
   productCategorySelector,
-  productCategoryState,
 } from '../../../../redux/slice/productCategorySlice';
 import { IProductCategory } from '../../../../types/productCategory';
 import {
@@ -37,9 +36,10 @@ import {
 const TableProductCategory: React.FC = () => {
   const dispatch = useDispatch();
   const [form] = Form.useForm();
-  const { productCategories, isLoading, page, pageSize }: productCategoryState =
-    useSelector(productCategorySelector);
-  const { user }: authState = useSelector(authSelector);
+  const { productCategories, isLoading, page, pageSize } = useSelector(
+    productCategorySelector
+  );
+  const { user } = useSelector(authSelector);
   const navigate = useNavigate();
   const columns = [
     {

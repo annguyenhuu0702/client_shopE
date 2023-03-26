@@ -38,6 +38,7 @@ const ProductAdmin: React.FC = () => {
             pageSize={pageSize}
             current={page}
             total={products.count}
+            showSizeChanger={false}
             onChange={(page: number, pageSize: number) => {
               dispatch(productActions.setPage({ page, pageSize }));
             }}

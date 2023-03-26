@@ -43,6 +43,7 @@ const Inventory: React.FC = () => {
             pageSize={pageSize}
             current={page}
             total={productVariants.count}
+            showSizeChanger={false}
             onChange={(page: number, pageSize: number) => {
               dispatch(productVariantActions.setPage({ page, pageSize }));
             }}

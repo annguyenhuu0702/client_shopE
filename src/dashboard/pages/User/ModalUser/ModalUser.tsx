@@ -19,17 +19,13 @@ import {
   Upload,
 } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
-import { authSelector, authState } from '../../../../redux/slice/authSlice';
+import { URL_API } from '../../../../constants';
+import { authSelector } from '../../../../redux/slice/authSlice';
 import {
   modalActions,
   modalSelector,
 } from '../../../../redux/slice/modalSlice';
-import {
-  userActions,
-  userSelector,
-  userState,
-} from '../../../../redux/slice/userSlice';
-import { URL_API } from '../../../../constants';
+import { userActions, userSelector } from '../../../../redux/slice/userSlice';
 
 const getBase64 = (img: RcFile, callback: (url: string) => void) => {
   const reader = new FileReader();
@@ -52,9 +48,9 @@ const beforeUpload = (file: RcFile) => {
 const ModalUser: React.FC = () => {
   const dispatch = useDispatch();
 
-  const { currentUser }: userState = useSelector(userSelector);
+  const { currentUser } = useSelector(userSelector);
 
-  const { user }: authState = useSelector(authSelector);
+  const { user } = useSelector(authSelector);
 
   const { isModal, title } = useSelector(modalSelector);
 

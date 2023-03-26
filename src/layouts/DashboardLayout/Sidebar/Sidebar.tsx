@@ -39,19 +39,17 @@ const items: MenuItem[] = [
   getItem('Khách hàng', '/admin/user', <UserOutlined />),
   getItem('Danh mục', '/admin/category', <BiCategory />),
   getItem('Bộ sưu tập', '/admin/collection', <BiCollection />),
-  getItem('Quản lý sản phẩm', 'qlsanpham', <FontAwesomeIcon icon={faList} />, [
-    getItem('Danh mục sản phẩm', '/admin/product-category'),
-    getItem('Sản phẩm', '/admin/product'),
-  ]),
+  getItem(
+    'Quản lý sản phẩm',
+    'product_management',
+    <FontAwesomeIcon icon={faList} />,
+    [
+      getItem('Danh mục sản phẩm', '/admin/product-category'),
+      getItem('Sản phẩm', '/admin/product'),
+    ]
+  ),
 
-  getItem('Navigation Two', 'sub2', <AppstoreOutlined />, [
-    getItem('Option 9', '9'),
-    getItem('Option 10', '10'),
-    getItem('Submenu', 'sub3', null, [
-      getItem('Option 11', '11'),
-      getItem('Option 12', '12'),
-    ]),
-  ]),
+  getItem('Tồn kho', '/admin/inventory', <AppstoreOutlined />),
 ];
 
 const Sidebar: React.FC = () => {

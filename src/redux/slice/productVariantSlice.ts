@@ -29,7 +29,7 @@ const initialState: productVariantState = {
     count: 0,
   },
   page: 1,
-  pageSize: 7,
+  pageSize: 9,
   currentProductVariant: null,
   isLoading: false,
   isError: false,

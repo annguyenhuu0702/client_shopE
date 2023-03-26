@@ -24,7 +24,7 @@ const FavoriteProduct = lazy(
 );
 const MyOrder = lazy(() => import('../pages/ProfilePage/MyOrder'));
 const ProductDetailPage = lazy(() => import('../pages/ProductDetail'));
-const CategoryPage = lazy(() => import('../pages/CategoryPage/CategoryPage'));
+const CategoryPage = lazy(() => import('../pages/CategoryPage'));
 const ProductCategoryPage = lazy(() => import('../pages/ProductCategoryPage'));
 const CartPage = lazy(() => import('../pages/CartPage'));
 const CheckOutPage = lazy(() => import('../pages/CheckOutPage'));
@@ -48,10 +48,12 @@ const FormProductCategory = lazy(
   () => import('../dashboard/pages/ProductCategory/FormProductCategory')
 );
 
-const ProductAdmin = lazy(() => import('../dashboard/pages/Product/Product'));
+const ProductAdmin = lazy(() => import('../dashboard/pages/Product'));
 const FormProduct = lazy(
   () => import('../dashboard/pages/Product/FormProduct')
 );
+
+const InventoryAdmin = lazy(() => import('../dashboard/pages/Inventory'));
 
 const NotFound = lazy(() => import('../pages/NotFound/NotFound'));
 
@@ -208,6 +210,11 @@ export const privateRoute: IRoute[] = [
   {
     path: routes.editProductAdmin,
     element: FormProduct,
+    layout: DashboardLayout,
+  },
+  {
+    path: routes.inventoryAdmin,
+    element: InventoryAdmin,
     layout: DashboardLayout,
   },
 ];

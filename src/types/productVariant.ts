@@ -12,8 +12,8 @@ export interface IProductVariant {
   variantValues: IVariantValue[];
   product: IProduct;
   deletedAt: Date;
-  createdAt: string;
-  updatedAt: string;
+  createdAt: Date;
+  updatedAt: Date;
 }
 
 export interface ICreateProductVariant {

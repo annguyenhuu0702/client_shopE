@@ -26,6 +26,8 @@ interface Props {
 
 const Product: React.FC<Props> = ({ product }) => {
   const { products } = useSelector(favoriteProductSelector);
+  // const [active, setActive] = useState<boolean>(false);
+
   const checkFavoriteProduct = useMemo(() => {
     return products.rows.some((item) => item.productId === product?.id);
   }, [product?.id, products.rows]);
@@ -54,6 +56,15 @@ const Product: React.FC<Props> = ({ product }) => {
 
   const handleSelectedSize = (size: IVariantValue) => {
     setSelectedSize(size);
+  };
+
+  const handleDeleteFavoriteProduct = (item: IProduct) => {
+    // setActive(false);
+    console.log(item);
+  };
+
+  const handleAddToFavoriteProduct = (item: IProduct) => {
+    // setActive(true);
   };
 
   useEffect(() => {
@@ -222,11 +233,23 @@ const Product: React.FC<Props> = ({ product }) => {
           >
             {checkFavoriteProduct === true ? (
               <Tooltip placement="bottomRight" title="Xóa khỏi yêu thích">
-                <FontAwesomeIcon icon={faHeart} />
+                <div
+                  onClick={() => {
+                    handleDeleteFavoriteProduct(product);
+                  }}
+                >
+                  <FontAwesomeIcon icon={faHeart} />
+                </div>
               </Tooltip>
             ) : (
               <Tooltip placement="bottomRight" title="Yêu thích">
-                <FontAwesomeIcon icon={faHeart} />
+                <div
+                  onClick={() => {
+                    handleAddToFavoriteProduct(product);
+                  }}
+                >
+                  <FontAwesomeIcon icon={faHeart} />
+                </div>
               </Tooltip>
             )}
           </div>

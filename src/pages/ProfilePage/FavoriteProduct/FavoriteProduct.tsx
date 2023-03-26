@@ -15,6 +15,7 @@ const FavoriteProduct: React.FC = () => {
   const { user } = useSelector(authSelector);
   const { products } = useSelector(favoriteProductSelector);
   const dispatch = useDispatch();
+
   useEffect(() => {
     dispatch(
       favoriteProductActions.getFavoriteProductByUser({

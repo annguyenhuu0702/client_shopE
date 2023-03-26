@@ -1,3 +1,4 @@
+import { type } from 'os';
 import { IProduct } from './product';
 
 type FavoriteProduct = {
@@ -11,4 +12,8 @@ type FavoriteProduct = {
   deletedAt: Date;
 };
 
-export type { FavoriteProduct };
+type createFavoriteProduct = {
+  productId: number;
+};
+
+export type { FavoriteProduct, createFavoriteProduct };

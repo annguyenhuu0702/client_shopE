@@ -1,6 +1,10 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { tokenPayload } from '../../types/common';
-import { FavoriteProduct } from '../../types/favoriteProduct';
+import { tokenPayload, tokenPayloadData } from '../../types/common';
+import {
+  createFavoriteProduct,
+  deleteFavoriteProduct,
+  FavoriteProduct,
+} from '../../types/favoriteProduct';
 
 import { RootState } from '../store';
 
@@ -53,6 +57,45 @@ const favoriteProductSlice = createSlice({
       state.products.count = actions.payload.count;
     },
     getFavoriteProductByUserFailed: (state) => {
+      state.isLoading = false;
+      state.isError = true;
+    },
+    createFavoriteProduct: (
+      state,
+      actions: PayloadAction<tokenPayloadData<createFavoriteProduct>>
+    ) => {
+      state.isLoading = true;
+      state.isError = false;
+    },
+    createFavoriteProductSuccess: (
+      state,
+      actions: PayloadAction<FavoriteProduct>
+    ) => {
+      state.isLoading = true;
+      state.isError = false;
+      state.products.rows.push(actions.payload);
+      state.products.count += 1;
+    },
+    createFavoriteProductFailed: (state) => {
+      state.isLoading = false;
+      state.isError = true;
+    },
+    deleteFavoriteProduct: (
+      state,
+      actions: PayloadAction<deleteFavoriteProduct>
+    ) => {
+      state.isLoading = true;
+      state.isError = false;
+    },
+    deleteFavoriteProductSuccess: (state, actions: PayloadAction<number>) => {
+      state.isLoading = true;
+      state.isError = false;
+      state.products.rows = state.products.rows.filter(
+        (item) => item.productId !== actions.payload
+      );
+      state.products.count -= 1;
+    },
+    deleteFavoriteProductFailed: (state) => {
       state.isLoading = false;
       state.isError = true;
     },

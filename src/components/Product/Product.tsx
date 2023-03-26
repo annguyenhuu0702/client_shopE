@@ -15,8 +15,12 @@ import { IProduct } from '../../types/product';
 import { IProductImage } from '../../types/productImage';
 import { IProductVariant } from '../../types/productVariant';
 import { IVariantValue } from '../../types/variantValue';
-import { useSelector } from 'react-redux';
-import { favoriteProductSelector } from '../../redux/slice/favoriteProductSlice';
+import { useDispatch, useSelector } from 'react-redux';
+import {
+  favoriteProductActions,
+  favoriteProductSelector,
+} from '../../redux/slice/favoriteProductSlice';
+import { authSelector } from '../../redux/slice/authSlice';
 
 const cx = classNames.bind(styles);
 
@@ -25,8 +29,9 @@ interface Props {
 }
 
 const Product: React.FC<Props> = ({ product }) => {
+  const dispatch = useDispatch();
   const { products } = useSelector(favoriteProductSelector);
-  // const [active, setActive] = useState<boolean>(false);
+  const { user } = useSelector(authSelector);
 
   const checkFavoriteProduct = useMemo(() => {
     return products.rows.some((item) => item.productId === product?.id);
@@ -59,12 +64,25 @@ const Product: React.FC<Props> = ({ product }) => {
   };
 
   const handleDeleteFavoriteProduct = (item: IProduct) => {
-    // setActive(false);
-    console.log(item);
+    dispatch(
+      favoriteProductActions.deleteFavoriteProduct({
+        token: user.accessToken,
+        dispatch,
+        productId: item.id,
+      })
+    );
   };
 
   const handleAddToFavoriteProduct = (item: IProduct) => {
-    // setActive(true);
+    dispatch(
+      favoriteProductActions.createFavoriteProduct({
+        token: user.accessToken,
+        dispatch,
+        data: {
+          productId: item.id,
+        },
+      })
+    );
   };
 
   useEffect(() => {
@@ -204,7 +222,7 @@ const Product: React.FC<Props> = ({ product }) => {
                   </div>
                 </div>
                 <div className={cx('more-detail')}>
-                  <Link to={`/${product.slug}`}>More Details</Link>
+                  <Link to={`/${product.slug}`}>Xem chi tiết sản phẩm</Link>
                 </div>
               </div>
             </div>
@@ -225,35 +243,37 @@ const Product: React.FC<Props> = ({ product }) => {
             </span>
           )}
         </div>
-        <div className={cx('tags-name')}>
-          <div
-            className={cx('wish-list', {
-              active: checkFavoriteProduct,
-            })}
-          >
-            {checkFavoriteProduct === true ? (
-              <Tooltip placement="bottomRight" title="Xóa khỏi yêu thích">
-                <div
-                  onClick={() => {
-                    handleDeleteFavoriteProduct(product);
-                  }}
-                >
-                  <FontAwesomeIcon icon={faHeart} />
-                </div>
-              </Tooltip>
-            ) : (
-              <Tooltip placement="bottomRight" title="Yêu thích">
-                <div
-                  onClick={() => {
-                    handleAddToFavoriteProduct(product);
-                  }}
-                >
-                  <FontAwesomeIcon icon={faHeart} />
-                </div>
-              </Tooltip>
-            )}
+        {user.user && (
+          <div className={cx('tags-name')}>
+            <div
+              className={cx('wish-list', {
+                active: checkFavoriteProduct,
+              })}
+            >
+              {checkFavoriteProduct === true ? (
+                <Tooltip placement="bottomRight" title="Xóa khỏi yêu thích">
+                  <div
+                    onClick={() => {
+                      handleDeleteFavoriteProduct(product);
+                    }}
+                  >
+                    <FontAwesomeIcon icon={faHeart} />
+                  </div>
+                </Tooltip>
+              ) : (
+                <Tooltip placement="bottomRight" title="Yêu thích">
+                  <div
+                    onClick={() => {
+                      handleAddToFavoriteProduct(product);
+                    }}
+                  >
+                    <FontAwesomeIcon icon={faHeart} />
+                  </div>
+                </Tooltip>
+              )}
+            </div>
           </div>
-        </div>
+        )}
         {product.priceSale !== 0 && (
           <div className={cx('tags-percent')}>
             <span>

@@ -90,7 +90,7 @@ const ProductCategoryPage: React.FC = () => {
               <Link to={routes.home}>Trang chủ</Link>
             </Breadcrumb.Item>
             <Breadcrumb.Item>
-              <Link to={`/${currentCollectionClient?.category.slug}`}>
+              <Link to={`/category/${currentCollectionClient?.category.slug}`}>
                 {currentCollectionClient?.category.name}
               </Link>
             </Breadcrumb.Item>
@@ -107,7 +107,7 @@ const ProductCategoryPage: React.FC = () => {
             </Breadcrumb.Item>
             <Breadcrumb.Item>
               <Link
-                to={`/${
+                to={`/category/${
                   currentProductCategoryClient &&
                   currentProductCategoryClient.collection.category.slug
                 }`}
@@ -118,7 +118,7 @@ const ProductCategoryPage: React.FC = () => {
             </Breadcrumb.Item>
             <Breadcrumb.Item>
               <Link
-                to={`/${
+                to={`/collection/${
                   currentProductCategoryClient &&
                   currentProductCategoryClient.collection.slug
                 }`}

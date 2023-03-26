@@ -1,4 +1,4 @@
-import { type } from 'os';
+import { tokenPayload } from './common';
 import { IProduct } from './product';
 
 type FavoriteProduct = {
@@ -16,4 +16,8 @@ type createFavoriteProduct = {
   productId: number;
 };
 
-export type { FavoriteProduct, createFavoriteProduct };
+type deleteFavoriteProduct = tokenPayload & {
+  productId: number;
+};
+
+export type { FavoriteProduct, createFavoriteProduct, deleteFavoriteProduct };

@@ -40,7 +40,7 @@ const FavoriteProduct: React.FC = () => {
       <Row gutter={[16, 16]}>
         {products.rows.map((product) => {
           return (
-            <Col xl={8} md={12} xs={12} key={product.id}>
+            <Col xl={6} md={12} xs={12} key={product.id}>
               <Product product={product.product} />
             </Col>
           );

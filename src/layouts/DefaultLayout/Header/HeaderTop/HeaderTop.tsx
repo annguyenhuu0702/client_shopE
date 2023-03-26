@@ -4,7 +4,6 @@ import styles from './__headerTop.module.scss';
 import { SearchOutlined } from '@ant-design/icons';
 import { Input } from 'antd';
 import classNames from 'classnames/bind';
-import { AiOutlineHeart } from 'react-icons/ai';
 import { BiUserCircle } from 'react-icons/bi';
 import { HiOutlineShoppingBag } from 'react-icons/hi';
 import { useDispatch, useSelector } from 'react-redux';
@@ -16,8 +15,9 @@ import {
   authSelector,
   authState,
 } from '../../../../redux/slice/authSlice';
-import Navigation from '../HeaderNavigation';
 import { cartActions } from '../../../../redux/slice/cartSlice';
+import { favoriteProductActions } from '../../../../redux/slice/favoriteProductSlice';
+import Navigation from '../HeaderNavigation';
 
 const cx = classNames.bind(styles);
 
@@ -45,6 +45,15 @@ const HeaderTop: React.FC = () => {
     );
   }, [dispatch, user.accessToken]);
 
+  useEffect(() => {
+    dispatch(
+      favoriteProductActions.getFavoriteProductByUser({
+        token: user.accessToken,
+        dispatch,
+      })
+    );
+  }, [dispatch, user.accessToken]);
+
   return (
     <section className={cx('header-top')}>
       <div className={cx('left')}>
@@ -66,14 +75,6 @@ const HeaderTop: React.FC = () => {
           />
         </div>
         <div className={cx('group-icon')}>
-          <div
-            className={cx('wish-list')}
-            onClick={() => {
-              navigate(routes.favoriteProduct);
-            }}
-          >
-            <AiOutlineHeart />
-          </div>
           <div className={cx('account')}>
             <BiUserCircle />
             <div className={cx('wrap-account')}>

@@ -96,8 +96,7 @@ const FormProduct: React.FC = () => {
           dispatch(productActions.setProduct(data));
           form.setFieldsValue({
             name: data.name,
-            productCategoryId:
-              data.productCategory && data.productCategory.name,
+            productCategoryId: data && data.productCategoryId,
             price: data.price,
             priceSale: data.priceSale,
             description: data.description,

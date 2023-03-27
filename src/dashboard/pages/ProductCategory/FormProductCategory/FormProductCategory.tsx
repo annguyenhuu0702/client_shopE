@@ -151,7 +151,7 @@ const FormProductCategory: React.FC = () => {
           dispatch(productCategoryActions.setProductCategory(data));
           form.setFieldsValue({
             name: data.name,
-            collectionId: data.collection && data.collection.name,
+            collectionId: data && data.collectionId,
             description: data.description,
             thumbnail: data.thumbnail,
           });

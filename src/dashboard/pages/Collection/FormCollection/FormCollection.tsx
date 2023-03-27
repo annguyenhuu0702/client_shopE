@@ -150,7 +150,7 @@ const FormCollection: React.FC = () => {
           dispatch(collectionActions.setCollection(data));
           form.setFieldsValue({
             name: data.name,
-            categoryId: data.category && data.category.name,
+            categoryId: data && data.categoryId,
             description: data.description,
             thumbnail: data.thumbnail,
           });

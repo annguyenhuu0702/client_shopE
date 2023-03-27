@@ -4,7 +4,6 @@ import moment from 'moment';
 import { AlignType } from 'rc-table/lib/interface';
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
 import { utils, writeFileXLSX } from 'xlsx';
 import { productVariantApi } from '../../../../apis/productVariant';
 import { categoryActions } from '../../../../redux/slice/categorySlice';
@@ -19,32 +18,21 @@ const TableEnventory: React.FC = () => {
   const { productVariants, isLoading, page, pageSize } = useSelector(
     productVariantSelector
   );
-  const navigate = useNavigate();
   const columns = [
+    {
+      title: 'ID',
+      width: 50,
+      render: (text: string, record: IProductVariant) => {
+        return <span>{record.productId}</span>;
+      },
+    },
+
     {
       title: 'Mã sản phẩm',
       width: 150,
       align: 'center' as AlignType,
       render: (text: string, record: IProductVariant) => {
         return <Text mark>{record.product.code}</Text>;
-      },
-    },
-    {
-      title: 'Hình ảnh',
-      width: 100,
-      align: 'center' as AlignType,
-      render: (text: string, record: IProductVariant) => {
-        return record.product.thumbnail !== '' ? (
-          <div className="cursor-text">
-            <img
-              src={record.product.thumbnail}
-              alt=""
-              className="w-20 h-14 object-cover"
-            />
-          </div>
-        ) : (
-          <></>
-        );
       },
     },
     {

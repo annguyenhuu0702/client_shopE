@@ -1,5 +1,4 @@
 import {
-  AppstoreOutlined,
   BarChartOutlined,
   MenuFoldOutlined,
   MenuUnfoldOutlined,
@@ -13,6 +12,7 @@ import React, { useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import styles from './__sidebar.module.scss';
 import { BiCategory, BiCollection } from 'react-icons/bi';
+import { MdInventory } from 'react-icons/md';
 
 const cx = classNames.bind(styles);
 
@@ -49,7 +49,7 @@ const items: MenuItem[] = [
     ]
   ),
 
-  getItem('Tồn kho', '/admin/inventory', <AppstoreOutlined />),
+  getItem('Tồn kho', '/admin/inventory', <MdInventory />),
 ];
 
 const Sidebar: React.FC = () => {

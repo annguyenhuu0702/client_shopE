@@ -5,7 +5,12 @@ import { cartApi } from '../../apis/cartApi';
 import { cartItemApi } from '../../apis/cartItemApi';
 import { routes } from '../../config/routes';
 import { STATUS_CODE } from '../../constants';
-import { createCartItem } from '../../types/cartItem';
+import {
+  CartItem,
+  createCartItem,
+  deleteCartItem,
+  updateCartItem,
+} from '../../types/cartItem';
 import { tokenPayload, tokenPayloadData } from '../../types/common';
 import { cartActions } from '../slice/cartSlice';
 
@@ -48,18 +53,60 @@ function* addToCartSaga({
   } catch (err) {
     console.log(err);
     yield put(cartActions.addToCartFailed());
-    notification.error({
-      message: 'Thất bại',
-      description: 'Thêm vào giỏ hàng thất bại',
-      placement: 'bottomRight',
-      duration: 3,
+  }
+}
+
+function* updateCartSaga({
+  payload,
+}: PayloadAction<tokenPayloadData<CartItem>>): any {
+  try {
+    const { token, dispatch, data } = payload;
+    const res = yield call(() => {
+      return cartItemApi.updateCart(token, dispatch, data);
     });
+    const { status } = res;
+    if (status === STATUS_CODE.SUCCESS) {
+      yield put(cartActions.updateCartSuccess(data));
+      notification.success({
+        message: 'Thành công',
+        description: 'Cập nhật giỏ hàng thành công',
+        placement: 'bottomRight',
+        duration: 3,
+      });
+    }
+  } catch (err) {
+    console.log(err);
+    yield put(cartActions.updateCartFailed());
+  }
+}
+
+function* deleteCartSaga({ payload }: PayloadAction<deleteCartItem>): any {
+  try {
+    const { token, dispatch, id } = payload;
+    const res = yield call(() => {
+      return cartItemApi.deleteCart(token, dispatch, id);
+    });
+    const { status } = res;
+    if (status === STATUS_CODE.SUCCESS) {
+      yield put(cartActions.deleteCartSuccess(id));
+      notification.success({
+        message: 'Thành công',
+        description: 'Xóa thành công',
+        placement: 'bottomRight',
+        duration: 3,
+      });
+    }
+  } catch (err) {
+    console.log(err);
+    yield put(cartActions.deleteCartFailed());
   }
 }
 
 function* cartSaga() {
   yield takeEvery('cart/getByUser', getCartByUserSaga);
   yield takeEvery('cart/addToCart', addToCartSaga);
+  yield takeEvery('cart/updateCart', updateCartSaga);
+  yield takeEvery('cart/deleteCart', deleteCartSaga);
 }
 
 export default cartSaga;

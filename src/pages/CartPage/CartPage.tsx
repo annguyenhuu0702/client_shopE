@@ -2,16 +2,19 @@ import { Col, Row } from 'antd';
 import React from 'react';
 import { AiOutlineDelete, AiOutlineMinus, AiOutlinePlus } from 'react-icons/ai';
 import { FaShippingFast } from 'react-icons/fa';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
 import { routes } from '../../config/routes';
 import { useTitle } from '../../hooks/useTitle';
-import { cartSelector } from '../../redux/slice/cartSlice';
+import { authSelector } from '../../redux/slice/authSlice';
+import { cartActions, cartSelector } from '../../redux/slice/cartSlice';
 import { CartItem } from '../../types/cartItem';
 import { castToVND } from '../../utils';
 
 const CartPage: React.FC = () => {
   const { cart } = useSelector(cartSelector);
+  const { user } = useSelector(authSelector);
+  const dispatch = useDispatch();
 
   const totalPrice = () => {
     let totalPrice =
@@ -41,8 +44,27 @@ const CartPage: React.FC = () => {
     return totalPrice || 0;
   };
 
+  const handleUpdateCart = (cartItem: CartItem, quantity: number) => {
+    dispatch(
+      cartActions.updateCart({
+        token: user.accessToken,
+        dispatch,
+        data: {
+          id: cartItem.id,
+          quantity: quantity,
+        },
+      })
+    );
+  };
+
   const handleDeleteCartItem = (cartItem: CartItem) => {
-    console.log(cartItem.id);
+    dispatch(
+      cartActions.deleteCart({
+        token: user.accessToken,
+        dispatch,
+        id: cartItem.id,
+      })
+    );
   };
 
   const navigate = useNavigate();
@@ -134,14 +156,28 @@ const CartPage: React.FC = () => {
                         <div className="w-1/5 max-sm:justify-end max-sm:w-2/4 max-sm:flex max-sm:items-start max-lg:mr-4">
                           <div className="text-2xl flex items-center justify-left">
                             <span
-                              className={`h-16 w-16 border border-solid border-border-variant inline-flex items-center justify-center  `}
+                              className={`h-16 w-16 border border-solid border-border-variant inline-flex items-center justify-center cursor-pointer`}
+                              onClick={() => {
+                                handleUpdateCart(
+                                  cartItem,
+                                  cartItem.quantity - 1
+                                );
+                              }}
                             >
                               <AiOutlineMinus />
                             </span>
                             <span className="h-16 min-w-40px border border-solid border-l-0 border-r-0 border-border-variant inline-flex items-center justify-center px-4">
                               {cartItem.quantity}
                             </span>
-                            <span className="h-16 w-16 border border-solid border-border-variant inline-flex items-center justify-center cursor-pointer">
+                            <span
+                              className="h-16 w-16 border border-solid border-border-variant inline-flex items-center justify-center cursor-pointer"
+                              onClick={() => {
+                                handleUpdateCart(
+                                  cartItem,
+                                  cartItem.quantity + 1
+                                );
+                              }}
+                            >
                               <AiOutlinePlus />
                             </span>
                           </div>

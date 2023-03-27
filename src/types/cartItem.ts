@@ -1,3 +1,4 @@
+import { tokenPayload } from './common';
 import { IProductVariant } from './productVariant';
 
 type CartItem = {
@@ -16,5 +17,13 @@ type createCartItem = {
   productVariantId: number;
   quantity: number;
 };
+type updateCartItem = {
+  id: number;
+  quantity: number;
+};
 
-export type { createCartItem, CartItem };
+type deleteCartItem = tokenPayload & {
+  id: number;
+};
+
+export type { CartItem, createCartItem, updateCartItem, deleteCartItem };

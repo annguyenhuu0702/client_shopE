@@ -16,7 +16,6 @@ const ProductRelated: React.FC = () => {
         {productsRelatedClient &&
           productsRelatedClient
             .filter((product) => product.slug !== slug)
-            .slice(0, 4)
             .map((item) => {
               return (
                 <Col xl={6} md={8} xs={12} key={item.id}>

@@ -20,14 +20,6 @@ const TableEnventory: React.FC = () => {
   );
   const columns = [
     {
-      title: 'ID',
-      width: 50,
-      render: (text: string, record: IProductVariant) => {
-        return <span>{record.productId}</span>;
-      },
-    },
-
-    {
       title: 'Mã sản phẩm',
       width: 150,
       align: 'center' as AlignType,
@@ -37,12 +29,15 @@ const TableEnventory: React.FC = () => {
     },
     {
       title: 'Tên sản phẩm',
+      align: 'center' as AlignType,
       render: (text: string, record: IProductVariant) => {
         return <span>{record.product.name}</span>;
       },
     },
     {
       title: 'Kích thước',
+      width: 150,
+      align: 'center' as AlignType,
       render: (text: string, record: IProductVariant) => {
         return (
           <span>
@@ -53,6 +48,8 @@ const TableEnventory: React.FC = () => {
     },
     {
       title: 'Màu sắc',
+      width: 150,
+      align: 'center' as AlignType,
       render: (text: string, record: IProductVariant) => {
         return (
           <span>
@@ -64,9 +61,15 @@ const TableEnventory: React.FC = () => {
     {
       title: 'Số lượng tồn',
       dataIndex: 'inventory',
+      width: 150,
+      align: 'center' as AlignType,
+      render: (text: string, record: IProductVariant) => {
+        return <span className="font-bold">{record.inventory}</span>;
+      },
     },
     {
       title: 'Ngày tạo',
+      align: 'center' as AlignType,
       render: (text: string, record: IProductVariant) => {
         let date = moment(record.createdAt).format('MM/DD/YYYY');
         return <div>{date}</div>;

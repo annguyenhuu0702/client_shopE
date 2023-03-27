@@ -4,12 +4,13 @@ import { faHeart, faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Image, Modal, Tooltip } from 'antd';
 import classNames from 'classnames/bind';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { Pagination } from 'swiper';
 import 'swiper/css';
 import 'swiper/css/pagination';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { castToVND } from '../../utils';
+import { AiOutlineMinus, AiOutlinePlus } from 'react-icons/ai';
 
 import { IProduct } from '../../types/product';
 import { IProductImage } from '../../types/productImage';
@@ -21,6 +22,7 @@ import {
   favoriteProductSelector,
 } from '../../redux/slice/favoriteProductSlice';
 import { authSelector } from '../../redux/slice/authSlice';
+import { cartActions } from '../../redux/slice/cartSlice';
 
 const cx = classNames.bind(styles);
 
@@ -32,6 +34,7 @@ const Product: React.FC<Props> = ({ product }) => {
   const dispatch = useDispatch();
   const { products } = useSelector(favoriteProductSelector);
   const { user } = useSelector(authSelector);
+  const navigate = useNavigate();
 
   const checkFavoriteProduct = useMemo(() => {
     return products.rows.some((item) => item.productId === product?.id);
@@ -42,6 +45,7 @@ const Product: React.FC<Props> = ({ product }) => {
   const [selectedSize, setSelectedSize] = useState<IVariantValue>();
   const [colors, setColors] = useState<IVariantValue[]>([]);
   const [sizes, setSizes] = useState<IVariantValue[]>([]);
+  const [quantity, setQuantity] = useState<number>(1);
 
   const showModal = () => {
     setIsModalVisible(true);
@@ -83,6 +87,33 @@ const Product: React.FC<Props> = ({ product }) => {
         },
       })
     );
+  };
+
+  const handleAddToCart = (product: IProduct) => {
+    if (product && selectedColor && selectedSize) {
+      const productVariant = product.productVariants.find((item) =>
+        item.variantValues.every(
+          (variantValue) =>
+            variantValue.id === selectedColor.id ||
+            variantValue.id === selectedSize.id
+        )
+      );
+      let formData;
+      if (productVariant) {
+        formData = {
+          productVariantId: productVariant.id,
+          quantity: quantity,
+        };
+        dispatch(
+          cartActions.addToCart({
+            token: user.accessToken,
+            dispatch,
+            navigate,
+            data: formData,
+          })
+        );
+      }
+    }
   };
 
   useEffect(() => {
@@ -214,9 +245,37 @@ const Product: React.FC<Props> = ({ product }) => {
                     </div>
                   </div>
                 )}
+                <div className="my-4 flex items-center">
+                  <span
+                    className={`h-16 w-16 border border-solid border-border-variant inline-flex items-center justify-center ${
+                      quantity > 1 ? 'cursor-pointer' : 'cursor-not-allowed'
+                    } `}
+                    onClick={() => {
+                      setQuantity(quantity - 1);
+                    }}
+                  >
+                    <AiOutlineMinus />
+                  </span>
+                  <span className="h-16 min-w-40px border border-solid border-l-0 border-r-0 border-border-variant inline-flex items-center justify-center px-4">
+                    {quantity}
+                  </span>
+                  <span
+                    className="h-16 w-16 border border-solid border-border-variant inline-flex items-center justify-center cursor-pointer"
+                    onClick={() => {
+                      setQuantity(quantity + 1);
+                    }}
+                  >
+                    <AiOutlinePlus />
+                  </span>
+                </div>
                 <div>
                   <div>
-                    <button className="bg-btn-order w-ful flex items-center justify-center uppercase py-6 px-24 text-white text-2xl border-none outline-none rounded-xl cursor-pointer hover:bg-hover-btn-order">
+                    <button
+                      className="bg-btn-order w-ful flex items-center justify-center uppercase py-6 px-24 text-white text-2xl border-none outline-none rounded-xl cursor-pointer hover:bg-hover-btn-order"
+                      onClick={() => {
+                        handleAddToCart(product);
+                      }}
+                    >
                       Thêm vào giỏ hàng
                     </button>
                   </div>

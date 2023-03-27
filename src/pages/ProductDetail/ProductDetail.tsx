@@ -88,6 +88,7 @@ const ProductDetail: React.FC = () => {
     }
   };
 
+  // lấy sản phẩm theo slug
   useEffect(() => {
     if (slug) {
       dispatch(
@@ -98,6 +99,7 @@ const ProductDetail: React.FC = () => {
     }
   }, [dispatch, slug]);
 
+  // lấy size với color để render
   useEffect(() => {
     if (currentProductClient && currentProductClient.productVariants) {
       const colors: IVariantValue[] = [];

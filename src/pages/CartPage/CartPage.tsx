@@ -44,6 +44,16 @@ const CartPage: React.FC = () => {
     return totalPrice || 0;
   };
 
+  const totalProduct = () => {
+    let totalProduct =
+      cart &&
+      cart.cartItems.reduce(
+        (prev, currentValue) => prev + currentValue.quantity,
+        0
+      );
+    return totalProduct || 0;
+  };
+
   const handleUpdateCart = (cartItem: CartItem, quantity: number) => {
     dispatch(
       cartActions.updateCart({
@@ -86,9 +96,7 @@ const CartPage: React.FC = () => {
               </div>
             )}
             <div className="pb-8">
-              <h2 className="m-0 text-4xl ">
-                ({cart?.cartItems.length}) sản phẩm
-              </h2>
+              <h2 className="m-0 text-4xl ">({totalProduct()}) sản phẩm</h2>
             </div>
             <div className="w-full">
               <div className="w-full flex items-center text-left bg-name-product text-gray-200 text-2xl p-3 max-sm:hidden">

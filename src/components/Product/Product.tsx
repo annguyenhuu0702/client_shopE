@@ -116,6 +116,7 @@ const Product: React.FC<Props> = ({ product }) => {
     }
   };
 
+  // lấy size với color để render
   useEffect(() => {
     if (product && product.productVariants) {
       const colors: IVariantValue[] = [];

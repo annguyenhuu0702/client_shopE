@@ -16,6 +16,7 @@ export interface IUser {
   avatar: string;
   phone: string;
   gender: boolean;
+  accumulatedPoints: number;
   role: string;
   key?: React.Key | string | number;
   resetValues?: Function;

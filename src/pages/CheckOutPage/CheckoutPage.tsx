@@ -18,26 +18,27 @@ import { Link } from 'react-router-dom';
 import { routes } from '../../config/routes';
 import { useTitle } from '../../hooks/useTitle';
 import province from '../../province.json';
+import { authSelector } from '../../redux/slice/authSlice';
 import { cartSelector } from '../../redux/slice/cartSlice';
 import { castToVND } from '../../utils';
 
 const CheckoutPage: React.FC = () => {
+  const { user } = useSelector(authSelector);
   const [form] = Form.useForm();
   const [value, setValue] = useState(0);
 
   const [districts, setDistricts] = useState([]);
   const [wards, setWards] = useState([]);
   const { cart } = useSelector(cartSelector);
-  console.log(cart);
 
   const initialValue = {
-    fullname: '',
-    phone: '',
-    city: '',
-    ward: '',
-    district: '',
-    street: '',
-    coupon: '',
+    fullname: user.user ? user.user.fullname : '',
+    phone: user.user ? user.user.phone : '',
+    city: user.user ? user.user.city : '',
+    ward: user.user ? user.user.ward : '',
+    district: user.user ? user.user.district : '',
+    address: user.user ? user.user.address : '',
+    accumulatedPoints: '',
     payment: 0,
   };
 
@@ -94,7 +95,17 @@ const CheckoutPage: React.FC = () => {
     return totalPrice || 0;
   };
 
-  let shippingCost = totalPrice() > 0 ? castToVND(0) : castToVND(30000);
+  let shippingCost = totalPrice() > 499000 ? 0 : 30000;
+
+  const totalProduct = () => {
+    let totalProduct =
+      cart &&
+      cart.cartItems.reduce(
+        (prev, currentValue) => prev + currentValue.quantity,
+        0
+      );
+    return totalProduct || 0;
+  };
 
   useTitle('Thủ tục thanh toán');
 
@@ -215,7 +226,7 @@ const CheckoutPage: React.FC = () => {
                     }
                   />
                 </Form.Item>
-                <Form.Item label="Địa chỉ khác" name="street">
+                <Form.Item label="Địa chỉ khác" name="address">
                   <Input />
                 </Form.Item>
               </Col>
@@ -248,7 +259,7 @@ const CheckoutPage: React.FC = () => {
           <Col xl={8} md={24} xs={24}>
             <div className="bg-bg-checkout p-8">
               <div className="pb-8 border-solid border-0 border-b-2 border-white">
-                <h2 className="m-0">Đơn hàng (1 sản phẩm)</h2>
+                <h2 className="m-0">Đơn hàng ({totalProduct()} sản phẩm)</h2>
               </div>
               {cart &&
                 cart.cartItems.map((cartItem) => {
@@ -299,7 +310,7 @@ const CheckoutPage: React.FC = () => {
                 })}
               <div className="flex items-center justify-between mt-8 pb-8 border-solid border-0 border-b-2 border-white">
                 <div className="w-full mr-12">
-                  <Form.Item name="coupon" className="mb-0">
+                  <Form.Item name="accumulatedPoints" className="mb-0">
                     <Input
                       size="large"
                       placeholder="Nhập điểm tích lũy của bạn"
@@ -331,7 +342,7 @@ const CheckoutPage: React.FC = () => {
                 </div>
                 <div className="flex justify-between items-center text-2xl font-semibold">
                   <span>Phí vận chuyển</span>
-                  <span>{shippingCost}</span>
+                  <span>{castToVND(shippingCost)}</span>
                 </div>
                 <div></div>
               </div>
@@ -339,7 +350,7 @@ const CheckoutPage: React.FC = () => {
                 <div className="flex justify-between items-center ">
                   <span className="text-2xl font-semibold mb-4">Tổng cộng</span>
                   <span className="text-4xl font-semibold mb-4 text-amber-500">
-                    {castToVND(totalPrice() + parseInt(shippingCost))}
+                    {castToVND(totalPrice() + shippingCost)}
                   </span>
                 </div>
               </div>

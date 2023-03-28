@@ -71,12 +71,12 @@ export const publicRoute: IRoute[] = [
   {
     path: routes.register,
     element: Register,
-    layout: DefaultLayout,
+    layout: null,
   },
   {
     path: routes.login,
     element: Login,
-    layout: DefaultLayout,
+    layout: null,
   },
   {
     path: routes.profile,

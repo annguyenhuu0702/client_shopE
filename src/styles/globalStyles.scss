@@ -273,18 +273,21 @@
   }
 }
 
-// nút login register
+// login register
 
 .btn-auth {
   width: 100%;
-  height: 100%;
+  height: 54px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   border: none;
   outline: none;
   text-transform: uppercase;
-  font-size: 2rem;
-  background: #13283f;
+  font-size: 1.8rem;
   color: $white-color;
-  margin-top: 24px;
+  background: #0089ed;
+  margin-top: 16px;
   text-align: center;
   cursor: pointer;
 
@@ -297,13 +300,10 @@
   }
 }
 
-// login register
-
 .container-auth {
   width: 500px;
-  margin: 0 auto;
   background: #f9f9f9;
-  padding: 60px 40px;
+  padding: 20px;
   .title {
     text-align: center;
     margin-bottom: 30px;
@@ -311,15 +311,23 @@
   }
   @include mobile {
     width: 100%;
+    height: 100vh;
     padding: 40px 20px;
   }
 }
 
-// common auth
 .auth {
-  margin: 20px 0;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   @include mobile {
+    display: block;
     margin: 0;
+  }
+
+  @include tablet {
+    height: 100%;
   }
 }
 

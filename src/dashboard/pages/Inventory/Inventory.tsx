@@ -7,7 +7,7 @@ import {
   productVariantSelector,
 } from '../../../redux/slice/productVariantSlice';
 import HeaderTitle from '../../components/HeaderTitle';
-import TableEnventory from './TableEnventory';
+import TableInventory from './TableInventory';
 
 const { Content } = Layout;
 
@@ -33,7 +33,7 @@ const Inventory: React.FC = () => {
       <Content className="common-layout-content-cus">
         <div className="common-content-wrap">
           <div className="common-content">
-            <TableEnventory />
+            <TableInventory />
           </div>
         </div>
       </Content>

@@ -12,7 +12,7 @@ import { IProductVariant } from '../../../../types/productVariant';
 
 const { Text } = Typography;
 
-const TableEnventory: React.FC = () => {
+const TableInventory: React.FC = () => {
   const dispatch = useDispatch();
   const [form] = Form.useForm();
   const { productVariants, isLoading, page, pageSize } = useSelector(
@@ -185,4 +185,4 @@ const TableEnventory: React.FC = () => {
   );
 };
 
-export default TableEnventory;
+export default TableInventory;

@@ -9,6 +9,16 @@ export interface loginDto {
   password: string;
 }
 
+export interface IFogotPassword {
+  email: string;
+}
+
+export interface IResetPassword {
+  id: number;
+  token: string;
+  password: string;
+}
+
 export interface changeProfileDto {
   fullname: string;
   birthday: Date;

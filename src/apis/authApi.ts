@@ -5,6 +5,8 @@ import {
   changeEmailDto,
   changePasswordDto,
   changeProfileDto,
+  IFogotPassword,
+  IResetPassword,
   loginDto,
   registerDto,
 } from '../types/auth';
@@ -15,6 +17,14 @@ const register = (user: registerDto): Promise<AxiosResponse> => {
 
 const login = (user: loginDto): Promise<AxiosResponse> => {
   return instance.post(`auth/login`, user);
+};
+
+const fogotPassword = (data: IFogotPassword): Promise<AxiosResponse> => {
+  return instance.post(`auth/fogotPassword`, data);
+};
+
+const resetPassword = (data: IResetPassword): Promise<AxiosResponse> => {
+  return instance.post(`auth/resetPassword/${data.id}/${data.token}`, data);
 };
 
 const logout = (): Promise<AxiosResponse> => {
@@ -65,4 +75,6 @@ export const authApi = {
   changeProfile,
   changePassword,
   changeEmail,
+  fogotPassword,
+  resetPassword,
 };

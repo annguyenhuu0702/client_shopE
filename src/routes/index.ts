@@ -12,6 +12,10 @@ import { IRoute } from '../types/route';
 const HomePage = lazy(() => import('../pages/HomePage'));
 const Login = lazy(() => import('../pages/Login'));
 const Register = lazy(() => import('../pages/Register'));
+const FogotPassword = lazy(() => import('../pages/FogotPassword'));
+const ResetPassword = lazy(
+  () => import('../pages/FogotPassword/ResetPassword')
+);
 const ProfilePage = lazy(() => import('../pages/ProfilePage'));
 const AccumulatedPoint = lazy(
   () => import('../pages/ProfilePage/AccumulatedPoint')
@@ -76,6 +80,16 @@ export const publicRoute: IRoute[] = [
   {
     path: routes.login,
     element: Login,
+    layout: null,
+  },
+  {
+    path: routes.fogotPassword,
+    element: FogotPassword,
+    layout: null,
+  },
+  {
+    path: routes.restPassword,
+    element: ResetPassword,
     layout: null,
   },
   {

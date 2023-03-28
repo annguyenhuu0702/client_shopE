@@ -5,6 +5,7 @@ import {
   changeProfileDto,
   loginDto,
   registerDto,
+  IFogotPassword,
 } from '../../types/auth';
 import { tokenPayloadData } from '../../types/common';
 import { IUser } from '../../types/user';
@@ -14,6 +15,8 @@ export interface authState {
   isLoading: boolean;
   isError: boolean;
   user: resUser;
+  id: number;
+  token: string;
 }
 
 export interface resUser {
@@ -28,6 +31,8 @@ const initialState: authState = {
     user: null,
     accessToken: JSON.parse(localStorage.getItem('mickey:AT') || 'null'),
   },
+  id: 0,
+  token: '',
 };
 
 const authSlice = createSlice({
@@ -68,6 +73,23 @@ const authSlice = createSlice({
       state.user.user = null;
       state.user.accessToken = '';
       localStorage.removeItem('mickey:AT');
+    },
+    fogotPassword: (state, action: PayloadAction<IFogotPassword>) => {
+      state.isLoading = true;
+      state.isError = false;
+    },
+    fogotPasswordSuccess: (
+      state,
+      action: PayloadAction<{ id: number; token: string }>
+    ) => {
+      state.isLoading = false;
+      state.isError = false;
+      state.id = action.payload.id;
+      state.token = action.payload.token;
+    },
+    fogotPasswordFailed: (state) => {
+      state.isLoading = false;
+      state.isError = true;
     },
     getProfile: (state, action: PayloadAction<IUser>) => {
       state.isError = false;

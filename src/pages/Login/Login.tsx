@@ -91,7 +91,12 @@ const Login: React.FC = () => {
                   />
                 </Form.Item>
                 <div>
-                  <span className="flex justify-end text-blue-500 cursor-pointer">
+                  <span
+                    className="flex justify-end text-blue-500 cursor-pointer"
+                    onClick={() => {
+                      navigate(routes.fogotPassword);
+                    }}
+                  >
                     Quên mật khẩu
                   </span>
                 </div>

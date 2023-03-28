@@ -2,6 +2,8 @@ export const routes = {
   home: '/',
   register: '/register',
   login: '/login',
+  fogotPassword: '/fogot-password',
+  restPassword: '/reset-password/:id/:token',
   profile: '/account',
   myOrder: '/account/my-order',
   changePassword: '/account/change-password',

@@ -78,7 +78,7 @@ const HomePage = () => {
               <Link to="">
                 <img
                   className="common-img"
-                  src="https://res.cloudinary.com/diot4imoq/image/upload/v1662017065/canifa/list_image_tablet1660929641_irwu7j.jpg"
+                  src="https://res.cloudinary.com/diot4imoq/image/upload/v1679973706/canifa/banner_name_tablet1678767026_fs72wf.webp"
                   alt="canifaz"
                 />
               </Link>

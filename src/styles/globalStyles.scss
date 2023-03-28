@@ -338,6 +338,15 @@
   border-radius: 6px;
 }
 
+// fogot password
+
+#fogot-password,
+#reset-password {
+  .ant-form-item-row {
+    width: 100%;
+  }
+}
+
 // admin
 
 .ant-layout {

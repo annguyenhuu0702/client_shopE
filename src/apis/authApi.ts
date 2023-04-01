@@ -23,6 +23,13 @@ const fogotPassword = (data: IFogotPassword): Promise<AxiosResponse> => {
   return instance.post(`auth/fogotPassword`, data);
 };
 
+const getEmailFogotPassword = (
+  id: string,
+  token: string
+): Promise<AxiosResponse> => {
+  return instance.get(`auth/resetPassword/${id}/${token}`);
+};
+
 const resetPassword = (data: IResetPassword): Promise<AxiosResponse> => {
   return instance.post(`auth/resetPassword/${data.id}/${data.token}`, data);
 };
@@ -76,5 +83,6 @@ export const authApi = {
   changePassword,
   changeEmail,
   fogotPassword,
+  getEmailFogotPassword,
   resetPassword,
 };

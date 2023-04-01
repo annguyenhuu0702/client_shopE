@@ -1,12 +1,12 @@
-import React from 'react';
-import styles from './__login.module.scss';
-import classNames from 'classnames/bind';
 import { Button, Form, Input } from 'antd';
-import { Link, useNavigate } from 'react-router-dom';
+import classNames from 'classnames/bind';
+import React from 'react';
 import { useDispatch } from 'react-redux';
-import { authActions } from '../../redux/slice/authSlice';
-import { useTitle } from '../../hooks/useTitle';
+import { Link, useNavigate } from 'react-router-dom';
 import { routes } from '../../config/routes';
+import { useTitle } from '../../hooks/useTitle';
+import { authActions } from '../../redux/slice/authSlice';
+import styles from './__login.module.scss';
 
 const cx = classNames.bind(styles);
 
@@ -20,6 +20,7 @@ const Login: React.FC = () => {
   const onFinishFailed = (errorInfo: any) => {
     console.log('Failed:', errorInfo);
   };
+
   useTitle('Login');
   return (
     <main className="auth">

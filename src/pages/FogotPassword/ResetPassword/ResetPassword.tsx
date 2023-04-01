@@ -1,26 +1,49 @@
-import { Button, Form, Input } from 'antd';
-import React from 'react';
-import { useSelector } from 'react-redux';
-import { Link, useNavigate } from 'react-router-dom';
+import { Button, Form, Input, notification } from 'antd';
+import React, { useEffect, useState } from 'react';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import { authApi } from '../../../apis/authApi';
 import { routes } from '../../../config/routes';
-import { authSelector } from '../../../redux/slice/authSlice';
 
 const ResetPassword: React.FC = () => {
-  const { id, token } = useSelector(authSelector);
+  const { id, token } = useParams();
   const navigate = useNavigate();
+  const [email, setEmail] = useState<string>('');
+
   const onFinish = async (values: any) => {
-    const res = await authApi.resetPassword({
-      id,
-      token,
-      password: values.password,
-    });
+    if (id && token) {
+      const res = await authApi.resetPassword({
+        id: id,
+        token: token,
+        password: values.password,
+      });
+      if (res.status === 200) {
+        notification.success({
+          message: 'Thành công',
+          description: 'Cập nhật mật khẩu thành công',
+          placement: 'bottomRight',
+          duration: 3,
+        });
+        navigate(routes.login);
+      }
+    }
     console.log(values);
   };
 
   const onFinishFailed = (errorInfo: any) => {
     console.log('Failed:', errorInfo);
   };
+
+  useEffect(() => {
+    const getEmail = async () => {
+      if (id && token) {
+        const res = await authApi.getEmailFogotPassword(id, token);
+        const { data } = res.data;
+        setEmail(data);
+      }
+    };
+    getEmail();
+  }, [id, token]);
+
   return (
     <div className="flex justify-center items-center h-screen">
       <div
@@ -35,7 +58,7 @@ const ResetPassword: React.FC = () => {
         }}
       >
         <div className="mb-8">
-          <span className="text-4xl font-semibold">Quên mật khẩu</span>
+          <span className="text-4xl font-semibold">{email}</span>
         </div>
         <Form
           name="reset-password"

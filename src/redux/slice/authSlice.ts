@@ -15,8 +15,6 @@ export interface authState {
   isLoading: boolean;
   isError: boolean;
   user: resUser;
-  id: number;
-  token: string;
 }
 
 export interface resUser {
@@ -31,8 +29,6 @@ const initialState: authState = {
     user: null,
     accessToken: JSON.parse(localStorage.getItem('mickey:AT') || 'null'),
   },
-  id: 0,
-  token: '',
 };
 
 const authSlice = createSlice({
@@ -78,14 +74,9 @@ const authSlice = createSlice({
       state.isLoading = true;
       state.isError = false;
     },
-    fogotPasswordSuccess: (
-      state,
-      action: PayloadAction<{ id: number; token: string }>
-    ) => {
+    fogotPasswordSuccess: (state) => {
       state.isLoading = false;
       state.isError = false;
-      state.id = action.payload.id;
-      state.token = action.payload.token;
     },
     fogotPasswordFailed: (state) => {
       state.isLoading = false;

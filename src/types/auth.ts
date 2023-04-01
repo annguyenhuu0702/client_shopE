@@ -10,11 +10,12 @@ export interface loginDto {
 }
 
 export interface IFogotPassword {
+  navigate?: any;
   email: string;
 }
 
 export interface IResetPassword {
-  id: number;
+  id: string;
   token: string;
   password: string;
 }

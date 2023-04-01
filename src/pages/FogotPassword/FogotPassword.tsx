@@ -10,25 +10,31 @@ const FogotPassword: React.FC = () => {
   const navigate = useNavigate();
 
   const onFinish = async (values: any) => {
-    const res = await authApi.fogotPassword({
-      email: values.email,
-    });
-    const { data } = res.data;
+    // const res = await authApi.fogotPassword({
+    //   email: values.email,
+    // });
+    // const { data } = res.data;
     dispatch(
-      authActions.fogotPasswordSuccess({
-        id: data.id,
-        token: data.token,
+      authActions.fogotPassword({
+        email: values.email,
+        navigate,
       })
     );
-    if (res.status === 200) {
-      navigate(`/reset-password/${data.id}/${data.token}`);
-      notification.success({
-        message: 'Thành công',
-        description: 'Vui lòng kiểm tra email của bạn để cập nhật lại mật khẩu',
-        placement: 'bottomRight',
-        duration: 5,
-      });
-    }
+    // dispatch(
+    //   authActions.fogotPasswordSuccess({
+    //     id: data.id,
+    //     token: data.token,
+    //   })
+    // );
+    // if (res.status === 200) {
+    //   navigate(`/reset-password/${data.id}/${data.token}`);
+    //   notification.success({
+    //     message: 'Thành công',
+    //     description: 'Vui lòng kiểm tra email của bạn để cập nhật lại mật khẩu',
+    //     placement: 'bottomRight',
+    //     duration: 5,
+    //   });
+    // }
   };
 
   const onFinishFailed = (errorInfo: any) => {

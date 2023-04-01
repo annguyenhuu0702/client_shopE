@@ -7,7 +7,10 @@ import { useDispatch, useSelector } from 'react-redux';
 import { utils, writeFileXLSX } from 'xlsx';
 import { productVariantApi } from '../../../../apis/productVariant';
 import { categoryActions } from '../../../../redux/slice/categorySlice';
-import { productVariantSelector } from '../../../../redux/slice/productVariantSlice';
+import {
+  productVariantActions,
+  productVariantSelector,
+} from '../../../../redux/slice/productVariantSlice';
 import { IProductVariant } from '../../../../types/productVariant';
 
 const { Text } = Typography;
@@ -78,8 +81,9 @@ const TableInventory: React.FC = () => {
   ];
 
   const onFinish = (values: any) => {
+    console.log(values.search);
     dispatch(
-      categoryActions.getAllCategory({
+      productVariantActions.getAllProductVariant({
         p: page,
         limit: pageSize,
         [values.option]: values.search,
@@ -101,8 +105,8 @@ const TableInventory: React.FC = () => {
             createdAt: moment(item.createdAt).format('MM/DD/YYYY'),
           }))
         );
-        utils.book_append_sheet(wb, ws, 'Enventory');
-        writeFileXLSX(wb, 'Enventory.xlsx');
+        utils.book_append_sheet(wb, ws, 'Inventory');
+        writeFileXLSX(wb, 'Inventory.xlsx');
       };
       getAllProductVariant();
     } catch (error) {
@@ -130,6 +134,7 @@ const TableInventory: React.FC = () => {
               >
                 <Select style={{ width: 120, borderRadius: '5px' }}>
                   <Select.Option value="name">Tên</Select.Option>
+                  <Select.Option value="code">Mã sản phẩm</Select.Option>
                 </Select>
               </Form.Item>
               <Form.Item name="search">

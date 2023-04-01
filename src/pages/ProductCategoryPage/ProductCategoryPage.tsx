@@ -1,9 +1,15 @@
 import { Breadcrumb, Col, Pagination, Popover, Row } from 'antd';
 import React, { useEffect, useMemo } from 'react';
 import { AiOutlineFilter } from 'react-icons/ai';
-import { BsSortDown } from 'react-icons/bs';
+import { BsSortDown, BsSortUp } from 'react-icons/bs';
 import { useDispatch, useSelector } from 'react-redux';
-import { Link, useLocation, useParams } from 'react-router-dom';
+import {
+  Link,
+  useLocation,
+  useNavigate,
+  useParams,
+  useSearchParams,
+} from 'react-router-dom';
 import Product from '../../components/Product';
 import { routes } from '../../config/routes';
 import { useTitle } from '../../hooks/useTitle';
@@ -26,12 +32,30 @@ import ContentFilter from './ContentFilter';
 
 const ProductCategoryPage: React.FC = () => {
   const { slug } = useParams();
+  const navigate = useNavigate();
   const location = useLocation();
+  const [searchParams] = useSearchParams();
+  const p = searchParams.get('p');
+  const sortBy = searchParams.get('sortBy');
+  const sortType = searchParams.get('sortType');
+
   const { currentCollectionClient } = useSelector(collectionSelector);
   const { currentProductCategoryClient } = useSelector(productCategorySelector);
   const dispatch = useDispatch();
   const { productsClient, pageClient, pageSizeClient } =
     useSelector(productSelector);
+
+  const handleSort = () => {
+    const params = {
+      sortBy: 'price',
+      ...(!sortType || sortType === 'DESC' ? { sortType: 'ASC' } : {}),
+    };
+    let queryString = new URLSearchParams(params).toString();
+    if (queryString !== '') {
+      queryString = `?` + queryString;
+    }
+    navigate(`${location.pathname}${queryString}`);
+  };
 
   useTitle(
     location.pathname === `/collection/${slug}`
@@ -39,8 +63,8 @@ const ProductCategoryPage: React.FC = () => {
       : currentProductCategoryClient?.name
   );
 
-  // phân biệt gọi collection hay productcategory rồi trả về collection để render category
   useEffect(() => {
+    // phân biệt gọi collection hay productcategory rồi trả về collection để render category
     if (location.pathname === `/collection/${slug}`) {
       dispatch(
         collectionActions.getCollectionBySlugClient({
@@ -74,12 +98,23 @@ const ProductCategoryPage: React.FC = () => {
   useEffect(() => {
     dispatch(
       productActions.getAllProductClient({
-        p: pageClient,
+        p: p ? +p : pageClient,
         limit: pageSizeClient,
         otherSlug: slug,
+        ...(sortBy ? { sortBy: '' + sortBy } : {}),
+        ...(sortType ? { sortType: '' + sortType } : {}),
       })
     );
-  }, [slug, dispatch, pageClient, pageSizeClient]);
+  }, [
+    slug,
+    dispatch,
+    pageClient,
+    pageSizeClient,
+    searchParams,
+    sortBy,
+    sortType,
+    p,
+  ]);
 
   return (
     <main className="px-20 max-sm:mt-24 max-sm:px-4">
@@ -152,10 +187,15 @@ const ProductCategoryPage: React.FC = () => {
             </div>
           </Popover>
 
-          <div className="w-1/2 flex items-center justify-center cursor-pointer text-red-500 font-semibold text-2xl bg-bg-layout-profile px-6 py-4">
+          <div
+            className="w-1/2 flex items-center justify-center cursor-pointer text-red-500 font-semibold text-2xl bg-bg-layout-profile px-6 py-4"
+            onClick={() => {
+              handleSort();
+            }}
+          >
             <span>Sắp xếp</span>
             <span className="flex items-center pl-4">
-              <BsSortDown />
+              {sortType === 'ASC' ? <BsSortUp /> : <BsSortDown />}
             </span>
           </div>
         </div>
@@ -224,14 +264,18 @@ const ProductCategoryPage: React.FC = () => {
               <section className="pb-12 mt-4 flex justify-end">
                 <Pagination
                   pageSize={pageSizeClient}
-                  current={pageClient}
+                  current={p ? +p : 1}
                   total={productsClient.count}
-                  onChange={(page: number, pageSize: number) => {
-                    dispatch(productActions.setPageClient({ page, pageSize }));
-                    window.scroll({
-                      top: 0,
-                      behavior: 'smooth',
-                    });
+                  onChange={(page: number) => {
+                    let queryString = new URLSearchParams({
+                      ...(sortBy ? { sortBy: '' + sortBy } : {}),
+                      ...(sortType ? { sortType: '' + sortType } : {}),
+                      ...(page > 1 ? { p: '' + page } : {}),
+                    }).toString();
+                    if (queryString !== '') {
+                      queryString = `?` + queryString;
+                    }
+                    navigate(`${location.pathname}${queryString}`);
                   }}
                 />
               </section>

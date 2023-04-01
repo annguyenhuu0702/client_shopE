@@ -32,6 +32,7 @@ const CategoryPage = lazy(() => import('../pages/CategoryPage'));
 const ProductCategoryPage = lazy(() => import('../pages/ProductCategoryPage'));
 const CartPage = lazy(() => import('../pages/CartPage'));
 const CheckOutPage = lazy(() => import('../pages/CheckOutPage'));
+const SearchProduct = lazy(() => import('../pages/SearchProduct'));
 
 // admin
 const User = lazy(() => import('../dashboard/pages/User'));
@@ -146,6 +147,11 @@ export const publicRoute: IRoute[] = [
     path: routes.checkOut,
     element: CheckOutPage,
     layout: CartLayout,
+  },
+  {
+    path: routes.searchProduct,
+    element: SearchProduct,
+    layout: DefaultLayout,
   },
 ];
 

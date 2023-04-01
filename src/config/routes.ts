@@ -15,6 +15,7 @@ export const routes = {
   collectionPage: '/collection/:slug',
   productCategoryPage: '/product-category/:slug',
   checkOut: '/checkout',
+  searchProduct: '/search',
 
   // admin
   admin: '/admin',

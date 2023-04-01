@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import styles from './__headerTop.module.scss';
 
 import { SearchOutlined } from '@ant-design/icons';
@@ -25,6 +25,8 @@ const HeaderTop: React.FC = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
+  const [serachProduct, setSearchProduct] = useState<string>('');
+
   const { user }: authState = useSelector(authSelector);
 
   const handleLogout = () => {
@@ -36,6 +38,18 @@ const HeaderTop: React.FC = () => {
     navigate(routes.cart);
   };
 
+  const handleSearchProduct = () => {
+    const params = { keyword: serachProduct };
+    let queryString = new URLSearchParams(params).toString();
+    if (queryString !== '') {
+      queryString = '?' + queryString;
+    }
+    if (serachProduct !== '') {
+      navigate(`${routes.searchProduct}${queryString}`);
+    }
+  };
+
+  // lấy cart
   useEffect(() => {
     dispatch(
       cartActions.getByUser({
@@ -45,6 +59,7 @@ const HeaderTop: React.FC = () => {
     );
   }, [dispatch, user.accessToken]);
 
+  // lấy sản phẩm yêu thích
   useEffect(() => {
     dispatch(
       favoriteProductActions.getFavoriteProductByUser({
@@ -69,8 +84,21 @@ const HeaderTop: React.FC = () => {
       <div className={cx('right')}>
         <div className="custom-input">
           <Input
+            value={serachProduct}
+            onChange={(e) => {
+              setSearchProduct(e.target.value);
+            }}
+            size="large"
             placeholder="Bạn cần tìm gì..."
-            suffix={<SearchOutlined />}
+            suffix={
+              <SearchOutlined
+                className="cursor-pointer"
+                onClick={() => {
+                  handleSearchProduct();
+                }}
+              />
+            }
+            onPressEnter={handleSearchProduct}
             allowClear
           />
         </div>

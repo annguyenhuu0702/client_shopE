@@ -1,5 +1,5 @@
 import { LoadingOutlined, PlusOutlined } from '@ant-design/icons';
-import { Button, Form, Input, Layout, message, Select } from 'antd';
+import { Button, Form, Input, Layout, Select, message } from 'antd';
 import Upload, {
   RcFile,
   UploadChangeParam,
@@ -25,6 +25,7 @@ import {
 } from '../../../../redux/slice/collectionSlice';
 import { configSlugify } from '../../../../utils';
 import HeaderTitle from '../../../components/HeaderTitle';
+import { ICategory } from '../../../../types/category';
 
 const { Content } = Layout;
 
@@ -213,7 +214,7 @@ const FormCollection: React.FC = () => {
                     onChange={handleChange}
                     options={
                       categories
-                        ? categories.rows.map((item: any) => {
+                        ? categories.rows.map((item: ICategory) => {
                             return {
                               value: item.id,
                               label: item.name,
@@ -223,6 +224,13 @@ const FormCollection: React.FC = () => {
                         : []
                     }
                     showSearch
+                    filterOption={(input, option: any) => {
+                      return (
+                        option.label
+                          .toLowerCase()
+                          .indexOf(input.toLowerCase()) >= 0
+                      );
+                    }}
                     allowClear
                   />
                 </Form.Item>

@@ -159,6 +159,13 @@ const FormProduct: React.FC = () => {
                     };
                   })}
                   showSearch={true}
+                  filterOption={(input, option: any) => {
+                    return (
+                      option.label
+                        .toLowerCase()
+                        .indexOf(input.toLocaleLowerCase()) >= 0
+                    );
+                  }}
                   allowClear
                 />
               </Form.Item>

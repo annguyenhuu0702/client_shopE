@@ -162,7 +162,7 @@ const HeaderTop: React.FC = () => {
           >
             <Badge count={totalProduct()} className="w-full h-full">
               <BsBag
-                className="w-10 h-10 text-white"
+                className="w-10 h-8 text-white"
                 onClick={() => {
                   navigate(routes.cart);
                 }}

@@ -24,6 +24,7 @@ import {
 } from '../../../../redux/slice/productCategorySlice';
 import { configSlugify } from '../../../../utils';
 import HeaderTitle from '../../../components/HeaderTitle';
+import { ICollection } from '../../../../types/collection';
 
 const { Content } = Layout;
 
@@ -220,7 +221,7 @@ const FormProductCategory: React.FC = () => {
                     onChange={handleChange}
                     options={
                       collections
-                        ? collections.rows.map((item: any) => {
+                        ? collections.rows.map((item: ICollection) => {
                             return {
                               value: item.id,
                               label: item.name,
@@ -230,6 +231,13 @@ const FormProductCategory: React.FC = () => {
                         : []
                     }
                     showSearch
+                    filterOption={(input, option: any) => {
+                      return (
+                        option.label
+                          .toLowerCase()
+                          .indexOf(input.toLocaleLowerCase()) >= 0
+                      );
+                    }}
                     allowClear
                   />
                 </Form.Item>

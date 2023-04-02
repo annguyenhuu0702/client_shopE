@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { authApi } from '../../../apis/authApi';
 import { routes } from '../../../config/routes';
+import { useTitle } from '../../../hooks/useTitle';
 
 const ResetPassword: React.FC = () => {
   const { id, token } = useParams();
@@ -43,6 +44,8 @@ const ResetPassword: React.FC = () => {
     };
     getEmail();
   }, [id, token]);
+
+  useTitle('Cập nhật mật khẩu');
 
   return (
     <div className="flex justify-center items-center h-screen">

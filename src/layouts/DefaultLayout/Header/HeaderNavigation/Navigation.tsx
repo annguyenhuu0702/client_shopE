@@ -6,7 +6,6 @@ import { Link } from 'react-router-dom';
 import {
   categoryActions,
   categorySelector,
-  categoryState,
 } from '../../../../redux/slice/categorySlice';
 import { ICategory } from '../../../../types/category';
 import { ICollection } from '../../../../types/collection';
@@ -18,7 +17,7 @@ const cx = classNames.bind(styles);
 
 const HeaderNavigation: React.FC = () => {
   const dispatch = useDispatch();
-  const { categoriesClient }: categoryState = useSelector(categorySelector);
+  const { categoriesClient } = useSelector(categorySelector);
 
   useEffect(() => {
     dispatch(categoryActions.getAllCategoryClient({ collections: true }));

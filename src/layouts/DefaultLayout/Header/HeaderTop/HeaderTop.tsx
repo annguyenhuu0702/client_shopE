@@ -2,20 +2,16 @@ import React, { useEffect, useState } from 'react';
 import styles from './__headerTop.module.scss';
 
 import { SearchOutlined } from '@ant-design/icons';
-import { Input } from 'antd';
+import { Badge, Input } from 'antd';
 import classNames from 'classnames/bind';
 import { BiUserCircle } from 'react-icons/bi';
-import { HiOutlineShoppingBag } from 'react-icons/hi';
+import { BsBag } from 'react-icons/bs';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
 import { authApi } from '../../../../apis/authApi';
 import { routes } from '../../../../config/routes';
-import {
-  authActions,
-  authSelector,
-  authState,
-} from '../../../../redux/slice/authSlice';
-import { cartActions } from '../../../../redux/slice/cartSlice';
+import { authActions, authSelector } from '../../../../redux/slice/authSlice';
+import { cartActions, cartSelector } from '../../../../redux/slice/cartSlice';
 import { favoriteProductActions } from '../../../../redux/slice/favoriteProductSlice';
 import Navigation from '../HeaderNavigation';
 
@@ -24,10 +20,10 @@ const cx = classNames.bind(styles);
 const HeaderTop: React.FC = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const { cart } = useSelector(cartSelector);
+  const { user } = useSelector(authSelector);
 
   const [serachProduct, setSearchProduct] = useState<string>('');
-
-  const { user }: authState = useSelector(authSelector);
 
   const handleLogout = () => {
     authApi.logout();
@@ -47,6 +43,16 @@ const HeaderTop: React.FC = () => {
     if (serachProduct !== '') {
       navigate(`${routes.searchProduct}${queryString}`);
     }
+  };
+
+  const totalProduct = () => {
+    let totalProduct =
+      cart &&
+      cart.cartItems.reduce(
+        (prev, currentValue) => prev + currentValue.quantity,
+        0
+      );
+    return totalProduct || 0;
   };
 
   // lấy cart
@@ -147,13 +153,21 @@ const HeaderTop: React.FC = () => {
               )}
             </div>
           </div>
+
           <div
             className={cx('cart')}
             onClick={() => {
               redirectCart();
             }}
           >
-            <HiOutlineShoppingBag />
+            <Badge count={totalProduct()} className="w-full h-full">
+              <BsBag
+                className="w-10 h-10 text-white"
+                onClick={() => {
+                  navigate(routes.cart);
+                }}
+              />
+            </Badge>
           </div>
         </div>
       </div>

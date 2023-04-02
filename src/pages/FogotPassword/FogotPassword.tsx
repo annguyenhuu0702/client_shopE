@@ -1,45 +1,28 @@
-import { Button, Form, Input, notification } from 'antd';
+import { Button, Form, Input } from 'antd';
 import React from 'react';
 import { useDispatch } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
-import { authApi } from '../../apis/authApi';
 import { routes } from '../../config/routes';
 import { authActions } from '../../redux/slice/authSlice';
+import { useTitle } from '../../hooks/useTitle';
 const FogotPassword: React.FC = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const onFinish = async (values: any) => {
-    // const res = await authApi.fogotPassword({
-    //   email: values.email,
-    // });
-    // const { data } = res.data;
     dispatch(
       authActions.fogotPassword({
         email: values.email,
         navigate,
       })
     );
-    // dispatch(
-    //   authActions.fogotPasswordSuccess({
-    //     id: data.id,
-    //     token: data.token,
-    //   })
-    // );
-    // if (res.status === 200) {
-    //   navigate(`/reset-password/${data.id}/${data.token}`);
-    //   notification.success({
-    //     message: 'Thành công',
-    //     description: 'Vui lòng kiểm tra email của bạn để cập nhật lại mật khẩu',
-    //     placement: 'bottomRight',
-    //     duration: 5,
-    //   });
-    // }
   };
 
   const onFinishFailed = (errorInfo: any) => {
     console.log('Failed:', errorInfo);
   };
+
+  useTitle('Quên mật khẩu');
   return (
     <div className="flex justify-center items-center h-screen">
       <div

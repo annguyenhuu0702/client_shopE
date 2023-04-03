@@ -36,6 +36,8 @@ const FormProduct: React.FC = () => {
     priceSale: currentProduct ? currentProduct.priceSale : 0,
     thumbnail: currentProduct ? currentProduct.thumbnail : '',
     description: currentProduct ? currentProduct.description : '',
+    material: currentProduct ? currentProduct.material : '',
+    guide: currentProduct ? currentProduct.guide : '',
   };
 
   const [form] = Form.useForm();
@@ -57,6 +59,8 @@ const FormProduct: React.FC = () => {
       price: values.price,
       priceSale: values.priceSale,
       description: values.description,
+      material: values.material,
+      guide: values.guide,
     };
     if (!currentProduct) {
       dispatch(
@@ -68,6 +72,7 @@ const FormProduct: React.FC = () => {
         })
       );
     } else {
+      console.log(formData);
       dispatch(
         productActions.editProduct({
           token: user.accessToken,
@@ -100,6 +105,8 @@ const FormProduct: React.FC = () => {
             price: data.price,
             priceSale: data.priceSale,
             description: data.description,
+            material: data.material,
+            guide: data.guide,
             thumbnail: data.thumbnail,
           });
         }
@@ -185,7 +192,13 @@ const FormProduct: React.FC = () => {
                 <InputNumber min={0} className="w-full" />
               </Form.Item>
               <Form.Item label="Mô tả" name="description">
-                <TextArea rows={4} />
+                <TextArea rows={2} />
+              </Form.Item>
+              <Form.Item label="Chất liệu" name="material">
+                <Input />
+              </Form.Item>
+              <Form.Item label="Hướng dẫn sử dụng" name="guide">
+                <TextArea rows={7} />
               </Form.Item>
               <Form.Item
                 shouldUpdate

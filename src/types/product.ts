@@ -13,6 +13,8 @@ export interface IProduct {
   slug: string;
   thumbnail: string;
   description: string;
+  material: string;
+  guide: string;
   price: number;
   priceSale: number;
   deletedAt: Date;
@@ -28,9 +30,11 @@ export interface ICreateProduct {
   productCategoryId: number;
   name: string;
   slug: string;
-  description: string;
   price: number;
   priceSale: number;
+  description: string;
+  material: string;
+  guide: string;
   resetValues?: Function;
 }
 

@@ -173,32 +173,34 @@ const ProductCategoryPage: React.FC = () => {
             </Breadcrumb.Item>
           </Breadcrumb>
         )}
-        <div className="flex w-96 gap-4 max-lg:hidden">
-          <Popover
-            content={<ContentFilter />}
-            trigger="click"
-            placement="bottomLeft"
-          >
-            <div className="w-1/2 flex items-center justify-center cursor-pointer text-red-500 font-semibold text-2xl bg-bg-layout-profile px-6 py-4">
-              <span>Bộ lọc</span>
+        {productsClient.count > 0 && (
+          <div className="flex w-96 gap-4 max-lg:hidden">
+            <Popover
+              content={<ContentFilter />}
+              trigger="click"
+              placement="bottomLeft"
+            >
+              <div className="w-1/2 flex items-center justify-center cursor-pointer text-red-500 font-semibold text-2xl bg-bg-layout-profile px-6 py-4">
+                <span>Bộ lọc</span>
+                <span className="flex items-center pl-4">
+                  <AiOutlineFilter />
+                </span>
+              </div>
+            </Popover>
+
+            <div
+              className="w-1/2 flex items-center justify-center cursor-pointer text-red-500 font-semibold text-2xl bg-bg-layout-profile px-6 py-4"
+              onClick={() => {
+                handleSort();
+              }}
+            >
+              <span>Sắp xếp</span>
               <span className="flex items-center pl-4">
-                <AiOutlineFilter />
+                {sortType === 'ASC' ? <BsSortUp /> : <BsSortDown />}
               </span>
             </div>
-          </Popover>
-
-          <div
-            className="w-1/2 flex items-center justify-center cursor-pointer text-red-500 font-semibold text-2xl bg-bg-layout-profile px-6 py-4"
-            onClick={() => {
-              handleSort();
-            }}
-          >
-            <span>Sắp xếp</span>
-            <span className="flex items-center pl-4">
-              {sortType === 'ASC' ? <BsSortUp /> : <BsSortDown />}
-            </span>
           </div>
-        </div>
+        )}
       </section>
       <section>
         <Row>
@@ -261,24 +263,26 @@ const ProductCategoryPage: React.FC = () => {
                   );
                 })}
               </Row>
-              <section className="pb-12 mt-4 flex justify-end">
-                <Pagination
-                  pageSize={pageSizeClient}
-                  current={p ? +p : 1}
-                  total={productsClient.count}
-                  onChange={(page: number) => {
-                    let queryString = new URLSearchParams({
-                      ...(sortBy ? { sortBy: '' + sortBy } : {}),
-                      ...(sortType ? { sortType: '' + sortType } : {}),
-                      ...(page > 1 ? { p: '' + page } : {}),
-                    }).toString();
-                    if (queryString !== '') {
-                      queryString = `?` + queryString;
-                    }
-                    navigate(`${location.pathname}${queryString}`);
-                  }}
-                />
-              </section>
+              {productsClient.count > 9 && (
+                <section className="pb-12 mt-4 flex justify-end">
+                  <Pagination
+                    pageSize={pageSizeClient}
+                    current={p ? +p : 1}
+                    total={productsClient.count}
+                    onChange={(page: number) => {
+                      let queryString = new URLSearchParams({
+                        ...(sortBy ? { sortBy: '' + sortBy } : {}),
+                        ...(sortType ? { sortType: '' + sortType } : {}),
+                        ...(page > 1 ? { p: '' + page } : {}),
+                      }).toString();
+                      if (queryString !== '') {
+                        queryString = `?` + queryString;
+                      }
+                      navigate(`${location.pathname}${queryString}`);
+                    }}
+                  />
+                </section>
+              )}
             </Col>
           ) : (
             <Col xl={20} md={18} xs={24}>

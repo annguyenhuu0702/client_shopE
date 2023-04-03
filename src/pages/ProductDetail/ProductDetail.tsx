@@ -27,7 +27,6 @@ const ProductDetail: React.FC = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { currentProductClient } = useSelector(productSelector);
-  const [isWishlist, setIsWishlist] = useState<boolean>(false);
 
   const [isDes, setIsDes] = useState<boolean>(true);
   const [isMaterial, setIsMaterial] = useState<boolean>(false);
@@ -167,11 +166,17 @@ const ProductDetail: React.FC = () => {
           </section>
           <section>
             <Row gutter={[16, 16]}>
-              <Col xl={10} md={12} xs={24}>
+              <Col
+                xl={10}
+                md={12}
+                xs={24}
+                className="h-700 max-sm:h-full max-lg:h-full"
+              >
                 <Swiper
                   className="my-swiper"
                   modules={[Pagination]}
                   pagination={{ clickable: true }}
+                  // onSlideChange, chọn ảnh thì slide nhỏ active theo
                   onSlideChange={(swiperCore) => {
                     const { activeIndex } = swiperCore;
                     setSelectedImage(
@@ -368,13 +373,15 @@ const ProductDetail: React.FC = () => {
                     {isDes ? (
                       <div className="mb-4">
                         <span>
-                          Áo phông basic, cổ tròn, tay cộc, in chữ nhỏ. Chất
-                          liệu 100% cotton Áo phông basic, cổ tròn, tay cộc, in
-                          chữ nhỏ. Chất liệu 100% cotton
+                          {currentProductClient.description
+                            .split('\n')
+                            .map((description, index) => {
+                              return <p key={index}>{description}</p>;
+                            })}
                         </span>
                       </div>
                     ) : (
-                      ''
+                      <></>
                     )}
                     <div className="flex justify-between mb-4">
                       <span className="font-bold">Chất liệu</span>
@@ -396,10 +403,16 @@ const ProductDetail: React.FC = () => {
                     </div>
                     {isMaterial ? (
                       <div className="mb-4">
-                        <span>100% cotton</span>
+                        <span>
+                          {currentProductClient.material
+                            .split('\n')
+                            .map((material, index) => {
+                              return <p key={index}>{material}</p>;
+                            })}
+                        </span>
                       </div>
                     ) : (
-                      ''
+                      <></>
                     )}
                     <div className="flex justify-between mb-4">
                       <span className="font-bold">Hướng dẫn sử dụng</span>
@@ -420,17 +433,17 @@ const ProductDetail: React.FC = () => {
                       )}
                     </div>
                     {isGuide ? (
-                      <div className="mb-4">
+                      <div className="mb-4 an">
                         <span>
-                          Giặt máy ở chế độ nhẹ, nhiệt độ thường. Không sử dụng
-                          hóa chất tẩy có chứa Clo. Phơi trong bóng mát. Sấy
-                          thùng, chế độ nhẹ nhàng. Là ở nhiệt độ trung bình 150
-                          độ C. Giặt với sản phẩm cùng màu. Không là lên chi
-                          tiết trang trí.
+                          {currentProductClient.guide
+                            .split('\n')
+                            .map((guide, index) => {
+                              return <p key={index}>{guide}</p>;
+                            })}
                         </span>
                       </div>
                     ) : (
-                      ''
+                      <></>
                     )}
                   </div>
                 </div>

@@ -1,5 +1,5 @@
 import React from 'react';
-import styles from './__statistical.module.scss';
+import styles from './__home.module.scss';
 
 import HeaderTitle from '../../components/HeaderTitle';
 import classNames from 'classnames/bind';
@@ -9,11 +9,11 @@ import { useTitle } from '../../../hooks/useTitle';
 const cx = classNames.bind(styles);
 const { Content } = Layout;
 
-const Statistical: React.FC = () => {
-  useTitle('Thống kê');
+const Dashboard: React.FC = () => {
+  useTitle('Dashboard');
   return (
     <main className={cx('statistical')}>
-      <HeaderTitle title="Thống kê" />
+      <HeaderTitle title="Trang chủ" />
       <Content className={cx('layout-content-cus')}>
         <div className={cx('content-wrap')}>
           <div className={cx('content')}></div>
@@ -26,4 +26,4 @@ const Statistical: React.FC = () => {
   );
 };
 
-export default Statistical;
+export default Dashboard;

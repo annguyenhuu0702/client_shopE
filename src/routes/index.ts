@@ -6,7 +6,6 @@ import {
   DefaultLayout,
   ProfileLayout,
 } from '../layouts';
-
 import { IRoute } from '../types/route';
 
 const HomePage = lazy(() => import('../pages/HomePage'));
@@ -36,7 +35,7 @@ const SearchProduct = lazy(() => import('../pages/SearchProduct'));
 
 // admin
 const User = lazy(() => import('../dashboard/pages/User'));
-const Statistical = lazy(() => import('../dashboard/pages/Statistical'));
+const Dashboard = lazy(() => import('../dashboard/pages/Home'));
 const Profile = lazy(() => import('../dashboard/pages/Profile'));
 const Category = lazy(() => import('../dashboard/pages/Category'));
 const FormCategory = lazy(
@@ -57,6 +56,12 @@ const ProductAdmin = lazy(() => import('../dashboard/pages/Product'));
 const FormProduct = lazy(
   () => import('../dashboard/pages/Product/FormProduct')
 );
+
+const Comment = lazy(() => import('../dashboard/pages/Comment'));
+const News = lazy(() => import('../dashboard/pages/News'));
+const Order = lazy(() => import('../dashboard/pages/Order'));
+const Promotion = lazy(() => import('../dashboard/pages/Promotion'));
+const Supplier = lazy(() => import('../dashboard/pages/Supplier'));
 
 const InventoryAdmin = lazy(() => import('../dashboard/pages/Inventory'));
 
@@ -159,7 +164,7 @@ export const publicRoute: IRoute[] = [
 export const privateRoute: IRoute[] = [
   {
     path: routes.admin,
-    element: Statistical,
+    element: Dashboard,
     layout: DashboardLayout,
   },
   {
@@ -235,6 +240,31 @@ export const privateRoute: IRoute[] = [
   {
     path: routes.inventoryAdmin,
     element: InventoryAdmin,
+    layout: DashboardLayout,
+  },
+  {
+    path: routes.commentAdmin,
+    element: Comment,
+    layout: DashboardLayout,
+  },
+  {
+    path: routes.newsAdmin,
+    element: News,
+    layout: DashboardLayout,
+  },
+  {
+    path: routes.orderAdmmin,
+    element: Order,
+    layout: DashboardLayout,
+  },
+  {
+    path: routes.promotionAdmin,
+    element: Promotion,
+    layout: DashboardLayout,
+  },
+  {
+    path: routes.supplierAdmin,
+    element: Supplier,
     layout: DashboardLayout,
   },
 ];

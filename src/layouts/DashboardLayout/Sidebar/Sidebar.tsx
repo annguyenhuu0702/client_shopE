@@ -11,8 +11,11 @@ import classNames from 'classnames/bind';
 import React, { useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import styles from './__sidebar.module.scss';
-import { BiCategory, BiCollection } from 'react-icons/bi';
+import { BiCategory, BiCollection, BiComment } from 'react-icons/bi';
 import { MdInventory } from 'react-icons/md';
+import { TbNews } from 'react-icons/tb';
+import { AiOutlineBook } from 'react-icons/ai';
+import { FcShipped } from 'react-icons/fc';
 
 const cx = classNames.bind(styles);
 
@@ -35,8 +38,9 @@ function getItem(
 }
 
 const items: MenuItem[] = [
-  getItem('Thống kê', '/admin', <BarChartOutlined />),
+  getItem('Trang chủ', '/admin', <BarChartOutlined />),
   getItem('Khách hàng', '/admin/user', <UserOutlined />),
+  getItem('Nhà cung cấp', '/admin/supplier', <FcShipped />),
   getItem('Danh mục', '/admin/category', <BiCategory />),
   getItem('Bộ sưu tập', '/admin/collection', <BiCollection />),
   getItem(
@@ -46,10 +50,14 @@ const items: MenuItem[] = [
     [
       getItem('Danh mục sản phẩm', '/admin/product-category'),
       getItem('Sản phẩm', '/admin/product'),
+      getItem('Khuyến mãi', '/admin/promotion'),
     ]
   ),
 
   getItem('Tồn kho', '/admin/inventory', <MdInventory />),
+  getItem('Đơn hàng', '/admin/order', <AiOutlineBook />),
+  getItem('Bình luận', '/admin/comment', <BiComment />),
+  getItem('Tin tức', '/admin/news', <TbNews />),
 ];
 
 const Sidebar: React.FC = () => {

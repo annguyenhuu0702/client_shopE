@@ -34,6 +34,11 @@ export const routes = {
   createProductAdmin: '/admin/product/create',
   editProductAdmin: '/admin/product/edit/:id',
   inventoryAdmin: '/admin/inventory',
+  commentAdmin: '/admin/comment',
+  newsAdmin: '/admin/news',
+  orderAdmmin: '/admin/order',
+  promotionAdmin: '/admin/promotion',
+  supplierAdmin: '/admin/supplier',
 };
 
 // export default routes;

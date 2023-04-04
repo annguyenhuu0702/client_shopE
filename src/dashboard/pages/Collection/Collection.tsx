@@ -35,7 +35,7 @@ const Collection: React.FC = () => {
           </div>
         </div>
       </Content>
-      {collections.count > 0 && (
+      {collections.count > 9 && (
         <div className="common-pagination-cus">
           <Pagination
             pageSize={pageSize}

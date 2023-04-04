@@ -61,7 +61,6 @@ const Comment = lazy(() => import('../dashboard/pages/Comment'));
 const News = lazy(() => import('../dashboard/pages/News'));
 const Order = lazy(() => import('../dashboard/pages/Order'));
 const Promotion = lazy(() => import('../dashboard/pages/Promotion'));
-const Supplier = lazy(() => import('../dashboard/pages/Supplier'));
 
 const InventoryAdmin = lazy(() => import('../dashboard/pages/Inventory'));
 
@@ -260,11 +259,6 @@ export const privateRoute: IRoute[] = [
   {
     path: routes.promotionAdmin,
     element: Promotion,
-    layout: DashboardLayout,
-  },
-  {
-    path: routes.supplierAdmin,
-    element: Supplier,
     layout: DashboardLayout,
   },
 ];

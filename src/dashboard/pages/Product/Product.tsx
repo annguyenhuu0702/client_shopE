@@ -32,7 +32,7 @@ const ProductAdmin: React.FC = () => {
           </div>
         </div>
       </Content>
-      {products.count > 0 && (
+      {products.count > 9 && (
         <div className="common-pagination-cus">
           <Pagination
             pageSize={pageSize}

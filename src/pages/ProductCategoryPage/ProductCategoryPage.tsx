@@ -263,7 +263,7 @@ const ProductCategoryPage: React.FC = () => {
                   );
                 })}
               </Row>
-              {productsClient.count > 9 && (
+              {productsClient.count > 12 && (
                 <section className="pb-12 mt-4 flex justify-end">
                   <Pagination
                     pageSize={pageSizeClient}

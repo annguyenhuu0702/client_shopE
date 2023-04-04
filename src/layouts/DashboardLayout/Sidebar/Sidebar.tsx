@@ -9,13 +9,12 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Menu, MenuProps } from 'antd';
 import classNames from 'classnames/bind';
 import React, { useState } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
-import styles from './__sidebar.module.scss';
+import { AiOutlineBook } from 'react-icons/ai';
 import { BiCategory, BiCollection, BiComment } from 'react-icons/bi';
 import { MdInventory } from 'react-icons/md';
 import { TbNews } from 'react-icons/tb';
-import { AiOutlineBook } from 'react-icons/ai';
-import { FcShipped } from 'react-icons/fc';
+import { useLocation, useNavigate } from 'react-router-dom';
+import styles from './__sidebar.module.scss';
 
 const cx = classNames.bind(styles);
 
@@ -40,7 +39,6 @@ function getItem(
 const items: MenuItem[] = [
   getItem('Trang chủ', '/admin', <BarChartOutlined />),
   getItem('Khách hàng', '/admin/user', <UserOutlined />),
-  getItem('Nhà cung cấp', '/admin/supplier', <FcShipped />),
   getItem('Danh mục', '/admin/category', <BiCategory />),
   getItem('Bộ sưu tập', '/admin/collection', <BiCollection />),
   getItem(

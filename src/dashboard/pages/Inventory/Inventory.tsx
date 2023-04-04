@@ -37,7 +37,7 @@ const Inventory: React.FC = () => {
           </div>
         </div>
       </Content>
-      {productVariants.count > 0 && (
+      {productVariants.count > 9 && (
         <div className="common-pagination-cus">
           <Pagination
             pageSize={pageSize}

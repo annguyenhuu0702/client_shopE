@@ -35,7 +35,7 @@ const Category: React.FC = () => {
           </div>
         </div>
       </Content>
-      {categories.count > 0 && (
+      {categories.count > 9 && (
         <div className="common-pagination-cus">
           <Pagination
             pageSize={pageSize}

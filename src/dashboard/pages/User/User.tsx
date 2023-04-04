@@ -37,7 +37,7 @@ const User: React.FC = () => {
           </div>
         </div>
       </Content>
-      {users.count > 0 && (
+      {users.count > 9 && (
         <div className="common-pagination-cus">
           <Pagination
             pageSize={pageSize}

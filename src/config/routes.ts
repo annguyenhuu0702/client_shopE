@@ -38,7 +38,6 @@ export const routes = {
   newsAdmin: '/admin/news',
   orderAdmmin: '/admin/order',
   promotionAdmin: '/admin/promotion',
-  supplierAdmin: '/admin/supplier',
 };
 
 // export default routes;

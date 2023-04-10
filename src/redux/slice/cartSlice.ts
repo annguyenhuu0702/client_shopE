@@ -15,8 +15,6 @@ export interface cartState {
   isError: boolean;
 }
 
-export interface resCart {}
-
 const initialState: cartState = {
   cart: null,
   isLoading: false,
@@ -27,14 +25,14 @@ const CartSlice = createSlice({
   name: 'cart',
   initialState: initialState,
   reducers: {
-    getByUser: (state, actions: PayloadAction<tokenPayload>) => {
+    getByUser: (state, action: PayloadAction<tokenPayload>) => {
       state.isLoading = true;
       state.isError = false;
     },
-    getByUserSuccess: (state, actions: PayloadAction<Cart>) => {
+    getByUserSuccess: (state, action: PayloadAction<Cart>) => {
       state.isLoading = false;
       state.isError = false;
-      state.cart = actions.payload;
+      state.cart = action.payload;
     },
     getByUserFailed: (state) => {
       state.isLoading = false;
@@ -57,23 +55,23 @@ const CartSlice = createSlice({
     },
     updateCart: (
       state,
-      actions: PayloadAction<tokenPayloadData<updateCartItem>>
+      action: PayloadAction<tokenPayloadData<updateCartItem>>
     ) => {
       state.isLoading = true;
       state.isError = false;
     },
-    updateCartSuccess: (state, actions: PayloadAction<CartItem>) => {
+    updateCartSuccess: (state, action: PayloadAction<CartItem>) => {
       state.isLoading = false;
       state.isError = false;
       if (state.cart) {
         let index = state.cart.cartItems.findIndex(
-          (item) => item.id === actions.payload.id
+          (item) => item.id === action.payload.id
         );
         if (index !== -1) {
-          if (actions.payload.quantity === 0) {
+          if (action.payload.quantity === 0) {
             state.cart.cartItems.splice(index, 1);
           } else {
-            state.cart.cartItems[index].quantity = actions.payload.quantity;
+            state.cart.cartItems[index].quantity = action.payload.quantity;
           }
         }
       }
@@ -82,16 +80,16 @@ const CartSlice = createSlice({
       state.isLoading = false;
       state.isError = true;
     },
-    deleteCart: (state, actions: PayloadAction<deleteCartItem>) => {
+    deleteCart: (state, action: PayloadAction<deleteCartItem>) => {
       state.isLoading = true;
       state.isError = false;
     },
-    deleteCartSuccess: (state, actions: PayloadAction<number>) => {
+    deleteCartSuccess: (state, action: PayloadAction<number>) => {
       state.isLoading = false;
       state.isError = false;
       if (state.cart) {
         state.cart.cartItems = state.cart.cartItems.filter(
-          (item) => item.id !== actions.payload
+          (item) => item.id !== action.payload
         );
       }
     },

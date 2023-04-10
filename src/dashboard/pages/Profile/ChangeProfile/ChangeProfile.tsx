@@ -35,7 +35,6 @@ const ChangeProfile: React.FC = () => {
   const onFinishFailed = (errorInfo: any) => {
     console.log('Failed:', errorInfo);
   };
-
   const initialValues = {
     fullname: user.user && user.user.fullname,
     birthday: user.user && moment(user.user.birthday),

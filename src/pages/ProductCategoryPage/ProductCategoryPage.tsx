@@ -106,8 +106,8 @@ const ProductCategoryPage: React.FC = () => {
       })
     );
   }, [
-    slug,
     dispatch,
+    slug,
     pageClient,
     pageSizeClient,
     searchParams,

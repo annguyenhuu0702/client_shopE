@@ -5,12 +5,7 @@ import { cartApi } from '../../apis/cartApi';
 import { cartItemApi } from '../../apis/cartItemApi';
 import { routes } from '../../config/routes';
 import { STATUS_CODE } from '../../constants';
-import {
-  CartItem,
-  createCartItem,
-  deleteCartItem,
-  updateCartItem,
-} from '../../types/cartItem';
+import { CartItem, createCartItem, deleteCartItem } from '../../types/cartItem';
 import { tokenPayload, tokenPayloadData } from '../../types/common';
 import { cartActions } from '../slice/cartSlice';
 

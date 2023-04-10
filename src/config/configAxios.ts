@@ -17,7 +17,7 @@ export const decodeToken = (token: string | undefined | null): any => {
 export const apiCallerWithToken = (token: string | null, dispatch: any) => {
   const instance = axios.create({
     baseURL: URL_API,
-    // withCredentials: true,
+    withCredentials: true,
   });
   instance.interceptors.request.use(
     async (config: AxiosRequestConfig) => {

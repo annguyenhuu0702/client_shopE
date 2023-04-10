@@ -12,6 +12,7 @@ import productImageReducer from './slice/productImageSlice';
 import productVariantReducer from './slice/productVariantSlice';
 import cartReducer from './slice/cartSlice';
 import favoriteProductReducer from './slice/favoriteProductSlice';
+import discountReducer from './slice/discountSlice';
 
 const sagaMiddleware = createSagaMiddleware();
 
@@ -28,6 +29,7 @@ export const store = configureStore({
     productVariant: productVariantReducer,
     favoriteProduct: favoriteProductReducer,
     cart: cartReducer,
+    discount: discountReducer,
   },
   middleware: [sagaMiddleware],
 });

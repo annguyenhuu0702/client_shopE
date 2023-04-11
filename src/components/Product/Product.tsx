@@ -337,7 +337,11 @@ const Product: React.FC<Props> = ({ product }) => {
         {product.priceSale !== 0 && (
           <div className={cx('tags-percent')}>
             <span>
-              -{Math.floor((product.priceSale / product.price) * 100)}%
+              -
+              {Math.floor(
+                ((product.price - product.priceSale) / product.price) * 100
+              )}
+              %
             </span>
           </div>
         )}

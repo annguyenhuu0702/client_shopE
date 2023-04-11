@@ -8,7 +8,9 @@ const getAll = (
   dispatch: AppDispatch,
   params?: queryParams
 ) => {
-  return apiCallerWithToken(token, dispatch).get(`discount/getAll`);
+  return apiCallerWithToken(token, dispatch).get(`discount/getAll`, {
+    params,
+  });
 };
 
 const create = (
@@ -19,7 +21,16 @@ const create = (
   return apiCallerWithToken(token, dispatch).post(`discount/create`, data);
 };
 
+const deleteDiscount = (
+  token: string | null,
+  dispatch: AppDispatch,
+  id: number
+) => {
+  return apiCallerWithToken(token, dispatch).delete(`discount/delete/${id}`);
+};
+
 export const discountApi = {
   getAll,
   create,
+  deleteDiscount,
 };

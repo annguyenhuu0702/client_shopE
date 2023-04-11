@@ -1,10 +1,12 @@
 import { queryParams, tokenPayload } from './common';
+import { IProductCategory } from './productCategory';
 
 type Discount = {
   key: string | number | React.Key;
   id: number;
   name: string;
   productsId: number[];
+  productCategories: IProductCategory[];
   startday: Date;
   endday: Date;
   percent: number;
@@ -15,7 +17,7 @@ type Discount = {
 };
 
 type getAllDiscount = tokenPayload & {
-  params: queryParams;
+  params?: queryParams;
   name?: string;
 };
 

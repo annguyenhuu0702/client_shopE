@@ -41,7 +41,9 @@ const ModalPromotion: React.FC = () => {
 
   const initialValues = {
     name: currentDiscount ? currentDiscount.name : '',
-    productCategoryId: [],
+    productCategoryId: currentDiscount
+      ? currentDiscount.productCategories.map((item) => item.name)
+      : [],
     startday: currentDiscount
       ? moment(new Date(currentDiscount.startday))
       : moment(Date.now()),

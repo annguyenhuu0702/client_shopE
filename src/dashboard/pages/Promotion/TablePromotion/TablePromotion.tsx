@@ -15,6 +15,8 @@ import {
   Select,
   Space,
   Table,
+  Tag,
+  Tooltip,
 } from 'antd';
 
 import React from 'react';
@@ -62,17 +64,17 @@ const TablePromotion: React.FC = () => {
   };
 
   function confirm(record: any) {
-    // dispatch(
-    //   discountActions.getAllDiscount({
-    //     token: user.accessToken,
-    //     dispatch,
-    //     id: record.id,
-    //     params: {
-    //       p: page,
-    //       limit: pageSize,
-    //     },
-    //   })
-    // );
+    dispatch(
+      discountActions.deleteDiscount({
+        token: user.accessToken,
+        dispatch,
+        id: record.id,
+        params: {
+          p: page,
+          limit: pageSize,
+        },
+      })
+    );
   }
 
   const handleAddNewPromotion = () => {
@@ -80,10 +82,10 @@ const TablePromotion: React.FC = () => {
     dispatch(modalActions.showModal('Thêm chương trình khuyến mãi'));
   };
 
-  const handleEditPromotion = (record: any) => {
-    dispatch(discountActions.setDiscount(record));
-    dispatch(modalActions.showModal('Sửa chương trình khuyến mãi'));
-  };
+  // const handleEditPromotion = (record: any) => {
+  //   dispatch(discountActions.setDiscount(record));
+  //   dispatch(modalActions.showModal('Sửa chương trình khuyến mãi'));
+  // };
 
   const handleExportExcel = () => {
     try {
@@ -117,15 +119,14 @@ const TablePromotion: React.FC = () => {
 
     {
       title: 'Tên',
-      dataIndex: 'name',
       render: (text: string, record: Discount) => {
         return (
           <div>
             <span
-              className="cursor-pointer text-blue-600 hover:text-blue-400"
-              onClick={() => {
-                handleEditPromotion(record);
-              }}
+              className="text-blue-600 hover:text-blue-400"
+              // onClick={() => {
+              //   handleEditPromotion(record);
+              // }}
             >
               {record.name}
             </span>
@@ -133,7 +134,22 @@ const TablePromotion: React.FC = () => {
         );
       },
     },
-
+    {
+      title: 'Danh mục sản phẩm',
+      render: (text: string, record: Discount) => {
+        return (
+          <Space size={[0, 8]} wrap>
+            {record.productCategories.map((item) => {
+              return (
+                <Tag color="green" key={item.id}>
+                  {item.name}
+                </Tag>
+              );
+            })}
+          </Space>
+        );
+      },
+    },
     {
       title: 'Khuyến mãi (%)',
       render: (text: string, record: Discount) => {
@@ -156,10 +172,17 @@ const TablePromotion: React.FC = () => {
       },
     },
     {
-      title: 'Ngày tạo',
+      title: 'Trạng thái',
       render: (text: string, record: Discount) => {
-        let date = moment(record.createdAt).format('MM/DD/YYYY');
-        return <div>{date}</div>;
+        return (
+          <div>
+            {date > moment(record.endday).format('MM/DD/YYYY') ? (
+              <Tag color="red">Kết thúc</Tag>
+            ) : (
+              <Tag color="green">Đang chạy</Tag>
+            )}
+          </div>
+        );
       },
     },
     {
@@ -167,12 +190,12 @@ const TablePromotion: React.FC = () => {
       render: (text: string, record: Discount) => {
         return (
           <Space size="middle">
-            <EditOutlined
+            {/* <EditOutlined
               className="common-icon-edit"
               onClick={() => {
                 handleEditPromotion(record);
               }}
-            />
+            /> */}
             <Popconfirm
               placement="topRight"
               title={`Bạn có muốn xóa??`}
@@ -182,10 +205,19 @@ const TablePromotion: React.FC = () => {
               okText="Có"
               cancelText="Không"
               disabled={
-                date > moment(record.endday).format('MM/DD/YYYY') ? true : false
+                date > moment(record.endday).format('MM/DD/YYYY') ? false : true
               }
             >
-              <DeleteOutlined className="common-icon-delete" />
+              {date > moment(record.endday).format('MM/DD/YYYY') ? (
+                <DeleteOutlined className="common-icon-delete" />
+              ) : (
+                <Tooltip
+                  placement="topLeft"
+                  title="Sản phẩm đang trong chương trình khuyến mãi nên bạn không thể xóa"
+                >
+                  <DeleteOutlined className="common-icon-delete" />
+                </Tooltip>
+              )}
             </Popconfirm>
           </Space>
         );

@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { createDiscount, Discount, getAllDiscount } from '../../types/discount';
 import { RootState } from '../store';
-import { tokenPayloadData } from '../../types/common';
+import { deleteParams, tokenPayloadData } from '../../types/common';
 
 export interface DiscountState {
   discount: resDiscount;
@@ -75,6 +75,24 @@ const DiscountSlice = createSlice({
       }
     },
     createDiscountFailed: (state) => {
+      state.isLoading = false;
+      state.isError = true;
+    },
+    deleteDiscount: (state, action: PayloadAction<deleteParams>) => {
+      state.isLoading = true;
+    },
+    deleteDiscountSuccess: (state, action: PayloadAction<number>) => {
+      state.isError = false;
+      state.isLoading = false;
+      state.discount.rows = state.discount.rows.filter(
+        (item) => item.id !== action.payload
+      );
+      state.discount.count -= 1;
+      if (state.discount.rows.length === 0) {
+        state.page = state.page - 1;
+      }
+    },
+    deleteDiscountFailed: (state) => {
       state.isLoading = false;
       state.isError = true;
     },

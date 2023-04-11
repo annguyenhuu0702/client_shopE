@@ -37,6 +37,7 @@ export const routes = {
   commentAdmin: '/admin/comment',
   newsAdmin: '/admin/news',
   createNews: '/admin/news/create',
+  editNews: '/admin/news/edit/:id',
   orderAdmmin: '/admin/order',
   promotionAdmin: '/admin/discount',
 };

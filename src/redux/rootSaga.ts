@@ -10,6 +10,7 @@ import productVariantSaga from './saga/productVariantSaga';
 import cartSaga from './saga/cartSaga';
 import favoriteSaga from './saga/favoriteProductSaga';
 import discountSaga from './saga/discountSaga';
+import newsSaga from './saga/newsSaga';
 
 function* rootSaga() {
   yield all([
@@ -24,6 +25,7 @@ function* rootSaga() {
     cartSaga(),
     favoriteSaga(),
     discountSaga(),
+    newsSaga(),
   ]);
 }
 

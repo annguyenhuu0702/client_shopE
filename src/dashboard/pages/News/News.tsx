@@ -1,10 +1,30 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import HeaderTitle from '../../components/HeaderTitle/HeaderTitle';
 import { Content } from 'antd/es/layout/layout';
 import TableNews from './TableNews/TableNews';
 import { useTitle } from '../../../hooks/useTitle';
+import { newsActions, newsSelector } from '../../../redux/slice/newsSlice';
+import { useDispatch, useSelector } from 'react-redux';
+import { authSelector } from '../../../redux/slice/authSlice';
+import { Pagination } from 'antd';
 
 const News: React.FC = () => {
+  const dispatch = useDispatch();
+  const { news, page, pageSize } = useSelector(newsSelector);
+  const { user } = useSelector(authSelector);
+  useEffect(() => {
+    dispatch(
+      newsActions.getAllNews({
+        token: user.accessToken,
+        dispatch,
+        params: {
+          p: page,
+          limit: pageSize,
+        },
+      })
+    );
+  }, [dispatch, page, pageSize, user.accessToken]);
+
   useTitle('Tin tức');
 
   return (
@@ -17,19 +37,19 @@ const News: React.FC = () => {
           </div>
         </div>
       </Content>
-      {/* {categories.count > 9 && (
+      {news.count > 9 && (
         <div className="common-pagination-cus">
           <Pagination
             pageSize={pageSize}
             current={page}
-            total={categories.count}
+            total={news.count}
             showSizeChanger={false}
             onChange={(page: number, pageSize: number) => {
-              dispatch(categoryActions.setPage({ page, pageSize }));
+              dispatch(newsActions.setPage({ page, pageSize }));
             }}
           />
         </div>
-      )} */}
+      )}
     </main>
   );
 };

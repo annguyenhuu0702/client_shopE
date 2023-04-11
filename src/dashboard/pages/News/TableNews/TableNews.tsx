@@ -18,15 +18,17 @@ import moment from 'moment';
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { authSelector } from '../../../../redux/slice/authSlice';
-import { categorySelector } from '../../../../redux/slice/categorySlice';
-import { ICategory } from '../../../../types/category';
 import { routes } from '../../../../config/routes';
+import { authSelector } from '../../../../redux/slice/authSlice';
+import { newsActions, newsSelector } from '../../../../redux/slice/newsSlice';
+import { News } from '../../../../types/news';
 
 const TableNews: React.FC = () => {
   const dispatch = useDispatch();
   const [form] = Form.useForm();
   const { user } = useSelector(authSelector);
+  const { news, page, pageSize, isLoading } = useSelector(newsSelector);
+
   const navigate = useNavigate();
   const columns = [
     {
@@ -35,9 +37,8 @@ const TableNews: React.FC = () => {
       width: 50,
     },
     {
-      title: 'Tên',
-      dataIndex: 'name',
-      render: (text: string, record: ICategory) => {
+      title: 'Tiêu đề',
+      render: (text: string, record: News) => {
         return (
           <div>
             <span
@@ -46,22 +47,26 @@ const TableNews: React.FC = () => {
                 handleEditNews(record);
               }}
             >
-              {record.name}
+              {record.title}
             </span>
           </div>
         );
       },
     },
     {
+      title: 'Người tạo',
+      dataIndex: 'userId',
+    },
+    {
       title: 'Ngày tạo',
-      render: (text: string, record: ICategory) => {
+      render: (text: string, record: News) => {
         let date = moment(record.createdAt).format('MM/DD/YYYY');
         return <div>{date}</div>;
       },
     },
     {
       title: 'Hành động',
-      render: (text: string, record: ICategory) => {
+      render: (text: string, record: News) => {
         return (
           <Space size="middle">
             <EditOutlined
@@ -88,13 +93,17 @@ const TableNews: React.FC = () => {
   ];
 
   const onFinish = (values: any) => {
-    // dispatch(
-    //   categoryActions.getAllCategory({
-    //     p: page,
-    //     limit: pageSize,
-    //     [values.option]: values.search,
-    //   })
-    // );
+    dispatch(
+      newsActions.getAllNews({
+        token: user.accessToken,
+        dispatch,
+        params: {
+          p: page,
+          limit: pageSize,
+          [values.option]: values.search,
+        },
+      })
+    );
   };
 
   const onFinishFailed = (errorInfo: any) => {
@@ -102,27 +111,27 @@ const TableNews: React.FC = () => {
   };
 
   function confirm(record: any) {
-    // dispatch(
-    //   categoryActions.deleteCategory({
-    //     token: user.accessToken,
-    //     dispatch,
-    //     id: record.id,
-    //     params: {
-    //       p: page,
-    //       limit: pageSize,
-    //     },
-    //   })
-    // );
+    dispatch(
+      newsActions.deleteNews({
+        token: user.accessToken,
+        dispatch,
+        id: record.id,
+        params: {
+          p: page,
+          limit: pageSize,
+        },
+      })
+    );
   }
 
   const handleAddNewNews = () => {
-    // dispatch(categoryActions.setCategory(null));
+    dispatch(newsActions.setNews(null));
     navigate(routes.createNews);
   };
 
   const handleEditNews = (record: any) => {
-    // dispatch(categoryActions.setCategory(record));
-    // navigate(`/admin/category/edit/${record.id}`);
+    dispatch(newsActions.setNews(record));
+    navigate(`/admin/news/edit/${record.id}`);
   };
 
   const handleExportExcel = () => {
@@ -150,7 +159,7 @@ const TableNews: React.FC = () => {
         <Col xl={18} style={{ paddingInline: '5px' }}>
           <Form
             form={form}
-            initialValues={{ option: 'name', search: '' }}
+            initialValues={{ option: 'title', search: '' }}
             onFinish={onFinish}
             onFinishFailed={onFinishFailed}
             autoComplete="off"
@@ -164,7 +173,7 @@ const TableNews: React.FC = () => {
                 }}
               >
                 <Select style={{ width: 120, borderRadius: '5px' }}>
-                  <Select.Option value="name">Tên</Select.Option>
+                  <Select.Option value="title">Tiêu đề</Select.Option>
                 </Select>
               </Form.Item>
               <Form.Item name="search">
@@ -221,8 +230,8 @@ const TableNews: React.FC = () => {
       </Row>
       <Row className="common-content-table">
         <Col xl={24} md={24} xs={24}>
-          {/* <Table
-            dataSource={categories.rows.map((item: ICategory) => {
+          <Table
+            dataSource={news.rows.map((item: News) => {
               return {
                 ...item,
                 key: item.id,
@@ -233,7 +242,7 @@ const TableNews: React.FC = () => {
             pagination={false}
             expandable={{ showExpandColumn: false }}
             size="small"
-          /> */}
+          />
         </Col>
       </Row>
     </React.Fragment>

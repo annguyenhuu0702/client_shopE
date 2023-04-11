@@ -13,13 +13,14 @@ import productVariantReducer from './slice/productVariantSlice';
 import cartReducer from './slice/cartSlice';
 import favoriteProductReducer from './slice/favoriteProductSlice';
 import discountReducer from './slice/discountSlice';
+import newsReducer from './slice/newsSlice';
 
 const sagaMiddleware = createSagaMiddleware();
 
 export const store = configureStore({
   reducer: {
-    auth: authReducer,
     modal: modalReducer,
+    auth: authReducer,
     user: userReducer,
     category: categoryReducer,
     collection: collectionReducer,
@@ -30,6 +31,7 @@ export const store = configureStore({
     favoriteProduct: favoriteProductReducer,
     cart: cartReducer,
     discount: discountReducer,
+    news: newsReducer,
   },
   middleware: [sagaMiddleware],
 });

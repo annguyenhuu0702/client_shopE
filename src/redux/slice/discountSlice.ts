@@ -43,15 +43,15 @@ const DiscountSlice = createSlice({
     setDiscount: (state, action: PayloadAction<Discount | null>) => {
       state.currentDiscount = action.payload;
     },
-    getAllDiscount: (state, actions: PayloadAction<getAllDiscount>) => {
+    getAllDiscount: (state, action: PayloadAction<getAllDiscount>) => {
       state.isLoading = true;
       state.isError = false;
     },
-    getAllDiscountSuccess: (state, actions: PayloadAction<resDiscount>) => {
+    getAllDiscountSuccess: (state, action: PayloadAction<resDiscount>) => {
       state.isLoading = false;
       state.isError = false;
-      state.discount.rows = actions.payload.rows;
-      state.discount.count = actions.payload.count;
+      state.discount.rows = action.payload.rows;
+      state.discount.count = action.payload.count;
     },
     getAllDiscountFailed: (state) => {
       state.isLoading = false;

@@ -260,6 +260,11 @@ export const privateRoute: IRoute[] = [
     layout: DashboardLayout,
   },
   {
+    path: routes.editNews,
+    element: FormNews,
+    layout: DashboardLayout,
+  },
+  {
     path: routes.orderAdmmin,
     element: Order,
     layout: DashboardLayout,

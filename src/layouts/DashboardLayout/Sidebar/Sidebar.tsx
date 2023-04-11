@@ -15,6 +15,7 @@ import { MdInventory } from 'react-icons/md';
 import { TbNews } from 'react-icons/tb';
 import { useLocation, useNavigate } from 'react-router-dom';
 import styles from './__sidebar.module.scss';
+import { routes } from '../../../config/routes';
 
 const cx = classNames.bind(styles);
 
@@ -37,25 +38,25 @@ function getItem(
 }
 
 const items: MenuItem[] = [
-  getItem('Trang chủ', '/admin', <BarChartOutlined />),
-  getItem('Khách hàng', '/admin/user', <UserOutlined />),
-  getItem('Danh mục', '/admin/category', <BiCategory />),
-  getItem('Bộ sưu tập', '/admin/collection', <BiCollection />),
+  getItem('Trang chủ', routes.admin, <BarChartOutlined />),
+  getItem('Khách hàng', routes.userAdmin, <UserOutlined />),
+  getItem('Danh mục', routes.categoryAdmin, <BiCategory />),
+  getItem('Bộ sưu tập', routes.collectionAdmin, <BiCollection />),
   getItem(
     'Quản lý sản phẩm',
     'product_management',
     <FontAwesomeIcon icon={faList} />,
     [
-      getItem('Danh mục sản phẩm', '/admin/product-category'),
-      getItem('Sản phẩm', '/admin/product'),
-      getItem('Khuyến mãi', '/admin/promotion'),
+      getItem('Danh mục sản phẩm', routes.productCategoryAdmin),
+      getItem('Sản phẩm', routes.productAdmin),
+      getItem('Khuyến mãi', routes.promotionAdmin),
     ]
   ),
 
-  getItem('Tồn kho', '/admin/inventory', <MdInventory />),
-  getItem('Đơn hàng', '/admin/order', <AiOutlineBook />),
-  getItem('Bình luận', '/admin/comment', <BiComment />),
-  getItem('Tin tức', '/admin/news', <TbNews />),
+  getItem('Tồn kho', routes.inventoryAdmin, <MdInventory />),
+  getItem('Đơn hàng', routes.orderAdmmin, <AiOutlineBook />),
+  getItem('Bình luận', routes.commentAdmin, <BiComment />),
+  getItem('Tin tức', routes.newsAdmin, <TbNews />),
 ];
 
 const Sidebar: React.FC = () => {

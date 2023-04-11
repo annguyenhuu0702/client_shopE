@@ -11,11 +11,10 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
 import { categoryApi } from '../../../../apis/categoryApi';
 import { useTitle } from '../../../../hooks/useTitle';
-import { authSelector, authState } from '../../../../redux/slice/authSlice';
+import { authSelector } from '../../../../redux/slice/authSlice';
 import {
   categoryActions,
   categorySelector,
-  categoryState,
 } from '../../../../redux/slice/categorySlice';
 
 import { URL_API } from '../../../../constants';

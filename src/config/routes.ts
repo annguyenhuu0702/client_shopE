@@ -36,8 +36,9 @@ export const routes = {
   inventoryAdmin: '/admin/inventory',
   commentAdmin: '/admin/comment',
   newsAdmin: '/admin/news',
+  createNews: '/admin/news/create',
   orderAdmmin: '/admin/order',
-  promotionAdmin: '/admin/promotion',
+  promotionAdmin: '/admin/discount',
 };
 
 // export default routes;

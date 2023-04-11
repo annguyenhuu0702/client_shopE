@@ -59,6 +59,9 @@ const FormProduct = lazy(
 
 const Comment = lazy(() => import('../dashboard/pages/Comment'));
 const News = lazy(() => import('../dashboard/pages/News'));
+const FormNews = lazy(
+  () => import('../dashboard/pages/News/FormNews/FormNews')
+);
 const Order = lazy(() => import('../dashboard/pages/Order'));
 const Promotion = lazy(() => import('../dashboard/pages/Promotion'));
 
@@ -249,6 +252,11 @@ export const privateRoute: IRoute[] = [
   {
     path: routes.newsAdmin,
     element: News,
+    layout: DashboardLayout,
+  },
+  {
+    path: routes.createNews,
+    element: FormNews,
     layout: DashboardLayout,
   },
   {

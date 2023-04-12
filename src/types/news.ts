@@ -2,8 +2,9 @@ import { queryParams, tokenPayload } from './common';
 type News = {
   key: string | number | React.Key;
   id: number;
-  userId: number;
+  creator: string;
   title: string;
+  slug: string;
   content: string;
   thumbnail: string;
   createdAt: Date;
@@ -12,8 +13,9 @@ type News = {
 };
 
 type createNews = {
-  userId: number;
+  creator: string;
   title: string;
+  slug: string;
   content: string;
   thumbnail: string;
 };
@@ -27,7 +29,7 @@ type getAllNewsParams = queryParams & {
 };
 
 type getAllNews = tokenPayload & {
-  params: getAllNewsParams;
+  params?: getAllNewsParams;
 };
 
 export type { News, createNews, updateNews, getAllNews };

@@ -15,6 +15,7 @@ import { UploadProps } from 'antd/lib/upload';
 import { useNavigate, useParams } from 'react-router-dom';
 import { URL_API } from '../../../../constants';
 import TextArea from 'antd/es/input/TextArea';
+import { configSlugify } from '../../../../utils';
 
 const getBase64 = (img: RcFile, callback: (url: string) => void) => {
   const reader = new FileReader();
@@ -61,9 +62,10 @@ const FormNews: React.FC = () => {
     if (user.user) {
       const formData = {
         title: values.title,
+        slug: configSlugify(values.title),
         thumbnail: pathImg,
         content: values.content,
-        userId: user.user.id,
+        creator: user.user.fullname,
       };
       if (currentNews === null) {
         if (user.user) {
@@ -173,7 +175,6 @@ const FormNews: React.FC = () => {
                 </Form.Item>
                 <Form.Item
                   label="Hình ảnh"
-                  name="thumbnail"
                   rules={[
                     {
                       required: true,

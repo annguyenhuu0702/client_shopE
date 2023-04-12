@@ -22,6 +22,8 @@ import { routes } from '../../../../config/routes';
 import { authSelector } from '../../../../redux/slice/authSlice';
 import { newsActions, newsSelector } from '../../../../redux/slice/newsSlice';
 import { News } from '../../../../types/news';
+import { newsApi } from '../../../../apis/newsApi';
+import { utils, writeFileXLSX } from 'xlsx';
 
 const TableNews: React.FC = () => {
   const dispatch = useDispatch();
@@ -55,7 +57,7 @@ const TableNews: React.FC = () => {
     },
     {
       title: 'Người tạo',
-      dataIndex: 'userId',
+      dataIndex: 'creator',
     },
     {
       title: 'Ngày tạo',
@@ -135,23 +137,24 @@ const TableNews: React.FC = () => {
   };
 
   const handleExportExcel = () => {
-    // try {
-    //   const getAllCategory = async () => {
-    //     const data = await categoryApi.getAll();
-    //     let wb = utils.book_new();
-    //     let ws = utils.json_to_sheet(
-    //       data.data.data.rows.map((item: ICategory) => ({
-    //         name: item.name,
-    //         createdAt: moment(item.createdAt).format('MM/DD/YYYY'),
-    //       }))
-    //     );
-    //     utils.book_append_sheet(wb, ws, 'Category');
-    //     writeFileXLSX(wb, 'Category.xlsx');
-    //   };
-    //   getAllCategory();
-    // } catch (error) {
-    //   console.log(error);
-    // }
+    try {
+      const getAllNews = async () => {
+        const data = await newsApi.getAll(user.accessToken, dispatch);
+        let wb = utils.book_new();
+        let ws = utils.json_to_sheet(
+          data.data.data.rows.map((item: News) => ({
+            name: item.title,
+            creator: item.creator,
+            createdAt: moment(item.createdAt).format('MM/DD/YYYY'),
+          }))
+        );
+        utils.book_append_sheet(wb, ws, 'News');
+        writeFileXLSX(wb, 'News.xlsx');
+      };
+      getAllNews();
+    } catch (error) {
+      console.log(error);
+    }
   };
   return (
     <React.Fragment>

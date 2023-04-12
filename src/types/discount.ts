@@ -16,9 +16,12 @@ type Discount = {
   resetValues?: Function;
 };
 
-type getAllDiscount = tokenPayload & {
-  params?: queryParams;
+type getAllDiscountParams = queryParams & {
   name?: string;
+};
+
+type getAllDiscount = tokenPayload & {
+  params?: getAllDiscountParams;
 };
 
 type createDiscount = {

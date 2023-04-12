@@ -12,6 +12,7 @@ import { ICollection } from '../../../../types/collection';
 import { IProductCategory } from '../../../../types/productCategory';
 import { removeTextBetweenParentheses } from '../../../../utils';
 import styles from './__navigation.module.scss';
+import { routes } from '../../../../config/routes';
 
 const cx = classNames.bind(styles);
 
@@ -40,7 +41,7 @@ const HeaderNavigation: React.FC = () => {
                   <Row
                     className={cx(
                       `${
-                        category?.collections.length > 0 ? 'block-category' : ''
+                        category.collections.length > 0 ? 'block-category' : ''
                       }`
                     )}
                   >
@@ -83,6 +84,11 @@ const HeaderNavigation: React.FC = () => {
                 </li>
               );
             })}
+          <li className={cx('item')}>
+            <Link to={routes.news} className={cx('group-category')}>
+              Tin tức
+            </Link>
+          </li>
         </ul>
       </div>
     </section>

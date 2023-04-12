@@ -1,8 +1,12 @@
 import { AxiosResponse } from 'axios';
-import { apiCallerWithToken } from '../config/configAxios';
+import instance, { apiCallerWithToken } from '../config/configAxios';
 import { AppDispatch } from '../redux/store';
 import { queryParams } from '../types/common';
 import { createNews, updateNews } from '../types/news';
+
+const getAllNewsClient = () => {
+  return instance.get(`news/getAll`);
+};
 
 const getAll = (
   token: string | null,
@@ -55,4 +59,5 @@ export const newsApi = {
   create,
   update,
   deleteNews,
+  getAllNewsClient,
 };

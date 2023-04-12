@@ -32,6 +32,7 @@ const ProductCategoryPage = lazy(() => import('../pages/ProductCategoryPage'));
 const CartPage = lazy(() => import('../pages/CartPage'));
 const CheckOutPage = lazy(() => import('../pages/CheckOutPage'));
 const SearchProduct = lazy(() => import('../pages/SearchProduct'));
+const NewsPage = lazy(() => import('../pages/NewsPage'));
 
 // admin
 const User = lazy(() => import('../dashboard/pages/User'));
@@ -51,20 +52,15 @@ const ProductCategory = lazy(
 const FormProductCategory = lazy(
   () => import('../dashboard/pages/ProductCategory/FormProductCategory')
 );
-
 const ProductAdmin = lazy(() => import('../dashboard/pages/Product'));
 const FormProduct = lazy(
   () => import('../dashboard/pages/Product/FormProduct')
 );
-
 const Comment = lazy(() => import('../dashboard/pages/Comment'));
-const News = lazy(() => import('../dashboard/pages/News'));
-const FormNews = lazy(
-  () => import('../dashboard/pages/News/FormNews/FormNews')
-);
+const NewsAdmin = lazy(() => import('../dashboard/pages/News'));
+const FormNews = lazy(() => import('../dashboard/pages/News/FormNews'));
 const Order = lazy(() => import('../dashboard/pages/Order'));
 const Promotion = lazy(() => import('../dashboard/pages/Promotion'));
-
 const InventoryAdmin = lazy(() => import('../dashboard/pages/Inventory'));
 
 const NotFound = lazy(() => import('../pages/NotFound/NotFound'));
@@ -160,6 +156,11 @@ export const publicRoute: IRoute[] = [
     element: SearchProduct,
     layout: DefaultLayout,
   },
+  {
+    path: routes.news,
+    element: NewsPage,
+    layout: DefaultLayout,
+  },
 ];
 
 //admin
@@ -251,7 +252,7 @@ export const privateRoute: IRoute[] = [
   },
   {
     path: routes.newsAdmin,
-    element: News,
+    element: NewsAdmin,
     layout: DashboardLayout,
   },
   {

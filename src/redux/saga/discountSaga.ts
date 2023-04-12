@@ -5,7 +5,6 @@ import { discountApi } from '../../apis/discount';
 import { STATUS_CODE } from '../../constants';
 import { deleteParams, tokenPayloadData } from '../../types/common';
 import { createDiscount, getAllDiscount } from '../../types/discount';
-import { cartActions } from '../slice/cartSlice';
 import { discountActions } from '../slice/discountSlice';
 import { modalActions } from '../slice/modalSlice';
 
@@ -22,7 +21,7 @@ function* getAllDiscountSaga({ payload }: PayloadAction<getAllDiscount>): any {
     }
   } catch (err) {
     console.log(err);
-    yield put(cartActions.getByUserFailed());
+    yield put(discountActions.getAllDiscountFailed());
   }
 }
 

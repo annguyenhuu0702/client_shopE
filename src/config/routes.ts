@@ -16,6 +16,7 @@ export const routes = {
   productCategoryPage: '/product-category/:slug',
   checkOut: '/checkout',
   searchProduct: '/search',
+  news: '/news',
 
   // admin
   admin: '/admin',

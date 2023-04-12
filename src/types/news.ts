@@ -32,4 +32,6 @@ type getAllNews = tokenPayload & {
   params?: getAllNewsParams;
 };
 
-export type { News, createNews, updateNews, getAllNews };
+type getAllNewsClient = {};
+
+export type { News, createNews, updateNews, getAllNews, getAllNewsClient };

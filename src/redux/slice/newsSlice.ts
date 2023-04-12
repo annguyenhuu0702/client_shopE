@@ -1,7 +1,12 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { deleteParams, tokenPayloadData } from '../../types/common';
-import { getAllDiscount } from '../../types/discount';
-import { createNews, getAllNews, News, updateNews } from '../../types/news';
+import {
+  createNews,
+  getAllNews,
+  getAllNewsClient,
+  News,
+  updateNews,
+} from '../../types/news';
 import { RootState } from '../store';
 
 export interface NewsState {
@@ -11,6 +16,10 @@ export interface NewsState {
   pageSize: number;
   isLoading: boolean;
   isError: boolean;
+
+  // client
+  newsClient: resNews;
+  currentNewsClient: News | null;
 }
 
 export interface resNews {
@@ -28,6 +37,13 @@ const initialState: NewsState = {
   currentNews: null,
   isLoading: false,
   isError: false,
+
+  // client
+  newsClient: {
+    rows: [],
+    count: 0,
+  },
+  currentNewsClient: null,
 };
 
 const NewsSlice = createSlice({
@@ -92,6 +108,20 @@ const NewsSlice = createSlice({
       state.isLoading = false;
     },
     deleteNewsFailed: (state) => {
+      state.isLoading = false;
+      state.isError = true;
+    },
+    getAllNewsClient: (state, action: PayloadAction<getAllNewsClient>) => {
+      state.isLoading = true;
+      state.isError = false;
+    },
+    getAllNewsClientSuccess: (state, action: PayloadAction<resNews>) => {
+      state.isLoading = false;
+      state.isError = false;
+      state.newsClient.rows = action.payload.rows;
+      state.newsClient.count = action.payload.count;
+    },
+    getAllNewsClientFailed: (state) => {
       state.isLoading = false;
       state.isError = true;
     },

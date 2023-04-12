@@ -2,12 +2,16 @@ import { PayloadAction } from '@reduxjs/toolkit';
 import { notification } from 'antd';
 import { call, put, takeEvery } from 'redux-saga/effects';
 import { newsApi } from '../../apis/newsApi';
+import { routes } from '../../config/routes';
 import { STATUS_CODE } from '../../constants';
 import { deleteParams, tokenPayloadData } from '../../types/common';
-import { createNews, getAllNews, updateNews } from '../../types/news';
-import { cartActions } from '../slice/cartSlice';
+import {
+  createNews,
+  getAllNews,
+  getAllNewsClient,
+  updateNews,
+} from '../../types/news';
 import { newsActions } from '../slice/newsSlice';
-import { routes } from '../../config/routes';
 
 function* getAllNewsSaga({ payload }: PayloadAction<getAllNews>): any {
   try {
@@ -21,7 +25,24 @@ function* getAllNewsSaga({ payload }: PayloadAction<getAllNews>): any {
     }
   } catch (err) {
     console.log(err);
-    yield put(cartActions.getByUserFailed());
+    yield put(newsActions.getAllNewsFailed());
+  }
+}
+
+function* getAllNewsClientSaga({
+  payload,
+}: PayloadAction<getAllNewsClient>): any {
+  try {
+    const res = yield call(() => {
+      return newsApi.getAllNewsClient();
+    });
+    const { data, status } = res;
+    if (status === STATUS_CODE.SUCCESS) {
+      yield put(newsActions.getAllNewsClientSuccess(data.data));
+    }
+  } catch (err) {
+    console.log(err);
+    yield put(newsActions.getAllNewsClientFailed());
   }
 }
 
@@ -124,6 +145,7 @@ function* newsSaga() {
   yield takeEvery('news/createNews', createNewsSaga);
   yield takeEvery('news/editNews', editNewsSaga);
   yield takeEvery('news/deleteNews', deleteNewsSaga);
+  yield takeEvery('news/getAllNewsClient', getAllNewsClientSaga);
 }
 
 export default newsSaga;

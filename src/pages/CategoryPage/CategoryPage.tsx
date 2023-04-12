@@ -23,12 +23,13 @@ import { routes } from '../../config/routes';
 import { removeTextBetweenParentheses } from '../../utils';
 import { productCategoryActions } from '../../redux/slice/productCategorySlice';
 import { ICategory } from '../../types/category';
+import Loading from '../../components/Loading/Loading';
 
 const CategoryPage: React.FC = () => {
   const dispatch = useDispatch();
   const { slug } = useParams();
   const { currentCategoryClient } = useSelector(categorySelector);
-  const { productsByCategory } = useSelector(productSelector);
+  const { productsByCategory, isLoadingClient } = useSelector(productSelector);
 
   // lấy banner
   useEffect(() => {
@@ -56,6 +57,7 @@ const CategoryPage: React.FC = () => {
 
   return (
     <main className="px-20 max-sm:px-4 max-sm:mt-24">
+      {isLoadingClient && <Loading />}
       <section className="my-8 max-sm:my-4">
         <Breadcrumb>
           <Breadcrumb.Item>

@@ -29,6 +29,7 @@ import { ICollection } from '../../types/collection';
 import { IProductCategory } from '../../types/productCategory';
 import { removeTextBetweenParentheses } from '../../utils';
 import ContentFilter from './ContentFilter';
+import Loading from '../../components/Loading/Loading';
 
 const ProductCategoryPage: React.FC = () => {
   const { slug } = useParams();
@@ -42,7 +43,7 @@ const ProductCategoryPage: React.FC = () => {
   const { currentCollectionClient } = useSelector(collectionSelector);
   const { currentProductCategoryClient } = useSelector(productCategorySelector);
   const dispatch = useDispatch();
-  const { productsClient, pageClient, pageSizeClient } =
+  const { productsClient, pageClient, pageSizeClient, isLoadingClient } =
     useSelector(productSelector);
 
   const handleSort = () => {
@@ -118,6 +119,7 @@ const ProductCategoryPage: React.FC = () => {
 
   return (
     <main className="px-20 max-sm:mt-24 max-sm:px-4">
+      {isLoadingClient && <Loading />}
       <section className="my-8 flex justify-between max-sm:hidden">
         {currentCollectionClient ? (
           <Breadcrumb>

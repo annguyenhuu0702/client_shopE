@@ -31,7 +31,7 @@ const CategoryPage = lazy(() => import('../pages/CategoryPage'));
 const ProductCategoryPage = lazy(() => import('../pages/ProductCategoryPage'));
 const CartPage = lazy(() => import('../pages/CartPage'));
 const CheckOutPage = lazy(() => import('../pages/CheckOutPage'));
-const SearchProduct = lazy(() => import('../pages/SearchProduct'));
+const SearchProduct = lazy(() => import('../pages/SearchProductPage'));
 const NewsPage = lazy(() => import('../pages/NewsPage'));
 
 // admin

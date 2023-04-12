@@ -20,13 +20,15 @@ import { IProductImage } from '../../types/productImage';
 import { IProductVariant } from '../../types/productVariant';
 import { IVariantValue } from '../../types/variantValue';
 import ProductRelated from './ProductRelated/ProductRelated';
+import Loading from '../../components/Loading/Loading';
 
 const ProductDetail: React.FC = () => {
   const { user } = useSelector(authSelector);
   const { slug } = useParams();
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { currentProductClient } = useSelector(productSelector);
+  const { currentProductClient, isLoadingClient } =
+    useSelector(productSelector);
 
   const [isDes, setIsDes] = useState<boolean>(true);
   const [isMaterial, setIsMaterial] = useState<boolean>(false);
@@ -137,6 +139,7 @@ const ProductDetail: React.FC = () => {
 
   return (
     <main className="product-detail mb-12 max-sm:mt-24 max-lg:my-12">
+      {isLoadingClient && <Loading />}
       <div className="p-100 max-sm:px-12">
         <div className="container">
           <section className="breadcrumb max-sm:hidden">

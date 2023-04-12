@@ -7,14 +7,15 @@ import {
 } from '../../redux/slice/productSlice';
 import { Col, Pagination, Row } from 'antd';
 import Product from '../../components/Product/Product';
+import Loading from '../../components/Loading/Loading';
 
-const SearchProduct: React.FC = () => {
+const SearchProductPage: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const dispatch = useDispatch();
   const [searchParams] = useSearchParams();
   const name = searchParams.get('keyword') || undefined;
-  const { productsClient, pageClient, pageSizeClient } =
+  const { productsClient, pageClient, pageSizeClient, isLoadingClient } =
     useSelector(productSelector);
 
   const p = searchParams.get('p');
@@ -31,6 +32,7 @@ const SearchProduct: React.FC = () => {
 
   return (
     <main className="px-20 py-10 max-sm:px-4 max-sm:mt-24">
+      {isLoadingClient && <Loading />}
       <section className="mb-4">
         <span className="text-4xl">
           <b>Kết quả tìm kiếm: {name}</b>
@@ -81,4 +83,4 @@ const SearchProduct: React.FC = () => {
   );
 };
 
-export default SearchProduct;
+export default SearchProductPage;

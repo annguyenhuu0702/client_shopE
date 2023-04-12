@@ -6,10 +6,11 @@ import { Col, Row } from 'antd';
 import { News } from '../../types/news';
 import { useTitle } from '../../hooks/useTitle';
 import moment from 'moment';
+import Loading from '../../components/Loading/Loading';
 
 const NewsPage: React.FC = () => {
   const dispatch = useDispatch();
-  const { newsClient } = useSelector(newsSelector);
+  const { newsClient, isLoading } = useSelector(newsSelector);
 
   useEffect(() => {
     dispatch(newsActions.getAllNewsClient({}));
@@ -18,6 +19,7 @@ const NewsPage: React.FC = () => {
   useTitle('Tin tức');
   return (
     <main className="px-20 py-20 max-sm:px-4 max-sm:mt-24">
+      {isLoading && <Loading />}
       <Row gutter={[16, 16]}>
         {newsClient &&
           newsClient.rows.map((item: News) => {

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import styles from './__headerTop.module.scss';
 
 import { SearchOutlined } from '@ant-design/icons';
@@ -28,6 +28,7 @@ const HeaderTop: React.FC = () => {
   const handleLogout = () => {
     authApi.logout();
     dispatch(authActions.logoutSuccess());
+    dispatch(cartActions.setCart());
   };
 
   const redirectCart = () => {
@@ -45,7 +46,7 @@ const HeaderTop: React.FC = () => {
     }
   };
 
-  const totalProduct = () => {
+  const totalProduct = useMemo(() => {
     let totalProduct =
       cart &&
       cart.cartItems.reduce(
@@ -53,27 +54,31 @@ const HeaderTop: React.FC = () => {
         0
       );
     return totalProduct || 0;
-  };
+  }, [cart]);
 
   // lấy cart
   useEffect(() => {
-    dispatch(
-      cartActions.getByUser({
-        token: user.accessToken,
-        dispatch,
-      })
-    );
-  }, [dispatch, user.accessToken]);
+    if (user.user) {
+      dispatch(
+        cartActions.getByUser({
+          token: user.accessToken,
+          dispatch,
+        })
+      );
+    }
+  }, [dispatch, user, user.accessToken]);
 
   // lấy sản phẩm yêu thích
   useEffect(() => {
-    dispatch(
-      favoriteProductActions.getFavoriteProductByUser({
-        token: user.accessToken,
-        dispatch,
-      })
-    );
-  }, [dispatch, user.accessToken]);
+    if (user.user) {
+      dispatch(
+        favoriteProductActions.getFavoriteProductByUser({
+          token: user.accessToken,
+          dispatch,
+        })
+      );
+    }
+  }, [dispatch, user, user.accessToken]);
 
   return (
     <section className={cx('header-top')}>
@@ -160,7 +165,7 @@ const HeaderTop: React.FC = () => {
               redirectCart();
             }}
           >
-            <Badge count={totalProduct()} className="w-full h-full">
+            <Badge count={totalProduct} className="w-full h-full">
               <BsBag
                 className="w-10 h-8 text-white"
                 onClick={() => {

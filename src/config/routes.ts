@@ -17,6 +17,7 @@ export const routes = {
   checkOut: '/checkout',
   searchProduct: '/search',
   news: '/news',
+  newsDetail: '/news/:slug',
 
   // admin
   admin: '/admin',

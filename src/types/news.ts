@@ -34,4 +34,15 @@ type getAllNews = tokenPayload & {
 
 type getAllNewsClient = {};
 
-export type { News, createNews, updateNews, getAllNews, getAllNewsClient };
+type getNewsBySlugClient = {
+  slug: string;
+};
+
+export type {
+  News,
+  createNews,
+  updateNews,
+  getAllNews,
+  getAllNewsClient,
+  getNewsBySlugClient,
+};

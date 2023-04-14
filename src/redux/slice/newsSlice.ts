@@ -4,6 +4,7 @@ import {
   createNews,
   getAllNews,
   getAllNewsClient,
+  getNewsBySlugClient,
   News,
   updateNews,
 } from '../../types/news';
@@ -122,6 +123,22 @@ const NewsSlice = createSlice({
       state.newsClient.count = action.payload.count;
     },
     getAllNewsClientFailed: (state) => {
+      state.isLoading = false;
+      state.isError = true;
+    },
+    getNewsBySlugClient: (
+      state,
+      action: PayloadAction<getNewsBySlugClient>
+    ) => {
+      state.isLoading = true;
+      state.isError = false;
+    },
+    getNewsBySlugClientSuccess: (state, action: PayloadAction<News>) => {
+      state.isLoading = false;
+      state.isError = false;
+      state.currentNewsClient = action.payload;
+    },
+    getNewsBySlugClientFailed: (state) => {
       state.isLoading = false;
       state.isError = true;
     },

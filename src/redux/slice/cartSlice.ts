@@ -25,6 +25,9 @@ const CartSlice = createSlice({
   name: 'cart',
   initialState: initialState,
   reducers: {
+    setCart: (state) => {
+      state.cart = null;
+    },
     getByUser: (state, action: PayloadAction<tokenPayload>) => {
       state.isLoading = true;
       state.isError = false;

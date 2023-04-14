@@ -9,6 +9,7 @@ import {
   createNews,
   getAllNews,
   getAllNewsClient,
+  getNewsBySlugClient,
   updateNews,
 } from '../../types/news';
 import { newsActions } from '../slice/newsSlice';
@@ -43,6 +44,24 @@ function* getAllNewsClientSaga({
   } catch (err) {
     console.log(err);
     yield put(newsActions.getAllNewsClientFailed());
+  }
+}
+
+function* getNewsBySlugClientSaga({
+  payload,
+}: PayloadAction<getNewsBySlugClient>): any {
+  const { slug } = payload;
+  try {
+    const res = yield call(() => {
+      return newsApi.getNewsBySlugClient(slug);
+    });
+    const { data, status } = res;
+    if (status === STATUS_CODE.SUCCESS) {
+      yield put(newsActions.getNewsBySlugClientSuccess(data.data));
+    }
+  } catch (err) {
+    console.log(err);
+    yield put(newsActions.getNewsBySlugClientFailed());
   }
 }
 
@@ -146,6 +165,7 @@ function* newsSaga() {
   yield takeEvery('news/editNews', editNewsSaga);
   yield takeEvery('news/deleteNews', deleteNewsSaga);
   yield takeEvery('news/getAllNewsClient', getAllNewsClientSaga);
+  yield takeEvery('news/getNewsBySlugClient', getNewsBySlugClientSaga);
 }
 
 export default newsSaga;

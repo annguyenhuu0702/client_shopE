@@ -8,6 +8,10 @@ const getAllNewsClient = () => {
   return instance.get(`news/getAll`);
 };
 
+const getNewsBySlugClient = (slug: string) => {
+  return instance.get(`news/getBySlug/${slug}`);
+};
+
 const getAll = (
   token: string | null,
   dispatch: AppDispatch,
@@ -60,4 +64,5 @@ export const newsApi = {
   update,
   deleteNews,
   getAllNewsClient,
+  getNewsBySlugClient,
 };

@@ -29,6 +29,7 @@ export interface ICreateUser {
   fullname: string;
   phone: string;
   gender: boolean;
+  accumulatedPoints: number;
   resetValues?: Function;
 }
 
@@ -39,6 +40,7 @@ export interface IUpdateUser {
   fullname: string;
   phone: string;
   gender: boolean;
+  accumulatedPoints: number;
   resetValues?: Function;
 }
 

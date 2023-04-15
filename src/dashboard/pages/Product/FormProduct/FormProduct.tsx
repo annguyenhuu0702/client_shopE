@@ -33,7 +33,6 @@ const FormProduct: React.FC = () => {
     name: currentProduct ? currentProduct.name : '',
     productCategoryId: currentProduct ? currentProduct.productCategoryId : '',
     price: currentProduct ? currentProduct.price : 0,
-    priceSale: currentProduct ? currentProduct.priceSale : 0,
     thumbnail: currentProduct ? currentProduct.thumbnail : '',
     description: currentProduct ? currentProduct.description : '',
     material: currentProduct ? currentProduct.material : '',
@@ -57,7 +56,6 @@ const FormProduct: React.FC = () => {
       slug: configSlugify(values.name),
       productCategoryId: values.productCategoryId,
       price: values.price,
-      priceSale: values.priceSale,
       description: values.description,
       material: values.material,
       guide: values.guide,
@@ -103,7 +101,6 @@ const FormProduct: React.FC = () => {
             name: data.name,
             productCategoryId: data && data.productCategoryId,
             price: data.price,
-            priceSale: data.priceSale,
             description: data.description,
             material: data.material,
             guide: data.guide,
@@ -186,9 +183,6 @@ const FormProduct: React.FC = () => {
                   },
                 ]}
               >
-                <InputNumber min={0} className="w-full" />
-              </Form.Item>
-              <Form.Item label="Giá khuyến mãi" name="priceSale">
                 <InputNumber min={0} className="w-full" />
               </Form.Item>
               <Form.Item label="Mô tả" name="description">

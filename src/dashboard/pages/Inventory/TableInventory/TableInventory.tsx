@@ -6,7 +6,6 @@ import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { utils, writeFileXLSX } from 'xlsx';
 import { productVariantApi } from '../../../../apis/productVariant';
-import { categoryActions } from '../../../../redux/slice/categorySlice';
 import {
   productVariantActions,
   productVariantSelector,

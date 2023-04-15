@@ -11,7 +11,7 @@ const ProductRelated: React.FC = () => {
 
   return (
     <div className="mt-16">
-      <h3 className="mb-8 text-4xl font-semibold">Sản phẩm liên quan</h3>
+      <h3 className="mb-8 text-4xl font-semibold">Có thể bạn sẽ thích</h3>
       <Row gutter={[16, 16]}>
         {productsRelatedClient &&
           productsRelatedClient

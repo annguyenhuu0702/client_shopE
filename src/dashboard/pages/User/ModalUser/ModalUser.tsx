@@ -119,6 +119,7 @@ const ModalUser: React.FC = () => {
       password: values.password,
       phone: values.phone,
       gender: values.gender,
+      accumulatedPoints: 0,
     };
     if (currentUser === null) {
       dispatch(

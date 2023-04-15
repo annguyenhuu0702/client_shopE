@@ -31,7 +31,7 @@ export interface ICreateProduct {
   name: string;
   slug: string;
   price: number;
-  priceSale: number;
+  // priceSale: number;
   description: string;
   material: string;
   guide: string;

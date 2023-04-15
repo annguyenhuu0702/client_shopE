@@ -30,7 +30,7 @@ const initialState: productCategoryState = {
     count: 0,
   },
   page: 1,
-  pageSize: 9,
+  pageSize: 12,
   currentProductCategory: null,
   isLoading: false,
   isError: false,

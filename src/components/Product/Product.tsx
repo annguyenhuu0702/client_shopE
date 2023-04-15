@@ -334,7 +334,7 @@ const Product: React.FC<Props> = ({ product }) => {
             </div>
           </div>
         )}
-        {product.priceSale !== 0 && (
+        {product.priceSale > 0 && (
           <div className={cx('tags-percent')}>
             <span>
               -

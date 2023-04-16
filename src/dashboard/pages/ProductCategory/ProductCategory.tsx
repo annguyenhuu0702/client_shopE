@@ -37,7 +37,7 @@ const ProductCategory: React.FC = () => {
           </div>
         </div>
       </Content>
-      {productCategories.count > 9 && (
+      {productCategories.count > 12 && (
         <div className="common-pagination-cus">
           <Pagination
             pageSize={pageSize}

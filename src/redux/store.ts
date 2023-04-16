@@ -10,6 +10,7 @@ import productCategoryReducer from './slice/productCategorySlice';
 import productReducer from './slice/productSlice';
 import productImageReducer from './slice/productImageSlice';
 import productVariantReducer from './slice/productVariantSlice';
+import variantValueReducer from './slice/variantValueSlice';
 import cartReducer from './slice/cartSlice';
 import favoriteProductReducer from './slice/favoriteProductSlice';
 import discountReducer from './slice/discountSlice';
@@ -28,6 +29,7 @@ export const store = configureStore({
     product: productReducer,
     productImage: productImageReducer,
     productVariant: productVariantReducer,
+    variantValue: variantValueReducer,
     favoriteProduct: favoriteProductReducer,
     cart: cartReducer,
     discount: discountReducer,

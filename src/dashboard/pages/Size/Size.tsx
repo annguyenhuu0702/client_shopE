@@ -1,51 +1,54 @@
-import { Layout, Pagination } from 'antd';
 import React, { useEffect } from 'react';
+
+import { Layout, Pagination } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
 import { useTitle } from '../../../hooks/useTitle';
+import { authSelector } from '../../../redux/slice/authSlice';
 import {
-  productVariantActions,
-  productVariantSelector,
-} from '../../../redux/slice/productVariantSlice';
+  variantValueActions,
+  variantValueSelector,
+} from '../../../redux/slice/variantValueSlice';
 import HeaderTitle from '../../components/HeaderTitle';
-import TableInventory from './TableInventory';
+import TableSize from './TableSize/TableSize';
 
 const { Content } = Layout;
 
-const Inventory: React.FC = () => {
+const Size: React.FC = () => {
   const dispatch = useDispatch();
-  const { page, pageSize, productVariants } = useSelector(
-    productVariantSelector
-  );
+  const { user } = useSelector(authSelector);
+  const { sizes, page, pageSize } = useSelector(variantValueSelector);
+
+  useTitle('Kích cỡ');
 
   useEffect(() => {
     dispatch(
-      productVariantActions.getAllProductVariant({
-        p: page,
-        limit: pageSize,
+      variantValueActions.getAllSize({
+        token: user.accessToken,
+        dispatch,
+        params: { p: page, limit: pageSize },
       })
     );
-  }, [dispatch, page, pageSize]);
+  }, [dispatch, page, pageSize, user.accessToken]);
 
-  useTitle('Tồn kho');
   return (
     <main className="section-common">
-      <HeaderTitle title="Tồn kho" />
+      <HeaderTitle title="Kích cỡ" />
       <Content className="common-layout-content-cus">
         <div className="common-content-wrap">
           <div className="common-content">
-            <TableInventory />
+            <TableSize />
           </div>
         </div>
       </Content>
-      {productVariants.count > 12 && (
+      {sizes.count > 12 && (
         <div className="common-pagination-cus">
           <Pagination
             pageSize={pageSize}
             current={page}
-            total={productVariants.count}
+            total={sizes.count}
             showSizeChanger={false}
             onChange={(page: number, pageSize: number) => {
-              dispatch(productVariantActions.setPage({ page, pageSize }));
+              dispatch(variantValueActions.setPage({ page, pageSize }));
             }}
           />
         </div>
@@ -54,4 +57,4 @@ const Inventory: React.FC = () => {
   );
 };
 
-export default Inventory;
+export default Size;

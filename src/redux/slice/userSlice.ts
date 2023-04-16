@@ -23,7 +23,7 @@ const initialState: userState = {
     count: 0,
   },
   page: 1,
-  pageSize: 8,
+  pageSize: 9,
   isLoading: false,
   isError: false,
   currentUser: null,

@@ -10,7 +10,7 @@ import { Menu, MenuProps } from 'antd';
 import classNames from 'classnames/bind';
 import React, { useState } from 'react';
 import { AiOutlineBook } from 'react-icons/ai';
-import { BiCategory, BiCollection, BiComment } from 'react-icons/bi';
+import { BiCategory, BiCollection, BiComment, BiCube } from 'react-icons/bi';
 import { MdInventory } from 'react-icons/md';
 import { TbNews } from 'react-icons/tb';
 import { useLocation, useNavigate } from 'react-router-dom';
@@ -47,9 +47,11 @@ const items: MenuItem[] = [
     'product_management',
     <FontAwesomeIcon icon={faList} />,
     [
-      getItem('Danh mục sản phẩm', routes.productCategoryAdmin),
-      getItem('Sản phẩm', routes.productAdmin),
-      getItem('Khuyến mãi', routes.promotionAdmin),
+      getItem('Danh mục sản phẩm', routes.productCategoryAdmin, <BiCube />),
+      getItem('Sản phẩm', routes.productAdmin, <BiCube />),
+      getItem('Kích thước', routes.sizeAdmin, <BiCube />),
+      getItem('Màu sắc', routes.colorAdmin, <BiCube />),
+      getItem('Khuyến mãi', routes.promotionAdmin, <BiCube />),
     ]
   ),
 

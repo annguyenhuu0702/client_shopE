@@ -42,6 +42,8 @@ export const routes = {
   editNews: '/admin/news/edit/:id',
   orderAdmmin: '/admin/order',
   promotionAdmin: '/admin/discount',
+  sizeAdmin: '/admin/size',
+  colorAdmin: '/admin/color',
 };
 
 // export default routes;

@@ -63,6 +63,7 @@ const FormNews = lazy(() => import('../dashboard/pages/News/FormNews'));
 const Order = lazy(() => import('../dashboard/pages/Order'));
 const Promotion = lazy(() => import('../dashboard/pages/Promotion'));
 const InventoryAdmin = lazy(() => import('../dashboard/pages/Inventory'));
+const Size = lazy(() => import('../dashboard/pages/Size'));
 
 const NotFound = lazy(() => import('../pages/NotFound/NotFound'));
 
@@ -274,6 +275,11 @@ export const privateRoute: IRoute[] = [
   {
     path: routes.orderAdmmin,
     element: Order,
+    layout: DashboardLayout,
+  },
+  {
+    path: routes.sizeAdmin,
+    element: Size,
     layout: DashboardLayout,
   },
   {

@@ -7,6 +7,7 @@ import productCategorySaga from './saga/productCategorySaga';
 import productSaga from './saga/productSaga';
 import productImageSaga from './saga/productImageSaga';
 import productVariantSaga from './saga/productVariantSaga';
+import variantValueSaga from './saga/variantValueSaga';
 import cartSaga from './saga/cartSaga';
 import favoriteSaga from './saga/favoriteProductSaga';
 import discountSaga from './saga/discountSaga';
@@ -22,6 +23,7 @@ function* rootSaga() {
     productSaga(),
     productImageSaga(),
     productVariantSaga(),
+    variantValueSaga(),
     cartSaga(),
     favoriteSaga(),
     discountSaga(),

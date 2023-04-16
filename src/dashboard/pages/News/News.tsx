@@ -37,7 +37,7 @@ const News: React.FC = () => {
           </div>
         </div>
       </Content>
-      {news.count > 9 && (
+      {news.count > 12 && (
         <div className="common-pagination-cus">
           <Pagination
             pageSize={pageSize}

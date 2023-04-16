@@ -61,6 +61,7 @@ const ModalUser: React.FC = () => {
     password: '',
     phone: currentUser ? currentUser.phone : '',
     avatar: currentUser ? currentUser.avatar : '',
+    accumulatedPoints: currentUser ? currentUser.accumulatedPoints : '',
   };
 
   const [form] = Form.useForm();
@@ -112,31 +113,33 @@ const ModalUser: React.FC = () => {
   };
 
   const onFinish = (values: any) => {
-    const formData = {
-      email: values.email,
-      avatar: pathImg,
-      fullname: values.fullname,
-      password: values.password,
-      phone: values.phone,
-      gender: values.gender,
-      accumulatedPoints: 0,
-    };
-    if (currentUser === null) {
-      dispatch(
-        userActions.createUser({
-          token: user.accessToken,
-          dispatch,
-          data: { ...formData, resetValues },
-        })
-      );
-    } else {
-      dispatch(
-        userActions.editUser({
-          token: user.accessToken,
-          dispatch,
-          data: { ...formData, id: currentUser.id, resetValues },
-        })
-      );
+    if (currentUser) {
+      const formData = {
+        email: values.email,
+        avatar: pathImg,
+        fullname: values.fullname,
+        password: values.password,
+        phone: values.phone,
+        gender: values.gender,
+        accumulatedPoints: currentUser.accumulatedPoints,
+      };
+      if (currentUser === null) {
+        dispatch(
+          userActions.createUser({
+            token: user.accessToken,
+            dispatch,
+            data: { ...formData, resetValues },
+          })
+        );
+      } else {
+        dispatch(
+          userActions.editUser({
+            token: user.accessToken,
+            dispatch,
+            data: { ...formData, id: currentUser.id, resetValues },
+          })
+        );
+      }
     }
   };
   const onFinishFailed = (errorInfo: any) => {

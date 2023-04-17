@@ -61,7 +61,7 @@ const TableSize: React.FC = () => {
                 handleEditSize(record);
               }}
             >
-              {/* {record.name} */}
+              {record.name}
             </span>
           </div>
         );

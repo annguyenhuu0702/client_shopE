@@ -34,7 +34,7 @@ const getAllSize = (
   });
 };
 
-const createSize = (
+const createVariantValue = (
   token: string | null,
   dispatch: AppDispatch,
   data: ICreateVariantValue
@@ -42,7 +42,7 @@ const createSize = (
   return apiCallerWithToken(token, dispatch).post(`variantValue/create`, data);
 };
 
-const updateSize = (
+const updateVariantValue = (
   token: string | null,
   dispatch: AppDispatch,
   data: IUpdateVariantValue
@@ -53,7 +53,7 @@ const updateSize = (
   );
 };
 
-const deleteSize = (
+const deleteVariantValue = (
   token: string | null,
   dispatch: AppDispatch,
   id: number
@@ -67,7 +67,7 @@ export const variantValueApi = {
   getAll,
   getAllColor,
   getAllSize,
-  createSize,
-  updateSize,
-  deleteSize,
+  createVariantValue,
+  updateVariantValue,
+  deleteVariantValue,
 };

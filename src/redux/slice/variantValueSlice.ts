@@ -2,6 +2,7 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { deleteParams, tokenPayloadData } from '../../types/common';
 import {
   ICreateVariantValue,
+  IGetAllColor,
   IGetAllSize,
   IUpdateVariantValue,
   IVariantValue,
@@ -140,6 +141,87 @@ const variantValueSlice = createSlice({
     deleteSizeFailed: (state) => {
       state.isLoading = false;
       state.isError = true;
+    },
+    getAllColor: (state, action: PayloadAction<IGetAllColor>) => {
+      state.isLoadingColor = true;
+    },
+    getAllColorSuccess: (state, action: PayloadAction<resColor>) => {
+      state.isLoadingColor = false;
+      state.isErrorColor = false;
+      state.colors.rows = action.payload.rows;
+      state.colors.count = action.payload.count;
+    },
+    getAllColorFailed: (state) => {
+      state.isLoadingColor = false;
+      state.isErrorColor = true;
+    },
+    setPageColor: (
+      state,
+      action: PayloadAction<{ page: number; pageSize: number }>
+    ) => {
+      state.pageColor = action.payload.page;
+      state.pageSizeColor = action.payload.pageSize;
+    },
+    createColor: (
+      state,
+      action: PayloadAction<tokenPayloadData<ICreateVariantValue>>
+    ) => {
+      state.isLoadingColor = true;
+    },
+    createColorSuccess: (state, action: PayloadAction<IVariantValue>) => {
+      state.isLoadingColor = false;
+      state.isErrorColor = false;
+      state.page = 1;
+      state.colors.rows.unshift(action.payload);
+      state.colors.count += 1;
+      if (state.colors.rows.length > 7) {
+        state.colors.rows.splice(state.colors.rows.length - 1, 1);
+      }
+    },
+    createColorFailed: (state) => {
+      state.isLoadingColor = false;
+      state.isErrorColor = true;
+    },
+    setColor: (state, action: PayloadAction<IVariantValue | null>) => {
+      state.currentColor = action.payload;
+    },
+    editColor: (
+      state,
+      action: PayloadAction<tokenPayloadData<IUpdateVariantValue>>
+    ) => {
+      state.isLoadingColor = true;
+    },
+    editColorSuccess: (state, action: PayloadAction<IVariantValue>) => {
+      state.isLoadingColor = false;
+      state.isErrorColor = false;
+      const index = state.colors.rows.findIndex(
+        (item) => item.id === action.payload.id
+      );
+      if (index !== -1) {
+        state.colors.rows[index] = action.payload;
+      }
+    },
+    editColorFailed: (state) => {
+      state.isLoadingColor = false;
+      state.isErrorColor = false;
+    },
+    deleteColor: (state, action: PayloadAction<deleteParams>) => {
+      state.isLoadingColor = true;
+    },
+    deleteColorSuccess: (state, action: PayloadAction<number>) => {
+      state.isErrorColor = false;
+      state.isLoadingColor = false;
+      state.colors.rows = state.colors.rows.filter(
+        (item) => item.id !== action.payload
+      );
+      state.colors.count -= 1;
+      if (state.colors.rows.length === 0) {
+        state.page = state.page - 1;
+      }
+    },
+    deleteColorFailed: (state) => {
+      state.isLoadingColor = false;
+      state.isErrorColor = true;
     },
   },
 });

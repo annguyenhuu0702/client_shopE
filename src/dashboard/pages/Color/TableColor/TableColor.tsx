@@ -30,13 +30,13 @@ import {
   variantValueSelector,
 } from '../../../../redux/slice/variantValueSlice';
 import { IVariantValue } from '../../../../types/variantValue';
-import ModalSize from '../ModalSize/ModalSize';
+import ModalColor from '../ModalColor/ModalColor';
 
-const TableSize: React.FC = () => {
+const TableColor: React.FC = () => {
   const dispatch = useDispatch();
 
   const { isModal } = useSelector(modalSelector);
-  const { sizes, isLoading, page, pageSize } =
+  const { colors, isLoadingColor, pageColor, pageSizeColor } =
     useSelector(variantValueSelector);
   const { user } = useSelector(authSelector);
 
@@ -57,7 +57,7 @@ const TableSize: React.FC = () => {
             <span
               className="cursor-pointer text-blue-600 hover:text-blue-400"
               onClick={() => {
-                handleEditSize(record);
+                handleEditColor(record);
               }}
             >
               {record.name}
@@ -84,7 +84,7 @@ const TableSize: React.FC = () => {
             <EditOutlined
               className="common-icon-edit"
               onClick={() => {
-                handleEditSize(record);
+                handleEditColor(record);
               }}
             />
             <Popconfirm
@@ -104,9 +104,9 @@ const TableSize: React.FC = () => {
     },
   ];
 
-  const handleEditSize = (record: IVariantValue) => {
-    dispatch(variantValueActions.setSize(record));
-    dispatch(modalActions.showModal('Sửa kích cỡ'));
+  const handleEditColor = (record: IVariantValue) => {
+    dispatch(variantValueActions.setColor(record));
+    dispatch(modalActions.showModal('Sửa màu sắc'));
   };
 
   const onFinish = (values: any) => {
@@ -129,27 +129,27 @@ const TableSize: React.FC = () => {
 
   function confirm(record: any) {
     dispatch(
-      variantValueActions.deleteSize({
+      variantValueActions.deleteColor({
         token: user.accessToken,
         dispatch,
         id: record.id,
         params: {
-          p: page,
-          limit: pageSize,
+          p: pageColor,
+          limit: pageSizeColor,
         },
       })
     );
   }
 
-  const handleAddNewSize = () => {
-    dispatch(variantValueActions.setSize(null));
-    dispatch(modalActions.showModal('Thêm kích cỡ'));
+  const handleAddNewColor = () => {
+    dispatch(variantValueActions.setColor(null));
+    dispatch(modalActions.showModal('Thêm màu sắc'));
   };
 
   const handleExportExcel = () => {
     try {
-      const getAllSize = async () => {
-        const data = await variantValueApi.getAllSize(
+      const getAllColor = async () => {
+        const data = await variantValueApi.getAllColor(
           user.accessToken,
           dispatch
         );
@@ -160,17 +160,17 @@ const TableSize: React.FC = () => {
             createdAt: moment(item.createdAt).format('MM/DD/YYYY'),
           }))
         );
-        utils.book_append_sheet(wb, ws, 'Size');
-        writeFileXLSX(wb, 'Size.xlsx');
+        utils.book_append_sheet(wb, ws, 'Color');
+        writeFileXLSX(wb, 'Color.xlsx');
       };
-      getAllSize();
+      getAllColor();
     } catch (error) {
       console.log(error);
     }
   };
   return (
     <React.Fragment>
-      {isModal && <ModalSize />}
+      {isModal && <ModalColor />}
       <Row className="common-row-cus">
         <Col xl={18} style={{ paddingInline: '5px' }}>
           <Form
@@ -237,7 +237,7 @@ const TableSize: React.FC = () => {
           <Button
             type="primary"
             onClick={() => {
-              handleAddNewSize();
+              handleAddNewColor();
             }}
           >
             Thêm mới
@@ -248,15 +248,15 @@ const TableSize: React.FC = () => {
         <Col xl={24} md={24} xs={24}>
           <Table
             dataSource={
-              sizes &&
-              sizes.rows.map((item: IVariantValue) => {
+              colors &&
+              colors.rows.map((item: IVariantValue) => {
                 return {
                   ...item,
                   key: item.id,
                 };
               })
             }
-            loading={isLoading}
+            loading={isLoadingColor}
             columns={columns}
             pagination={false}
             size="small"
@@ -267,4 +267,4 @@ const TableSize: React.FC = () => {
   );
 };
 
-export default TableSize;
+export default TableColor;

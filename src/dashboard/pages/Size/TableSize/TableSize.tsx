@@ -107,21 +107,21 @@ const TableSize: React.FC = () => {
 
   const handleEditSize = (record: IVariantValue) => {
     dispatch(variantValueActions.setSize(record));
-    dispatch(modalActions.showModal('Sửa khách hàng'));
+    dispatch(modalActions.showModal('Sửa kích cỡ'));
   };
 
   const onFinish = (values: any) => {
-    dispatch(
-      userActions.getAllUser({
-        token: user.accessToken,
-        dispatch,
-        params: {
-          p: page,
-          limit: pageSize,
-          [values.option]: values.search,
-        },
-      })
-    );
+    // dispatch(
+    //   userActions.getAllUser({
+    //     token: user.accessToken,
+    //     dispatch,
+    //     params: {
+    //       p: page,
+    //       limit: pageSize,
+    //       [values.option]: values.search,
+    //     },
+    //   })
+    // );
   };
 
   const onFinishFailed = (errorInfo: any) => {
@@ -129,17 +129,17 @@ const TableSize: React.FC = () => {
   };
 
   function confirm(record: any) {
-    dispatch(
-      userActions.deleteUser({
-        token: user.accessToken,
-        dispatch,
-        id: record.id,
-        params: {
-          p: page,
-          limit: pageSize,
-        },
-      })
-    );
+    // dispatch(
+    //   userActions.deleteUser({
+    //     token: user.accessToken,
+    //     dispatch,
+    //     id: record.id,
+    //     params: {
+    //       p: page,
+    //       limit: pageSize,
+    //     },
+    //   })
+    // );
   }
 
   const handleAddNewSize = () => {

@@ -142,7 +142,7 @@ const CategoryPage: React.FC = () => {
             <section className="mb-16" key={index}>
               <div>
                 <h3 className="m-0 mb-8 font-bold text-4xl">
-                  {item.productCategory?.name}
+                  {removeTextBetweenParentheses(item.productCategory?.name)}
                 </h3>
               </div>
               <div className="pb-6">

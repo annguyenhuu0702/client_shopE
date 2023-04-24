@@ -21,13 +21,14 @@ import { IProductVariant } from '../../types/productVariant';
 import { IVariantValue } from '../../types/variantValue';
 import ProductRelated from './ProductRelated/ProductRelated';
 import Loading from '../../components/Loading/Loading';
+import CommentProduct from './CommentProduct/CommentProduct';
 
-const ProductDetail: React.FC = () => {
+const ProductDetail: React.FC = ({ children }: any) => {
   const { user } = useSelector(authSelector);
   const { slug } = useParams();
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { currentProductClient, isLoadingClient } =
+  const { currentProductClient, productsRelatedClient, isLoadingClient } =
     useSelector(productSelector);
 
   const [isDes, setIsDes] = useState<boolean>(true);
@@ -453,8 +454,11 @@ const ProductDetail: React.FC = () => {
               </Col>
             </Row>
           </section>
+          <section>
+            <CommentProduct />
+          </section>
           <section className="product-related">
-            <ProductRelated />
+            {productsRelatedClient.length > 1 && <ProductRelated />}
             <div className="view-all my-10">
               <Link
                 to={`/product-category/${currentProductClient.productCategory.slug}`}

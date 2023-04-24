@@ -17,8 +17,8 @@ export const configSlugify = (text: string) => {
   });
 };
 
-export const removeTextBetweenParentheses = (text: string) => {
-  return text.replace(/ *\([^)]*\) */g, '');
+export const removeTextBetweenParentheses = (text?: string) => {
+  return text?.replace(/ *\([^)]*\) */g, '');
 };
 
 export const removeParenthesis = (text: string) => {

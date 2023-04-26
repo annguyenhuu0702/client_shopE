@@ -101,6 +101,8 @@ const TableInventory: React.FC = () => {
         let wb = utils.book_new();
         let ws = utils.json_to_sheet(
           data.data.data.rows.map((item: IProductVariant) => ({
+            code: item.product.code,
+            name: item.product.name,
             createdAt: moment(item.createdAt).format('MM/DD/YYYY'),
           }))
         );

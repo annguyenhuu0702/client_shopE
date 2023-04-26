@@ -22,6 +22,7 @@ import { IVariantValue } from '../../types/variantValue';
 import ProductRelated from './ProductRelated/ProductRelated';
 import Loading from '../../components/Loading/Loading';
 import CommentProduct from './CommentProduct/CommentProduct';
+import { commentApi } from '../../apis/commentApi';
 
 const ProductDetail: React.FC = ({ children }: any) => {
   const { user } = useSelector(authSelector);
@@ -131,6 +132,17 @@ const ProductDetail: React.FC = ({ children }: any) => {
   useEffect(() => {
     if (currentProductClient) {
       setSelectedImage(currentProductClient.thumbnail);
+    }
+  }, [currentProductClient]);
+
+  useEffect(() => {
+    if (currentProductClient) {
+      const getData = async () => {
+        const res = await commentApi.getAllByProduct(currentProductClient.id);
+        const { data } = res.data;
+        console.log(data);
+      };
+      getData();
     }
   }, [currentProductClient]);
 
@@ -454,7 +466,7 @@ const ProductDetail: React.FC = ({ children }: any) => {
               </Col>
             </Row>
           </section>
-          <section>
+          <section className="my-10">
             <CommentProduct />
           </section>
           <section className="product-related">

@@ -15,6 +15,7 @@ import cartReducer from './slice/cartSlice';
 import favoriteProductReducer from './slice/favoriteProductSlice';
 import discountReducer from './slice/discountSlice';
 import newsReducer from './slice/newsSlice';
+import commentReducer from './slice/collectionSlice';
 
 const sagaMiddleware = createSagaMiddleware();
 
@@ -34,6 +35,7 @@ export const store = configureStore({
     cart: cartReducer,
     discount: discountReducer,
     news: newsReducer,
+    comment: commentReducer,
   },
   middleware: [sagaMiddleware],
 });

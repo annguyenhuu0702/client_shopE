@@ -9,9 +9,11 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import { castToVND } from '../../utils';
 
 import { useDispatch, useSelector } from 'react-redux';
+import Loading from '../../components/Loading/Loading';
 import { useTitle } from '../../hooks/useTitle';
 import { authSelector } from '../../redux/slice/authSlice';
 import { cartActions } from '../../redux/slice/cartSlice';
+import { commentActions } from '../../redux/slice/commentSlice';
 import {
   productActions,
   productSelector,
@@ -19,10 +21,8 @@ import {
 import { IProductImage } from '../../types/productImage';
 import { IProductVariant } from '../../types/productVariant';
 import { IVariantValue } from '../../types/variantValue';
-import ProductRelated from './ProductRelated/ProductRelated';
-import Loading from '../../components/Loading/Loading';
 import CommentProduct from './CommentProduct/CommentProduct';
-import { commentApi } from '../../apis/commentApi';
+import ProductRelated from './ProductRelated/ProductRelated';
 
 const ProductDetail: React.FC = ({ children }: any) => {
   const { user } = useSelector(authSelector);
@@ -137,14 +137,21 @@ const ProductDetail: React.FC = ({ children }: any) => {
 
   useEffect(() => {
     if (currentProductClient) {
-      const getData = async () => {
-        const res = await commentApi.getAllByProduct(currentProductClient.id);
-        const { data } = res.data;
-        console.log(data);
-      };
-      getData();
+      // const getData = async () => {
+      //   const res = await commentApi.getAllByProduct(currentProductClient.id);
+      //   const { data } = res.data;
+      //   console.log(data);
+      // };
+      // getData();
+      dispatch(
+        commentActions.getAllCommentByProduct({
+          // token: user.accessToken,
+          // dispatch,
+          productId: currentProductClient.id,
+        })
+      );
     }
-  }, [currentProductClient]);
+  }, [currentProductClient, dispatch, user.accessToken]);
 
   useTitle(currentProductClient?.name);
 

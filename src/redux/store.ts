@@ -15,7 +15,7 @@ import cartReducer from './slice/cartSlice';
 import favoriteProductReducer from './slice/favoriteProductSlice';
 import discountReducer from './slice/discountSlice';
 import newsReducer from './slice/newsSlice';
-import commentReducer from './slice/collectionSlice';
+import commentReducer from './slice/commentSlice';
 
 const sagaMiddleware = createSagaMiddleware();
 

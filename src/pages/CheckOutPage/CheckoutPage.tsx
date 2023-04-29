@@ -1,4 +1,4 @@
-import type { RadioChangeEvent } from 'antd';
+import { RadioChangeEvent, notification } from 'antd';
 import {
   Badge,
   Button,
@@ -13,16 +13,19 @@ import {
 import React, { useState } from 'react';
 import { AiOutlineRollback } from 'react-icons/ai';
 import { FaMoneyBillAlt } from 'react-icons/fa';
-import { useSelector } from 'react-redux';
-import { Link } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { Link, useNavigate } from 'react-router-dom';
 import { routes } from '../../config/routes';
 import { useTitle } from '../../hooks/useTitle';
 import province from '../../province.json';
 import { authSelector } from '../../redux/slice/authSlice';
 import { cartSelector } from '../../redux/slice/cartSlice';
 import { castToVND } from '../../utils';
+import { paymentApi } from '../../apis/paymentApi';
 
 const CheckoutPage: React.FC = () => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
   const { user } = useSelector(authSelector);
   const [form] = Form.useForm();
   const [value, setValue] = useState(0);
@@ -37,13 +40,36 @@ const CheckoutPage: React.FC = () => {
     city: user.user ? user.user.city : '',
     ward: user.user ? user.user.ward : '',
     district: user.user ? user.user.district : '',
-    address: user.user ? user.user.address : '',
-    accumulatedPoints: '',
-    payment: 0,
+    street: user.user ? user.user.address : '',
+    accumulatedPoints: 0,
+    payment: 1,
   };
 
-  const onFinish = (values: any) => {
-    console.log('Success:', values);
+  const onFinish = async (values: any) => {
+    try {
+      if (user) {
+        const res = await paymentApi.create(user.accessToken, dispatch, {
+          ...values,
+          point: values.accumulatedPoints,
+          shippingCost,
+          totalPrice: totalPrice(),
+        });
+        const { data, status } = res;
+        console.log(data);
+        if (status === 201) {
+          navigate(routes.paymentSuccess);
+        } else {
+          notification.error({
+            message: 'Thất bại',
+            description: 'Có lỗi khi điền form dữ liệu!',
+            placement: 'bottomRight',
+            duration: 3,
+          });
+        }
+      }
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const onFinishFailed = (errorInfo: any) => {
@@ -226,7 +252,7 @@ const CheckoutPage: React.FC = () => {
                     }
                   />
                 </Form.Item>
-                <Form.Item label="Địa chỉ khác" name="address">
+                <Form.Item label="Địa chỉ cụ thể" name="street">
                   <Input />
                 </Form.Item>
               </Col>
@@ -241,9 +267,19 @@ const CheckoutPage: React.FC = () => {
                   <Radio.Group onChange={onChange} value={value}>
                     <Space direction="vertical">
                       <div className="flex items-center justify-between border-2 border-solid border-border-checkout px-4 py-4 mb-4">
-                        <Radio value={0}>
+                        <Radio value={1}>
                           <span className="text-3xl mr-20">
                             Thanh toán khi nhận hàng (Cod)
+                          </span>
+                        </Radio>
+                        <div className="flex items-center text-4xl text-yellow-500">
+                          <FaMoneyBillAlt />
+                        </div>
+                      </div>
+                      <div className="flex items-center justify-between border-2 border-solid border-border-checkout px-4 py-4 mb-4">
+                        <Radio value={2}>
+                          <span className="text-3xl mr-20">
+                            Thanh toán qua cổng PayPal
                           </span>
                         </Radio>
                         <div className="flex items-center text-4xl text-yellow-500">

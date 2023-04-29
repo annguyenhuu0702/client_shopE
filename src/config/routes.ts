@@ -18,6 +18,7 @@ export const routes = {
   searchProduct: '/search',
   news: '/news',
   newsDetail: '/news/:slug',
+  paymentSuccess: '/payment-success',
 
   // admin
   admin: '/admin',

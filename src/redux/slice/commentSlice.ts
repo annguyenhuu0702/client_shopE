@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { IGetAllCategoryParams } from '../../types/category';
+import { getCommentByProduct } from '../../types/comment';
 import { RootState } from '../store';
 
 export interface commentState {
@@ -13,6 +13,10 @@ export interface commentState {
   // client
   commentsClient: resComment;
   currentCommentClient: any | null;
+  pageClient: number;
+  pageSizeClient: number;
+  isLoadingClient: boolean;
+  isErrorClient: boolean;
 }
 
 export interface resComment {
@@ -38,6 +42,10 @@ const initialState: commentState = {
     count: 0,
   },
   currentCommentClient: null,
+  pageClient: 1,
+  pageSizeClient: 12,
+  isLoadingClient: false,
+  isErrorClient: false,
 };
 
 const CommentSlice = createSlice({
@@ -48,33 +56,33 @@ const CommentSlice = createSlice({
       state,
       action: PayloadAction<{ page: number; pageSize: number }>
     ) => {
-      state.page = action.payload.page;
-      state.pageSize = action.payload.pageSize;
+      state.pageClient = action.payload.page;
+      state.pageSizeClient = action.payload.pageSize;
     },
 
     getAllCommentByProduct: (
       state,
-      action: PayloadAction<IGetAllCategoryParams>
+      action: PayloadAction<getCommentByProduct>
     ) => {
-      state.isLoading = true;
+      state.isLoadingClient = true;
     },
     getAllCommentByProductSuccess: (
       state,
       action: PayloadAction<resComment>
     ) => {
-      state.isLoading = false;
-      state.isError = false;
+      state.isLoadingClient = false;
+      state.isErrorClient = false;
       state.commentsClient.rows = action.payload.rows;
       state.commentsClient.count = action.payload.count;
     },
     getAllCommentByProductFailed: (state) => {
-      state.isLoading = false;
-      state.isError = true;
+      state.isLoadingClient = false;
+      state.isErrorClient = true;
     },
   },
 });
 
 export const commentActions = CommentSlice.actions;
-export const commentSelector = (state: RootState) => state.category;
+export const commentSelector = (state: RootState) => state.comment;
 
 export default CommentSlice.reducer;

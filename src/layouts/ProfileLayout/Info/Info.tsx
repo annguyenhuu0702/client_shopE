@@ -64,7 +64,7 @@ const InfoUser: React.FC = () => {
           )}
         </div>
         <div className="text-center mb-2">
-          <span>Nguyễn Hữu An</span>
+          <span>{user.user?.fullname}</span>
         </div>
         <div
           onClick={() => {

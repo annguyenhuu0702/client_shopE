@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { deleteParams } from '../../types/common';
-import { getAllPayment, Payment } from '../../types/payment';
+import { deleteParams, tokenPayloadData } from '../../types/common';
+import { getAllPayment, Payment, updatePayment } from '../../types/payment';
 import { RootState } from '../store';
 
 export interface PaymentState {
@@ -61,6 +61,26 @@ const PaymentSlice = createSlice({
     },
     setPayment: (state, action: PayloadAction<Payment | null>) => {
       state.currentPayment = action.payload;
+    },
+    editPayment: (
+      state,
+      action: PayloadAction<tokenPayloadData<updatePayment>>
+    ) => {
+      state.isLoading = true;
+    },
+    editPaymentSuccess: (state, action: PayloadAction<Payment>) => {
+      state.isLoading = false;
+      state.isError = false;
+      const index = state.payments.rows.findIndex(
+        (item) => item.id === action.payload.id
+      );
+      if (index !== -1) {
+        state.payments.rows[index] = action.payload;
+      }
+    },
+    editPaymentFailed: (state) => {
+      state.isLoading = false;
+      state.isError = false;
     },
     getAllPayment: (state, action: PayloadAction<getAllPayment>) => {
       state.isLoading = true;

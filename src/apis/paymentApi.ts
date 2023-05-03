@@ -1,7 +1,7 @@
 import { AxiosResponse } from 'axios';
 import { apiCallerWithToken } from '../config/configAxios';
 import { AppDispatch } from '../redux/store';
-import { createPayment } from '../types/payment';
+import { createPayment, updatePayment } from '../types/payment';
 import { queryParams } from '../types/common';
 
 const getAll = (
@@ -22,7 +22,19 @@ const create = (
   return apiCallerWithToken(token, dispatch).post('/payment/create', data);
 };
 
+const update = (
+  token: string | null,
+  dispatch: AppDispatch,
+  data: updatePayment
+): Promise<AxiosResponse> => {
+  return apiCallerWithToken(token, dispatch).put(
+    `/payment/update/${data.id}`,
+    data
+  );
+};
+
 export const paymentApi = {
   create,
+  update,
   getAll,
 };

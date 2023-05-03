@@ -60,6 +60,7 @@ const TableOrder: React.FC = () => {
               className="cursor-pointer text-blue-600 hover:text-blue-400"
               onClick={() => {
                 dispatch(modalActions.showModal('Sửa đơn hàng'));
+                dispatch(paymentActions.setPayment(record));
               }}
             >
               {record.fullname}
@@ -129,6 +130,14 @@ const TableOrder: React.FC = () => {
       },
     },
     {
+      title: 'Ngày tạo',
+      dataIndex: 'createdAt',
+      render: (text: string, record: Payment) => {
+        let date = moment(record.createdAt).format('MM/DD/YYYY');
+        return <div>{date}</div>;
+      },
+    },
+    {
       title: 'Hành động',
       dataIndex: 'action',
       width: 100,
@@ -136,23 +145,27 @@ const TableOrder: React.FC = () => {
       render: (text: string, record: Payment) => {
         return (
           <Space size="middle">
+            {/* {record.status !== 'Đã giao hàng' && ( */}
             <EditOutlined
               className="common-icon-edit"
               onClick={() => {
                 handleEditPayment(record);
               }}
             />
-            <Popconfirm
-              placement="topLeft"
-              title={`Bạn có muốn xóa??`}
-              onConfirm={() => {
-                confirm(record);
-              }}
-              okText="Có"
-              cancelText="Không"
-            >
-              <DeleteOutlined className="common-icon-delete" />
-            </Popconfirm>
+            {/* )} */}
+            {record.status === 'Đã giao hàng' && (
+              <Popconfirm
+                placement="topLeft"
+                title={`Bạn có muốn xóa??`}
+                onConfirm={() => {
+                  confirm(record);
+                }}
+                okText="Có"
+                cancelText="Không"
+              >
+                <DeleteOutlined className="common-icon-delete" />
+              </Popconfirm>
+            )}
           </Space>
         );
       },

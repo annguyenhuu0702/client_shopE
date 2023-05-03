@@ -7,8 +7,10 @@ import {
   modalActions,
   modalSelector,
 } from '../../../../redux/slice/modalSlice';
-import { paymentSelector } from '../../../../redux/slice/paymentSlice';
-import { castToVND } from '../../../../utils';
+import {
+  paymentActions,
+  paymentSelector,
+} from '../../../../redux/slice/paymentSlice';
 
 const ModalOrder: React.FC = () => {
   const dispatch = useDispatch();
@@ -28,11 +30,7 @@ const ModalOrder: React.FC = () => {
     status: currentPayment ? currentPayment.status : '',
     shippingCost: currentPayment ? currentPayment.shippingCost : '',
     totalPrice: currentPayment ? currentPayment.totalPrice : '',
-    payment: currentPayment
-      ? currentPayment.payment === 1
-        ? 'Thanh toán bằng tiền mặt'
-        : 'Thanh toán online'
-      : '',
+    payment: currentPayment?.payment,
   };
 
   const [form] = Form.useForm();
@@ -53,35 +51,30 @@ const ModalOrder: React.FC = () => {
   };
 
   const onFinish = (values: any) => {
-    console.log(values);
-    // if (currentUser) {
-    //   const formData = {
-    //     email: values.email,
-    //     fullname: values.fullname,
-    //     password: values.password,
-    //     phone: values.phone,
-    //     gender: values.gender,
-    //     accumulatedPoints: currentUser.accumulatedPoints,
-    //   };
-    //   if (currentUser === null) {
-    //     dispatch(
-    //       userActions.createUser({
-    //         token: user.accessToken,
-    //         dispatch,
-    //         data: { ...formData, resetValues },
-    //       })
-    //     );
-    //   } else {
-    //     dispatch(
-    //       userActions.editUser({
-    //         token: user.accessToken,
-    //         dispatch,
-    //         data: { ...formData, id: currentUser.id, resetValues },
-    //       })
-    //     );
-    //   }
-    // }
+    if (currentPayment) {
+      const formData = {
+        fullname: values.fullName,
+        status: values.status,
+        phone: values.phone,
+        city: values.city,
+        district: values.district,
+        ward: values.ward,
+        shippingCost: values.shippingCost,
+        totalPrice: values.totalPrice,
+        payment: values.payment,
+        point: currentPayment.point,
+        street: currentPayment.street,
+      };
+      dispatch(
+        paymentActions.editPayment({
+          token: user.accessToken,
+          dispatch,
+          data: { ...formData, id: currentPayment.id, resetValues },
+        })
+      );
+    }
   };
+
   const onFinishFailed = (errorInfo: any) => {
     console.log('Failed:', errorInfo);
   };
@@ -127,7 +120,7 @@ const ModalOrder: React.FC = () => {
                   },
                 ]}
               >
-                <Input />
+                <Input disabled />
               </Form.Item>
               <Form.Item
                 label="Số điện thoại"
@@ -139,7 +132,7 @@ const ModalOrder: React.FC = () => {
                   },
                 ]}
               >
-                <Input />
+                <Input disabled />
               </Form.Item>
               <Form.Item
                 label="Tỉnh/Thành phố"
@@ -151,7 +144,7 @@ const ModalOrder: React.FC = () => {
                   },
                 ]}
               >
-                <Input />
+                <Input disabled />
               </Form.Item>
               <Form.Item
                 label="Quận/huyện"
@@ -163,7 +156,7 @@ const ModalOrder: React.FC = () => {
                   },
                 ]}
               >
-                <Input />
+                <Input disabled />
               </Form.Item>
               <Form.Item
                 label="Phường/xã"
@@ -175,7 +168,7 @@ const ModalOrder: React.FC = () => {
                   },
                 ]}
               >
-                <Input />
+                <Input disabled />
               </Form.Item>
             </Col>
             <Col xl={12} md={12}>
@@ -206,12 +199,12 @@ const ModalOrder: React.FC = () => {
                       label: 'Chờ xử lí',
                     },
                     {
-                      value: 'Xác nhận',
-                      label: 'Xác nhận',
+                      value: 'Đang giao hàng',
+                      label: 'Đang giao hàng',
                     },
                     {
-                      value: 'Hoàn thành',
-                      label: 'Hoàn thành',
+                      value: 'Đã giao hàng',
+                      label: 'Đã giao hàng',
                     },
                   ]}
                 />
@@ -226,7 +219,7 @@ const ModalOrder: React.FC = () => {
                   },
                 ]}
               >
-                <Input />
+                <Input disabled />
               </Form.Item>
               <Form.Item
                 label="Tổng tiền"
@@ -238,7 +231,7 @@ const ModalOrder: React.FC = () => {
                   },
                 ]}
               >
-                <Input />
+                <Input disabled />
               </Form.Item>
               <Form.Item
                 label="Hình thức thanh toán"
@@ -251,6 +244,7 @@ const ModalOrder: React.FC = () => {
                 ]}
               >
                 <Select
+                  disabled
                   showSearch
                   // placeholder="Select a person"
                   optionFilterProp="children"

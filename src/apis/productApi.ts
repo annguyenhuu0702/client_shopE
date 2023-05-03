@@ -8,6 +8,10 @@ import {
   IUpdateProduct,
 } from '../types/product';
 
+const getHomePage = () => {
+  return instance.get(`product/getHomePage`);
+};
+
 const getAll = (params?: IGetAllProductParams) => {
   return instance.get(`product/getAll`, {
     params,
@@ -65,4 +69,5 @@ export const productApi = {
   update,
   deleteProduct,
   getByCategory,
+  getHomePage,
 };

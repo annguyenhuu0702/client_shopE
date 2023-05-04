@@ -183,8 +183,10 @@ const ModalOrder: React.FC = () => {
                 ]}
               >
                 <Select
+                  disabled={
+                    currentPayment?.status === 'Đã giao hàng' ? true : false
+                  }
                   showSearch
-                  // placeholder="Select a person"
                   optionFilterProp="children"
                   // onChange={onChange}
                   // onSearch={onSearch}

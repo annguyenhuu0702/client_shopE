@@ -66,7 +66,10 @@ function* deleteDiscountSaga({ payload }: PayloadAction<deleteParams>): any {
         discountActions.getAllDiscount({
           token,
           dispatch,
-          params,
+          params: {
+            p: params?.p,
+            limit: params?.limit,
+          },
         })
       );
     }

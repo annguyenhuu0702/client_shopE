@@ -14,6 +14,16 @@ const getAll = (
   });
 };
 
+const getByUser = (
+  token: string | null,
+  dispatch: AppDispatch,
+  params?: queryParams
+): Promise<AxiosResponse> => {
+  return apiCallerWithToken(token, dispatch).get('/payment/getByUser', {
+    params,
+  });
+};
+
 const create = (
   token: string | null,
   dispatch: AppDispatch,
@@ -33,8 +43,18 @@ const update = (
   );
 };
 
+const deletePayment = (
+  token: string | null,
+  dispatch: AppDispatch,
+  id: number
+): Promise<AxiosResponse> => {
+  return apiCallerWithToken(token, dispatch).delete(`/payment/delete/${id}`);
+};
+
 export const paymentApi = {
   create,
   update,
   getAll,
+  getByUser,
+  deletePayment,
 };

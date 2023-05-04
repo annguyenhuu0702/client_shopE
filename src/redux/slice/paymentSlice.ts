@@ -43,7 +43,7 @@ const initialState: PaymentState = {
   },
   currentPaymentClient: null,
   pageClient: 1,
-  pageSizeClient: 9,
+  pageSizeClient: 5,
   isLoadingClient: false,
   isErrorClient: false,
 };
@@ -99,13 +99,63 @@ const PaymentSlice = createSlice({
     deletePayment: (state, action: PayloadAction<deleteParams>) => {
       state.isLoading = true;
     },
-    deletePaymentSuccess: (state) => {
+    deletePaymentSuccess: (state, action: PayloadAction<number>) => {
       state.isError = false;
       state.isLoading = false;
+      state.payments.rows = state.payments.rows.filter(
+        (item) => item.id !== action.payload
+      );
+      state.payments.count -= 1;
+      if (state.payments.rows.length === 0) {
+        state.page = state.page - 1;
+      }
     },
     deletePaymentFailed: (state) => {
       state.isLoading = false;
       state.isError = true;
+    },
+    getAllPaymentByUser: (state, action: PayloadAction<getAllPayment>) => {
+      state.isLoadingClient = true;
+      state.isErrorClient = false;
+    },
+    getAllPaymentByUserSuccess: (state, action: PayloadAction<resPayment>) => {
+      state.isLoadingClient = false;
+      state.isErrorClient = false;
+      state.paymentClient.rows = action.payload.rows;
+      state.paymentClient.count = action.payload.count;
+    },
+    getAllPaymentByUserFailed: (state) => {
+      state.isLoadingClient = false;
+      state.isErrorClient = true;
+    },
+    setPaymentClient: (state, action: PayloadAction<Payment | null>) => {
+      state.currentPaymentClient = action.payload;
+    },
+    setPageClient: (
+      state,
+      action: PayloadAction<{ page: number; pageSize: number }>
+    ) => {
+      state.pageClient = action.payload.page;
+      state.pageSizeClient = action.payload.pageSize;
+    },
+    deletePaymentClient: (state, action: PayloadAction<deleteParams>) => {
+      state.isLoadingClient = true;
+      state.isErrorClient = false;
+    },
+    deletePaymentClientSuccess: (state, action: PayloadAction<number>) => {
+      state.isErrorClient = false;
+      state.isLoadingClient = false;
+      state.paymentClient.rows = state.paymentClient.rows.filter(
+        (item) => item.id !== action.payload
+      );
+      state.paymentClient.count -= 1;
+      if (state.paymentClient.rows.length === 0) {
+        state.pageClient = state.pageClient - 1;
+      }
+    },
+    deletePaymentClientFailed: (state) => {
+      state.isLoadingClient = false;
+      state.isErrorClient = true;
     },
   },
 });

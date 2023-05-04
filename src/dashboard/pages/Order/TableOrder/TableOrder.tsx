@@ -122,7 +122,12 @@ const TableOrder: React.FC = () => {
       render: (text: string, record: Payment) => {
         return (
           <div>
-            <Tag color="red" className="border-0 text-xl">
+            <Tag
+              color={`${record.status === 'Chờ xử lí' ? 'red' : ''} ${
+                record.status === 'Đang giao hàng' ? 'blue' : ''
+              } ${record.status === 'Đã giao hàng' ? 'green' : ''}`}
+              className="border-0 text-xl"
+            >
               {record.status}
             </Tag>
           </div>
@@ -145,14 +150,14 @@ const TableOrder: React.FC = () => {
       render: (text: string, record: Payment) => {
         return (
           <Space size="middle">
-            {/* {record.status !== 'Đã giao hàng' && ( */}
-            <EditOutlined
-              className="common-icon-edit"
-              onClick={() => {
-                handleEditPayment(record);
-              }}
-            />
-            {/* )} */}
+            {record.status !== 'Đã giao hàng' && (
+              <EditOutlined
+                className="common-icon-edit"
+                onClick={() => {
+                  handleEditPayment(record);
+                }}
+              />
+            )}
             {record.status === 'Đã giao hàng' && (
               <Popconfirm
                 placement="topLeft"
@@ -179,7 +184,7 @@ const TableOrder: React.FC = () => {
 
   const onFinish = (values: any) => {
     dispatch(
-      userActions.getAllUser({
+      paymentActions.getAllPayment({
         token: user.accessToken,
         dispatch,
         params: {
@@ -197,7 +202,7 @@ const TableOrder: React.FC = () => {
 
   function confirm(record: any) {
     dispatch(
-      userActions.deleteUser({
+      paymentActions.deletePayment({
         token: user.accessToken,
         dispatch,
         id: record.id,

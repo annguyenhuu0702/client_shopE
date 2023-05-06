@@ -40,7 +40,7 @@ const Order: React.FC = () => {
           </div>
         </div>
       </Content>
-      {payments.count > 9 && (
+      {payments.count > 12 && (
         <div className="common-pagination-cus">
           <Pagination
             pageSize={pageSize}

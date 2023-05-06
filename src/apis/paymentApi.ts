@@ -51,10 +51,21 @@ const deletePayment = (
   return apiCallerWithToken(token, dispatch).delete(`/payment/delete/${id}`);
 };
 
+const checkPoint = (
+  token: string | null,
+  dispatch: AppDispatch,
+  point: number
+): Promise<AxiosResponse> => {
+  return apiCallerWithToken(token, dispatch).post(`/payment/check-point`, {
+    point,
+  });
+};
+
 export const paymentApi = {
   create,
   update,
   getAll,
   getByUser,
   deletePayment,
+  checkPoint,
 };

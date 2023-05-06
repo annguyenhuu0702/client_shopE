@@ -28,7 +28,10 @@ const CheckoutPage: React.FC = () => {
   const navigate = useNavigate();
   const { user } = useSelector(authSelector);
   const [form] = Form.useForm();
+
   const [value, setValue] = useState(0);
+  const [point, setPoint] = useState<number>(0);
+  const [priceSale, setPriceSale] = useState<number>(0);
 
   const [districts, setDistricts] = useState([]);
   const [wards, setWards] = useState([]);
@@ -50,9 +53,9 @@ const CheckoutPage: React.FC = () => {
       if (user) {
         const res = await paymentApi.create(user.accessToken, dispatch, {
           ...values,
-          point: values.accumulatedPoints,
+          point: +point,
           shippingCost,
-          totalPrice: totalPrice(),
+          totalPrice: totalPrice() + shippingCost - priceSale,
         });
         const { data, status } = res;
         console.log(data);
@@ -83,7 +86,6 @@ const CheckoutPage: React.FC = () => {
     if (checkProvince) {
       setDistricts(checkProvince.districts);
     }
-    console.log(`selected ${value}`);
   };
 
   const handleChangeDistrict = (value: string) => {
@@ -93,15 +95,13 @@ const CheckoutPage: React.FC = () => {
     if (checkDistrict) {
       setWards(checkDistrict.wards);
     }
-    console.log(`selected ${value}`);
   };
 
   const handleChangeWard = (value: string) => {
-    console.log(`selected ${value}`);
+    // console.log(`selected ${value}`);
   };
 
   const onChange = (e: RadioChangeEvent) => {
-    console.log('radio checked', e.target.value);
     setValue(e.target.value);
   };
 
@@ -131,6 +131,23 @@ const CheckoutPage: React.FC = () => {
         0
       );
     return totalProduct || 0;
+  };
+
+  const handleCheckPoint = async () => {
+    try {
+      const res = await paymentApi.checkPoint(
+        user.accessToken,
+        dispatch,
+        point
+      );
+      const status = res.status;
+      if (status === 200) {
+        setPriceSale(point * 100);
+      }
+    } catch (error) {
+      setPoint(0);
+      console.log(error);
+    }
   };
 
   useTitle('Thủ tục thanh toán');
@@ -344,49 +361,56 @@ const CheckoutPage: React.FC = () => {
                     </div>
                   );
                 })}
-              <div className="flex items-center justify-between mt-8 pb-8 border-solid border-0 border-b-2 border-white">
+              <div className="flex items-center justify-between mt-8 pb-4">
                 <div className="w-full mr-12">
-                  <Form.Item name="accumulatedPoints" className="mb-0">
+                  <Form.Item className="mb-0">
                     <Input
+                      value={point}
+                      onChange={(e: any) => {
+                        setPoint(e.target.value);
+                      }}
                       size="large"
                       placeholder="Nhập điểm tích lũy của bạn"
                     />
                   </Form.Item>
                 </div>
-                <Form.Item className="mb-0" shouldUpdate>
-                  {() => (
-                    <Button
-                      type="primary"
-                      size="large"
-                      className="flex items-center justify-center w-44 text-white"
-                      disabled={
-                        !form.isFieldsTouched(false) ||
-                        !!form
-                          .getFieldsError()
-                          .filter(({ errors }: any) => errors.length).length
-                      }
-                    >
-                      Áp dụng
-                    </Button>
-                  )}
+                <Form.Item className="mb-0">
+                  <Button
+                    type="primary"
+                    size="large"
+                    className="flex items-center justify-center w-44 text-white"
+                    onClick={() => {
+                      handleCheckPoint();
+                    }}
+                  >
+                    Áp dụng
+                  </Button>
                 </Form.Item>
+              </div>
+              <div className="pb-8 border-solid border-0 border-b-2 border-white">
+                <span className="text-2xl font-semibold">
+                  Bạn hiện đang có <b>{user.user?.accumulatedPoints}</b> điểm
+                </span>
               </div>
               <div className="mt-8 pb-8 border-solid border-0 border-b-2 border-white">
                 <div className="flex justify-between items-center text-2xl font-semibold mb-4">
                   <span>Tạm tính</span>
                   <span>{castToVND(totalPrice())}</span>
                 </div>
-                <div className="flex justify-between items-center text-2xl font-semibold">
+                <div className="flex justify-between items-center text-2xl font-semibold mb-4">
                   <span>Phí vận chuyển</span>
                   <span>{castToVND(shippingCost)}</span>
                 </div>
-                <div></div>
+                <div className="flex justify-between items-center text-2xl font-semibold">
+                  <span>Điểm tích lũy</span>
+                  <span>-{castToVND(priceSale)}</span>
+                </div>
               </div>
               <div className="mt-8 pb-8 border-solid border-0 border-b-2 border-white">
                 <div className="flex justify-between items-center ">
                   <span className="text-2xl font-semibold mb-4">Tổng cộng</span>
                   <span className="text-4xl font-semibold mb-4 text-amber-500">
-                    {castToVND(totalPrice() + shippingCost)}
+                    {castToVND(totalPrice() + shippingCost - priceSale)}
                   </span>
                 </div>
               </div>

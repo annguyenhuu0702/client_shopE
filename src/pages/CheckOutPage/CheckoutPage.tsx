@@ -1,4 +1,4 @@
-import { RadioChangeEvent, notification } from 'antd';
+import { RadioChangeEvent, message, notification } from 'antd';
 import {
   Badge,
   Button,
@@ -146,6 +146,7 @@ const CheckoutPage: React.FC = () => {
       }
     } catch (error) {
       setPoint(0);
+      message.error('Điểm tích lũy của bạn không đủ!');
       console.log(error);
     }
   };

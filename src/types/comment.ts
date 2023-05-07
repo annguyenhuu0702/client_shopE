@@ -1,4 +1,4 @@
-import { queryParams } from './common';
+import { queryParams, tokenPayload } from './common';
 import { IUser } from './user';
 
 type Comment = {
@@ -18,4 +18,9 @@ type getCommentByProduct = {
   params?: queryParams;
 };
 
-export type { Comment, getCommentByProduct };
+type createComment = queryParams & {
+  content: string;
+  productId: number;
+};
+
+export type { Comment, getCommentByProduct, createComment };

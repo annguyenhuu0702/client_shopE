@@ -1,6 +1,11 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { getCommentByProduct } from '../../types/comment';
+import {
+  Comment,
+  createComment,
+  getCommentByProduct,
+} from '../../types/comment';
 import { RootState } from '../store';
+import { tokenPayloadData } from '../../types/common';
 
 export interface commentState {
   comments: resComment;
@@ -31,7 +36,7 @@ const initialState: commentState = {
     count: 0,
   },
   page: 1,
-  pageSize: 9,
+  pageSize: 12,
   currentComment: null,
   isLoading: false,
   isError: false,
@@ -76,6 +81,30 @@ const CommentSlice = createSlice({
       state.commentsClient.count = action.payload.count;
     },
     getAllCommentByProductFailed: (state) => {
+      state.isLoadingClient = false;
+      state.isErrorClient = true;
+    },
+
+    createCommentByUser: (
+      state,
+      action: PayloadAction<tokenPayloadData<createComment>>
+    ) => {
+      state.isLoadingClient = true;
+    },
+    createCommentByUserSuccess: (state, action: PayloadAction<Comment>) => {
+      state.isLoadingClient = false;
+      state.isErrorClient = false;
+      // state.pageClient = 1;
+      // state.commentsClient.rows.unshift(action.payload);
+      // state.commentsClient.count += 1;
+      // if (state.commentsClient.rows.length > 12) {
+      //   state.commentsClient.rows.splice(
+      //     state.commentsClient.rows.length - 1,
+      //     1
+      //   );
+      // }
+    },
+    createCommentByUserFailed: (state) => {
       state.isLoadingClient = false;
       state.isErrorClient = true;
     },

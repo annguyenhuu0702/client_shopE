@@ -137,12 +137,6 @@ const ProductDetail: React.FC = ({ children }: any) => {
 
   useEffect(() => {
     if (currentProductClient) {
-      // const getData = async () => {
-      //   const res = await commentApi.getAllByProduct(currentProductClient.id);
-      //   const { data } = res.data;
-      //   console.log(data);
-      // };
-      // getData();
       dispatch(
         commentActions.getAllCommentByProduct({
           // token: user.accessToken,

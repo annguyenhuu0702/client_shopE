@@ -1,9 +1,105 @@
 import { Col, Row } from 'antd';
-import React from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { castToVND } from '../../../utils';
 import { AiOutlineDelete } from 'react-icons/ai';
+import { useDispatch } from 'react-redux';
+import { IVariantValue } from '../../../types/variantValue';
+import { variantValueApi } from '../../../apis/variantValueApi';
 
 const ContentFilter: React.FC = () => {
+  const [variant, setVariant] = useState<any>();
+  // const [sizes, setSizes] = useState<IVariantValue[]>([]);
+  // const [colors, setColors] = useState<IVariantValue[]>([]);
+
+  const [activeSize, setActiveSize] = useState<string>('');
+  const [activeColor, setActiveColor] = useState<string>('');
+  const [activePrice, setActivePrice] = useState<string>('');
+
+  const [filter, setFilter] = useState<{}>({});
+
+  const priceFilter = [
+    {
+      label: '0 ₫ - 200.000 ₫',
+      min: 0,
+      max: 200000,
+    },
+    {
+      label: '200.000 ₫ - 400.000 ₫',
+      min: 200000,
+      max: 400000,
+    },
+    {
+      label: '400.000 ₫ - 600.000 ₫',
+      min: 4000000,
+      max: 600000,
+    },
+    {
+      label: '600.000 ₫ - 800.000 ₫',
+      min: 600000,
+      max: 800000,
+    },
+    {
+      label: '800.000 ₫ - 1.000.000 ₫',
+      min: 800000,
+      max: 1000000,
+    },
+    {
+      label: '1.000.000 ₫ - 1.600.000 ₫',
+      min: 1000000,
+      max: 1600000,
+    },
+    {
+      label: '> 1.600.000 ₫',
+      min: 1600000,
+    },
+  ];
+
+  useEffect(() => {
+    try {
+      const getData = async () => {
+        const res = await variantValueApi.getAll();
+        const { data } = res.data;
+        const status = res.status;
+        if (status === 200) {
+          setVariant(data);
+        }
+      };
+      getData();
+    } catch (error) {
+      console.log(error);
+    }
+  }, []);
+
+  console.log(variant);
+
+  // render color
+  const getVariantColors = useMemo(() => {
+    if (variant) {
+      return variant.rows
+        .reverse()
+        .filter((item: IVariantValue) => item.variantId === 2);
+    }
+  }, [variant]);
+
+  // render size
+  const getVariantSizes = useMemo(() => {
+    if (variant) {
+      return variant.rows.filter((item: IVariantValue) => item.variantId === 1);
+    }
+  }, [variant]);
+
+  const handleActiveColor = (name: string) => {
+    setActiveColor(name);
+  };
+
+  const handleActiveSize = (name: string) => {
+    setActiveSize(name);
+  };
+
+  const handleActivePrice = (name: string) => {
+    setActivePrice(name);
+  };
+
   return (
     <section className="w-1000 px-6 pt-6">
       <Row className="border-solid border-0 border-b-2 border-b-bg-layout-profile">
@@ -17,41 +113,23 @@ const ContentFilter: React.FC = () => {
             </div>
             <div>
               <ul className="list-none mb-0">
-                <li className="text-2xl mb-6 py-4 cursor-pointer rounded-2xl bg-name-product text-white">
-                  <span className="ml-8">
-                    {castToVND(0)} - {castToVND(200000)}
-                  </span>
-                </li>
-                <li className="text-2xl mb-6 py-4 cursor-pointer rounded-2xl bg-bg-layout-profile text-name-product">
-                  <span className="ml-8">
-                    {castToVND(200000)} - {castToVND(400000)}
-                  </span>
-                </li>
-                <li className="text-2xl mb-6 py-4 cursor-pointer rounded-2xl bg-bg-layout-profile text-name-product">
-                  <span className="ml-8">
-                    {castToVND(400000)} - {castToVND(600000)}
-                  </span>
-                </li>
-                <li className="text-2xl mb-6 py-4 cursor-pointer rounded-2xl bg-bg-layout-profile text-name-product">
-                  <span className="ml-8">
-                    {castToVND(600000)} - {castToVND(800000)}
-                  </span>
-                </li>
-                <li className="text-2xl mb-6 py-4 cursor-pointer rounded-2xl bg-bg-layout-profile text-name-product">
-                  <span className="ml-8">
-                    {castToVND(800000)} - {castToVND(1000000)}
-                  </span>
-                </li>
-                <li className="text-2xl mb-6 py-4 cursor-pointer rounded-2xl bg-bg-layout-profile text-name-product">
-                  <span className="ml-8">
-                    {castToVND(1000000)} - {castToVND(1600000)}
-                  </span>
-                </li>
-                <li className="text-2xl mb-6 py-4 cursor-pointer rounded-2xl bg-bg-layout-profile text-name-product">
-                  <span className="ml-8">
-                    {'>'} {castToVND(1600000)}
-                  </span>
-                </li>
+                {priceFilter &&
+                  priceFilter.map((item) => {
+                    return (
+                      <li
+                        className={`text-2xl mb-6 py-4 cursor-pointer rounded-2xl ${
+                          item.label === activePrice
+                            ? 'bg-name-product text-white'
+                            : 'text-name-product bg-bg-layout-profile'
+                        }`}
+                        onClick={() => {
+                          handleActivePrice(item.label);
+                        }}
+                      >
+                        <span className="ml-8">{item.label}</span>
+                      </li>
+                    );
+                  })}
               </ul>
             </div>
           </div>
@@ -66,27 +144,23 @@ const ContentFilter: React.FC = () => {
             </div>
             <div>
               <ul className="list-none mb-0 flex flex-wrap">
-                <li className="text-2xl mb-6 p-4 mr-4 cursor-pointer bg-name-product text-white">
-                  <span className="">Trắng</span>
-                </li>
-                <li className="text-2xl mb-6 p-4 mr-4 cursor-pointer bg-bg-layout-profile text-name-product">
-                  <span className="">Đỏ</span>
-                </li>
-                <li className="text-2xl mb-6 p-4 mr-4 cursor-pointer bg-bg-layout-profile text-name-product">
-                  <span className="">Vàng</span>
-                </li>
-                <li className="text-2xl mb-6 p-4 mr-4 cursor-pointer bg-bg-layout-profile text-name-product">
-                  <span className="">Lục</span>
-                </li>
-                <li className="text-2xl mb-6 p-4 mr-4 cursor-pointer bg-bg-layout-profile text-name-product">
-                  <span className="">Lam</span>
-                </li>
-                <li className="text-2xl mb-6 p-4 mr-4 cursor-pointer bg-bg-layout-profile text-name-product">
-                  <span className="">Xanh dương</span>
-                </li>
-                <li className="text-2xl mb-6 p-4 mr-4 cursor-pointer bg-bg-layout-profile text-name-product">
-                  <span className="">Tím</span>
-                </li>
+                {getVariantColors?.map((item: IVariantValue) => {
+                  return (
+                    <li
+                      className={`text-2xl mb-6 py-4 px-6 mr-4 cursor-pointer ${
+                        item.name === activeColor
+                          ? 'bg-name-product text-white'
+                          : 'bg-bg-layout-profile text-name-product'
+                      } `}
+                      key={item.id}
+                      onClick={() => {
+                        handleActiveColor(item.name);
+                      }}
+                    >
+                      <span className="">{item.name}</span>
+                    </li>
+                  );
+                })}
               </ul>
             </div>
           </div>
@@ -101,21 +175,23 @@ const ContentFilter: React.FC = () => {
             </div>
             <div>
               <ul className="list-none mb-0 flex flex-wrap">
-                <li className="text-2xl mb-6 py-4 px-6 mr-4 cursor-pointer bg-name-product text-white">
-                  <span className="">S</span>
-                </li>
-                <li className="text-2xl mb-6 py-4 px-6 mr-4 cursor-pointer bg-bg-layout-profile text-name-product">
-                  <span className="">M</span>
-                </li>
-                <li className="text-2xl mb-6 py-4 px-6 mr-4 cursor-pointer bg-bg-layout-profile text-name-product">
-                  <span className="">L</span>
-                </li>
-                <li className="text-2xl mb-6 py-4 px-6 mr-4 cursor-pointer bg-bg-layout-profile text-name-product">
-                  <span className="">XL</span>
-                </li>
-                <li className="text-2xl mb-6 py-4 px-6 mr-4 cursor-pointer bg-bg-layout-profile text-name-product">
-                  <span className="">XXL</span>
-                </li>
+                {getVariantSizes?.map((item: IVariantValue) => {
+                  return (
+                    <li
+                      className={`text-2xl mb-6 py-4 px-6 mr-4 cursor-pointer ${
+                        item.name === activeSize
+                          ? 'bg-name-product text-white'
+                          : 'bg-bg-layout-profile text-name-product'
+                      } `}
+                      key={item.id}
+                      onClick={() => {
+                        handleActiveSize(item.name);
+                      }}
+                    >
+                      <span>{item.name}</span>
+                    </li>
+                  );
+                })}
               </ul>
             </div>
           </div>

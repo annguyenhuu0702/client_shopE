@@ -17,6 +17,10 @@ export interface userState {
   isError: boolean;
   currentColor: IVariantValue | null;
 
+  // client
+  sizesClient: resSize;
+  colorsClient: resColor;
+
   colors: resColor;
   pageColor: number;
   pageSizeColor: number;
@@ -55,6 +59,17 @@ const initialState: userState = {
   pageSizeColor: 12,
   isLoadingColor: false,
   isErrorColor: false,
+
+  // client
+  sizesClient: {
+    rows: [],
+    count: 0,
+  },
+
+  colorsClient: {
+    rows: [],
+    count: 0,
+  },
 };
 
 const variantValueSlice = createSlice({
@@ -222,6 +237,20 @@ const variantValueSlice = createSlice({
     deleteColorFailed: (state) => {
       state.isLoadingColor = false;
       state.isErrorColor = true;
+    },
+
+    getAllSizeClient: (state, action: PayloadAction<IGetAllSize>) => {
+      state.isLoading = true;
+    },
+    getAllSizeClientSuccess: (state, action: PayloadAction<resSize>) => {
+      state.isLoading = false;
+      state.isError = false;
+      state.sizesClient.rows = action.payload.rows;
+      state.sizesClient.count = action.payload.count;
+    },
+    getAllSizeClientFailed: (state) => {
+      state.isLoading = false;
+      state.isError = true;
     },
   },
 });

@@ -204,6 +204,22 @@ function* deleteColorSaga({ payload }: PayloadAction<deleteParams>): any {
   }
 }
 
+function* getAllSizeClientSaga({ payload }: PayloadAction<IGetAllSize>): any {
+  try {
+    const { token, dispatch, params } = payload;
+    const res = yield call(() => {
+      return variantValueApi.getAllSize(token, dispatch, params);
+    });
+    const { data, status } = res;
+    if (status === STATUS_CODE.SUCCESS) {
+      yield put(variantValueActions.getAllSizeClientSuccess(data.data));
+    }
+  } catch (err) {
+    console.log(err);
+    yield put(variantValueActions.getAllSizeClientFailed());
+  }
+}
+
 function* userSaga() {
   yield takeEvery('variantValue/getAllSize', getAllSizeSaga);
   yield takeEvery('variantValue/createSize', createSizeSaga);
@@ -213,6 +229,7 @@ function* userSaga() {
   yield takeEvery('variantValue/createColor', createColorSaga);
   yield takeEvery('variantValue/editColor', editColorSaga);
   yield takeEvery('variantValue/deleteColor', deleteColorSaga);
+  yield takeEvery('variantValue/getAllSizeClient', getAllSizeClientSaga);
 }
 
 export default userSaga;

@@ -23,4 +23,12 @@ type createComment = queryParams & {
   productId: number;
 };
 
-export type { Comment, getCommentByProduct, createComment };
+type getAllComment = tokenPayload & {
+  params?: IGetAllCommentParams;
+};
+
+export interface IGetAllCommentParams extends queryParams {
+  fullname?: string;
+}
+
+export type { Comment, getCommentByProduct, createComment, getAllComment };

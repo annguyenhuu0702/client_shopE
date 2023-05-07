@@ -70,7 +70,7 @@ const CommentProduct: React.FC = () => {
           </div>
         )}
         <div className="flex flex-col gap-8 mt-6">
-          {commentsClient &&
+          {commentsClient && commentsClient.count > 0 ? (
             commentsClient.rows.map((comment: Comment) => {
               return (
                 <div
@@ -99,7 +99,14 @@ const CommentProduct: React.FC = () => {
                   </div>
                 </div>
               );
-            })}
+            })
+          ) : (
+            <div className="my-6 border border-solid border-gray-400 rounded-md">
+              <span className="flex justify-center text-3xl py-12">
+                Hiện chưa có bình luận nào cho sản phẩm này!
+              </span>
+            </div>
+          )}
         </div>
       </Col>
     </Row>

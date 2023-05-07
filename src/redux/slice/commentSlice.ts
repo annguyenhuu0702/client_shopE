@@ -2,10 +2,11 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import {
   Comment,
   createComment,
+  getAllComment,
   getCommentByProduct,
 } from '../../types/comment';
 import { RootState } from '../store';
-import { tokenPayloadData } from '../../types/common';
+import { deleteParams, tokenPayloadData } from '../../types/common';
 
 export interface commentState {
   comments: resComment;
@@ -65,6 +66,36 @@ const CommentSlice = createSlice({
       state.pageSizeClient = action.payload.pageSize;
     },
 
+    setComment: (state, action: PayloadAction<Comment | null>) => {
+      state.currentComment = action.payload;
+    },
+
+    getAllComment: (state, action: PayloadAction<getAllComment>) => {
+      state.isLoading = true;
+    },
+    getAllCommentSuccess: (state, action: PayloadAction<resComment>) => {
+      state.isLoading = false;
+      state.isError = false;
+      state.comments.rows = action.payload.rows;
+      state.comments.count = action.payload.count;
+    },
+    getAllCommentFailed: (state) => {
+      state.isLoading = false;
+      state.isError = true;
+    },
+
+    deleteComment: (state, action: PayloadAction<deleteParams>) => {
+      state.isLoading = true;
+    },
+    deleteCommentSuccess: (state) => {
+      state.isError = false;
+      state.isLoading = false;
+    },
+    deleteCommentFailed: (state) => {
+      state.isLoading = false;
+      state.isError = true;
+    },
+
     getAllCommentByProduct: (
       state,
       action: PayloadAction<getCommentByProduct>
@@ -94,15 +125,6 @@ const CommentSlice = createSlice({
     createCommentByUserSuccess: (state, action: PayloadAction<Comment>) => {
       state.isLoadingClient = false;
       state.isErrorClient = false;
-      // state.pageClient = 1;
-      // state.commentsClient.rows.unshift(action.payload);
-      // state.commentsClient.count += 1;
-      // if (state.commentsClient.rows.length > 12) {
-      //   state.commentsClient.rows.splice(
-      //     state.commentsClient.rows.length - 1,
-      //     1
-      //   );
-      // }
     },
     createCommentByUserFailed: (state) => {
       state.isLoadingClient = false;

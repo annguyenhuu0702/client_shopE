@@ -4,6 +4,16 @@ import { queryParams } from '../types/common';
 import { AppDispatch } from '../redux/store';
 import { createComment } from '../types/comment';
 
+const getAllComment = (
+  token: string | null,
+  dispatch: AppDispatch,
+  params?: queryParams
+): Promise<AxiosResponse> => {
+  return apiCallerWithToken(token, dispatch).get('/comment/getAll', {
+    params,
+  });
+};
+
 const getAllByProduct = (
   productId: number,
   params?: queryParams
@@ -21,7 +31,17 @@ const addCommentByUser = (
   return apiCallerWithToken(token, dispatch).post('/comment/create', data);
 };
 
+const deleteComment = (
+  token: string | null,
+  dispatch: AppDispatch,
+  id: number
+): Promise<AxiosResponse> => {
+  return apiCallerWithToken(token, dispatch).delete(`/comment/delete/${id}`);
+};
+
 export const commentApi = {
   getAllByProduct,
   addCommentByUser,
+  getAllComment,
+  deleteComment,
 };

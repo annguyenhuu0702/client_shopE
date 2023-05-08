@@ -26,11 +26,11 @@ const Comment: React.FC = () => {
     );
   }, [dispatch, user.accessToken]);
 
-  useTitle('Bình luận');
+  useTitle('Đánh giá');
 
   return (
     <main className="section-common">
-      <HeaderTitle title="Bình luận" />
+      <HeaderTitle title="Đánh giá" />
       <Content className="common-layout-content-cus">
         <div className="common-content-wrap">
           <div className="common-content">

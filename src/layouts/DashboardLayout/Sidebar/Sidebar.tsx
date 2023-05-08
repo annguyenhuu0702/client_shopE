@@ -9,7 +9,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Menu, MenuProps } from 'antd';
 import classNames from 'classnames/bind';
 import React, { useState } from 'react';
-import { AiOutlineBook } from 'react-icons/ai';
+import { AiOutlineBarChart, AiOutlineBook } from 'react-icons/ai';
 import { BiCategory, BiCollection, BiComment, BiCube } from 'react-icons/bi';
 import { MdInventory } from 'react-icons/md';
 import { TbNews } from 'react-icons/tb';
@@ -40,13 +40,13 @@ function getItem(
 const items: MenuItem[] = [
   getItem('Trang chủ', routes.admin, <BarChartOutlined />),
   getItem('Khách hàng', routes.userAdmin, <UserOutlined />),
-  getItem('Danh mục', routes.categoryAdmin, <BiCategory />),
-  getItem('Bộ sưu tập', routes.collectionAdmin, <BiCollection />),
   getItem(
     'Quản lý sản phẩm',
     'product_management',
     <FontAwesomeIcon icon={faList} />,
     [
+      getItem('Danh mục', routes.categoryAdmin, <BiCategory />),
+      getItem('Bộ sưu tập', routes.collectionAdmin, <BiCollection />),
       getItem('Danh mục sản phẩm', routes.productCategoryAdmin, <BiCube />),
       getItem('Sản phẩm', routes.productAdmin, <BiCube />),
       getItem('Kích thước', routes.sizeAdmin, <BiCube />),
@@ -57,8 +57,9 @@ const items: MenuItem[] = [
 
   getItem('Tồn kho', routes.inventoryAdmin, <MdInventory />),
   getItem('Đơn hàng', routes.orderAdmmin, <AiOutlineBook />),
-  getItem('Bình luận', routes.commentAdmin, <BiComment />),
+  getItem('Đánh giá', routes.commentAdmin, <BiComment />),
   getItem('Tin tức', routes.newsAdmin, <TbNews />),
+  getItem('Thống kê', routes.statisticalAdmin, <AiOutlineBarChart />),
 ];
 
 const Sidebar: React.FC = () => {

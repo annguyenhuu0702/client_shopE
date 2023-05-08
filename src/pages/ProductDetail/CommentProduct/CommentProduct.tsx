@@ -43,7 +43,7 @@ const CommentProduct: React.FC = () => {
   };
 
   const handleEditComment = (comment: Comment) => {
-    dispatch(modalActions.showModal('Sửa bình luận'));
+    dispatch(modalActions.showModal('Sửa đánh giá'));
     dispatch(commentActions.setComment(comment));
   };
 

@@ -45,6 +45,7 @@ export const routes = {
   promotionAdmin: '/admin/discount',
   sizeAdmin: '/admin/size',
   colorAdmin: '/admin/color',
+  statisticalAdmin: '/admin/statistical',
 };
 
 // export default routes;

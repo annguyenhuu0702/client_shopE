@@ -61,6 +61,13 @@ const deleteProduct = (
   return apiCallerWithToken(token, dispatch).delete(`product/delete/${id}`);
 };
 
+const getHomeAdmin = (
+  token: string | null,
+  dispatch: AppDispatch
+): Promise<AxiosResponse> => {
+  return apiCallerWithToken(token, dispatch).get(`admin/getHomeAdmin`);
+};
+
 export const productApi = {
   create,
   getAll,
@@ -70,4 +77,5 @@ export const productApi = {
   deleteProduct,
   getByCategory,
   getHomePage,
+  getHomeAdmin,
 };

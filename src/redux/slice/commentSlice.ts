@@ -2,15 +2,17 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import {
   Comment,
   createComment,
+  deleteComment,
   getAllComment,
   getCommentByProduct,
+  updateComment,
 } from '../../types/comment';
 import { RootState } from '../store';
 import { deleteParams, tokenPayloadData } from '../../types/common';
 
 export interface commentState {
   comments: resComment;
-  currentComment: any | null;
+  currentComment: Comment | null;
   page: number;
   pageSize: number;
   isLoading: boolean;
@@ -18,7 +20,7 @@ export interface commentState {
 
   // client
   commentsClient: resComment;
-  currentCommentClient: any | null;
+  currentCommentClient: Comment | null;
   pageClient: number;
   pageSizeClient: number;
   isLoadingClient: boolean;
@@ -122,13 +124,40 @@ const CommentSlice = createSlice({
     ) => {
       state.isLoadingClient = true;
     },
-    createCommentByUserSuccess: (state, action: PayloadAction<Comment>) => {
+    createCommentByUserSuccess: (state) => {
       state.isLoadingClient = false;
       state.isErrorClient = false;
     },
     createCommentByUserFailed: (state) => {
       state.isLoadingClient = false;
       state.isErrorClient = true;
+    },
+
+    editCommentByUser: (
+      state,
+      action: PayloadAction<tokenPayloadData<updateComment>>
+    ) => {
+      state.isLoadingClient = true;
+    },
+    editCommentByUserSuccess: (state) => {
+      state.isLoadingClient = false;
+      state.isErrorClient = false;
+    },
+    editCommentByUserFailed: (state) => {
+      state.isLoadingClient = false;
+      state.isErrorClient = true;
+    },
+
+    deleteCommentByUser: (state, action: PayloadAction<deleteComment>) => {
+      state.isLoading = true;
+    },
+    deleteCommentByUserSuccess: (state) => {
+      state.isError = false;
+      state.isLoading = false;
+    },
+    deleteCommentByUserFailed: (state) => {
+      state.isLoading = false;
+      state.isError = true;
     },
   },
 });

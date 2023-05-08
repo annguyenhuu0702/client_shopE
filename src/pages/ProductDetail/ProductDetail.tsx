@@ -139,8 +139,6 @@ const ProductDetail: React.FC = ({ children }: any) => {
     if (currentProductClient) {
       dispatch(
         commentActions.getAllCommentByProduct({
-          // token: user.accessToken,
-          // dispatch,
           productId: currentProductClient.id,
         })
       );

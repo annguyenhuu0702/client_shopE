@@ -2,7 +2,7 @@ import { AxiosResponse } from 'axios';
 import instance, { apiCallerWithToken } from '../config/configAxios';
 import { queryParams } from '../types/common';
 import { AppDispatch } from '../redux/store';
-import { createComment } from '../types/comment';
+import { createComment, updateComment } from '../types/comment';
 
 const getAllComment = (
   token: string | null,
@@ -31,6 +31,17 @@ const addCommentByUser = (
   return apiCallerWithToken(token, dispatch).post('/comment/create', data);
 };
 
+const editCommentByUser = (
+  token: string | null,
+  dispatch: AppDispatch,
+  data: updateComment
+): Promise<AxiosResponse> => {
+  return apiCallerWithToken(token, dispatch).put(
+    `/comment/update/${data.id}`,
+    data
+  );
+};
+
 const deleteComment = (
   token: string | null,
   dispatch: AppDispatch,
@@ -42,6 +53,7 @@ const deleteComment = (
 export const commentApi = {
   getAllByProduct,
   addCommentByUser,
+  editCommentByUser,
   getAllComment,
   deleteComment,
 };

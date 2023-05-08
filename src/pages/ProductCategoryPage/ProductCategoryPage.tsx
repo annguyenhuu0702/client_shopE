@@ -281,6 +281,10 @@ const ProductCategoryPage: React.FC = () => {
                         queryString = `?` + queryString;
                       }
                       navigate(`${location.pathname}${queryString}`);
+                      window.scrollTo({
+                        top: 0,
+                        behavior: 'smooth',
+                      });
                     }}
                   />
                 </section>

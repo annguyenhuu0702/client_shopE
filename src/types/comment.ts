@@ -1,4 +1,4 @@
-import { queryParams, tokenPayload } from './common';
+import { deleteParams, queryParams, tokenPayload } from './common';
 import { IUser } from './user';
 
 type Comment = {
@@ -23,12 +23,27 @@ type createComment = queryParams & {
   productId: number;
 };
 
+type updateComment = createComment & {
+  id: number;
+};
+
 type getAllComment = tokenPayload & {
   params?: IGetAllCommentParams;
+};
+
+type deleteComment = deleteParams & {
+  productId: number;
 };
 
 export interface IGetAllCommentParams extends queryParams {
   fullname?: string;
 }
 
-export type { Comment, getCommentByProduct, createComment, getAllComment };
+export type {
+  Comment,
+  getCommentByProduct,
+  createComment,
+  updateComment,
+  getAllComment,
+  deleteComment,
+};

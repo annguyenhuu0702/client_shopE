@@ -61,6 +61,26 @@ const checkPoint = (
   });
 };
 
+const getRevenueMonth = (
+  token: string | null,
+  dispatch: AppDispatch,
+  params?: any
+): Promise<AxiosResponse> => {
+  return apiCallerWithToken(token, dispatch).get(`/payment/revenue-month`, {
+    params,
+  });
+};
+
+const getRevenueYear = (
+  token: string | null,
+  dispatch: AppDispatch,
+  params?: any
+): Promise<AxiosResponse> => {
+  return apiCallerWithToken(token, dispatch).get(`/payment/revenue-year`, {
+    params,
+  });
+};
+
 export const paymentApi = {
   create,
   update,
@@ -68,4 +88,6 @@ export const paymentApi = {
   getByUser,
   deletePayment,
   checkPoint,
+  getRevenueMonth,
+  getRevenueYear,
 };

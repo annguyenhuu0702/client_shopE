@@ -1,5 +1,4 @@
 import {
-  BarChartOutlined,
   MenuFoldOutlined,
   MenuUnfoldOutlined,
   UserOutlined,
@@ -9,13 +8,17 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Menu, MenuProps } from 'antd';
 import classNames from 'classnames/bind';
 import React, { useState } from 'react';
-import { AiOutlineBarChart, AiOutlineBook } from 'react-icons/ai';
+import {
+  AiOutlineBarChart,
+  AiOutlineBook,
+  AiOutlineHome,
+} from 'react-icons/ai';
 import { BiCategory, BiCollection, BiComment, BiCube } from 'react-icons/bi';
-import { MdInventory } from 'react-icons/md';
+import { FaWarehouse } from 'react-icons/fa';
 import { TbNews } from 'react-icons/tb';
 import { useLocation, useNavigate } from 'react-router-dom';
-import styles from './__sidebar.module.scss';
 import { routes } from '../../../config/routes';
+import styles from './__sidebar.module.scss';
 
 const cx = classNames.bind(styles);
 
@@ -38,7 +41,7 @@ function getItem(
 }
 
 const items: MenuItem[] = [
-  getItem('Trang chủ', routes.admin, <BarChartOutlined />),
+  getItem('Trang chủ', routes.admin, <AiOutlineHome />),
   getItem('Khách hàng', routes.userAdmin, <UserOutlined />),
   getItem(
     'Quản lý sản phẩm',
@@ -55,7 +58,7 @@ const items: MenuItem[] = [
     ]
   ),
 
-  getItem('Tồn kho', routes.inventoryAdmin, <MdInventory />),
+  getItem('Tồn kho', routes.inventoryAdmin, <FaWarehouse />),
   getItem('Đơn hàng', routes.orderAdmmin, <AiOutlineBook />),
   getItem('Đánh giá', routes.commentAdmin, <BiComment />),
   getItem('Tin tức', routes.newsAdmin, <TbNews />),

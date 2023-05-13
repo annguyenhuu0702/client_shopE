@@ -124,8 +124,8 @@ const HeaderTop: React.FC = () => {
                     <Link
                       to={
                         user.user.role === 'admin'
-                          ? '/admin/profile'
-                          : '/account'
+                          ? routes.admin
+                          : routes.profile
                       }
                       className="text"
                     >

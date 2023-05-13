@@ -26,14 +26,14 @@ const TableInventory: React.FC = () => {
       width: 150,
       align: 'center' as AlignType,
       render: (text: string, record: IProductVariant) => {
-        return <Text mark>{record.product.code}</Text>;
+        return <Text mark>{record?.product?.code}</Text>;
       },
     },
     {
       title: 'Tên sản phẩm',
       align: 'center' as AlignType,
       render: (text: string, record: IProductVariant) => {
-        return <span>{record.product.name}</span>;
+        return <span>{record?.product?.name}</span>;
       },
     },
     {
@@ -43,7 +43,7 @@ const TableInventory: React.FC = () => {
       render: (text: string, record: IProductVariant) => {
         return (
           <span>
-            {record.variantValues.find((item) => item.variantId === 1)?.name}
+            {record?.variantValues?.find((item) => item?.variantId === 1)?.name}
           </span>
         );
       },
@@ -55,7 +55,7 @@ const TableInventory: React.FC = () => {
       render: (text: string, record: IProductVariant) => {
         return (
           <span>
-            {record.variantValues.find((item) => item.variantId === 2)?.name}
+            {record?.variantValues?.find((item) => item?.variantId === 2)?.name}
           </span>
         );
       },
@@ -66,14 +66,14 @@ const TableInventory: React.FC = () => {
       width: 150,
       align: 'center' as AlignType,
       render: (text: string, record: IProductVariant) => {
-        return <span className="font-bold">{record.inventory}</span>;
+        return <span className="font-bold">{record?.inventory}</span>;
       },
     },
     {
       title: 'Ngày tạo',
       align: 'center' as AlignType,
       render: (text: string, record: IProductVariant) => {
-        let date = moment(record.createdAt).format('MM/DD/YYYY');
+        let date = moment(record?.createdAt).format('MM/DD/YYYY');
         return <div>{date}</div>;
       },
     },

@@ -253,16 +253,24 @@ const ProductDetail: React.FC = ({ children }: any) => {
                       MÃ SP: <b>{currentProductClient.code}</b>
                     </span>
                   </div>
-                  <div className="flex items-center text-3xl mb-4">
-                    <span className="mr-16">
-                      {castToVND(currentProductClient.price)}
-                    </span>
-                    {currentProductClient.priceSale > 0 && (
+                  {currentProductClient?.priceSale > 0 ? (
+                    <div className="flex items-center text-3xl mb-4">
+                      {currentProductClient.priceSale > 0 && (
+                        <span className="mr-8">
+                          {castToVND(currentProductClient.priceSale)}
+                        </span>
+                      )}
                       <span className="text-root-price line-through">
-                        {castToVND(currentProductClient.priceSale)}
+                        {castToVND(currentProductClient.price)}
                       </span>
-                    )}
-                  </div>
+                    </div>
+                  ) : (
+                    <div className="flex items-center text-3xl mb-4">
+                      <span className="text-black">
+                        {castToVND(currentProductClient.price)}
+                      </span>
+                    </div>
+                  )}
                   {colors.length > 0 && (
                     <div>
                       <h3>Màu sắc:</h3>

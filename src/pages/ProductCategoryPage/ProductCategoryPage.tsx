@@ -1,5 +1,5 @@
 import { Breadcrumb, Col, Pagination, Popover, Row } from 'antd';
-import React, { useEffect, useMemo } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { AiOutlineFilter } from 'react-icons/ai';
 import { BsSortDown, BsSortUp } from 'react-icons/bs';
 import { useDispatch, useSelector } from 'react-redux';
@@ -40,6 +40,14 @@ const ProductCategoryPage: React.FC = () => {
   const sortBy = searchParams.get('sortBy');
   const sortType = searchParams.get('sortType');
 
+  const min = searchParams.get('min');
+  const max = searchParams.get('max');
+  const sizesId = searchParams.get('sizesId');
+  const colorsId = searchParams.get('colorsId');
+
+  // tắt mở popup filter
+  const [isOpen, setIsOpen] = useState<boolean>(false);
+
   const { currentCollectionClient } = useSelector(collectionSelector);
   const { currentProductCategoryClient } = useSelector(productCategorySelector);
   const dispatch = useDispatch();
@@ -50,6 +58,25 @@ const ProductCategoryPage: React.FC = () => {
     const params = {
       sortBy: 'price',
       ...(!sortType || sortType === 'DESC' ? { sortType: 'ASC' } : {}),
+      ...(min ? { min } : {}),
+      ...(max ? { max } : {}),
+      ...(sizesId ? { sizesId } : {}),
+      ...(colorsId ? { colorsId } : {}),
+      ...(p && +p > 1 ? { p: '' + p } : {}),
+    };
+    let queryString = new URLSearchParams(params).toString();
+    if (queryString !== '') {
+      queryString = `?` + queryString;
+    }
+    navigate(`${location.pathname}${queryString}`);
+  };
+
+  const handleFilter = (obj: any) => {
+    const params = {
+      ...(p && +p > 1 ? { p: '' + p } : {}),
+      ...(sortBy ? { sortBy: '' + sortBy } : {}),
+      ...(!sortType || sortType === 'DESC' ? { sortType: 'ASC' } : {}),
+      ...obj,
     };
     let queryString = new URLSearchParams(params).toString();
     if (queryString !== '') {
@@ -178,9 +205,24 @@ const ProductCategoryPage: React.FC = () => {
         {productsClient.count > 0 && (
           <div className="flex w-96 gap-4 max-lg:hidden">
             <Popover
-              content={<ContentFilter />}
+              content={
+                <ContentFilter
+                  onClosePopup={() => {
+                    setIsOpen(false);
+                  }}
+                  min={min ? +min : -1}
+                  max={max ? +max : -1}
+                  colorsId={colorsId ? colorsId : ''}
+                  sizesId={sizesId ? sizesId : ''}
+                  handleFilter={handleFilter}
+                />
+              }
               trigger="click"
               placement="bottomLeft"
+              open={isOpen}
+              onOpenChange={(visible) => {
+                setIsOpen(visible);
+              }}
             >
               <div className="w-1/2 flex items-center justify-center cursor-pointer text-red-500 font-semibold text-2xl bg-bg-layout-profile px-6 py-4">
                 <span>Bộ lọc</span>
@@ -276,6 +318,10 @@ const ProductCategoryPage: React.FC = () => {
                         ...(sortBy ? { sortBy: '' + sortBy } : {}),
                         ...(sortType ? { sortType: '' + sortType } : {}),
                         ...(page > 1 ? { p: '' + page } : {}),
+                        ...(min ? { min } : {}),
+                        ...(max ? { max } : {}),
+                        ...(sizesId ? { sizesId } : {}),
+                        ...(colorsId ? { colorsId } : {}),
                       }).toString();
                       if (queryString !== '') {
                         queryString = `?` + queryString;

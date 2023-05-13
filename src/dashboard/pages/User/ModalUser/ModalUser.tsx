@@ -113,33 +113,31 @@ const ModalUser: React.FC = () => {
   };
 
   const onFinish = (values: any) => {
-    if (currentUser) {
-      const formData = {
-        email: values.email,
-        avatar: pathImg,
-        fullname: values.fullname,
-        password: values.password,
-        phone: values.phone,
-        gender: values.gender,
-        accumulatedPoints: currentUser.accumulatedPoints,
-      };
-      if (currentUser === null) {
-        dispatch(
-          userActions.createUser({
-            token: user.accessToken,
-            dispatch,
-            data: { ...formData, resetValues },
-          })
-        );
-      } else {
-        dispatch(
-          userActions.editUser({
-            token: user.accessToken,
-            dispatch,
-            data: { ...formData, id: currentUser.id, resetValues },
-          })
-        );
-      }
+    const formData = {
+      email: values.email,
+      avatar: pathImg,
+      fullname: values.fullname,
+      password: values.password,
+      phone: values.phone,
+      gender: values.gender,
+      accumulatedPoints: currentUser ? currentUser.accumulatedPoints : 0,
+    };
+    if (currentUser === null) {
+      dispatch(
+        userActions.createUser({
+          token: user.accessToken,
+          dispatch,
+          data: { ...formData, resetValues },
+        })
+      );
+    } else {
+      dispatch(
+        userActions.editUser({
+          token: user.accessToken,
+          dispatch,
+          data: { ...formData, id: currentUser.id, resetValues },
+        })
+      );
     }
   };
   const onFinishFailed = (errorInfo: any) => {
@@ -187,7 +185,7 @@ const ModalUser: React.FC = () => {
                   },
                   {
                     type: 'email',
-                    message: 'Please enter a valid email!',
+                    message: 'Vui lòng nhập email hợp lệ!',
                   },
                 ]}
               >
@@ -204,7 +202,7 @@ const ModalUser: React.FC = () => {
                     },
                     {
                       min: 6,
-                      message: 'Password must be at least 6 characters',
+                      message: 'Mật khẩu có ít nhất 6 kí tự',
                     },
                   ]}
                 >

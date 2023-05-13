@@ -47,10 +47,10 @@ const TableCategory: React.FC = () => {
       width: 100,
       align: 'center' as AlignType,
       render: (text: string, record: ICategory) => {
-        return record.thumbnail !== '' ? (
+        return record?.thumbnail !== '' ? (
           <div className="cursor-text">
             <img
-              src={record.thumbnail}
+              src={record?.thumbnail}
               alt=""
               className="w-20 h-14 object-cover"
             />
@@ -72,7 +72,7 @@ const TableCategory: React.FC = () => {
                 handleEditCategory(record);
               }}
             >
-              {record.name}
+              {record?.name}
             </span>
           </div>
         );
@@ -81,7 +81,7 @@ const TableCategory: React.FC = () => {
     {
       title: 'Ngày tạo',
       render: (text: string, record: ICategory) => {
-        let date = moment(record.createdAt).format('MM/DD/YYYY');
+        let date = moment(record?.createdAt).format('MM/DD/YYYY');
         return <div>{date}</div>;
       },
     },

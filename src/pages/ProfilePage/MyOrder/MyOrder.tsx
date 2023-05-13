@@ -1,14 +1,14 @@
 import { Col, Pagination, Row } from 'antd';
-import React, { useEffect, useMemo } from 'react';
-import { useTitle } from '../../../hooks/useTitle';
+import moment from 'moment';
+import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { useTitle } from '../../../hooks/useTitle';
 import { authSelector } from '../../../redux/slice/authSlice';
 import {
   paymentActions,
   paymentSelector,
 } from '../../../redux/slice/paymentSlice';
 import { Payment } from '../../../types/payment';
-import moment from 'moment';
 import { castToVND } from '../../../utils';
 
 const MyOrder: React.FC = () => {
@@ -37,16 +37,20 @@ const MyOrder: React.FC = () => {
         paymentActions.getAllPaymentByUser({
           token: user.accessToken,
           dispatch,
+          params: {
+            p: pageClient,
+            limit: pageSizeClient,
+          },
         })
       );
     }
-  }, [user.accessToken, dispatch]);
+  }, [user.accessToken, dispatch, pageClient, pageSizeClient]);
 
   useTitle('Đơn hàng của tôi');
   return (
     <section className="pl-12 pb-36 max-sm:px-4 max-sm:pb-12 max-lg:px-8 max-lg:pb-12">
       <h3 className="mb-8 pt-8 text-4xl">Đơn hàng của tôi</h3>
-      <Row className="lg:mb-20 ">
+      <Row className="">
         <Col xl={24} md={24} xs={24}>
           <div className="w-full">
             <div className="w-full flex items-center text-left bg-name-product text-gray-200 text-2xl p-3 max-sm:hidden">
@@ -118,7 +122,7 @@ const MyOrder: React.FC = () => {
         </Col>
       </Row>
       {paymentClient.count > 5 && (
-        <div className="absolute bottom-2 right-0">
+        <div className="absolute bottom-10 right-0">
           <Pagination
             pageSize={pageSizeClient}
             current={pageClient}

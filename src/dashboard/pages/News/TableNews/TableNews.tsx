@@ -49,7 +49,7 @@ const TableNews: React.FC = () => {
                 handleEditNews(record);
               }}
             >
-              {record.title}
+              {record?.title}
             </span>
           </div>
         );
@@ -62,7 +62,7 @@ const TableNews: React.FC = () => {
     {
       title: 'Ngày tạo',
       render: (text: string, record: News) => {
-        let date = moment(record.createdAt).format('MM/DD/YYYY');
+        let date = moment(record?.createdAt).format('MM/DD/YYYY');
         return <div>{date}</div>;
       },
     },

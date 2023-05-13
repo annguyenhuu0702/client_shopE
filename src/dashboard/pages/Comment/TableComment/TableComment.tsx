@@ -22,7 +22,6 @@ import {
   commentSelector,
 } from '../../../../redux/slice/commentSlice';
 import { modalActions } from '../../../../redux/slice/modalSlice';
-import { paymentActions } from '../../../../redux/slice/paymentSlice';
 import { Comment } from '../../../../types/comment';
 import { Payment } from '../../../../types/payment';
 import { castToVND } from '../../../../utils';
@@ -54,7 +53,7 @@ const TableComment: React.FC = () => {
                 dispatch(commentActions.setComment(record));
               }}
             >
-              {record.user.fullname}
+              {record?.user?.fullname}
             </span>
           </div>
         );
@@ -66,7 +65,7 @@ const TableComment: React.FC = () => {
       render: (text: string, record: Comment) => {
         return (
           <div>
-            <span>{castToVND(record.content)}</span>
+            <span>{castToVND(record?.content)}</span>
           </div>
         );
       },
@@ -75,7 +74,7 @@ const TableComment: React.FC = () => {
       title: 'Ngày tạo',
       dataIndex: 'createdAt',
       render: (text: string, record: Comment) => {
-        let date = moment(record.createdAt).format('MM/DD/YYYY');
+        let date = moment(record?.createdAt).format('MM/DD/YYYY');
         return <div>{date}</div>;
       },
     },

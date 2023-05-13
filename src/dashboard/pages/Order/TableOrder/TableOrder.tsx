@@ -63,7 +63,7 @@ const TableOrder: React.FC = () => {
                 dispatch(paymentActions.setPayment(record));
               }}
             >
-              {record.fullname}
+              {record?.fullname}
             </span>
           </div>
         );
@@ -74,7 +74,7 @@ const TableOrder: React.FC = () => {
       render: (text: string, record: Payment) => {
         return (
           <div>
-            <span>{record.phone}</span>
+            <span>{record?.phone}</span>
           </div>
         );
       },
@@ -84,7 +84,7 @@ const TableOrder: React.FC = () => {
       render: (text: string, record: Payment) => {
         return (
           <div>
-            <span>{castToVND(record.shippingCost)}</span>
+            <span>{castToVND(record?.shippingCost)}</span>
           </div>
         );
       },
@@ -94,7 +94,7 @@ const TableOrder: React.FC = () => {
       render: (text: string, record: Payment) => {
         return (
           <div>
-            <span>{castToVND(record.totalPrice)}</span>
+            <span>{castToVND(record?.totalPrice)}</span>
           </div>
         );
       },
@@ -104,7 +104,7 @@ const TableOrder: React.FC = () => {
       render: (text: string, record: Payment) => {
         return (
           <div>
-            {record.payment === 1 ? (
+            {record?.payment === 1 ? (
               <Tag color="blue" className="border-0 text-xl">
                 Thanh toán tiền mặt
               </Tag>
@@ -123,12 +123,12 @@ const TableOrder: React.FC = () => {
         return (
           <div>
             <Tag
-              color={`${record.status === 'Chờ xử lí' ? 'red' : ''} ${
-                record.status === 'Đang giao hàng' ? 'blue' : ''
-              } ${record.status === 'Đã giao hàng' ? 'green' : ''}`}
+              color={`${record?.status === 'Chờ xử lí' ? 'red' : ''} ${
+                record?.status === 'Đang giao hàng' ? 'blue' : ''
+              } ${record?.status === 'Đã giao hàng' ? 'green' : ''}`}
               className="border-0 text-xl"
             >
-              {record.status}
+              {record?.status}
             </Tag>
           </div>
         );
@@ -138,7 +138,7 @@ const TableOrder: React.FC = () => {
       title: 'Ngày tạo',
       dataIndex: 'createdAt',
       render: (text: string, record: Payment) => {
-        let date = moment(record.createdAt).format('MM/DD/YYYY');
+        let date = moment(record?.createdAt).format('MM/DD/YYYY');
         return <div>{date}</div>;
       },
     },

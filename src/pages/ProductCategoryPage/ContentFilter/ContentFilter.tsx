@@ -1,76 +1,75 @@
 import { Col, Row } from 'antd';
-import React, { useState, useEffect, useMemo } from 'react';
-import { castToVND } from '../../../utils';
+import React, { useEffect, useMemo, useState } from 'react';
 import { AiOutlineDelete } from 'react-icons/ai';
-import { useDispatch } from 'react-redux';
-import { IVariantValue } from '../../../types/variantValue';
 import { variantValueApi } from '../../../apis/variantValueApi';
+import { IVariantValue } from '../../../types/variantValue';
+import { useNavigate } from 'react-router-dom';
 
-const ContentFilter: React.FC = () => {
+interface Props {
+  onClosePopup: () => void;
+  min: number;
+  max: number;
+  sizesId: string;
+  colorsId: string;
+  handleFilter: (obj: any) => void;
+}
+
+const priceFilter = [
+  {
+    label: '0 ₫ - 200.000 ₫',
+    min: 0,
+    max: 200000,
+  },
+  {
+    label: '200.000 ₫ - 400.000 ₫',
+    min: 200000,
+    max: 400000,
+  },
+  {
+    label: '400.000 ₫ - 600.000 ₫',
+    min: 4000000,
+    max: 600000,
+  },
+  {
+    label: '600.000 ₫ - 800.000 ₫',
+    min: 600000,
+    max: 800000,
+  },
+  {
+    label: '800.000 ₫ - 1.000.000 ₫',
+    min: 800000,
+    max: 1000000,
+  },
+  {
+    label: '1.000.000 ₫ - 1.600.000 ₫',
+    min: 1000000,
+    max: 1600000,
+  },
+  {
+    label: '> 1.600.000 ₫',
+    min: 1600000,
+  },
+];
+
+const ContentFilter: React.FC<Props> = ({
+  onClosePopup,
+  min,
+  max,
+  colorsId,
+  sizesId,
+  handleFilter,
+}) => {
   const [variant, setVariant] = useState<any>();
-  // const [sizes, setSizes] = useState<IVariantValue[]>([]);
-  // const [colors, setColors] = useState<IVariantValue[]>([]);
 
-  const [activeSize, setActiveSize] = useState<string>('');
-  const [activeColor, setActiveColor] = useState<string>('');
-  const [activePrice, setActivePrice] = useState<string>('');
-
-  const [filter, setFilter] = useState<{}>({});
-
-  const priceFilter = [
-    {
-      label: '0 ₫ - 200.000 ₫',
-      min: 0,
-      max: 200000,
-    },
-    {
-      label: '200.000 ₫ - 400.000 ₫',
-      min: 200000,
-      max: 400000,
-    },
-    {
-      label: '400.000 ₫ - 600.000 ₫',
-      min: 4000000,
-      max: 600000,
-    },
-    {
-      label: '600.000 ₫ - 800.000 ₫',
-      min: 600000,
-      max: 800000,
-    },
-    {
-      label: '800.000 ₫ - 1.000.000 ₫',
-      min: 800000,
-      max: 1000000,
-    },
-    {
-      label: '1.000.000 ₫ - 1.600.000 ₫',
-      min: 1000000,
-      max: 1600000,
-    },
-    {
-      label: '> 1.600.000 ₫',
-      min: 1600000,
-    },
-  ];
-
-  useEffect(() => {
-    try {
-      const getData = async () => {
-        const res = await variantValueApi.getAll();
-        const { data } = res.data;
-        const status = res.status;
-        if (status === 200) {
-          setVariant(data);
-        }
-      };
-      getData();
-    } catch (error) {
-      console.log(error);
+  const [activePrice, setActivePrice] = useState<string>(() => {
+    let data = priceFilter.find((item) => item.min === min && item.max === max);
+    if (data) {
+      return data.label;
     }
-  }, []);
-
-  console.log(variant);
+    return '';
+  });
+  const [activeSize, setActiveSize] = useState<number[]>([]);
+  const [activeColor, setActiveColor] = useState<number[]>([]);
 
   // render color
   const getVariantColors = useMemo(() => {
@@ -88,17 +87,95 @@ const ContentFilter: React.FC = () => {
     }
   }, [variant]);
 
-  const handleActiveColor = (name: string) => {
-    setActiveColor(name);
+  const handleActiveColor = (id: number) => {
+    const newColors = [...activeColor];
+    const findIndex = activeColor.findIndex((item) => item === id);
+    if (findIndex === -1) {
+      newColors.push(id);
+    } else {
+      newColors.splice(findIndex, 1);
+    }
+    setActiveColor(newColors);
   };
 
-  const handleActiveSize = (name: string) => {
-    setActiveSize(name);
+  const handleActiveSize = (id: number) => {
+    const newSizes = [...activeSize];
+    const findIndex = activeSize.findIndex((item) => item === id);
+    if (findIndex === -1) {
+      newSizes.push(id);
+    } else {
+      newSizes.splice(findIndex, 1);
+    }
+    setActiveSize(newSizes);
   };
 
   const handleActivePrice = (name: string) => {
     setActivePrice(name);
   };
+
+  // xóa option thì set state rỗng hết
+  const handleDeleteOption = () => {
+    setActiveColor([]);
+    setActiveSize([]);
+    setActivePrice('');
+  };
+
+  const handleFilterProduct = () => {
+    const newData: any = {};
+    if (activePrice !== '') {
+      let price = priceFilter.find((item) => item.label === activePrice);
+      if (price) {
+        newData.min = price.min;
+        if (price.max) {
+          newData.max = price.max;
+        }
+      }
+    }
+    if (activeSize.length > 0) {
+      let join = activeSize.join(',');
+      newData.sizesId = join;
+    }
+    if (activeColor.length > 0) {
+      let join = activeColor.join(',');
+      newData.colorsId = join;
+    }
+    handleFilter(newData);
+    onClosePopup();
+  };
+
+  useEffect(() => {
+    try {
+      const getData = async () => {
+        const res = await variantValueApi.getAll();
+        const { data } = res.data;
+        const status = res.status;
+        if (status === 200) {
+          setVariant(data);
+        }
+      };
+      getData();
+    } catch (error) {
+      console.log(error);
+    }
+  }, []);
+
+  // f5 lại vẫn lấy active từ trên url
+  useEffect(() => {
+    if (variant) {
+      let idSize = sizesId.split(',');
+      let idColor = colorsId.split(',');
+      setActiveColor(
+        variant.rows
+          .filter((variant: IVariantValue) => idColor.includes('' + variant.id))
+          .map((item: IVariantValue) => item.id)
+      );
+      setActiveSize(
+        variant.rows
+          .filter((variant: IVariantValue) => idSize.includes('' + variant.id))
+          .map((item: IVariantValue) => item.id)
+      );
+    }
+  }, [colorsId, sizesId, variant]);
 
   return (
     <section className="w-1000 px-6 pt-6">
@@ -117,6 +194,7 @@ const ContentFilter: React.FC = () => {
                   priceFilter.map((item) => {
                     return (
                       <li
+                        key={item.label}
                         className={`text-2xl mb-6 py-4 cursor-pointer rounded-2xl ${
                           item.label === activePrice
                             ? 'bg-name-product text-white'
@@ -148,13 +226,13 @@ const ContentFilter: React.FC = () => {
                   return (
                     <li
                       className={`text-2xl mb-6 py-4 px-6 mr-4 cursor-pointer ${
-                        item.name === activeColor
+                        activeColor.includes(item.id)
                           ? 'bg-name-product text-white'
                           : 'bg-bg-layout-profile text-name-product'
                       } `}
                       key={item.id}
                       onClick={() => {
-                        handleActiveColor(item.name);
+                        handleActiveColor(item.id);
                       }}
                     >
                       <span className="">{item.name}</span>
@@ -179,13 +257,13 @@ const ContentFilter: React.FC = () => {
                   return (
                     <li
                       className={`text-2xl mb-6 py-4 px-6 mr-4 cursor-pointer ${
-                        item.name === activeSize
+                        activeSize.includes(item.id)
                           ? 'bg-name-product text-white'
                           : 'bg-bg-layout-profile text-name-product'
                       } `}
                       key={item.id}
                       onClick={() => {
-                        handleActiveSize(item.name);
+                        handleActiveSize(item.id);
                       }}
                     >
                       <span>{item.name}</span>
@@ -201,66 +279,54 @@ const ContentFilter: React.FC = () => {
         <Col xl={16}>
           <div className="pr-10">
             <ul className="list-none mb-0 flex flex-wrap">
-              <li className="flex items-center text-2xl mb-6 mr-4 py-4 px-8 cursor-pointer bg-option-filter text-white">
-                <span className="">Trắng</span>
-                <span className="flex items-center ml-4">
-                  <AiOutlineDelete className="" />
-                </span>
-              </li>
-              <li className="flex items-center text-2xl mb-6 mr-4 px-8 py-4 cursor-pointer bg-option-filter text-white">
-                <span className="">Đỏ</span>
-                <span className="flex items-center ml-4">
-                  <AiOutlineDelete className="" />
-                </span>
-              </li>
-              <li className="flex items-center text-2xl mb-6 mr-4 px-8 py-4 cursor-pointer bg-option-filter text-white">
-                <span className="">Vàng</span>
-                <span className="flex items-center ml-4">
-                  <AiOutlineDelete className="" />
-                </span>
-              </li>
-              <li className="flex items-center text-2xl mb-6 mr-4 px-8 py-4 cursor-pointer bg-option-filter text-white">
-                <span className="">Lục</span>
-                <span className="flex items-center ml-4">
-                  <AiOutlineDelete className="" />
-                </span>
-              </li>
-              <li className="flex items-center text-2xl mb-6 mr-4 px-8 py-4 cursor-pointer bg-option-filter text-white">
-                <span className="">Lam</span>
-                <span className="flex items-center ml-4">
-                  <AiOutlineDelete className="" />
-                </span>
-              </li>
-              <li className="flex items-center text-2xl mb-6 mr-4 px-8 py-4 cursor-pointer bg-option-filter text-white">
-                <span className="">Xanh dương</span>
-                <span className="flex items-center ml-4">
-                  <AiOutlineDelete className="" />
-                </span>
-              </li>
-              <li className="flex items-center text-2xl mb-6 mr-4 px-8 py-4 cursor-pointer bg-option-filter text-white">
-                <span className="">Tím</span>
-                <span className="flex items-center ml-4">
-                  <AiOutlineDelete className="" />
-                </span>
-              </li>
-              <li className="flex items-center text-2xl mb-6 mr-4 px-8 py-4 cursor-pointer bg-option-filter text-white">
-                <span className="">Lam</span>
-                <span className="flex items-center ml-4">
-                  <AiOutlineDelete className="" />
-                </span>
-              </li>
-              <li className="flex items-center text-2xl mb-6 mr-4 px-8 py-4 cursor-pointer bg-option-filter text-white">
-                <span className="">Xanh dương</span>
-                <span className="flex items-center ml-4">
-                  <AiOutlineDelete className="" />
-                </span>
-              </li>
-              <li className="flex items-center text-2xl mb-6 mr-4 px-8 py-4 cursor-pointer bg-option-filter text-white">
-                <span className="">Tím</span>
-                <span className="flex items-center ml-4">
-                  <AiOutlineDelete className="" />
-                </span>
-              </li>
+              {activeColor.map((item) => {
+                return (
+                  <li
+                    className="flex items-center text-2xl mb-6 mr-4 py-4 px-8 cursor-pointer bg-option-filter text-white"
+                    key={item}
+                  >
+                    <span className="">
+                      {
+                        getVariantColors?.find(
+                          (variant: any) => variant.id === item
+                        )?.name
+                      }
+                    </span>
+                    {/* <span className="flex items-center ml-4">
+                      <AiOutlineDelete className="" />
+                    </span> */}
+                  </li>
+                );
+              })}
+
+              {activeSize.map((item) => {
+                return (
+                  <li
+                    className="flex items-center text-2xl mb-6 mr-4 py-4 px-8 cursor-pointer bg-option-filter text-white"
+                    key={item}
+                  >
+                    <span className="">
+                      {
+                        getVariantSizes?.find(
+                          (variant: any) => variant.id === item
+                        )?.name
+                      }
+                    </span>
+                    {/* <span className="flex items-center ml-4">
+                      <AiOutlineDelete className="" />
+                    </span> */}
+                  </li>
+                );
+              })}
+
+              {activePrice !== '' && (
+                <li className="flex items-center text-2xl mb-6 mr-4 py-4 px-8 cursor-pointer bg-option-filter text-white">
+                  <span className="">{activePrice}</span>
+                  {/* <span className="flex items-center ml-4">
+                    <AiOutlineDelete className="" />
+                  </span> */}
+                </li>
+              )}
             </ul>
           </div>
         </Col>
@@ -270,6 +336,9 @@ const ContentFilter: React.FC = () => {
               <button
                 type="submit"
                 className="w-full py-6 text-3xl border-none outline-none cursor-pointer bg-bg-layout-profile text-name-product font-semibold"
+                onClick={() => {
+                  handleDeleteOption();
+                }}
               >
                 Xóa tất cả
               </button>
@@ -278,6 +347,9 @@ const ContentFilter: React.FC = () => {
               <button
                 type="submit"
                 className="w-full py-6 text-3xl border-none outline-none cursor-pointer  text-white bg-name-product"
+                onClick={() => {
+                  handleFilterProduct();
+                }}
               >
                 Áp dụng
               </button>

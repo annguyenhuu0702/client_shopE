@@ -128,7 +128,7 @@ const TablePromotion: React.FC = () => {
               //   handleEditPromotion(record);
               // }}
             >
-              {record.name}
+              {record?.name}
             </span>
           </div>
         );
@@ -139,7 +139,7 @@ const TablePromotion: React.FC = () => {
       render: (text: string, record: Discount) => {
         return (
           <Space size={[0, 8]} wrap>
-            {record.productCategories.map((item) => {
+            {record?.productCategories?.map((item) => {
               return (
                 <Tag color="green" key={item.id}>
                   {item.name}
@@ -153,21 +153,21 @@ const TablePromotion: React.FC = () => {
     {
       title: 'Khuyến mãi (%)',
       render: (text: string, record: Discount) => {
-        return <div>{record.percent}</div>;
+        return <div>{record?.percent}</div>;
       },
       align: 'center' as AlignType,
     },
     {
       title: 'Ngày bắt đầu',
       render: (text: string, record: Discount) => {
-        let date = moment(record.startday).format('MM/DD/YYYY');
+        let date = moment(record?.startday).format('MM/DD/YYYY');
         return <div>{date}</div>;
       },
     },
     {
       title: 'Ngày kết thúc',
       render: (text: string, record: Discount) => {
-        let date = moment(record.endday).format('MM/DD/YYYY');
+        let date = moment(record?.endday).format('MM/DD/YYYY');
         return <div>{date}</div>;
       },
     },
@@ -176,7 +176,7 @@ const TablePromotion: React.FC = () => {
       render: (text: string, record: Discount) => {
         return (
           <div>
-            {date > moment(record.endday).format('MM/DD/YYYY') ? (
+            {date > moment(record?.endday).format('MM/DD/YYYY') ? (
               <Tag color="red">Kết thúc</Tag>
             ) : (
               <Tag color="green">Đang chạy</Tag>
@@ -205,10 +205,12 @@ const TablePromotion: React.FC = () => {
               okText="Có"
               cancelText="Không"
               disabled={
-                date > moment(record.endday).format('MM/DD/YYYY') ? false : true
+                date > moment(record?.endday).format('MM/DD/YYYY')
+                  ? false
+                  : true
               }
             >
-              {date > moment(record.endday).format('MM/DD/YYYY') ? (
+              {date > moment(record?.endday).format('MM/DD/YYYY') ? (
                 <DeleteOutlined className="common-icon-delete" />
               ) : (
                 <Tooltip

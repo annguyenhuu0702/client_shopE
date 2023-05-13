@@ -75,7 +75,7 @@ const TableProductCategory: React.FC = () => {
                 handleEditProductCategory(record);
               }}
             >
-              {removeTextBetweenParentheses(record.name)}
+              {removeTextBetweenParentheses(record?.name)}
             </span>
           </div>
         );
@@ -87,7 +87,8 @@ const TableProductCategory: React.FC = () => {
         return (
           <div>
             <Tag color="green" className="border-0 text-xl">
-              {record.collection && removeParenthesis(record.collection.name)}
+              {record?.collection &&
+                removeParenthesis(record?.collection?.name)}
             </Tag>
           </div>
         );
@@ -96,7 +97,7 @@ const TableProductCategory: React.FC = () => {
     {
       title: 'Ngày tạo',
       render: (text: string, record: IProductCategory) => {
-        let date = moment(record.createdAt).format('MM/DD/YYYY');
+        let date = moment(record?.createdAt).format('MM/DD/YYYY');
         return <div>{date}</div>;
       },
     },

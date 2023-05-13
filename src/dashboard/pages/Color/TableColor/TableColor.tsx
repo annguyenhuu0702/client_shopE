@@ -60,7 +60,7 @@ const TableColor: React.FC = () => {
                 handleEditColor(record);
               }}
             >
-              {record.name}
+              {record?.name}
             </span>
           </div>
         );
@@ -70,7 +70,7 @@ const TableColor: React.FC = () => {
       title: 'Ngày tạo',
       align: 'center' as AlignType,
       render: (text: string, record: IVariantValue) => {
-        let date = moment(record.createdAt).format('MM/DD/YYYY');
+        let date = moment(record?.createdAt).format('MM/DD/YYYY');
         return <div>{date}</div>;
       },
     },

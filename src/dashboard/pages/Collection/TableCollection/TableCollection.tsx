@@ -72,7 +72,7 @@ const TableCollection: React.FC = () => {
                 handleEditCollection(record);
               }}
             >
-              {removeTextBetweenParentheses(record.name)}
+              {removeTextBetweenParentheses(record?.name)}
             </span>
           </div>
         );
@@ -84,7 +84,7 @@ const TableCollection: React.FC = () => {
         return (
           <div>
             <Tag color="green" className="border-0 text-xl">
-              {record.category && record.category.name}
+              {record?.category && record?.category?.name}
             </Tag>
           </div>
         );
@@ -93,7 +93,7 @@ const TableCollection: React.FC = () => {
     {
       title: 'Ngày tạo',
       render: (text: string, record: ICollection) => {
-        let date = moment(record.createdAt).format('MM/DD/YYYY');
+        let date = moment(record?.createdAt).format('MM/DD/YYYY');
         return <div>{date}</div>;
       },
     },

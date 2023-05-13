@@ -53,7 +53,7 @@ const TableUser: React.FC = () => {
       render: (text: string, record: IUser) => {
         return (
           <React.Fragment>
-            {!record.avatar ? (
+            {!record?.avatar ? (
               <img
                 className="w-20 h-14 object-cover"
                 src="https://res.cloudinary.com/diot4imoq/image/upload/v1677655323/canifa/user_jmlojj.jpg"
@@ -62,7 +62,7 @@ const TableUser: React.FC = () => {
             ) : (
               <img
                 className="w-20 h-14 object-cover"
-                src={record.avatar}
+                src={record?.avatar}
                 alt=""
               />
             )}
@@ -82,7 +82,7 @@ const TableUser: React.FC = () => {
                 handleEditUser(record);
               }}
             >
-              {record.fullname}
+              {record?.fullname}
             </span>
           </div>
         );
@@ -104,7 +104,7 @@ const TableUser: React.FC = () => {
       render: (text: string, record: IUser) => {
         return (
           <div>
-            {record.gender === true ? (
+            {record?.gender === true ? (
               <Tag color="red" className="border-0 text-xl">
                 Nam
               </Tag>
@@ -126,7 +126,7 @@ const TableUser: React.FC = () => {
       title: 'Ngày tạo',
       dataIndex: 'createdAt',
       render: (text: string, record: IUser) => {
-        let date = moment(record.createdAt).format('MM/DD/YYYY');
+        let date = moment(record?.createdAt).format('MM/DD/YYYY');
         return <div>{date}</div>;
       },
     },

@@ -76,7 +76,7 @@ const TableProduct: React.FC = () => {
     {
       title: 'Mã sản phẩm',
       render: (text: string, record: IProduct) => {
-        return <Text mark>{record.code}</Text>;
+        return <Text mark>{record?.code}</Text>;
       },
     },
     {
@@ -84,10 +84,10 @@ const TableProduct: React.FC = () => {
       width: 100,
       align: 'center' as AlignType,
       render: (text: string, record: IProduct) => {
-        return record.thumbnail !== '' ? (
+        return record?.thumbnail !== '' ? (
           <div className="cursor-text">
             <img
-              src={record.thumbnail}
+              src={record?.thumbnail}
               alt=""
               className="w-20 h-14 object-cover"
             />
@@ -109,7 +109,7 @@ const TableProduct: React.FC = () => {
                 handleEditProduct(record);
               }}
             >
-              {record.name}
+              {record?.name}
             </span>
           </div>
         );
@@ -123,7 +123,7 @@ const TableProduct: React.FC = () => {
         return (
           <div>
             <Tag color="green" className="border-0 text-xl">
-              {record.productCategory && record.productCategory.name}
+              {record?.productCategory && record?.productCategory?.name}
             </Tag>
           </div>
         );
@@ -170,7 +170,7 @@ const TableProduct: React.FC = () => {
         return (
           <div>
             <Tag color="#108ee9" className="text-2xl">
-              {castToVND(record.price)}
+              {castToVND(record?.price)}
             </Tag>
           </div>
         );
@@ -181,7 +181,7 @@ const TableProduct: React.FC = () => {
       width: 100,
       align: 'center' as AlignType,
       render: (text: string, record: IProduct) => {
-        let date = moment(record.createdAt).format('MM/DD/YYYY');
+        let date = moment(record?.createdAt).format('MM/DD/YYYY');
         return <div>{date}</div>;
       },
     },

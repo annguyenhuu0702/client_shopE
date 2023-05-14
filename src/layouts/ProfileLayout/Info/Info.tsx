@@ -7,6 +7,7 @@ import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { authApi } from '../../../apis/authApi';
 import { routes } from '../../../config/routes';
 import { authActions, authSelector } from '../../../redux/slice/authSlice';
+import { cartActions } from '../../../redux/slice/cartSlice';
 
 const InfoUser: React.FC = () => {
   const { user } = useSelector(authSelector);
@@ -43,6 +44,7 @@ const InfoUser: React.FC = () => {
   const handleLogout = () => {
     authApi.logout();
     dispatch(authActions.logoutSuccess());
+    dispatch(cartActions.setCart());
     navigate(routes.home);
   };
   return (

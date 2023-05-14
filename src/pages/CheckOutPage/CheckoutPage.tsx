@@ -134,14 +134,22 @@ const CheckoutPage: React.FC = () => {
 
   const handleCheckPoint = async () => {
     try {
-      const res = await paymentApi.checkPoint(
-        user.accessToken,
-        dispatch,
-        point
-      );
-      const status = res.status;
-      if (status === 200) {
-        setPriceSale(point * 100);
+      if (point > 1000) {
+        setPoint(0);
+        message.error({
+          type: 'error',
+          content: 'Bạn chỉ có thể dùng tối đa 1000 điểm',
+        });
+      } else {
+        const res = await paymentApi.checkPoint(
+          user.accessToken,
+          dispatch,
+          point
+        );
+        const status = res.status;
+        if (status === 200) {
+          setPriceSale(point * 100);
+        }
       }
     } catch (error) {
       setPoint(0);
@@ -387,10 +395,15 @@ const CheckoutPage: React.FC = () => {
                   </Button>
                 </Form.Item>
               </div>
-              <div className="pb-8 border-solid border-0 border-b-2 border-white">
-                <span className="text-2xl font-semibold">
-                  Bạn hiện đang có <b>{user.user?.accumulatedPoints}</b> điểm
+              <div className="flex flex-col pb-8 border-solid border-0 border-b-2 border-white">
+                <span className="text-2xl">
+                  Bạn hiện đang có <b>{user.user?.accumulatedPoints}</b> điểm.
                 </span>
+                {user.user && user.user?.accumulatedPoints > 0 && (
+                  <span className="text-2xl">
+                    Lưu ý: Chỉ có thể sử dụng tối đa 1000 điểm.
+                  </span>
+                )}
               </div>
               <div className="mt-8 pb-8 border-solid border-0 border-b-2 border-white">
                 <div className="flex justify-between items-center text-2xl font-semibold mb-4">

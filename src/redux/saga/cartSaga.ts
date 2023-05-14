@@ -3,7 +3,6 @@ import { notification } from 'antd';
 import { call, put, takeEvery } from 'redux-saga/effects';
 import { cartApi } from '../../apis/cartApi';
 import { cartItemApi } from '../../apis/cartItemApi';
-import { routes } from '../../config/routes';
 import { STATUS_CODE } from '../../constants';
 import { CartItem, createCartItem, deleteCartItem } from '../../types/cartItem';
 import { tokenPayload, tokenPayloadData } from '../../types/common';
@@ -30,7 +29,7 @@ function* addToCartSaga({
   payload,
 }: PayloadAction<tokenPayloadData<createCartItem>>): any {
   try {
-    const { token, dispatch, navigate, data } = payload;
+    const { token, dispatch, data } = payload;
     const res = yield call(() => {
       return cartItemApi.addToCart(token, dispatch, data);
     });
@@ -43,7 +42,12 @@ function* addToCartSaga({
         placement: 'bottomRight',
         duration: 3,
       });
-      navigate(routes.cart);
+      yield put(
+        cartActions.getByUser({
+          token,
+          dispatch,
+        })
+      );
     }
   } catch (err) {
     console.log(err);

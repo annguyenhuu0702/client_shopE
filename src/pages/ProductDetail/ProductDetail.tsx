@@ -10,6 +10,7 @@ import { castToVND } from '../../utils';
 
 import { useDispatch, useSelector } from 'react-redux';
 import Loading from '../../components/Loading/Loading';
+
 import { useTitle } from '../../hooks/useTitle';
 import { authSelector } from '../../redux/slice/authSlice';
 import { cartActions } from '../../redux/slice/cartSlice';
@@ -93,18 +94,25 @@ const ProductDetail: React.FC = ({ children }: any) => {
       );
       let formData;
       if (productVariant) {
-        formData = {
-          productVariantId: productVariant.id,
-          quantity: quantity,
-        };
-        dispatch(
-          cartActions.addToCart({
-            token: user.accessToken,
-            dispatch,
-            navigate,
-            data: formData,
-          })
-        );
+        if (productVariant.inventory < quantity) {
+          message.warning({
+            type: 'warning',
+            content: 'Số lượng tồn không đủ!',
+          });
+        } else {
+          formData = {
+            productVariantId: productVariant.id,
+            quantity: quantity,
+          };
+          dispatch(
+            cartActions.addToCart({
+              token: user.accessToken,
+              dispatch,
+              navigate,
+              data: formData,
+            })
+          );
+        }
       }
     }
   };
@@ -293,7 +301,7 @@ const ProductDetail: React.FC = ({ children }: any) => {
                   )}
                   {colors.length > 0 && (
                     <div>
-                      <h3>Màu sắc:</h3>
+                      <h3>Màu sắc</h3>
                       <div className="flex flex-wrap gap-4">
                         {colors.map((color, index) => {
                           return (
@@ -317,7 +325,7 @@ const ProductDetail: React.FC = ({ children }: any) => {
                   )}
                   {sizes.length > 0 && (
                     <div>
-                      <h3 className="my-2">Kích thước:</h3>
+                      <h3 className="my-2">Kích thước</h3>
                       <div className="flex flex-wrap gap-4">
                         {sizes.map((size, index) => {
                           return (
@@ -339,10 +347,13 @@ const ProductDetail: React.FC = ({ children }: any) => {
                       </div>
                     </div>
                   )}
-                  <div className="my-4">
+                  {/* <div className="my-4">
                     <span className="font-bold cursor-pointer">
                       Hướng dẫn chọn size:
                     </span>
+                  </div> */}
+                  <div className="my-4">
+                    <span className="font-bold cursor-pointer">Số lượng</span>
                   </div>
                   <div className="my-4 flex items-center">
                     <span
@@ -355,9 +366,14 @@ const ProductDetail: React.FC = ({ children }: any) => {
                     >
                       <AiOutlineMinus />
                     </span>
-                    <span className="h-16 min-w-40px border border-solid border-l-0 border-r-0 border-border-variant inline-flex items-center justify-center px-4">
-                      {quantity}
-                    </span>
+                    <input
+                      value={quantity}
+                      onChange={(e: any) => {
+                        setQuantity(e.target.value);
+                      }}
+                      className="flex text-center h-16 w-32 border border-solid border-l-0 border-r-0 border-border-variant px-4 outline-none"
+                    />
+
                     <span
                       className="h-16 w-16 border border-solid border-border-variant inline-flex items-center justify-center cursor-pointer"
                       onClick={() => {

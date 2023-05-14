@@ -3,7 +3,6 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { AiOutlineDelete } from 'react-icons/ai';
 import { variantValueApi } from '../../../apis/variantValueApi';
 import { IVariantValue } from '../../../types/variantValue';
-import { useNavigate } from 'react-router-dom';
 
 interface Props {
   onClosePopup: () => void;
@@ -27,7 +26,7 @@ const priceFilter = [
   },
   {
     label: '400.000 ₫ - 600.000 ₫',
-    min: 4000000,
+    min: 400000,
     max: 600000,
   },
   {
@@ -120,6 +119,7 @@ const ContentFilter: React.FC<Props> = ({
     setActivePrice('');
   };
 
+  // bộ lọc
   const handleFilterProduct = () => {
     const newData: any = {};
     if (activePrice !== '') {

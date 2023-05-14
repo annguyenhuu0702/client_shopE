@@ -71,6 +71,7 @@ const ProductCategoryPage: React.FC = () => {
     navigate(`${location.pathname}${queryString}`);
   };
 
+  // filter
   const handleFilter = (obj: any) => {
     const params = {
       ...(p && +p > 1 ? { p: '' + p } : {}),
@@ -131,6 +132,10 @@ const ProductCategoryPage: React.FC = () => {
         otherSlug: slug,
         ...(sortBy ? { sortBy: '' + sortBy } : {}),
         ...(sortType ? { sortType: '' + sortType } : {}),
+        ...(min ? { min } : {}),
+        ...(max ? { max } : {}),
+        ...(sizesId ? { sizesId } : {}),
+        ...(colorsId ? { colorsId } : {}),
       })
     );
   }, [
@@ -142,6 +147,10 @@ const ProductCategoryPage: React.FC = () => {
     sortBy,
     sortType,
     p,
+    min,
+    max,
+    sizesId,
+    colorsId,
   ]);
 
   return (
@@ -202,49 +211,49 @@ const ProductCategoryPage: React.FC = () => {
             </Breadcrumb.Item>
           </Breadcrumb>
         )}
-        {productsClient.count > 0 && (
-          <div className="flex w-96 gap-4 max-lg:hidden">
-            <Popover
-              content={
-                <ContentFilter
-                  onClosePopup={() => {
-                    setIsOpen(false);
-                  }}
-                  min={min ? +min : -1}
-                  max={max ? +max : -1}
-                  colorsId={colorsId ? colorsId : ''}
-                  sizesId={sizesId ? sizesId : ''}
-                  handleFilter={handleFilter}
-                />
-              }
-              trigger="click"
-              placement="bottomLeft"
-              open={isOpen}
-              onOpenChange={(visible) => {
-                setIsOpen(visible);
-              }}
-            >
-              <div className="w-1/2 flex items-center justify-center cursor-pointer text-red-500 font-semibold text-2xl bg-bg-layout-profile px-6 py-4">
-                <span>Bộ lọc</span>
-                <span className="flex items-center pl-4">
-                  <AiOutlineFilter />
-                </span>
-              </div>
-            </Popover>
-
-            <div
-              className="w-1/2 flex items-center justify-center cursor-pointer text-red-500 font-semibold text-2xl bg-bg-layout-profile px-6 py-4"
-              onClick={() => {
-                handleSort();
-              }}
-            >
-              <span>Sắp xếp</span>
+        {/* {productsClient.count > 0 && ( */}
+        <div className="flex w-96 gap-4 max-lg:hidden">
+          <Popover
+            content={
+              <ContentFilter
+                onClosePopup={() => {
+                  setIsOpen(false);
+                }}
+                min={min ? +min : -1}
+                max={max ? +max : -1}
+                colorsId={colorsId ? colorsId : ''}
+                sizesId={sizesId ? sizesId : ''}
+                handleFilter={handleFilter}
+              />
+            }
+            trigger="click"
+            placement="bottomLeft"
+            open={isOpen}
+            onOpenChange={(visible) => {
+              setIsOpen(visible);
+            }}
+          >
+            <div className="w-1/2 flex items-center justify-center cursor-pointer text-red-500 font-semibold text-2xl bg-bg-layout-profile px-6 py-4">
+              <span>Bộ lọc</span>
               <span className="flex items-center pl-4">
-                {sortType === 'ASC' ? <BsSortUp /> : <BsSortDown />}
+                <AiOutlineFilter />
               </span>
             </div>
+          </Popover>
+
+          <div
+            className="w-1/2 flex items-center justify-center cursor-pointer text-red-500 font-semibold text-2xl bg-bg-layout-profile px-6 py-4"
+            onClick={() => {
+              handleSort();
+            }}
+          >
+            <span>Sắp xếp</span>
+            <span className="flex items-center pl-4">
+              {sortType === 'ASC' ? <BsSortUp /> : <BsSortDown />}
+            </span>
           </div>
-        )}
+        </div>
+        {/* )} */}
       </section>
       <section>
         <Row>

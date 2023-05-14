@@ -57,8 +57,7 @@ const CheckoutPage: React.FC = () => {
           shippingCost,
           totalPrice: totalPrice() + shippingCost - priceSale,
         });
-        const { data, status } = res;
-        console.log(data);
+        const { status } = res;
         if (status === 201) {
           navigate(routes.paymentSuccess);
         } else {

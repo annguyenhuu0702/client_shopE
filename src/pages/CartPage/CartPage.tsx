@@ -10,11 +10,13 @@ import { authSelector } from '../../redux/slice/authSlice';
 import { cartActions, cartSelector } from '../../redux/slice/cartSlice';
 import { CartItem } from '../../types/cartItem';
 import { castToVND } from '../../utils';
+import Loading from '../../components/Loading/Loading';
 
 const CartPage: React.FC = () => {
-  const { cart } = useSelector(cartSelector);
+  const { cart, isLoading } = useSelector(cartSelector);
   const { user } = useSelector(authSelector);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const totalPrice = () => {
     let totalPrice =
@@ -76,8 +78,6 @@ const CartPage: React.FC = () => {
       })
     );
   };
-
-  const navigate = useNavigate();
 
   useTitle('Giỏ hàng');
   return cart && cart.cartItems.length > 0 ? (

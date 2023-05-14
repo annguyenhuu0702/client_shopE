@@ -6,33 +6,34 @@ import { Link } from 'react-router-dom';
 import {
   categoryActions,
   categorySelector,
-  categoryState,
 } from '../../../../redux/slice/categorySlice';
-import { category } from '../../../../types/category';
-import { collection } from '../../../../types/collection';
-import { productCategory } from '../../../../types/productCategory';
+import { ICategory } from '../../../../types/category';
+import { ICollection } from '../../../../types/collection';
+import { IProductCategory } from '../../../../types/productCategory';
 import { removeTextBetweenParentheses } from '../../../../utils';
 import styles from './__navigation.module.scss';
+import { routes } from '../../../../config/routes';
 
 const cx = classNames.bind(styles);
 
 const HeaderNavigation: React.FC = () => {
   const dispatch = useDispatch();
-  const { categories }: categoryState = useSelector(categorySelector);
+  const { categoriesClient } = useSelector(categorySelector);
+
   useEffect(() => {
-    dispatch(categoryActions.getAllCategory({ collections: true }));
+    dispatch(categoryActions.getAllCategoryClient({ collections: true }));
   }, [dispatch]);
 
   return (
     <section className={cx('navigation')}>
       <div className={cx('menu')}>
         <ul className={cx('list-item')}>
-          {categories &&
-            [...categories.rows].reverse().map((category: category) => {
+          {categoriesClient &&
+            [...categoriesClient.rows].reverse().map((category: ICategory) => {
               return (
                 <li className={cx('item')} key={category.id}>
                   <Link
-                    to={`/${category.slug}`}
+                    to={`/category/${category.slug}`}
                     className={cx('group-category')}
                   >
                     {category.name}
@@ -46,7 +47,7 @@ const HeaderNavigation: React.FC = () => {
                   >
                     {[...category.collections]
                       .reverse()
-                      .map((collection: collection) => {
+                      .map((collection: ICollection) => {
                         return (
                           <Col
                             xl={6}
@@ -54,7 +55,7 @@ const HeaderNavigation: React.FC = () => {
                             key={collection.id}
                           >
                             <Link
-                              to={`/${collection.slug}`}
+                              to={`/collection/${collection.slug}`}
                               className={cx('category')}
                             >
                               {removeTextBetweenParentheses(collection.name)}
@@ -62,10 +63,12 @@ const HeaderNavigation: React.FC = () => {
                             <ul className={cx('child-category')}>
                               {[...collection.productCategories]
                                 .reverse()
-                                .map((item: productCategory) => {
+                                .map((item: IProductCategory) => {
                                   return (
                                     <li key={item.id}>
-                                      <Link to={`/${item.slug}`}>
+                                      <Link
+                                        to={`/product-category/${item.slug}`}
+                                      >
                                         {removeTextBetweenParentheses(
                                           item.name
                                         )}
@@ -81,46 +84,11 @@ const HeaderNavigation: React.FC = () => {
                 </li>
               );
             })}
-          {/* <li className={cx('item')}>
-            <Link to="/" className={cx('group-category')}>
-              Trang chủ
+          <li className={cx('item')}>
+            <Link to={routes.news} className={cx('group-category')}>
+              Tin tức
             </Link>
           </li>
-          <li className={cx('item')}>
-            <Link to="" className={cx('group-category')}>
-              Sản phẩm mới
-            </Link>
-          </li>
-          <li className={cx('item')}>
-            <Link to="" className={cx('group-category')}>
-              aaa
-            </Link>
-            <FontAwesomeIcon icon={faAngleDown} className={cx('icon')} />
-            <div className={cx('block-category')}>
-              <div style={{ display: 'flex', width: '60%' }}>
-                <div className={cx('wrap-children')}>
-                  <Link to="" className={cx('category')}>
-                    aaa
-                  </Link>
-                  <ul className={cx('child-category')}>
-                    <li>
-                      <Link to="">aa</Link>
-                    </li>
-                  </ul>
-                </div>
-              </div>
-              <div className={cx('banner')}>
-                <img
-                  src="https://res.cloudinary.com/diot4imoq/image/upload/v1657609158/supersports/490x185-M_720x_gcrmgv.jpg"
-                  alt=""
-                />
-                <img
-                  src="https://res.cloudinary.com/diot4imoq/image/upload/v1657609313/supersports/Banner_Hoka_menu_banner_720x_iidfc1.jpg"
-                  alt=""
-                />
-              </div>
-            </div>
-          </li> */}
         </ul>
       </div>
     </section>

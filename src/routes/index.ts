@@ -6,12 +6,15 @@ import {
   DefaultLayout,
   ProfileLayout,
 } from '../layouts';
-
-import { route } from '../types/route';
+import { IRoute } from '../types/route';
 
 const HomePage = lazy(() => import('../pages/HomePage'));
 const Login = lazy(() => import('../pages/Login'));
 const Register = lazy(() => import('../pages/Register'));
+const FogotPassword = lazy(() => import('../pages/FogotPassword'));
+const ResetPassword = lazy(
+  () => import('../pages/FogotPassword/ResetPassword')
+);
 const ProfilePage = lazy(() => import('../pages/ProfilePage'));
 const AccumulatedPoint = lazy(
   () => import('../pages/ProfilePage/AccumulatedPoint')
@@ -24,14 +27,18 @@ const FavoriteProduct = lazy(
 );
 const MyOrder = lazy(() => import('../pages/ProfilePage/MyOrder'));
 const ProductDetailPage = lazy(() => import('../pages/ProductDetail'));
-const CategoryPage = lazy(() => import('../pages/CategoryPage/CategoryPage'));
+const CategoryPage = lazy(() => import('../pages/CategoryPage'));
 const ProductCategoryPage = lazy(() => import('../pages/ProductCategoryPage'));
 const CartPage = lazy(() => import('../pages/CartPage'));
 const CheckOutPage = lazy(() => import('../pages/CheckOutPage'));
+const SearchProduct = lazy(() => import('../pages/SearchProductPage'));
+const NewsPage = lazy(() => import('../pages/NewsPage'));
+const NewsDetailPage = lazy(() => import('../pages/NewsDetailPage'));
+const PaymentSuccessPage = lazy(() => import('../pages/PaymentSuccess'));
 
 // admin
 const User = lazy(() => import('../dashboard/pages/User'));
-const Statistical = lazy(() => import('../dashboard/pages/Statistical'));
+const Dashboard = lazy(() => import('../dashboard/pages/Home'));
 const Profile = lazy(() => import('../dashboard/pages/Profile'));
 const Category = lazy(() => import('../dashboard/pages/Category'));
 const FormCategory = lazy(
@@ -47,15 +54,23 @@ const ProductCategory = lazy(
 const FormProductCategory = lazy(
   () => import('../dashboard/pages/ProductCategory/FormProductCategory')
 );
-
-const ProductAdmin = lazy(() => import('../dashboard/pages/Product/Product'));
+const ProductAdmin = lazy(() => import('../dashboard/pages/Product'));
 const FormProduct = lazy(
   () => import('../dashboard/pages/Product/FormProduct')
 );
+const Comment = lazy(() => import('../dashboard/pages/Comment'));
+const NewsAdmin = lazy(() => import('../dashboard/pages/News'));
+const FormNews = lazy(() => import('../dashboard/pages/News/FormNews'));
+const Order = lazy(() => import('../dashboard/pages/Order'));
+const Promotion = lazy(() => import('../dashboard/pages/Promotion'));
+const InventoryAdmin = lazy(() => import('../dashboard/pages/Inventory'));
+const Size = lazy(() => import('../dashboard/pages/Size'));
+const Color = lazy(() => import('../dashboard/pages/Color'));
+const Statistical = lazy(() => import('../dashboard/pages/Statistical'));
 
 const NotFound = lazy(() => import('../pages/NotFound/NotFound'));
 
-export const publicRoute: route[] = [
+export const publicRoute: IRoute[] = [
   {
     path: '*',
     element: NotFound,
@@ -69,12 +84,22 @@ export const publicRoute: route[] = [
   {
     path: routes.register,
     element: Register,
-    layout: DefaultLayout,
+    layout: null,
   },
   {
     path: routes.login,
     element: Login,
-    layout: DefaultLayout,
+    layout: null,
+  },
+  {
+    path: routes.fogotPassword,
+    element: FogotPassword,
+    layout: null,
+  },
+  {
+    path: routes.restPassword,
+    element: ResetPassword,
+    layout: null,
   },
   {
     path: routes.profile,
@@ -112,7 +137,12 @@ export const publicRoute: route[] = [
     layout: DefaultLayout,
   },
   {
-    path: routes.categoryPage,
+    path: routes.collectionPage,
+    element: ProductCategoryPage,
+    layout: DefaultLayout,
+  },
+  {
+    path: routes.productCategoryPage,
     element: ProductCategoryPage,
     layout: DefaultLayout,
   },
@@ -126,13 +156,33 @@ export const publicRoute: route[] = [
     element: CheckOutPage,
     layout: CartLayout,
   },
+  {
+    path: routes.searchProduct,
+    element: SearchProduct,
+    layout: DefaultLayout,
+  },
+  {
+    path: routes.news,
+    element: NewsPage,
+    layout: DefaultLayout,
+  },
+  {
+    path: routes.newsDetail,
+    element: NewsDetailPage,
+    layout: DefaultLayout,
+  },
+  {
+    path: routes.paymentSuccess,
+    element: PaymentSuccessPage,
+    layout: DefaultLayout,
+  },
 ];
 
 //admin
-export const privateRoute: route[] = [
+export const privateRoute: IRoute[] = [
   {
     path: routes.admin,
-    element: Statistical,
+    element: Dashboard,
     layout: DashboardLayout,
   },
   {
@@ -203,6 +253,56 @@ export const privateRoute: route[] = [
   {
     path: routes.editProductAdmin,
     element: FormProduct,
+    layout: DashboardLayout,
+  },
+  {
+    path: routes.inventoryAdmin,
+    element: InventoryAdmin,
+    layout: DashboardLayout,
+  },
+  {
+    path: routes.commentAdmin,
+    element: Comment,
+    layout: DashboardLayout,
+  },
+  {
+    path: routes.newsAdmin,
+    element: NewsAdmin,
+    layout: DashboardLayout,
+  },
+  {
+    path: routes.createNews,
+    element: FormNews,
+    layout: DashboardLayout,
+  },
+  {
+    path: routes.editNews,
+    element: FormNews,
+    layout: DashboardLayout,
+  },
+  {
+    path: routes.orderAdmmin,
+    element: Order,
+    layout: DashboardLayout,
+  },
+  {
+    path: routes.sizeAdmin,
+    element: Size,
+    layout: DashboardLayout,
+  },
+  {
+    path: routes.colorAdmin,
+    element: Color,
+    layout: DashboardLayout,
+  },
+  {
+    path: routes.promotionAdmin,
+    element: Promotion,
+    layout: DashboardLayout,
+  },
+  {
+    path: routes.statisticalAdmin,
+    element: Statistical,
     layout: DashboardLayout,
   },
 ];

@@ -1,8 +1,7 @@
-import React from 'react';
 import {
   DeleteOutlined,
-  EditOutlined,
   DownloadOutlined,
+  EditOutlined,
 } from '@ant-design/icons';
 import {
   Button,
@@ -14,56 +13,56 @@ import {
   Select,
   Space,
   Table,
+  Tag,
 } from 'antd';
-
 import moment from 'moment';
+import { AlignType } from 'rc-table/lib/interface';
+import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { utils, writeFileXLSX } from 'xlsx';
 import { userApi } from '../../../../apis/userApi';
+import { authSelector } from '../../../../redux/slice/authSlice';
 import {
   modalActions,
   modalSelector,
-  modalState,
 } from '../../../../redux/slice/modalSlice';
-import {
-  userState,
-  userActions,
-  userSelector,
-} from '../../../../redux/slice/userSlice';
-import { user } from '../../../../types/user';
+import { userActions, userSelector } from '../../../../redux/slice/userSlice';
+import { IUser } from '../../../../types/user';
 import ModalUser from '../ModalUser';
-import { authSelector, authState } from '../../../../redux/slice/authSlice';
 
 const TableUser: React.FC = () => {
   const dispatch = useDispatch();
 
-  const { isModal }: modalState = useSelector(modalSelector);
-  const { users, isLoading, page, pageSize }: userState =
-    useSelector(userSelector);
-  const { user }: authState = useSelector(authSelector);
+  const { isModal } = useSelector(modalSelector);
+  const { users, isLoading, page, pageSize } = useSelector(userSelector);
+  const { user } = useSelector(authSelector);
 
   const [form] = Form.useForm();
 
   const columns = [
     {
+      title: 'ID',
+      dataIndex: 'id',
+      width: 50,
+    },
+    {
       title: 'Hình ảnh',
       dataIndex: 'avatar',
-      render: (text: string, record: user) => {
+      width: 100,
+      align: 'center' as AlignType,
+      render: (text: string, record: IUser) => {
         return (
           <React.Fragment>
-            {!record.avatar ? (
+            {!record?.avatar ? (
               <img
-                style={{
-                  width: '30px',
-                  height: '30px',
-                }}
-                src="https://res.cloudinary.com/diot4imoq/image/upload/v1659164349/supersports/1200px-Breezeicons-actions-22-im-user.svg_ophigj.png"
+                className="w-20 h-14 object-cover"
+                src="https://res.cloudinary.com/diot4imoq/image/upload/v1677655323/canifa/user_jmlojj.jpg"
                 alt=""
               />
             ) : (
               <img
                 className="w-20 h-14 object-cover"
-                src={record.avatar}
+                src={record?.avatar}
                 alt=""
               />
             )}
@@ -74,6 +73,20 @@ const TableUser: React.FC = () => {
     {
       title: 'Họ tên',
       dataIndex: 'fullname',
+      render: (text: string, record: IUser) => {
+        return (
+          <div>
+            <span
+              className="cursor-pointer text-blue-600 hover:text-blue-400"
+              onClick={() => {
+                handleEditUser(record);
+              }}
+            >
+              {record?.fullname}
+            </span>
+          </div>
+        );
+      },
     },
     {
       title: 'Email',
@@ -86,26 +99,43 @@ const TableUser: React.FC = () => {
     {
       title: 'Giới tính',
       dataIndex: 'gender',
-      render: (text: string, record: user) => {
+      width: 100,
+      align: 'center' as AlignType,
+      render: (text: string, record: IUser) => {
         return (
-          <React.Fragment>
-            {record.gender === true ? <span>Nam</span> : <span>Nữ</span>}
-          </React.Fragment>
+          <div>
+            {record?.gender === true ? (
+              <Tag color="red" className="border-0 text-xl">
+                Nam
+              </Tag>
+            ) : (
+              <Tag color="green" className="border-0 text-xl">
+                Nữ
+              </Tag>
+            )}
+          </div>
         );
       },
     },
     {
+      title: 'Điểm tích lũy',
+      dataIndex: 'accumulatedPoints',
+      align: 'center' as AlignType,
+    },
+    {
       title: 'Ngày tạo',
       dataIndex: 'createdAt',
-      render: (text: string, record: user) => {
-        let date = moment(record.createdAt).format('MM/DD/YYYY');
-        return <React.Fragment>{date}</React.Fragment>;
+      render: (text: string, record: IUser) => {
+        let date = moment(record?.createdAt).format('MM/DD/YYYY');
+        return <div>{date}</div>;
       },
     },
     {
       title: 'Hành động',
       dataIndex: 'action',
-      render: (text: string, record: user) => {
+      width: 100,
+      align: 'center' as AlignType,
+      render: (text: string, record: IUser) => {
         return (
           <Space size="middle">
             <EditOutlined
@@ -120,8 +150,8 @@ const TableUser: React.FC = () => {
               onConfirm={() => {
                 confirm(record);
               }}
-              okText="Yes"
-              cancelText="No"
+              okText="Có"
+              cancelText="Không"
             >
               <DeleteOutlined className="common-icon-delete" />
             </Popconfirm>
@@ -131,9 +161,9 @@ const TableUser: React.FC = () => {
     },
   ];
 
-  const handleEditUser = (record: user) => {
-    dispatch(modalActions.showModal('Edit user'));
+  const handleEditUser = (record: IUser) => {
     dispatch(userActions.setUser(record));
+    dispatch(modalActions.showModal('Sửa khách hàng'));
   };
 
   const onFinish = (values: any) => {
@@ -169,8 +199,8 @@ const TableUser: React.FC = () => {
   }
 
   const handleAddNewUser = () => {
-    dispatch(modalActions.showModal('Add user'));
     dispatch(userActions.setUser(null));
+    dispatch(modalActions.showModal('Thêm khách hàng'));
   };
 
   const handleExportExcel = () => {
@@ -179,7 +209,7 @@ const TableUser: React.FC = () => {
         const data = await userApi.getAll(user.accessToken, dispatch);
         let wb = utils.book_new();
         let ws = utils.json_to_sheet(
-          data.data.data.rows.map((item: user) => ({
+          data.data.data.rows.map((item: IUser) => ({
             fullname: item.fullname,
             email: item.email,
             phone: item.phone,
@@ -199,7 +229,6 @@ const TableUser: React.FC = () => {
   return (
     <React.Fragment>
       {isModal && <ModalUser />}
-
       <Row className="common-row-cus">
         <Col xl={18} style={{ paddingInline: '5px' }}>
           <Form
@@ -280,7 +309,7 @@ const TableUser: React.FC = () => {
           <Table
             dataSource={
               users &&
-              users.rows.map((item: user) => {
+              users.rows.map((item: IUser) => {
                 return {
                   ...item,
                   key: item.id,
@@ -290,7 +319,7 @@ const TableUser: React.FC = () => {
             loading={isLoading}
             columns={columns}
             pagination={false}
-            size="middle"
+            size="small"
           />
         </Col>
       </Row>

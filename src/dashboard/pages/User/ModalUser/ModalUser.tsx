@@ -19,17 +19,13 @@ import {
   Upload,
 } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
-import { authSelector, authState } from '../../../../redux/slice/authSlice';
+import { URL_API } from '../../../../constants';
+import { authSelector } from '../../../../redux/slice/authSlice';
 import {
   modalActions,
   modalSelector,
 } from '../../../../redux/slice/modalSlice';
-import {
-  userActions,
-  userSelector,
-  userState,
-} from '../../../../redux/slice/userSlice';
-import { URL_API } from '../../../../constants';
+import { userActions, userSelector } from '../../../../redux/slice/userSlice';
 
 const getBase64 = (img: RcFile, callback: (url: string) => void) => {
   const reader = new FileReader();
@@ -52,9 +48,9 @@ const beforeUpload = (file: RcFile) => {
 const ModalUser: React.FC = () => {
   const dispatch = useDispatch();
 
-  const { currentUser }: userState = useSelector(userSelector);
+  const { currentUser } = useSelector(userSelector);
 
-  const { user }: authState = useSelector(authSelector);
+  const { user } = useSelector(authSelector);
 
   const { isModal, title } = useSelector(modalSelector);
 
@@ -65,17 +61,18 @@ const ModalUser: React.FC = () => {
     password: '',
     phone: currentUser ? currentUser.phone : '',
     avatar: currentUser ? currentUser.avatar : '',
+    accumulatedPoints: currentUser ? currentUser.accumulatedPoints : '',
   };
 
   const [form] = Form.useForm();
   const [gender, setGender] = useState(1);
 
   // disable button when not input data
-  // const [disabledSave, setDisabledSave] = useState(true);
-  // const handleFormChange = () => {
-  //   const hasErrors = form.getFieldsError().some(({ errors }) => errors.length);
-  //   setDisabledSave(hasErrors);
-  // };
+  const [disabledSave, setDisabledSave] = useState(true);
+  const handleFormChange = () => {
+    const hasErrors = form.getFieldsError().some(({ errors }) => errors.length);
+    setDisabledSave(hasErrors);
+  };
 
   const [loading, setLoading] = useState(false);
   const [imageUrl, setImageUrl] = useState<string>();
@@ -123,6 +120,7 @@ const ModalUser: React.FC = () => {
       password: values.password,
       phone: values.phone,
       gender: values.gender,
+      accumulatedPoints: currentUser ? currentUser.accumulatedPoints : 0,
     };
     if (currentUser === null) {
       dispatch(
@@ -158,12 +156,12 @@ const ModalUser: React.FC = () => {
         okText="Lưu"
         cancelText="Quay lại"
         width={1000}
-        // okButtonProps={{ disabled: disabledSave }}
+        okButtonProps={{ disabled: disabledSave }}
       >
         <Form
           initialValues={initialValues}
           form={form}
-          // onFieldsChange={handleFormChange}
+          onFieldsChange={handleFormChange}
           labelCol={{ span: 6 }}
           wrapperCol={{ span: 14 }}
           onFinish={onFinish}
@@ -187,7 +185,7 @@ const ModalUser: React.FC = () => {
                   },
                   {
                     type: 'email',
-                    message: 'Please enter a valid email!',
+                    message: 'Vui lòng nhập email hợp lệ!',
                   },
                 ]}
               >
@@ -195,7 +193,7 @@ const ModalUser: React.FC = () => {
               </Form.Item>
               {!currentUser && (
                 <Form.Item
-                  label="Password"
+                  label="Mật khẩu"
                   name="password"
                   rules={[
                     {
@@ -204,7 +202,7 @@ const ModalUser: React.FC = () => {
                     },
                     {
                       min: 6,
-                      message: 'Password must be at least 6 characters',
+                      message: 'Mật khẩu có ít nhất 6 kí tự',
                     },
                   ]}
                 >
@@ -212,7 +210,7 @@ const ModalUser: React.FC = () => {
                 </Form.Item>
               )}
 
-              <Form.Item label="Avatar">
+              <Form.Item label="Hình ảnh">
                 <Upload
                   name="image"
                   listType="picture-card"
@@ -240,7 +238,7 @@ const ModalUser: React.FC = () => {
             </Col>
             <Col xl={12} md={12}>
               <Form.Item
-                label="Fullname"
+                label="Họ tên"
                 name="fullname"
                 rules={[
                   {
@@ -252,7 +250,7 @@ const ModalUser: React.FC = () => {
                 <Input />
               </Form.Item>
               <Form.Item
-                label="Phone"
+                label="SĐT"
                 name="phone"
                 rules={[
                   {
@@ -263,15 +261,15 @@ const ModalUser: React.FC = () => {
               >
                 <Input />
               </Form.Item>
-              <Form.Item label="Gender" name="gender">
+              <Form.Item label="Giới tính" name="gender">
                 <Radio.Group
                   onChange={(e: RadioChangeEvent) => {
                     setGender(e.target.value);
                   }}
                   value={gender}
                 >
-                  <Radio value={true}>Male</Radio>
-                  <Radio value={false}>Female</Radio>
+                  <Radio value={true}>Nam</Radio>
+                  <Radio value={false}>Nữ</Radio>
                 </Radio.Group>
               </Form.Item>
             </Col>

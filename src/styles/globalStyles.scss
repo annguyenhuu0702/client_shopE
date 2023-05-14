@@ -1,60 +1,60 @@
 @import "./variable.module.scss";
 @import "./mixin.module.scss";
 
-.swiper {
-  width: 100%;
-  height: 100%;
-}
+// .swiper {
+//   width: 100%;
+//   height: 100%;
+// }
 
-.swiper-slide {
-  text-align: center;
-  font-size: 18px;
-}
+// .swiper-slide {
+//   text-align: center;
+//   font-size: 18px;
+// }
 
-.swiper-button-prev {
-  top: 44% !important;
-  border-radius: 50%;
-  background: $white-color;
-  width: 46px !important;
-  height: 46px !important;
-  transform: rotate(180deg);
-  background-image: url("https://res.cloudinary.com/diot4imoq/image/upload/v1676777019/canifa/download_u883yz.svg");
-  background-repeat: no-repeat;
-  // background-size: 100% auto;
-  background-position: center;
+// .swiper-button-prev {
+//   top: 44% !important;
+//   border-radius: 50%;
+//   background: $white-color;
+//   width: 46px !important;
+//   height: 46px !important;
+//   transform: rotate(180deg);
+//   background-image: url("https://res.cloudinary.com/diot4imoq/image/upload/v1676777019/canifa/download_u883yz.svg");
+//   background-repeat: no-repeat;
+//   // background-size: 100% auto;
+//   background-position: center;
 
-  @include tablet {
-    top: 40% !important;
-  }
+//   @include tablet {
+//     top: 40% !important;
+//   }
 
-  @include mobile {
-    top: 40% !important;
-  }
-}
+//   @include mobile {
+//     top: 40% !important;
+//   }
+// }
 
-.swiper-button-next {
-  top: 44% !important;
-  border-radius: 50%;
-  background: $white-color;
-  width: 46px !important;
-  height: 46px !important;
-  background-image: url("https://res.cloudinary.com/diot4imoq/image/upload/v1676777019/canifa/download_u883yz.svg");
-  background-repeat: no-repeat;
-  // background-size: 100% auto;
-  background-position: center;
+// .swiper-button-next {
+//   top: 44% !important;
+//   border-radius: 50%;
+//   background: $white-color;
+//   width: 46px !important;
+//   height: 46px !important;
+//   background-image: url("https://res.cloudinary.com/diot4imoq/image/upload/v1676777019/canifa/download_u883yz.svg");
+//   background-repeat: no-repeat;
+//   // background-size: 100% auto;
+//   background-position: center;
 
-  @include tablet {
-    top: 40% !important;
-  }
+//   @include tablet {
+//     top: 40% !important;
+//   }
 
-  @include mobile {
-    top: 40% !important;
-  }
-}
+//   @include mobile {
+//     top: 40% !important;
+//   }
+// }
 
-.swiper-button-next::after {
-  display: none;
-}
+// .swiper-button-next::after {
+//   display: none;
+// }
 
 .p-50 {
   padding: 0 50px;
@@ -177,12 +177,12 @@
   object-fit: cover;
 }
 
-.common-img-slide {
-  border-radius: 50%;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
+// .common-img-slide {
+//   border-radius: 50%;
+//   width: 100%;
+//   height: 100%;
+//   object-fit: cover;
+// }
 
 // common title home-page
 
@@ -273,18 +273,21 @@
   }
 }
 
-// nút login register
+// login register
 
 .btn-auth {
   width: 100%;
-  height: 100%;
+  height: 54px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   border: none;
   outline: none;
   text-transform: uppercase;
-  font-size: 2rem;
-  background: #13283f;
+  font-size: 1.8rem;
   color: $white-color;
-  margin-top: 24px;
+  background: #0089ed;
+  margin-top: 16px;
   text-align: center;
   cursor: pointer;
 
@@ -297,13 +300,10 @@
   }
 }
 
-// login register
-
 .container-auth {
   width: 500px;
-  margin: 0 auto;
   background: #f9f9f9;
-  padding: 60px 40px;
+  padding: 20px;
   .title {
     text-align: center;
     margin-bottom: 30px;
@@ -311,15 +311,23 @@
   }
   @include mobile {
     width: 100%;
+    height: 100vh;
     padding: 40px 20px;
   }
 }
 
-// common auth
 .auth {
-  margin: 20px 0;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   @include mobile {
+    display: block;
     margin: 0;
+  }
+
+  @include tablet {
+    height: 100%;
   }
 }
 
@@ -328,6 +336,15 @@
 .ant-btn-primary,
 .ant-input-affix-wrapper {
   border-radius: 6px;
+}
+
+// fogot password
+
+#fogot-password,
+#reset-password {
+  .ant-form-item-row {
+    width: 100%;
+  }
 }
 
 // admin
@@ -378,7 +395,7 @@
   }
 
   .common-layout-content-cus {
-    height: calc(100vh - 65px - 65px);
+    // height: calc(100vh - 65px - 65px);
 
     .common-content-wrap {
       .common-content {

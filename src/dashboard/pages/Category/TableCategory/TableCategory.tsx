@@ -1,8 +1,7 @@
-import React from 'react';
 import {
   DeleteOutlined,
-  EditOutlined,
   DownloadOutlined,
+  EditOutlined,
 } from '@ant-design/icons';
 import {
   Button,
@@ -16,34 +15,42 @@ import {
   Table,
 } from 'antd';
 import moment from 'moment';
+import { AlignType } from 'rc-table/lib/interface';
+import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { utils, writeFileXLSX } from 'xlsx';
 import { categoryApi } from '../../../../apis/categoryApi';
-import { authSelector, authState } from '../../../../redux/slice/authSlice';
+import { routes } from '../../../../config/routes';
+import { authSelector } from '../../../../redux/slice/authSlice';
 import {
   categoryActions,
   categorySelector,
-  categoryState,
 } from '../../../../redux/slice/categorySlice';
-import { category } from '../../../../types/category';
+import { ICategory } from '../../../../types/category';
 
 const TableCategory: React.FC = () => {
   const dispatch = useDispatch();
   const [form] = Form.useForm();
-  const { categories, isLoading, page, pageSize }: categoryState =
+  const { categories, isLoading, page, pageSize } =
     useSelector(categorySelector);
-  const { user }: authState = useSelector(authSelector);
+  const { user } = useSelector(authSelector);
   const navigate = useNavigate();
   const columns = [
     {
+      title: 'ID',
+      dataIndex: 'id',
+      width: 50,
+    },
+    {
       title: 'Hình ảnh',
-      width: '100px',
-      render: (text: string, record: category) => {
-        return record.thumbnail !== '' ? (
-          <div className="flex justify-center cursor-text">
+      width: 100,
+      align: 'center' as AlignType,
+      render: (text: string, record: ICategory) => {
+        return record?.thumbnail !== '' ? (
+          <div className="cursor-text">
             <img
-              src={record.thumbnail}
+              src={record?.thumbnail}
               alt=""
               className="w-20 h-14 object-cover"
             />
@@ -56,17 +63,31 @@ const TableCategory: React.FC = () => {
     {
       title: 'Tên',
       dataIndex: 'name',
+      render: (text: string, record: ICategory) => {
+        return (
+          <div>
+            <span
+              className="cursor-pointer text-blue-600 hover:text-blue-400"
+              onClick={() => {
+                handleEditCategory(record);
+              }}
+            >
+              {record?.name}
+            </span>
+          </div>
+        );
+      },
     },
     {
       title: 'Ngày tạo',
-      render: (text: string, record: category) => {
-        let date = moment(record.createdAt).format('MM/DD/YYYY');
+      render: (text: string, record: ICategory) => {
+        let date = moment(record?.createdAt).format('MM/DD/YYYY');
         return <div>{date}</div>;
       },
     },
     {
       title: 'Hành động',
-      render: (text: string, record: category) => {
+      render: (text: string, record: ICategory) => {
         return (
           <Space size="middle">
             <EditOutlined
@@ -81,8 +102,8 @@ const TableCategory: React.FC = () => {
               onConfirm={() => {
                 confirm(record);
               }}
-              okText="Yes"
-              cancelText="No"
+              okText="Có"
+              cancelText="Không"
             >
               <DeleteOutlined className="common-icon-delete" />
             </Popconfirm>
@@ -122,7 +143,7 @@ const TableCategory: React.FC = () => {
 
   const handleAddNewCategory = () => {
     dispatch(categoryActions.setCategory(null));
-    navigate('/admin/category/create');
+    navigate(routes.createCategoryAdmin);
   };
 
   const handleEditCategory = (record: any) => {
@@ -136,7 +157,7 @@ const TableCategory: React.FC = () => {
         const data = await categoryApi.getAll();
         let wb = utils.book_new();
         let ws = utils.json_to_sheet(
-          data.data.data.rows.map((item: category) => ({
+          data.data.data.rows.map((item: ICategory) => ({
             name: item.name,
 
             createdAt: moment(item.createdAt).format('MM/DD/YYYY'),
@@ -228,7 +249,7 @@ const TableCategory: React.FC = () => {
       <Row className="common-content-table">
         <Col xl={24} md={24} xs={24}>
           <Table
-            dataSource={categories.rows.map((item: category) => {
+            dataSource={categories.rows.map((item: ICategory) => {
               return {
                 ...item,
                 key: item.id,
@@ -238,7 +259,7 @@ const TableCategory: React.FC = () => {
             columns={columns}
             pagination={false}
             expandable={{ showExpandColumn: false }}
-            size="middle"
+            size="small"
           />
         </Col>
       </Row>

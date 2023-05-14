@@ -1,7 +1,6 @@
 import slugify from 'slugify';
 
 export const castToVND = (price: string | number) => {
-  if (!price) return;
   price = price.toLocaleString('vi', { style: 'currency', currency: 'VND' });
   return price;
 };
@@ -18,10 +17,22 @@ export const configSlugify = (text: string) => {
   });
 };
 
-export const removeTextBetweenParentheses = (text: string) => {
-  return text.replace(/ *\([^)]*\) */g, '');
+export const removeTextBetweenParentheses = (text?: string) => {
+  return text?.replace(/ *\([^)]*\) */g, '');
 };
 
 export const removeParenthesis = (text: string) => {
   return text.replace(/[{()}]/g, '');
+};
+
+export const makeid = (length: number) => {
+  let result = '';
+  const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+  const charactersLength = characters.length;
+  let counter = 0;
+  while (counter < length) {
+    result += characters.charAt(Math.floor(Math.random() * charactersLength));
+    counter += 1;
+  }
+  return result;
 };

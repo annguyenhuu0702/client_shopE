@@ -13,6 +13,7 @@ import {
   Select,
   Space,
   Table,
+  Tag,
 } from 'antd';
 import moment from 'moment';
 import React from 'react';
@@ -21,13 +22,12 @@ import { useNavigate } from 'react-router-dom';
 import { utils, writeFileXLSX } from 'xlsx';
 import { productCategoryApi } from '../../../../apis/productCategoryApi';
 import { routes } from '../../../../config/routes';
-import { authSelector, authState } from '../../../../redux/slice/authSlice';
+import { authSelector } from '../../../../redux/slice/authSlice';
 import {
   productCategoryActions,
   productCategorySelector,
-  productCategoryState,
 } from '../../../../redux/slice/productCategorySlice';
-import { productCategory } from '../../../../types/productCategory';
+import { IProductCategory } from '../../../../types/productCategory';
 import {
   removeParenthesis,
   removeTextBetweenParentheses,
@@ -36,44 +36,68 @@ import {
 const TableProductCategory: React.FC = () => {
   const dispatch = useDispatch();
   const [form] = Form.useForm();
-  const { productCategories, isLoading, page, pageSize }: productCategoryState =
-    useSelector(productCategorySelector);
-  const { user }: authState = useSelector(authSelector);
+  const { productCategories, isLoading, page, pageSize } = useSelector(
+    productCategorySelector
+  );
+  const { user } = useSelector(authSelector);
   const navigate = useNavigate();
   const columns = [
     {
-      title: 'Hình ảnh',
-      width: '100px',
-      render: (text: string, record: productCategory) => {
-        return record.thumbnail !== '' ? (
-          <div className="flex justify-center cursor-text">
-            <img
-              src={record.thumbnail}
-              alt=""
-              className="w-20 h-14 object-cover"
-            />
+      title: 'ID',
+      dataIndex: 'id',
+      width: 50,
+    },
+    // {
+    //   title: 'Hình ảnh',
+    //   width: 100,
+    //   render: (text: string, record: productCategory) => {
+    //     return record.thumbnail !== '' ? (
+    //       <div className="cursor-text">
+    //         <img
+    //           src={record.thumbnail}
+    //           alt=""
+    //           className="w-20 h-14 object-cover"
+    //         />
+    //       </div>
+    //     ) : (
+    //       <></>
+    //     );
+    //   },
+    // },
+    {
+      title: 'Tên',
+      render: (text: string, record: IProductCategory) => {
+        return (
+          <div>
+            <span
+              className="cursor-pointer text-blue-600 hover:text-blue-400"
+              onClick={() => {
+                handleEditProductCategory(record);
+              }}
+            >
+              {removeTextBetweenParentheses(record?.name)}
+            </span>
           </div>
-        ) : (
-          <></>
         );
       },
     },
     {
-      title: 'Tên',
-      render: (text: string, record: productCategory) => {
-        return <div>{removeTextBetweenParentheses(record.name)}</div>;
-      },
-    },
-    {
       title: 'Bộ sưu tập',
-      render: (text: string, record: productCategory) => {
-        return <div>{removeParenthesis(record.collection?.name)}</div>;
+      render: (text: string, record: IProductCategory) => {
+        return (
+          <div>
+            <Tag color="green" className="border-0 text-xl">
+              {record?.collection &&
+                removeParenthesis(record?.collection?.name)}
+            </Tag>
+          </div>
+        );
       },
     },
     {
       title: 'Ngày tạo',
-      render: (text: string, record: any) => {
-        let date = moment(record.createdAt).format('MM/DD/YYYY');
+      render: (text: string, record: IProductCategory) => {
+        let date = moment(record?.createdAt).format('MM/DD/YYYY');
         return <div>{date}</div>;
       },
     },
@@ -95,8 +119,8 @@ const TableProductCategory: React.FC = () => {
               onConfirm={() => {
                 confirm(record);
               }}
-              okText="Yes"
-              cancelText="No"
+              okText="Có"
+              cancelText="Không"
             >
               <DeleteOutlined className="common-icon-delete" />
             </Popconfirm>
@@ -150,7 +174,7 @@ const TableProductCategory: React.FC = () => {
         const data = await productCategoryApi.getAll();
         let wb = utils.book_new();
         let ws = utils.json_to_sheet(
-          data.data.data.rows.map((item: productCategory) => ({
+          data.data.data.rows.map((item: IProductCategory) => ({
             name: item.name,
             collection: item.collection.name,
             createdAt: moment(item.createdAt).format('MM/DD/YYYY'),
@@ -242,7 +266,7 @@ const TableProductCategory: React.FC = () => {
       <Row className="common-content-table">
         <Col xl={24} md={24} xs={24}>
           <Table
-            dataSource={productCategories.rows.map((item: productCategory) => {
+            dataSource={productCategories.rows.map((item: IProductCategory) => {
               return {
                 ...item,
                 key: item.id,
@@ -252,7 +276,7 @@ const TableProductCategory: React.FC = () => {
             columns={columns}
             pagination={false}
             expandable={{ showExpandColumn: false }}
-            size="middle"
+            size="small"
           />
         </Col>
       </Row>

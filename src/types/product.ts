@@ -1,44 +1,69 @@
 import React from 'react';
-import { queryParams, tokenPayload } from './common';
-import { productCategory } from './productCategory';
+import { queryParams } from './common';
+import { IProductCategory } from './productCategory';
+import { IProductImage } from './productImage';
+import { IProductVariant } from './productVariant';
 
-export interface product {
+export interface IProduct {
   key?: React.Key | string | number;
   id: number;
   productCategoryId: number;
   name: string;
+  code: string;
   slug: string;
   thumbnail: string;
   description: string;
+  material: string;
+  guide: string;
   price: number;
   priceSale: number;
   deletedAt: Date;
   createdAt: string;
   updatedAt: string;
   resetValues?: Function;
-  productCategory: productCategory;
+  productCategory: IProductCategory;
+  productImages: IProductImage[];
+  productVariants: IProductVariant[];
 }
 
-export interface createProduct {
+export interface ICreateProduct {
   productCategoryId: number;
   name: string;
   slug: string;
-  thumbnail: string;
-  description: string;
   price: number;
-  priceSale: number;
+  // priceSale: number;
+  description: string;
+  material: string;
+  guide: string;
   resetValues?: Function;
 }
 
-export interface updateProduct extends createProduct {
+export interface IUpdateProduct extends ICreateProduct {
   id: number;
 }
 
-export interface deleteProduct extends tokenPayload {
-  id: number;
-  params?: queryParams;
-}
-
-export interface getAllProductParams extends queryParams {
+export interface IGetAllProductParams extends queryParams {
   name?: string;
+  slug?: string;
+  otherSlug?: string;
+  min?: string;
+  max?: string;
+  sizesId?: string;
+  colorsId?: string;
 }
+
+export interface IGetAllProductByCategory {
+  limitCollection?: number;
+  limitProduct?: number;
+  slug: string;
+}
+
+export interface IGetProductBySlug {
+  slug: string;
+}
+
+export interface ICreateFavoriteProduct {
+  productId: number;
+}
+
+export interface IGetAllFavoriteProduct extends queryParams {}

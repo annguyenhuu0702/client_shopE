@@ -1,53 +1,73 @@
-import instance from '../config/configAxios';
-import { URL_API } from '../constants';
-import { getAllVariantValue } from '../types/variantValue';
+import { AxiosResponse } from 'axios';
+import instance, { apiCallerWithToken } from '../config/configAxios';
+import { AppDispatch } from '../redux/store';
+import { queryParams } from '../types/common';
+import {
+  ICreateVariantValue,
+  IGetAllVariantValue,
+  IUpdateVariantValue,
+} from '../types/variantValue';
 
-const getAll = (params?: getAllVariantValue) => {
-  return instance.get(`${URL_API}/variantValue/getAll`, {
+const getAll = (params?: IGetAllVariantValue) => {
+  return instance.get(`variantValue/getAll`, {
     params,
   });
 };
 
-// const getById = (id: string) => {
-//   return instance.get(`${URL_API}/productImage/getById/${id}`);
-// };
+const getAllColor = (
+  token: string | null,
+  dispatch: AppDispatch,
+  params?: queryParams
+): Promise<AxiosResponse> => {
+  return apiCallerWithToken(token, dispatch).get(`variantValue/getAllColor`, {
+    params,
+  });
+};
 
-// const create = (
-//   token: string | null,
-//   dispatch: AppDispatch,
-//   data: createProductVariant
-// ): Promise<AxiosResponse> => {
-//   return apiCallerWithToken(token, dispatch).post(
-//     `${URL_API}/productImage/create`,
-//     data
-//   );
-// };
+const getAllSize = (
+  token: string | null,
+  dispatch: AppDispatch,
+  params?: queryParams
+): Promise<AxiosResponse> => {
+  return apiCallerWithToken(token, dispatch).get(`variantValue/getAllSize`, {
+    params,
+  });
+};
 
-// const update = (
-//   token: string | null,
-//   dispatch: AppDispatch,
-//   data: updateProductVariant
-// ): Promise<AxiosResponse> => {
-//   return apiCallerWithToken(token, dispatch).put(
-//     `${URL_API}/productImage/update/${data.id}`,
-//     data
-//   );
-// };
+const createVariantValue = (
+  token: string | null,
+  dispatch: AppDispatch,
+  data: ICreateVariantValue
+): Promise<AxiosResponse> => {
+  return apiCallerWithToken(token, dispatch).post(`variantValue/create`, data);
+};
 
-// const deleteProductVariant = (
-//   token: string | null,
-//   dispatch: AppDispatch,
-//   id: number
-// ): Promise<AxiosResponse> => {
-//   return apiCallerWithToken(token, dispatch).delete(
-//     `${URL_API}/productImage/delete/${id}`
-//   );
-// };
+const updateVariantValue = (
+  token: string | null,
+  dispatch: AppDispatch,
+  data: IUpdateVariantValue
+): Promise<AxiosResponse> => {
+  return apiCallerWithToken(token, dispatch).put(
+    `variantValue/update/${data.id}`,
+    data
+  );
+};
+
+const deleteVariantValue = (
+  token: string | null,
+  dispatch: AppDispatch,
+  id: number
+): Promise<AxiosResponse> => {
+  return apiCallerWithToken(token, dispatch).delete(
+    `variantValue/delete/${id}`
+  );
+};
 
 export const variantValueApi = {
-  // create,
   getAll,
-  // getById,
-  // update,
-  // deleteProductVariant,
+  getAllColor,
+  getAllSize,
+  createVariantValue,
+  updateVariantValue,
+  deleteVariantValue,
 };

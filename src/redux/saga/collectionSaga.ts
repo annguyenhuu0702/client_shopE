@@ -4,9 +4,9 @@ import { call, put, takeEvery } from 'redux-saga/effects';
 import { collectionApi } from '../../apis/collectionApi';
 import { STATUS_CODE } from '../../constants';
 import {
-  collection,
-  createCollection,
-  getAllCollectionParams,
+  ICollection,
+  ICreateCollection,
+  IGetAllCollectionParams,
 } from '../../types/collection';
 import { deleteParams, tokenPayloadData } from '../../types/common';
 import { collectionActions } from '../slice/collectionSlice';
@@ -14,7 +14,7 @@ import { routes } from '../../config/routes';
 
 function* getAllCollectionSaga({
   payload,
-}: PayloadAction<getAllCollectionParams>): any {
+}: PayloadAction<IGetAllCollectionParams>): any {
   try {
     const res = yield call(() => {
       return collectionApi.getAll(payload);
@@ -29,39 +29,17 @@ function* getAllCollectionSaga({
   }
 }
 
-function* getCollectionBySlugSaga({
-  payload,
-}: PayloadAction<getAllCollectionParams>): any {
-  try {
-    const res = yield call(() => {
-      return collectionApi.getAll({
-        slug: payload.slug,
-        productCategories: true,
-      });
-    });
-    const { data, status } = res;
-    if (status === STATUS_CODE.SUCCESS) {
-      yield put(
-        collectionActions.getCollectionBySlugSuccess(data.data.rows[0])
-      );
-    }
-  } catch (err) {
-    console.log(err);
-    yield put(collectionActions.getCollectionBySlugFailed());
-  }
-}
-
 function* createCollectionSaga({
   payload,
-}: PayloadAction<tokenPayloadData<createCollection>>): any {
+}: PayloadAction<tokenPayloadData<ICreateCollection>>): any {
   try {
     const { token, dispatch, data, navigate } = payload;
     const res = yield call(() => {
       return collectionApi.create(token, dispatch, data);
     });
-    const { data: newData, status } = res;
+    const { status } = res;
     if (status === STATUS_CODE.CREATED) {
-      yield put(collectionActions.createCollectionSuccess(newData.data));
+      yield put(collectionActions.createCollectionSuccess());
       if (data.resetValues) {
         data.resetValues();
       }
@@ -87,7 +65,7 @@ function* createCollectionSaga({
 
 function* editCollectionSaga({
   payload,
-}: PayloadAction<tokenPayloadData<collection>>): any {
+}: PayloadAction<tokenPayloadData<ICollection>>): any {
   try {
     const { token, dispatch, data, navigate } = payload;
     const res = yield call(() => {
@@ -95,7 +73,8 @@ function* editCollectionSaga({
     });
     const { status } = res;
     if (status === STATUS_CODE.SUCCESS) {
-      yield put(collectionActions.editCollectionSuccess(data));
+      yield put(collectionActions.editCollectionSuccess());
+
       if (data.resetValues) {
         data.resetValues();
       }
@@ -127,7 +106,7 @@ function* deleteCollectionSaga({ payload }: PayloadAction<deleteParams>): any {
     });
     const { status } = res;
     if (status === STATUS_CODE.SUCCESS) {
-      yield put(collectionActions.deleteCollectionSuccess(id));
+      yield put(collectionActions.deleteCollectionSuccess());
       yield put(
         collectionActions.getAllCollection({
           p: params?.p,
@@ -147,10 +126,35 @@ function* deleteCollectionSaga({ payload }: PayloadAction<deleteParams>): any {
   }
 }
 
+function* getCollectionBySlugClientSaga({
+  payload,
+}: PayloadAction<IGetAllCollectionParams>): any {
+  try {
+    const res = yield call(() => {
+      return collectionApi.getAll({
+        slug: payload.slug,
+        productCategories: true,
+      });
+    });
+    const { data, status } = res;
+    if (status === STATUS_CODE.SUCCESS) {
+      yield put(
+        collectionActions.getCollectionBySlugClientSuccess(data.data.rows[0])
+      );
+    }
+  } catch (err) {
+    console.log(err);
+    yield put(collectionActions.getCollectionBySlugClientFailed());
+  }
+}
+
 function* categorySaga() {
   yield takeEvery('collection/createCollection', createCollectionSaga);
   yield takeEvery('collection/getAllCollection', getAllCollectionSaga);
-  yield takeEvery('collection/getCollectionBySlug', getCollectionBySlugSaga);
+  yield takeEvery(
+    'collection/getCollectionBySlugClient',
+    getCollectionBySlugClientSaga
+  );
   yield takeEvery('collection/editCollection', editCollectionSaga);
   yield takeEvery('collection/deleteCollection', deleteCollectionSaga);
 }

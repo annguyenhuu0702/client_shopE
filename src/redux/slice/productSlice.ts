@@ -1,26 +1,53 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { deleteParams, tokenPayloadData } from '../../types/common';
 import {
-  createProduct,
-  getAllProductParams,
-  product,
-  updateProduct,
+  deleteParams,
+  tokenPayload,
+  tokenPayloadData,
+} from '../../types/common';
+import {
+  IProduct,
+  ICreateProduct,
+  IUpdateProduct,
+  IGetAllProductParams,
+  IGetAllProductByCategory,
+  IGetProductBySlug,
 } from '../../types/product';
+import { IProductCategory } from '../../types/productCategory';
 
 import { RootState } from '../store';
 
+export interface IProductByCategory {
+  products: IProduct[];
+  productCategory: IProductCategory | null;
+}
+
+export interface resProductByCategory {
+  rows: IProductByCategory[];
+  count: number;
+}
+
+export interface resProduct {
+  rows: IProduct[];
+  count: number;
+}
+
 export interface productState {
   products: resProduct;
-  currentProduct: product | null;
+  currentProduct: IProduct | null;
   page: number;
   pageSize: number;
   isLoading: boolean;
   isError: boolean;
-}
 
-export interface resProduct {
-  rows: product[];
-  count: number;
+  // client
+  productsClient: resProduct;
+  productsRelatedClient: IProduct[];
+  currentProductClient: IProduct | null;
+  pageClient: number;
+  pageSizeClient: number;
+  isLoadingClient: boolean;
+  isErrorClient: boolean;
+  productsByCategory: resProductByCategory;
 }
 
 const initialState: productState = {
@@ -29,10 +56,25 @@ const initialState: productState = {
     count: 0,
   },
   page: 1,
-  pageSize: 7,
+  pageSize: 9,
   currentProduct: null,
   isLoading: false,
   isError: false,
+  // client
+  productsClient: {
+    rows: [],
+    count: 0,
+  },
+  productsRelatedClient: [],
+  currentProductClient: null,
+  pageClient: 1,
+  pageSizeClient: 12,
+  isLoadingClient: false,
+  isErrorClient: false,
+  productsByCategory: {
+    rows: [{ productCategory: null, products: [] }],
+    count: 0,
+  },
 };
 
 const ProductSlice = createSlice({
@@ -46,10 +88,10 @@ const ProductSlice = createSlice({
       state.page = action.payload.page;
       state.pageSize = action.payload.pageSize;
     },
-    setProduct: (state, action: PayloadAction<product | null>) => {
+    setProduct: (state, action: PayloadAction<IProduct | null>) => {
       state.currentProduct = action.payload;
     },
-    getAllProduct: (state, action: PayloadAction<getAllProductParams>) => {
+    getAllProduct: (state, action: PayloadAction<IGetAllProductParams>) => {
       state.isLoading = true;
     },
     getAllProductSuccess: (state, action: PayloadAction<resProduct>) => {
@@ -64,19 +106,13 @@ const ProductSlice = createSlice({
     },
     createProduct: (
       state,
-      action: PayloadAction<tokenPayloadData<createProduct>>
+      action: PayloadAction<tokenPayloadData<ICreateProduct>>
     ) => {
       state.isLoading = true;
     },
-    createProductSuccess: (state, action: PayloadAction<product>) => {
+    createProductSuccess: (state) => {
       state.isLoading = false;
       state.isError = false;
-      state.products.rows.unshift(action.payload);
-      state.products.count += 1;
-      state.page = 1;
-      if (state.products.rows.length > 7) {
-        state.products.rows.splice(state.products.rows.length - 1, 1);
-      }
     },
     createProductFailed: (state) => {
       state.isLoading = false;
@@ -84,41 +120,119 @@ const ProductSlice = createSlice({
     },
     editProduct: (
       state,
-      action: PayloadAction<tokenPayloadData<updateProduct>>
+      action: PayloadAction<tokenPayloadData<IUpdateProduct>>
     ) => {
       state.isLoading = true;
     },
-    editProductSuccess: (state, action: PayloadAction<product>) => {
+    editProductSuccess: (state) => {
       state.isLoading = false;
       state.isError = false;
-      const index = state.products.rows.findIndex(
-        (item) => item.id === action.payload.id
-      );
-      if (index !== -1) {
-        state.products.rows[index] = action.payload;
-      }
     },
     editProductFailed: (state) => {
       state.isLoading = false;
-      state.isError = false;
+      state.isError = true;
     },
     deleteProduct: (state, action: PayloadAction<deleteParams>) => {
       state.isLoading = true;
     },
-    deleteProductSuccess: (state, action: PayloadAction<number>) => {
+    deleteProductSuccess: (state) => {
       state.isError = false;
       state.isLoading = false;
-      state.products.rows = state.products.rows.filter(
-        (item) => item.id !== action.payload
-      );
-      state.products.count -= 1;
-      if (state.products.rows.length === 0) {
-        state.page = state.page - 1;
-      }
     },
     deleteProductFailed: (state) => {
       state.isLoading = false;
       state.isError = true;
+    },
+    updateThumbnail: (
+      state,
+      { payload }: PayloadAction<{ id: number; thumbnail: string }>
+    ) => {
+      const { id, thumbnail } = payload;
+      const index = state.products.rows.findIndex((item) => item.id === id);
+      if (index !== -1) {
+        state.products.rows[index].thumbnail = thumbnail;
+        if (state.currentProduct) {
+          state.currentProduct.thumbnail = thumbnail;
+        }
+      }
+    },
+    getAllProductClient: (
+      state,
+      action: PayloadAction<IGetAllProductParams>
+    ) => {
+      state.isLoadingClient = true;
+    },
+    getAllProductClientSuccess: (state, action: PayloadAction<resProduct>) => {
+      state.isLoadingClient = false;
+      state.isErrorClient = false;
+      state.productsClient.rows = action.payload.rows;
+      state.productsClient.count = action.payload.count;
+    },
+    getAllProductClientFailed: (state) => {
+      state.isLoadingClient = false;
+      state.isErrorClient = true;
+    },
+    setPageClient: (
+      state,
+      action: PayloadAction<{ page: number; pageSize: number }>
+    ) => {
+      state.pageClient = action.payload.page;
+      state.pageSizeClient = action.payload.pageSize;
+    },
+    getAllProductByCategoryClient: (
+      state,
+      action: PayloadAction<IGetAllProductByCategory>
+    ) => {
+      state.isLoadingClient = true;
+    },
+    getAllProductByCategoryClientSuccess: (
+      state,
+      action: PayloadAction<resProductByCategory>
+    ) => {
+      state.isLoadingClient = false;
+      state.isErrorClient = false;
+      state.productsByCategory.rows = action.payload.rows;
+      state.productsByCategory.count = action.payload.count;
+    },
+    getAllProductByCategoryClientFailed: (state) => {
+      state.isLoadingClient = false;
+      state.isErrorClient = true;
+    },
+    getProductBySlugClient: (
+      state,
+      action: PayloadAction<IGetProductBySlug>
+    ) => {
+      state.isLoadingClient = true;
+    },
+    getProductBySlugClientSuccess: (
+      state,
+      action: PayloadAction<{ product: IProduct; productsRelated: IProduct[] }>
+    ) => {
+      state.isLoadingClient = false;
+      state.isErrorClient = false;
+      state.currentProductClient = action.payload.product;
+      state.productsRelatedClient = action.payload.productsRelated;
+    },
+    getProductBySlugClientFailed: (state) => {
+      state.isLoadingClient = false;
+      state.isErrorClient = true;
+    },
+    getFavoriteProductByUser: (state, actions: PayloadAction<tokenPayload>) => {
+      state.isLoadingClient = true;
+      state.isErrorClient = false;
+    },
+    getFavoriteProductByUserSuccess: (
+      state,
+      actions: PayloadAction<resProduct>
+    ) => {
+      state.isLoadingClient = true;
+      state.isErrorClient = false;
+      state.productsClient.rows = actions.payload.rows;
+      state.productsClient.count = actions.payload.count;
+    },
+    getFavoriteProductByUserFailed: (state) => {
+      state.isLoadingClient = false;
+      state.isErrorClient = true;
     },
   },
 });

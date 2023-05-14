@@ -2,7 +2,8 @@ import { LoadingOutlined, PlusOutlined } from '@ant-design/icons';
 import { Col, Form, message, Modal, Row, Select, Upload } from 'antd';
 import type { RcFile, UploadFile, UploadProps } from 'antd/es/upload/interface';
 import { UploadChangeParam } from 'antd/lib/upload';
-import { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
+import { AiFillDelete, AiOutlineCheck } from 'react-icons/ai';
 import { useDispatch, useSelector } from 'react-redux';
 import { productImageApi } from '../../../../apis/productImage';
 import { variantValueApi } from '../../../../apis/variantValueApi';
@@ -12,8 +13,16 @@ import {
   modalActions,
   modalSelector,
 } from '../../../../redux/slice/modalSlice';
-import { productSelector } from '../../../../redux/slice/productSlice';
-import { variantValue } from '../../../../types/variantValue';
+import {
+  productImageActions,
+  productImageSelector,
+} from '../../../../redux/slice/productImageSlice';
+import {
+  productActions,
+  productSelector,
+} from '../../../../redux/slice/productSlice';
+import { IProductImage } from '../../../../types/productImage';
+import { IVariantValue } from '../../../../types/variantValue';
 
 const getBase64 = (img: RcFile, callback: (url: string) => void) => {
   const reader = new FileReader();
@@ -33,49 +42,77 @@ const beforeUpload = (file: RcFile) => {
   return isJpgOrPng && isLt2M;
 };
 
-const ModalProductImage = () => {
+const ModalProductImage: React.FC = () => {
   const dispatch = useDispatch();
   const [form] = Form.useForm();
   const { user } = useSelector(authSelector);
   const { isModal, title } = useSelector(modalSelector);
   const { currentProduct } = useSelector(productSelector);
+  const { productImages } = useSelector(productImageSelector);
+
   const [loading, setLoading] = useState(false);
+
   const [imageUrl, setImageUrl] = useState<string>();
+
+  // lúc thêm ảnh
   const [pathImgs, setPathImgs] = useState<
     Array<{
       path: string;
-      variantValueId: number | null;
+      variantValueId: number;
     }>
   >([]);
-  const [variantValues, setVariantValues] = useState<variantValue[]>([]);
+
+  // sửa ảnh
+  const [updateImages, setUpdateImages] = useState<IProductImage[]>([]);
+
+  const [variantValues, setVariantValues] = useState<IVariantValue[]>([]);
+
+  const [listId, setListId] = useState<number[]>([]);
+  const [thumbnail, setThumbnail] = useState<string>('');
+  const [deleteThumbnail, setDeleteThumbnail] = useState<boolean>(false);
+
+  const getVariantColors = useMemo(() => {
+    return variantValues.filter((item) => item.variantId === 2);
+  }, [variantValues]);
 
   const handleOk = () => {
     form.submit();
-    console.log('helo');
   };
 
   const handleCancel = () => {
     dispatch(modalActions.hideModal());
   };
 
-  console.log('currentProduct:', currentProduct);
-
   const onFinish = async (values: any) => {
-    try {
-      if (currentProduct) {
-        const { data } = await productImageApi.createMany(
-          user.accessToken,
-          dispatch,
-          pathImgs.map((item: any) => ({
-            ...item,
-            productId: currentProduct.id,
-          }))
-        );
-        console.log('data', data);
+    if (currentProduct) {
+      try {
+        await productImageApi.createMany(user.accessToken, dispatch, {
+          pathImgs,
+          productId: currentProduct.id,
+          listId,
+          updateImages,
+          thumbnail,
+        });
         dispatch(modalActions.hideModal());
+        if (deleteThumbnail) {
+          dispatch(
+            productActions.updateThumbnail({
+              id: currentProduct.id,
+              thumbnail: '',
+            })
+          );
+        }
+        if (currentProduct?.thumbnail !== thumbnail) {
+          dispatch(
+            productActions.updateThumbnail({
+              id: currentProduct.id,
+              thumbnail,
+            })
+          );
+        }
+      } catch (error) {
+        console.log(error);
       }
-    } catch (error) {
-      console.log(error);
     }
   };
 
@@ -83,29 +120,51 @@ const ModalProductImage = () => {
     console.log('Failed:', errorInfo);
   };
 
+  const handleChangColors = (value: any, item: any) => {
+    setUpdateImages((state) =>
+      state.map((s: any) =>
+        s.path === item.path ? { ...s, variantValueId: value } : s
+      )
+    );
+  };
+
+  const handleSelectThumbnail = (path: string) => {
+    setThumbnail(path);
+  };
+
+  const handleDeleteImage = (id: number, path: string) => {
+    if (currentProduct && path === currentProduct.thumbnail) {
+      setDeleteThumbnail(true);
+    }
+    setListId((state) => {
+      return [...state, id];
+    });
+  };
+
+  const handleDeleteImageOnUpload = (path: string) => {
+    setPathImgs((state) => {
+      return state.filter((item) => item.path !== path);
+    });
+  };
   const handleChange: UploadProps['onChange'] = (
     info: UploadChangeParam<UploadFile>
   ) => {
-    console.log(info);
-
     if (info.file.status === 'uploading') {
       setLoading(true);
       return;
     }
     if (info.file.status === 'done') {
       // Get this url from response in real world.
-      console.log(
-        info.fileList.map((file: any) => ({
-          path: file.response,
-          variantValueId: null,
-        })) as any
-      );
-      setPathImgs(
-        info.fileList.map((file: any) => ({
-          path: file.response.data[0].secure_url,
-          variantValueId: null,
-        })) as any
-      );
+      try {
+        if (info.fileList.length > 0 && info.fileList[0].response) {
+          setPathImgs(
+            info.fileList.map((file: any, index) => ({
+              path: file.response.data[0].secure_url,
+              variantValueId: null,
+            })) as any
+          );
+        }
+      } catch (error) {}
       getBase64(info.file.originFileObj as RcFile, (url) => {
         setLoading(false);
         setImageUrl(url);
@@ -119,12 +178,28 @@ const ModalProductImage = () => {
         const { data } = await variantValueApi.getAll({
           variantName: 'Màu sắc',
         });
+        console.log(data.data);
         setVariantValues(data.data.rows);
       } catch (error) {
         console.log(error);
       }
     })();
   }, []);
+
+  useEffect(() => {
+    if (currentProduct) {
+      dispatch(
+        productImageActions.getAllProductImage({
+          productId: `${currentProduct?.id}`,
+        })
+      );
+      setThumbnail(currentProduct.thumbnail);
+    }
+  }, [dispatch, currentProduct]);
+
+  useEffect(() => {
+    setUpdateImages(productImages.rows);
+  }, [productImages]);
 
   const uploadButton = (
     <div>
@@ -138,7 +213,7 @@ const ModalProductImage = () => {
       open={isModal}
       centered
       destroyOnClose
-      width={1000}
+      width="70vw"
       okText="Lưu"
       cancelText="Quay lại"
       onOk={handleOk}
@@ -167,9 +242,10 @@ const ModalProductImage = () => {
           </Upload>
         </Form.Item>
         <Row gutter={[16, 16]}>
+          {/* lúc upload ảnh thì cái này chạy */}
           {pathImgs.map((item: any) => {
             return (
-              <Col key={item.path} xs={6}>
+              <Col key={item.path} xl={6}>
                 <div className="overflow-hidden">
                   <div
                     className="h-0 relative"
@@ -196,7 +272,7 @@ const ModalProductImage = () => {
                       );
                     }}
                   >
-                    {variantValues.map((variantValue) => (
+                    {getVariantColors.map((variantValue) => (
                       <Select.Option
                         key={variantValue.id}
                         value={variantValue.id}
@@ -206,9 +282,94 @@ const ModalProductImage = () => {
                     ))}
                   </Select>
                 </div>
+                <div className="mt-2 flex justify-between">
+                  <span
+                    className="w-10 h-10 bg-red-600 text-white flex items-center justify-center rounded-md cursor-pointer"
+                    onClick={() => {
+                      handleDeleteImageOnUpload(item.path);
+                    }}
+                  >
+                    <AiFillDelete />
+                  </span>
+                  {item.path === thumbnail ? (
+                    <></>
+                  ) : (
+                    <span
+                      className="w-10 h-10 bg-green-600 text-white flex items-center justify-center rounded-md cursor-pointer"
+                      onClick={() => {
+                        handleSelectThumbnail(item.path);
+                      }}
+                    >
+                      <AiOutlineCheck />
+                    </span>
+                  )}
+                </div>
               </Col>
             );
           })}
+          {/* có productImage thì cái này chạy */}
+          {productImages.rows.length > 0 &&
+            productImages.rows.map((item: any, index: number) => {
+              if (listId.includes(item.id))
+                return <React.Fragment key={item.id}></React.Fragment>;
+              return (
+                <Col key={item.path} xl={6}>
+                  <div className="overflow-hidden">
+                    <div
+                      className="h-0 relative"
+                      style={{
+                        paddingBottom: '130%',
+                      }}
+                    >
+                      <img src={item.path} alt="" className="w-full" />
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-2 mt-2">
+                    <span style={{ whiteSpace: 'nowrap', fontSize: '12px' }}>
+                      Chọn màu
+                    </span>
+                    <Select
+                      value={updateImages[index]?.variantValueId}
+                      className="w-full"
+                      onChange={(value: any) => {
+                        handleChangColors(value, item);
+                      }}
+                    >
+                      {getVariantColors.map((variantValue) => (
+                        <Select.Option
+                          key={variantValue.id}
+                          value={variantValue.id}
+                        >
+                          {variantValue.name}
+                        </Select.Option>
+                      ))}
+                    </Select>
+                  </div>
+                  <div className="mt-2 flex justify-between">
+                    <span
+                      className="w-10 h-10 bg-red-600 text-white flex items-center justify-center rounded-md cursor-pointer"
+                      onClick={() => {
+                        handleDeleteImage(item.id, item.path);
+                      }}
+                    >
+                      <AiFillDelete />
+                    </span>
+                    {item.path === thumbnail ? (
+                      <></>
+                    ) : (
+                      <span
+                        className="w-10 h-10 bg-green-600 text-white flex items-center justify-center rounded-md cursor-pointer"
+                        onClick={() => {
+                          handleSelectThumbnail(item.path);
+                        }}
+                      >
+                        <AiOutlineCheck />
+                      </span>
+                    )}
+                  </div>
+                </Col>
+              );
+            })}
         </Row>
       </Form>
     </Modal>

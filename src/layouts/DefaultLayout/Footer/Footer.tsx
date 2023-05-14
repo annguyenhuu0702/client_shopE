@@ -137,12 +137,6 @@ const Footer: React.FC = () => {
           <div className={cx('left')}>
             <span>© 2022 CANIFA</span>
           </div>
-          <div className={cx('right')}>
-            <img
-              src="https://res.cloudinary.com/diot4imoq/image/upload/v1657698613/supersports/logoSaleNoti-220x80_msxaqc.png"
-              alt=""
-            />
-          </div>
         </div>
       </section>
     </footer>

@@ -1,13 +1,18 @@
 import React from 'react';
-import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { AiOutlineBook, AiOutlineHeart, AiOutlineLock } from 'react-icons/ai';
 import { BiUserCircle } from 'react-icons/bi';
-import { AiOutlineBook, AiOutlineLock, AiOutlineHeart } from 'react-icons/ai';
 import { TbGift } from 'react-icons/tb';
+import { useDispatch, useSelector } from 'react-redux';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { authApi } from '../../../apis/authApi';
 import { routes } from '../../../config/routes';
+import { authActions, authSelector } from '../../../redux/slice/authSlice';
 
 const InfoUser: React.FC = () => {
+  const { user } = useSelector(authSelector);
   const location = useLocation();
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const menu = [
     {
       icon: <BiUserCircle />,
@@ -35,20 +40,37 @@ const InfoUser: React.FC = () => {
       path: routes.favoriteProduct,
     },
   ];
+  const handleLogout = () => {
+    authApi.logout();
+    dispatch(authActions.logoutSuccess());
+    navigate(routes.home);
+  };
   return (
     <section className="max-sm:mt-24 bg-white">
       <div className="p-8">
         <div className="text-center mb-8">
-          <img
-            className="w-40 h-40"
-            src="https://res.cloudinary.com/diot4imoq/image/upload/v1659754217/supersports/28276948_2203483443212489_6296148341503783566_n_ypqfub.jpg"
-            alt="avatar"
-          />
+          {user.user?.avatar ? (
+            <img
+              className="w-40 h-40 rounded-full"
+              src={user.user?.avatar}
+              alt=""
+            />
+          ) : (
+            <img
+              className="w-40 h-40"
+              src="https://res.cloudinary.com/diot4imoq/image/upload/v1677655323/canifa/user_jmlojj.jpg"
+              alt="avatar"
+            />
+          )}
         </div>
         <div className="text-center mb-2">
-          <span>Nguyễn Hữu An</span>
+          <span>{user.user?.fullname}</span>
         </div>
-        <div>
+        <div
+          onClick={() => {
+            handleLogout();
+          }}
+        >
           <button
             type="submit"
             className=" w-full bg-btn-order flex items-center justify-center py-2 px-12 text-white text-xl border-none outline-none cursor-pointer rounded-2xl"
@@ -58,7 +80,7 @@ const InfoUser: React.FC = () => {
         </div>
       </div>
       <div>
-        <ul className="m-0 list-none pb-16">
+        <ul className="m-0 list-none pb-32 max-sm:pb-8">
           {menu &&
             menu.map((item) => {
               return (

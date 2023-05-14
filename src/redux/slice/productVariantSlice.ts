@@ -1,17 +1,17 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { deleteParams, tokenPayloadData } from '../../types/common';
+import { tokenPayloadData } from '../../types/common';
 import {
-  createProductVariant,
-  getAllProductProductVariantParams,
-  productVariant,
-  updateProductVariant,
+  ICreateProductVariant,
+  IGetAllProductVariantParams,
+  IProductVariant,
+  IUpdateProductVariant,
 } from '../../types/productVariant';
 
 import { RootState } from '../store';
 
 export interface productVariantState {
   productVariants: resProductVariant;
-  currentProductVariant: productVariant | null;
+  currentProductVariant: IProductVariant | null;
   page: number;
   pageSize: number;
   isLoading: boolean;
@@ -19,7 +19,7 @@ export interface productVariantState {
 }
 
 export interface resProductVariant {
-  rows: productVariant[];
+  rows: IProductVariant[];
   count: number;
 }
 
@@ -29,7 +29,7 @@ const initialState: productVariantState = {
     count: 0,
   },
   page: 1,
-  pageSize: 7,
+  pageSize: 12,
   currentProductVariant: null,
   isLoading: false,
   isError: false,
@@ -48,13 +48,13 @@ const productVariantSlice = createSlice({
     },
     setProductVariant: (
       state,
-      action: PayloadAction<productVariant | null>
+      action: PayloadAction<IProductVariant | null>
     ) => {
       state.currentProductVariant = action.payload;
     },
     getAllProductVariant: (
       state,
-      action: PayloadAction<getAllProductProductVariantParams>
+      action: PayloadAction<IGetAllProductVariantParams>
     ) => {
       state.isLoading = true;
     },
@@ -73,25 +73,13 @@ const productVariantSlice = createSlice({
     },
     createProductVariant: (
       state,
-      action: PayloadAction<tokenPayloadData<createProductVariant>>
+      action: PayloadAction<tokenPayloadData<ICreateProductVariant[]>>
     ) => {
       state.isLoading = true;
     },
-    createProductVariantSuccess: (
-      state,
-      action: PayloadAction<productVariant>
-    ) => {
+    createProductVariantSuccess: (state) => {
       state.isLoading = false;
       state.isError = false;
-      state.productVariants.rows.unshift(action.payload);
-      state.productVariants.count += 1;
-      state.page = 1;
-      if (state.productVariants.rows.length > 7) {
-        state.productVariants.rows.splice(
-          state.productVariants.rows.length - 1,
-          1
-        );
-      }
     },
     createProductVariantFailed: (state) => {
       state.isLoading = false;
@@ -99,42 +87,15 @@ const productVariantSlice = createSlice({
     },
     editProductVariant: (
       state,
-      action: PayloadAction<tokenPayloadData<updateProductVariant>>
+      action: PayloadAction<tokenPayloadData<IUpdateProductVariant>>
     ) => {
       state.isLoading = true;
     },
-    editProductVariantSuccess: (
-      state,
-      action: PayloadAction<productVariant>
-    ) => {
+    editProductVariantSuccess: (state) => {
       state.isLoading = false;
       state.isError = false;
-      const index = state.productVariants.rows.findIndex(
-        (item) => item.id === action.payload.id
-      );
-      if (index !== -1) {
-        state.productVariants.rows[index] = action.payload;
-      }
     },
     editProductVariantFailed: (state) => {
-      state.isLoading = false;
-      state.isError = false;
-    },
-    deleteProductVariant: (state, action: PayloadAction<deleteParams>) => {
-      state.isLoading = true;
-    },
-    deleteProductVariantSuccess: (state, action: PayloadAction<number>) => {
-      state.isError = false;
-      state.isLoading = false;
-      state.productVariants.rows = state.productVariants.rows.filter(
-        (item) => item.id !== action.payload
-      );
-      state.productVariants.count -= 1;
-      if (state.productVariants.rows.length === 0) {
-        state.page = state.page - 1;
-      }
-    },
-    deleteProductVariantFailed: (state) => {
       state.isLoading = false;
       state.isError = true;
     },

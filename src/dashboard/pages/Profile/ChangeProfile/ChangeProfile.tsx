@@ -15,7 +15,7 @@ const ChangeProfile: React.FC = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [form] = Form.useForm();
-  const [gender, setGender] = useState(1);
+  const [gender, setGender] = useState(true);
 
   const onFinish = (values: any) => {
     const data = {
@@ -35,7 +35,6 @@ const ChangeProfile: React.FC = () => {
   const onFinishFailed = (errorInfo: any) => {
     console.log('Failed:', errorInfo);
   };
-
   const initialValues = {
     fullname: user.user && user.user.fullname,
     birthday: user.user && moment(user.user.birthday),
@@ -75,7 +74,7 @@ const ChangeProfile: React.FC = () => {
           },
         ]}
       >
-        <DatePicker format={'MM/DD/YYYY'} allowClear={false} />
+        <DatePicker format="MM/DD/YYYY" allowClear />
       </Form.Item>
 
       <Form.Item label="Giới tính" name="gender">
@@ -101,7 +100,7 @@ const ChangeProfile: React.FC = () => {
                 .length
             }
           >
-            Submit
+            Lưu
           </Button>
         )}
       </Form.Item>

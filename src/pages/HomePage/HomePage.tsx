@@ -1,165 +1,130 @@
 import { Col, Row } from 'antd';
+import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import 'swiper/css';
+import { productApi } from '../../apis/productApi';
 import Product from '../../components/Product';
 import { useTitle } from '../../hooks/useTitle';
-import Endow from './Endow';
+import { Swiper, SwiperSlide } from 'swiper/react';
+import { Pagination, Navigation, Autoplay } from 'swiper';
+import 'swiper/css';
+import 'swiper/css/pagination';
+import 'swiper/css/navigation';
 
 const HomePage = () => {
+  const [data, setData] = useState<any>();
+
+  useEffect(() => {
+    try {
+      const getAllData = async () => {
+        const res = await productApi.getHomePage();
+        const { data } = res.data;
+        setData(data);
+      };
+      getAllData();
+    } catch (error) {
+      console.log(error);
+    }
+  }, []);
+
   useTitle('CANIFA');
   return (
     <main className="home-page">
-      <section className="banner max-sm:mt-24">
-        <Link to="">
+      <section className="max-sm:mt-24">
+        <Swiper
+          navigation={true}
+          modules={[Autoplay, Pagination, Navigation]}
+          pagination={{ clickable: true }}
+          autoplay={true}
+          loop={true}
+          slidesPerView={1}
+          className="mySwiper"
+        >
+          <SwiperSlide>
+            <Link to="/collection/ao">
+              <img
+                className="common-img"
+                src="https://res.cloudinary.com/diot4imoq/image/upload/v1683340219/canifa/banner_name_tablet1682329031_tpg7gd.webp"
+                alt=""
+              />
+            </Link>
+          </SwiperSlide>
+          <SwiperSlide>
+            <Link to="/collection/ao">
+              <img
+                className="common-img"
+                src="https://res.cloudinary.com/diot4imoq/image/upload/v1683340219/canifa/banner_name_tablet1683277783_u8tuut.webp"
+                alt=""
+              />
+            </Link>
+          </SwiperSlide>
+          <SwiperSlide>
+            <Link to="/collection/ao">
+              <img
+                className="common-img"
+                src="https://res.cloudinary.com/diot4imoq/image/upload/v1683340219/canifa/banner_name_tablet1683293073_mzppzm.webp"
+                alt=""
+              />
+            </Link>
+          </SwiperSlide>
+        </Swiper>
+      </section>
+      <section className="banner">
+        <Link to={`/category/nu`}>
           <img
             className="common-img"
-            src="https://res.cloudinary.com/diot4imoq/image/upload/v1662004283/canifa/banner_name_tablet1661792546_s7efpf.jpg"
-            alt="endow"
+            src="https://res.cloudinary.com/diot4imoq/image/upload/v1677223182/canifa/banner_name_tablet1675168225_r1kmqn.webp"
+            alt=""
           />
         </Link>
       </section>
-      <Endow />
-      {/* code hàng mới đây là xong trang chủ */}
-      <section className="block-endow">
+      <section className="bst-family">
         <div className="p-50">
-          <div className="title">
-            <h2 className="common-title">Sản phẩm giá tốt</h2>
-          </div>
-          <Row>
-            <Col xl={24} md={24}>
-              <Link to="">
-                <img
-                  className="common-img"
-                  src="https://res.cloudinary.com/diot4imoq/image/upload/v1662007772/canifa/list_image_tablet1646719696_zpgxfv.jpg"
-                  alt="product-endow"
-                />
-              </Link>
-            </Col>
+          <h2 className="common-title">Áo phông</h2>
+          <Row gutter={[12, 12]} className="list-product">
+            {data?.tshirt.map((item: any) => {
+              return (
+                <Col xl={6} md={6} xs={12} key={item.id}>
+                  <Product product={item} />
+                </Col>
+              );
+            })}
           </Row>
+          <div className="view-all my-10">
+            <Link
+              to={`/product-category/${data?.tshirt[0]?.productCategory?.slug}`}
+              className="text"
+            >
+              Xem tất cả
+            </Link>
+          </div>
         </div>
+      </section>
+      <section className="banner max-sm:mt-24">
+        <Link to={`/category/nu`}>
+          <img
+            className="common-img"
+            src="https://res.cloudinary.com/diot4imoq/image/upload/v1677223203/canifa/banner_name_tablet1675168324_ze8v9u.webp"
+            alt=""
+          />
+        </Link>
       </section>
       <section className="bst-family">
         <div className="p-50">
-          <h2 className="common-title">BST gia đình</h2>
+          <h2 className="common-title">Quần short</h2>
           <Row gutter={[12, 12]} className="list-product">
-            <Col xl={6} md={6} xs={12}>
-              <Link to="">
-                <img
-                  className="common-img"
-                  src="https://res.cloudinary.com/diot4imoq/image/upload/v1662008630/canifa/list_image_tablet_third1650513698_wdxvrh.png"
-                  alt="style-at-home"
-                />
-              </Link>
-            </Col>
-            <Col xl={6} md={6} xs={12}>
-              <Product />
-            </Col>
-            <Col xl={6} md={6} xs={12}>
-              <Product />
-            </Col>
-            <Col xl={6} md={6} xs={12}>
-              <Product />
-            </Col>
+            {data?.short.map((item: any) => {
+              return (
+                <Col xl={6} md={6} xs={12} key={item.id}>
+                  <Product product={item} />
+                </Col>
+              );
+            })}
           </Row>
           <div className="view-all my-10">
-            <Link to="" className="text">
-              Xem tất cả
-            </Link>
-          </div>
-        </div>
-      </section>
-      <section className="block-canifaz">
-        <div className="p-50">
-          <div className="title">
-            <h2 className="common-title">Canifa Z</h2>
-          </div>
-          <Row>
-            <Col xl={24} md={24}>
-              <Link to="">
-                <img
-                  className="common-img"
-                  src="https://res.cloudinary.com/diot4imoq/image/upload/v1662017065/canifa/list_image_tablet1660929641_irwu7j.jpg"
-                  alt="canifaz"
-                />
-              </Link>
-            </Col>
-          </Row>
-        </div>
-      </section>
-      <section className="style-at-home">
-        <div className="p-50">
-          <h2 className="common-title">Style at home</h2>
-          <Row className="list-product" gutter={[12, 12]}>
-            <Col xl={6} md={6} xs={12}>
-              <Link to="">
-                <img
-                  className="common-img"
-                  src="https://res.cloudinary.com/diot4imoq/image/upload/v1662008630/canifa/list_image_tablet_third1650513698_wdxvrh.png"
-                  alt="style-at-home"
-                />
-              </Link>
-            </Col>
-
-            <Col xl={6} md={6} xs={12}>
-              <Product />
-            </Col>
-            <Col xl={6} md={6} xs={12}>
-              <Product />
-            </Col>
-            <Col xl={6} md={6} xs={12}>
-              <Product />
-            </Col>
-          </Row>
-          <div className="view-all" style={{ margin: '24px 0' }}>
-            <Link to="" className="text">
-              Xem tất cả
-            </Link>
-          </div>
-        </div>
-      </section>
-      <section className="jeans">
-        <div className="p-50">
-          <div className="title">
-            <h2 className="common-title">Quần jean</h2>
-          </div>
-          <Row>
-            <Col xl={24} md={24}>
-              <Link to="">
-                <img
-                  className="common-img"
-                  src="https://res.cloudinary.com/diot4imoq/image/upload/v1662018253/canifa/list_image_tablet1650248471_nn79wp.jpg"
-                  alt="jeans"
-                />
-              </Link>
-            </Col>
-          </Row>
-        </div>
-      </section>
-      <section>
-        <div className="p-50">
-          <h2 className="common-title">Áo phông</h2>
-          <Row className="list-product" gutter={[12, 12]}>
-            <Col xl={6} md={6} xs={12}>
-              <Link to="">
-                <img
-                  className="common-img"
-                  src="https://res.cloudinary.com/diot4imoq/image/upload/v1662008630/canifa/list_image_tablet_third1650513698_wdxvrh.png"
-                  alt="style-at-home"
-                />
-              </Link>
-            </Col>
-            <Col xl={6} md={6} xs={12}>
-              <Product />
-            </Col>
-            <Col xl={6} md={6} xs={12}>
-              <Product />
-            </Col>
-            <Col xl={6} md={6} xs={12}>
-              <Product />
-            </Col>
-          </Row>
-          <div className="view-all" style={{ margin: '24px 0' }}>
-            <Link to="" className="text">
+            <Link
+              to={`/product-category/${data?.short[0]?.productCategory?.slug}`}
+              className="text"
+            >
               Xem tất cả
             </Link>
           </div>

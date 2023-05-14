@@ -12,20 +12,19 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { productCategoryApi } from '../../../../apis/productCategoryApi';
 import { URL_API } from '../../../../constants';
 import { useTitle } from '../../../../hooks/useTitle';
-import { authSelector, authState } from '../../../../redux/slice/authSlice';
+import { authSelector } from '../../../../redux/slice/authSlice';
 import {
   collectionActions,
   collectionSelector,
-  collectionState,
 } from '../../../../redux/slice/collectionSlice';
 
 import {
   productCategoryActions,
   productCategorySelector,
-  productCategoryState,
 } from '../../../../redux/slice/productCategorySlice';
 import { configSlugify } from '../../../../utils';
 import HeaderTitle from '../../../components/HeaderTitle';
+import { ICollection } from '../../../../types/collection';
 
 const { Content } = Layout;
 
@@ -50,12 +49,10 @@ const beforeUpload = (file: RcFile) => {
 const FormProductCategory: React.FC = () => {
   const navigate = useNavigate();
   const { id } = useParams();
-  const { user }: authState = useSelector(authSelector);
+  const { user } = useSelector(authSelector);
 
-  const { currentProductCategory }: productCategoryState = useSelector(
-    productCategorySelector
-  );
-  const { collections }: collectionState = useSelector(collectionSelector);
+  const { currentProductCategory } = useSelector(productCategorySelector);
+  const { collections } = useSelector(collectionSelector);
 
   const initialValues = {
     name: currentProductCategory ? currentProductCategory.name : '',
@@ -155,7 +152,7 @@ const FormProductCategory: React.FC = () => {
           dispatch(productCategoryActions.setProductCategory(data));
           form.setFieldsValue({
             name: data.name,
-            collectionId: data.collectionId,
+            collectionId: data && data.collectionId,
             description: data.description,
             thumbnail: data.thumbnail,
           });
@@ -224,7 +221,7 @@ const FormProductCategory: React.FC = () => {
                     onChange={handleChange}
                     options={
                       collections
-                        ? collections.rows.map((item: any) => {
+                        ? collections.rows.map((item: ICollection) => {
                             return {
                               value: item.id,
                               label: item.name,
@@ -233,6 +230,15 @@ const FormProductCategory: React.FC = () => {
                           })
                         : []
                     }
+                    showSearch
+                    filterOption={(input, option: any) => {
+                      return (
+                        option.label
+                          .toLowerCase()
+                          .indexOf(input.toLocaleLowerCase()) >= 0
+                      );
+                    }}
+                    allowClear
                   />
                 </Form.Item>
                 <Form.Item label="Mô tả" name="description">
@@ -264,21 +270,30 @@ const FormProductCategory: React.FC = () => {
                   </Upload>
                 </Form.Item>
                 <Form.Item
+                  shouldUpdate
                   style={{
                     textAlign: 'center',
                   }}
                   wrapperCol={{ span: 14 }}
                 >
-                  <Button
-                    type="primary"
-                    htmlType="submit"
-                    style={{
-                      width: '200px',
-                    }}
-                    size="large"
-                  >
-                    {currentProductCategory ? 'Sửa' : 'Thêm'}
-                  </Button>
+                  {() => (
+                    <Button
+                      type="primary"
+                      htmlType="submit"
+                      disabled={
+                        !form.isFieldsTouched(false) ||
+                        !!form
+                          .getFieldsError()
+                          .filter(({ errors }) => errors.length).length
+                      }
+                      style={{
+                        width: '200px',
+                      }}
+                      size="large"
+                    >
+                      {currentProductCategory ? 'Sửa' : 'Thêm'}
+                    </Button>
+                  )}
                 </Form.Item>
               </div>
             </Form>

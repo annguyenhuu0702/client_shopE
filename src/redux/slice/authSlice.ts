@@ -5,9 +5,10 @@ import {
   changeProfileDto,
   loginDto,
   registerDto,
+  IFogotPassword,
 } from '../../types/auth';
 import { tokenPayloadData } from '../../types/common';
-import { user } from '../../types/user';
+import { IUser } from '../../types/user';
 import { RootState } from '../store';
 
 export interface authState {
@@ -17,7 +18,7 @@ export interface authState {
 }
 
 export interface resUser {
-  user: user | null;
+  user: IUser | null;
   accessToken: string | null;
 }
 
@@ -69,7 +70,19 @@ const authSlice = createSlice({
       state.user.accessToken = '';
       localStorage.removeItem('mickey:AT');
     },
-    getProfile: (state, action: PayloadAction<user>) => {
+    fogotPassword: (state, action: PayloadAction<IFogotPassword>) => {
+      state.isLoading = true;
+      state.isError = false;
+    },
+    fogotPasswordSuccess: (state) => {
+      state.isLoading = false;
+      state.isError = false;
+    },
+    fogotPasswordFailed: (state) => {
+      state.isLoading = false;
+      state.isError = true;
+    },
+    getProfile: (state, action: PayloadAction<IUser>) => {
       state.isError = false;
       state.isLoading = false;
       state.user.user = action.payload;
@@ -98,6 +111,7 @@ const authSlice = createSlice({
       state.isLoading = false;
       state.isError = true;
     },
+
     changePassword: (
       state,
       action: PayloadAction<tokenPayloadData<changePasswordDto>>
@@ -129,6 +143,43 @@ const authSlice = createSlice({
       state.isError = false;
     },
     changeEmailFailed: (state) => {
+      state.isLoading = false;
+      state.isError = true;
+    },
+    changeProfileClient: (
+      state,
+      action: PayloadAction<tokenPayloadData<changeProfileDto>>
+    ) => {
+      state.isLoading = true;
+    },
+    changeProfileClientSuccess: (
+      state,
+      action: PayloadAction<changeProfileDto>
+    ) => {
+      state.isLoading = false;
+      state.isError = false;
+      if (state.user.user) {
+        state.user.user = {
+          ...state.user.user,
+          ...action.payload,
+        };
+      }
+    },
+    changeProfileClientFailed: (state) => {
+      state.isLoading = false;
+      state.isError = true;
+    },
+    changePasswordUser: (
+      state,
+      action: PayloadAction<tokenPayloadData<changePasswordDto>>
+    ) => {
+      state.isLoading = true;
+    },
+    changePasswordUserSuccess: (state) => {
+      state.isLoading = false;
+      state.isError = false;
+    },
+    changePasswordUserFailed: (state) => {
       state.isLoading = false;
       state.isError = true;
     },

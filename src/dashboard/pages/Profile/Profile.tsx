@@ -48,7 +48,7 @@ const Profile: React.FC = () => {
 
   return (
     <main className={cx('profile')}>
-      <HeaderTitle title="User" />
+      <HeaderTitle title="Thông tin cá nhân" />
       <div className={cx('layout-content')}>
         <div className={cx('banner')}>
           <div className={cx('avatar')}>

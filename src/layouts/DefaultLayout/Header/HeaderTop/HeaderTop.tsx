@@ -1,40 +1,84 @@
-import React from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import styles from './__headerTop.module.scss';
 
 import { SearchOutlined } from '@ant-design/icons';
-import { Input } from 'antd';
+import { Badge, Input } from 'antd';
 import classNames from 'classnames/bind';
-import { AiOutlineHeart } from 'react-icons/ai';
 import { BiUserCircle } from 'react-icons/bi';
-import { HiOutlineShoppingBag } from 'react-icons/hi';
-import { RiStoreLine } from 'react-icons/ri';
+import { BsBag } from 'react-icons/bs';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
 import { authApi } from '../../../../apis/authApi';
-import {
-  authActions,
-  authSelector,
-  authState,
-} from '../../../../redux/slice/authSlice';
-import Navigation from '../HeaderNavigation';
 import { routes } from '../../../../config/routes';
+import { authActions, authSelector } from '../../../../redux/slice/authSlice';
+import { cartActions, cartSelector } from '../../../../redux/slice/cartSlice';
+import { favoriteProductActions } from '../../../../redux/slice/favoriteProductSlice';
+import Navigation from '../HeaderNavigation';
 
 const cx = classNames.bind(styles);
 
 const HeaderTop: React.FC = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const { cart } = useSelector(cartSelector);
+  const { user } = useSelector(authSelector);
 
-  const { user }: authState = useSelector(authSelector);
+  const [serachProduct, setSearchProduct] = useState<string>('');
 
   const handleLogout = () => {
     authApi.logout();
     dispatch(authActions.logoutSuccess());
+    dispatch(cartActions.setCart());
   };
 
   const redirectCart = () => {
     navigate(routes.cart);
   };
+
+  const handleSearchProduct = () => {
+    const params = { keyword: serachProduct };
+    let queryString = new URLSearchParams(params).toString();
+    if (queryString !== '') {
+      queryString = '?' + queryString;
+    }
+    if (serachProduct !== '') {
+      navigate(`${routes.searchProduct}${queryString}`);
+    }
+  };
+
+  const totalProduct = useMemo(() => {
+    let totalProduct =
+      cart &&
+      cart.cartItems.reduce(
+        (prev, currentValue) => prev + currentValue.quantity,
+        0
+      );
+    return totalProduct || 0;
+  }, [cart]);
+
+  // lấy cart
+  useEffect(() => {
+    if (user.user) {
+      dispatch(
+        cartActions.getByUser({
+          token: user.accessToken,
+          dispatch,
+        })
+      );
+    }
+  }, [dispatch, user, user.accessToken]);
+
+  // lấy sản phẩm yêu thích
+  useEffect(() => {
+    if (user.user) {
+      dispatch(
+        favoriteProductActions.getFavoriteProductByUser({
+          token: user.accessToken,
+          dispatch,
+        })
+      );
+    }
+  }, [dispatch, user, user.accessToken]);
 
   return (
     <section className={cx('header-top')}>
@@ -51,20 +95,25 @@ const HeaderTop: React.FC = () => {
       <div className={cx('right')}>
         <div className="custom-input">
           <Input
+            value={serachProduct}
+            onChange={(e) => {
+              setSearchProduct(e.target.value);
+            }}
+            size="large"
             placeholder="Bạn cần tìm gì..."
-            suffix={<SearchOutlined />}
+            suffix={
+              <SearchOutlined
+                className="cursor-pointer"
+                onClick={() => {
+                  handleSearchProduct();
+                }}
+              />
+            }
+            onPressEnter={handleSearchProduct}
             allowClear
           />
         </div>
         <div className={cx('group-icon')}>
-          <div
-            className={cx('wish-list')}
-            onClick={() => {
-              navigate(routes.favoriteProduct);
-            }}
-          >
-            <AiOutlineHeart />
-          </div>
           <div className={cx('account')}>
             <BiUserCircle />
             <div className={cx('wrap-account')}>
@@ -75,8 +124,8 @@ const HeaderTop: React.FC = () => {
                     <Link
                       to={
                         user.user.role === 'admin'
-                          ? '/admin/profile'
-                          : '/account'
+                          ? routes.admin
+                          : routes.profile
                       }
                       className="text"
                     >
@@ -84,7 +133,11 @@ const HeaderTop: React.FC = () => {
                     </Link>
                   </div>
                   <div className="block-child">
-                    <Link to="/" className="text" onClick={handleLogout}>
+                    <Link
+                      to={routes.home}
+                      className="text"
+                      onClick={handleLogout}
+                    >
                       Đăng xuất
                     </Link>
                   </div>
@@ -105,13 +158,21 @@ const HeaderTop: React.FC = () => {
               )}
             </div>
           </div>
+
           <div
             className={cx('cart')}
             onClick={() => {
               redirectCart();
             }}
           >
-            <HiOutlineShoppingBag />
+            <Badge count={totalProduct} className="w-full h-full">
+              <BsBag
+                className="w-10 h-8 text-white"
+                onClick={() => {
+                  navigate(routes.cart);
+                }}
+              />
+            </Badge>
           </div>
         </div>
       </div>

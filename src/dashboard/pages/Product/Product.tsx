@@ -32,17 +32,16 @@ const ProductAdmin: React.FC = () => {
           </div>
         </div>
       </Content>
-      {products.count > 0 && (
+      {products.count > 9 && (
         <div className="common-pagination-cus">
           <Pagination
             pageSize={pageSize}
             current={page}
             total={products.count}
+            showSizeChanger={false}
             onChange={(page: number, pageSize: number) => {
               dispatch(productActions.setPage({ page, pageSize }));
             }}
-            // showSizeChanger={true}
-            // pageSizeOptions={[7, 50, 100, 200]}
           />
         </div>
       )}

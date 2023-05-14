@@ -1,8 +1,21 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import HeaderMobile from './HeaderMobile/HeaderMobile';
 import HeaderTop from './HeaderTop';
 
 const Header: React.FC = () => {
+  const [width, setWidth] = useState<number>(window.innerWidth);
+
+  const handleWindowSizeChange = () => {
+    setWidth(window.innerWidth);
+  };
+  useEffect(() => {
+    window.addEventListener('resize', handleWindowSizeChange);
+    return () => {
+      window.removeEventListener('resize', handleWindowSizeChange);
+    };
+  }, []);
+
+  const isMobile = width <= 480;
   return (
     <React.Fragment>
       <header
@@ -17,7 +30,7 @@ const Header: React.FC = () => {
           </div>
         </div>
       </header>
-      <HeaderMobile />
+      {isMobile && <HeaderMobile />}
     </React.Fragment>
   );
 };

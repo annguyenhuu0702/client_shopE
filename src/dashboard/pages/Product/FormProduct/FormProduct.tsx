@@ -1,31 +1,15 @@
-import { LoadingOutlined, PlusOutlined } from '@ant-design/icons';
-import {
-  Button,
-  Form,
-  Input,
-  InputNumber,
-  Layout,
-  message,
-  Select,
-} from 'antd';
-import Upload, {
-  RcFile,
-  UploadChangeParam,
-  UploadFile,
-  UploadProps,
-} from 'antd/lib/upload';
-import React, { useEffect, useState } from 'react';
+import { Button, Form, Input, InputNumber, Layout, Select } from 'antd';
+import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
 import { productApi } from '../../../../apis/productApi';
 import { useTitle } from '../../../../hooks/useTitle';
-import { authSelector, authState } from '../../../../redux/slice/authSlice';
+import { authSelector } from '../../../../redux/slice/authSlice';
 
 import TextArea from 'antd/lib/input/TextArea';
 import {
   productCategoryActions,
   productCategorySelector,
-  productCategoryState,
 } from '../../../../redux/slice/productCategorySlice';
 import { configSlugify } from '../../../../utils';
 import HeaderTitle from '../../../components/HeaderTitle';
@@ -33,81 +17,30 @@ import HeaderTitle from '../../../components/HeaderTitle';
 import {
   productActions,
   productSelector,
-  productState,
 } from '../../../../redux/slice/productSlice';
-import { URL_API } from '../../../../constants';
 
 const { Content } = Layout;
 
-const getBase64 = (img: RcFile, callback: (url: string) => void) => {
-  const reader = new FileReader();
-  reader.addEventListener('load', () => callback(reader.result as string));
-  reader.readAsDataURL(img);
-};
-
-const beforeUpload = (file: RcFile) => {
-  const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png';
-  if (!isJpgOrPng) {
-    message.error('You can only upload JPG/PNG file!');
-  }
-  const isLt2M = file.size / 1024 / 1024 < 2;
-  if (!isLt2M) {
-    message.error('Image must smaller than 2MB!');
-  }
-  return isJpgOrPng && isLt2M;
-};
-
 const FormProduct: React.FC = () => {
-  const { productCategories, page }: productCategoryState = useSelector(
-    productCategorySelector
-  );
+  const { productCategories, page } = useSelector(productCategorySelector);
   const navigate = useNavigate();
   const { id } = useParams();
-  const { user }: authState = useSelector(authSelector);
+  const { user } = useSelector(authSelector);
 
-  const { currentProduct }: productState = useSelector(productSelector);
+  const { currentProduct } = useSelector(productSelector);
 
   const initialValues = {
     name: currentProduct ? currentProduct.name : '',
     productCategoryId: currentProduct ? currentProduct.productCategoryId : '',
     price: currentProduct ? currentProduct.price : 0,
-    priceSale: currentProduct ? currentProduct.priceSale : 0,
     thumbnail: currentProduct ? currentProduct.thumbnail : '',
     description: currentProduct ? currentProduct.description : '',
+    material: currentProduct ? currentProduct.material : '',
+    guide: currentProduct ? currentProduct.guide : '',
   };
 
   const [form] = Form.useForm();
   const dispatch = useDispatch();
-
-  const [loading, setLoading] = useState(false);
-  const [imageUrl, setImageUrl] = useState<string>();
-  const [pathImg, setPathImg] = useState<string>(
-    currentProduct ? currentProduct.thumbnail : ''
-  );
-
-  const handleChangeUpload: UploadProps['onChange'] = (
-    info: UploadChangeParam<UploadFile>
-  ) => {
-    if (info.file.status === 'uploading') {
-      setLoading(true);
-      return;
-    }
-    if (info.file.status === 'done') {
-      // Get this url from response in real world.
-      setPathImg(info.file.response.data.secure_url);
-      getBase64(info.file.originFileObj as RcFile, (url) => {
-        setLoading(false);
-        setImageUrl(url);
-      });
-    }
-  };
-
-  const uploadButton = (
-    <div>
-      {loading ? <LoadingOutlined /> : <PlusOutlined />}
-      <div style={{ marginTop: 8 }}>Upload</div>
-    </div>
-  );
 
   const resetValues = () => {
     form.setFieldsValue(initialValues);
@@ -123,9 +56,9 @@ const FormProduct: React.FC = () => {
       slug: configSlugify(values.name),
       productCategoryId: values.productCategoryId,
       price: values.price,
-      priceSale: values.priceSale,
       description: values.description,
-      thumbnail: pathImg,
+      material: values.material,
+      guide: values.guide,
     };
     if (!currentProduct) {
       dispatch(
@@ -137,6 +70,7 @@ const FormProduct: React.FC = () => {
         })
       );
     } else {
+      console.log(formData);
       dispatch(
         productActions.editProduct({
           token: user.accessToken,
@@ -153,12 +87,7 @@ const FormProduct: React.FC = () => {
   };
 
   useEffect(() => {
-    dispatch(
-      productCategoryActions.getAllProductCategory({
-        p: page,
-        limit: 7,
-      })
-    );
+    dispatch(productCategoryActions.getAllProductCategory({}));
   }, [dispatch, page]);
 
   useEffect(() => {
@@ -170,10 +99,11 @@ const FormProduct: React.FC = () => {
           dispatch(productActions.setProduct(data));
           form.setFieldsValue({
             name: data.name,
-            productCategoryId: data.productCategoryId,
+            productCategoryId: data && data.productCategoryId,
             price: data.price,
-            priceSale: data.priceSale,
             description: data.description,
+            material: data.material,
+            guide: data.guide,
             thumbnail: data.thumbnail,
           });
         }
@@ -183,10 +113,6 @@ const FormProduct: React.FC = () => {
       console.log(error);
     }
   }, [id, dispatch, form]);
-
-  useEffect(() => {
-    setPathImg(currentProduct ? currentProduct.thumbnail : '');
-  }, [currentProduct]);
 
   useTitle(currentProduct ? 'Sửa sản phẩm' : 'Thêm sản phẩm');
 
@@ -236,6 +162,15 @@ const FormProduct: React.FC = () => {
                       label: item.name,
                     };
                   })}
+                  showSearch={true}
+                  filterOption={(input, option: any) => {
+                    return (
+                      option.label
+                        .toLowerCase()
+                        .indexOf(input.toLocaleLowerCase()) >= 0
+                    );
+                  }}
+                  allowClear
                 />
               </Form.Item>
               <Form.Item
@@ -250,53 +185,40 @@ const FormProduct: React.FC = () => {
               >
                 <InputNumber min={0} className="w-full" />
               </Form.Item>
-              <Form.Item label="Giá khuyến mãi" name="priceSale">
-                <InputNumber min={0} className="w-full" />
-              </Form.Item>
               <Form.Item label="Mô tả" name="description">
-                <TextArea rows={4} />
+                <TextArea rows={2} />
               </Form.Item>
-              <Form.Item label="Hình ảnh">
-                <Upload
-                  name="image"
-                  listType="picture-card"
-                  className="avatar-uploader"
-                  showUploadList={false}
-                  action={`${URL_API}/upload/single`}
-                  beforeUpload={beforeUpload}
-                  onChange={handleChangeUpload}
-                >
-                  {pathImg ? (
-                    <img
-                      src={pathImg}
-                      alt="avatar"
-                      style={{
-                        width: '90px',
-                        height: '90px',
-                        objectFit: 'cover',
-                      }}
-                    />
-                  ) : (
-                    uploadButton
-                  )}
-                </Upload>
+              <Form.Item label="Chất liệu" name="material">
+                <Input />
+              </Form.Item>
+              <Form.Item label="Hướng dẫn sử dụng" name="guide">
+                <TextArea rows={7} />
               </Form.Item>
               <Form.Item
+                shouldUpdate
                 style={{
                   textAlign: 'center',
                 }}
                 wrapperCol={{ span: 14 }}
               >
-                <Button
-                  type="primary"
-                  htmlType="submit"
-                  style={{
-                    width: '200px',
-                  }}
-                  size="large"
-                >
-                  {currentProduct ? 'Sửa' : 'Thêm'}
-                </Button>
+                {() => (
+                  <Button
+                    type="primary"
+                    htmlType="submit"
+                    disabled={
+                      !form.isFieldsTouched(false) ||
+                      !!form
+                        .getFieldsError()
+                        .filter(({ errors }) => errors.length).length
+                    }
+                    style={{
+                      width: '200px',
+                    }}
+                    size="large"
+                  >
+                    {currentProduct ? 'Sửa' : 'Thêm'}
+                  </Button>
+                )}
               </Form.Item>
             </Form>
           </div>

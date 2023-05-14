@@ -1,30 +1,157 @@
-import React, { useState } from 'react';
-import { Breadcrumb, Button, Col, Row } from 'antd';
-import { Link } from 'react-router-dom';
-import { Swiper, SwiperSlide } from 'swiper/react';
+import { Breadcrumb, Col, Row } from 'antd';
+import React, { useEffect, useState } from 'react';
+import { AiOutlineCheck, AiOutlineMinus, AiOutlinePlus } from 'react-icons/ai';
+import { Link, useNavigate, useParams } from 'react-router-dom';
+import { Pagination } from 'swiper';
 import 'swiper/css';
 import 'swiper/css/pagination';
-import { Pagination } from 'swiper';
+import { Swiper, SwiperSlide } from 'swiper/react';
 import { castToVND } from '../../utils';
-import {
-  AiOutlineCheck,
-  AiFillHeart,
-  AiOutlineMinus,
-  AiOutlinePlus,
-} from 'react-icons/ai';
 
-const ProductDetail: React.FC = () => {
-  const [isWishlist, setIsWishlist] = useState<boolean>(false);
-  const [indexColor, setIndexColor] = useState<number>();
-  const [indexSize, setIndexSize] = useState<number>();
+import { useDispatch, useSelector } from 'react-redux';
+import Loading from '../../components/Loading/Loading';
+import { useTitle } from '../../hooks/useTitle';
+import { authSelector } from '../../redux/slice/authSlice';
+import { cartActions } from '../../redux/slice/cartSlice';
+import { commentActions } from '../../redux/slice/commentSlice';
+import {
+  productActions,
+  productSelector,
+} from '../../redux/slice/productSlice';
+import { IProductImage } from '../../types/productImage';
+import { IProductVariant } from '../../types/productVariant';
+import { IVariantValue } from '../../types/variantValue';
+import CommentProduct from './CommentProduct/CommentProduct';
+import ProductRelated from './ProductRelated/ProductRelated';
+
+const ProductDetail: React.FC = ({ children }: any) => {
+  const { user } = useSelector(authSelector);
+  const { slug } = useParams();
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const { currentProductClient, productsRelatedClient, isLoadingClient } =
+    useSelector(productSelector);
+
   const [isDes, setIsDes] = useState<boolean>(true);
   const [isMaterial, setIsMaterial] = useState<boolean>(false);
   const [isGuide, setIsGuide] = useState<boolean>(false);
-  const colors = ['Xanh', 'Đỏ', 'Tím', 'Vàng', 'Lục'];
-  const sizes = [100, 111, 222, 333, 444, 555];
+
+  // chọn màu với kích thước
+  const [selectedColor, setSelectedColor] = useState<IVariantValue>();
+  const [selectedSize, setSelectedSize] = useState<IVariantValue>();
+
+  // state render color size
+  const [colors, setColors] = useState<IVariantValue[]>([]);
+  const [sizes, setSizes] = useState<IVariantValue[]>([]);
+
+  // chọn hình
+  const [selectedImage, setSelectedImage] = useState<string>(() => {
+    return currentProductClient ? currentProductClient.thumbnail : '';
+  });
+
+  // quantity add to cart
+  const [quantity, setQuantity] = useState<number>(1);
+
+  const handleSelectedColor = (color: IVariantValue) => {
+    setSelectedColor(color);
+  };
+
+  const handleSelectedSize = (size: IVariantValue) => {
+    setSelectedSize(size);
+  };
+
+  const handleSelectedImage = (item: IProductImage) => {
+    setSelectedImage(item.path);
+  };
+
+  const handleAddToCart = () => {
+    if (currentProductClient && selectedColor && selectedSize) {
+      const productVariant = currentProductClient.productVariants.find((item) =>
+        item.variantValues.every(
+          (variantValue) =>
+            variantValue.id === selectedColor.id ||
+            variantValue.id === selectedSize.id
+        )
+      );
+      let formData;
+      if (productVariant) {
+        formData = {
+          productVariantId: productVariant.id,
+          quantity: quantity,
+        };
+        dispatch(
+          cartActions.addToCart({
+            token: user.accessToken,
+            dispatch,
+            navigate,
+            data: formData,
+          })
+        );
+      }
+    }
+  };
+
+  // lấy sản phẩm theo slug
+  useEffect(() => {
+    if (slug) {
+      dispatch(
+        productActions.getProductBySlugClient({
+          slug,
+        })
+      );
+    }
+  }, [dispatch, slug]);
+
+  // lấy size với color để render
+  useEffect(() => {
+    if (currentProductClient && currentProductClient.productVariants) {
+      const colors: IVariantValue[] = [];
+      const sizes: IVariantValue[] = [];
+      currentProductClient.productVariants.forEach((data: IProductVariant) => {
+        data.variantValues.forEach((variantValue: IVariantValue) => {
+          if (variantValue.variantId === 1) {
+            let index = sizes.findIndex((size) => size.id === variantValue.id);
+            if (index === -1) {
+              sizes.push(variantValue);
+            }
+          } else if (variantValue.variantId === 2) {
+            let index = colors.findIndex((size) => size.id === variantValue.id);
+            if (index === -1) {
+              colors.push(variantValue);
+            }
+          }
+        });
+      });
+      sizes.sort((a, b) => a.id - b.id);
+      colors.sort((a, b) => a.id - b.id);
+      setColors(colors);
+      setSizes(sizes);
+    }
+  }, [currentProductClient]);
+
+  useEffect(() => {
+    if (currentProductClient) {
+      setSelectedImage(currentProductClient.thumbnail);
+    }
+  }, [currentProductClient]);
+
+  useEffect(() => {
+    if (currentProductClient) {
+      dispatch(
+        commentActions.getAllCommentByProduct({
+          productId: currentProductClient.id,
+        })
+      );
+    }
+  }, [currentProductClient, dispatch, user.accessToken]);
+
+  useTitle(currentProductClient?.name);
+
+  if (!currentProductClient) return <></>;
 
   return (
     <main className="product-detail mb-12 max-sm:mt-24 max-lg:my-12">
+      {isLoadingClient && <Loading />}
       <div className="p-100 max-sm:px-12">
         <div className="container">
           <section className="breadcrumb max-sm:hidden">
@@ -33,99 +160,192 @@ const ProductDetail: React.FC = () => {
                 <Link to="/">Trang chủ</Link>
               </Breadcrumb.Item>
               <Breadcrumb.Item>
-                <Link to="/">Nam</Link>
+                <Link
+                  to={`/category/${currentProductClient.productCategory.collection.category.slug}`}
+                >
+                  {
+                    currentProductClient.productCategory.collection.category
+                      .name
+                  }
+                </Link>
               </Breadcrumb.Item>
               <Breadcrumb.Item>
-                <Link to="/">Đồ Mặc nhà</Link>
+                <Link
+                  to={`/product-category/${currentProductClient.productCategory.slug}`}
+                >
+                  {currentProductClient.productCategory.name}
+                </Link>
               </Breadcrumb.Item>
-              <Breadcrumb.Item>Áo mặc nhà nam</Breadcrumb.Item>
+              <Breadcrumb.Item>{currentProductClient.name}</Breadcrumb.Item>
             </Breadcrumb>
           </section>
           <section>
             <Row gutter={[16, 16]}>
-              <Col xl={12} md={12} xs={24}>
+              <Col
+                xl={10}
+                md={12}
+                xs={24}
+                className="h-700 max-sm:h-full max-lg:h-full"
+              >
                 <Swiper
-                  modules={[Pagination]}
                   className="my-swiper"
+                  modules={[Pagination]}
                   pagination={{ clickable: true }}
+                  // onSlideChange, chọn ảnh thì slide nhỏ active theo
+                  onSlideChange={(swiperCore) => {
+                    const { activeIndex } = swiperCore;
+                    setSelectedImage(
+                      [...currentProductClient.productImages].sort(
+                        (a, b) => a.variantValueId - b.variantValueId
+                      )[activeIndex].path
+                    );
+                  }}
                 >
-                  <SwiperSlide>
-                    <img
-                      className="common-img"
-                      src="https://canifa.com/img/1000/1500/resize/2/l/2ls22s018-sy038-1.jpg"
-                      alt=""
-                    />
-                  </SwiperSlide>
-                  <SwiperSlide>
-                    <img
-                      className="common-img"
-                      src="https://canifa.com/img/1000/1500/resize/2/l/2ls22s018-sy038-2-thumb.jpg"
-                      alt=""
-                    />
-                  </SwiperSlide>
-                  <SwiperSlide>
-                    <img
-                      className="common-img"
-                      src="https://canifa.com/img/1000/1500/resize/2/l/2ls22s018-sy038-110-1-ghep-u.jpg"
-                      alt=""
-                    />
-                  </SwiperSlide>
+                  {[...currentProductClient.productImages]
+                    .sort((a, b) => a.variantValueId - b.variantValueId)
+                    .map((item) => {
+                      return (
+                        <SwiperSlide key={item.id}>
+                          <img
+                            className="common-img"
+                            src={selectedImage}
+                            alt={currentProductClient.name}
+                          />
+                        </SwiperSlide>
+                      );
+                    })}
                 </Swiper>
               </Col>
+              <Col xl={2} md={0} xs={0}>
+                <div className="h-700 overflow-y-auto">
+                  {[...currentProductClient.productImages]
+                    .sort((a, b) => a.variantValueId - b.variantValueId)
+                    .map((item) => {
+                      return (
+                        <div
+                          key={item.id}
+                          className="pb-2 pr-1"
+                          onClick={() => {
+                            handleSelectedImage(item);
+                          }}
+                        >
+                          <img
+                            className={`common-img ${
+                              item.path === selectedImage
+                                ? 'border border-solid'
+                                : ''
+                            }`}
+                            src={item.path}
+                            alt={currentProductClient.name}
+                          />
+                        </div>
+                      );
+                    })}
+                </div>
+              </Col>
               <Col xl={12} md={12} xs={24}>
-                <div>
+                <div className="ml-10 max-sm:ml-0 max-lg:0">
                   <div className="text-4xl text-name-product font-bold mb-4">
-                    <span>Bộ mặc nhà bé trai</span>
+                    <span>{currentProductClient.name}</span>
                   </div>
                   <div className="text-2xl mb-4">
                     <span>
-                      MÃ SP: <b>2LS22S018</b>
+                      MÃ SP: <b>{currentProductClient.code}</b>
                     </span>
                   </div>
-                  <div className="flex items-center text-3xl mb-4">
-                    <span className="mr-16">{castToVND(200000000)}</span>
-                    <span className="text-root-price line-through">
-                      {castToVND(200000000)}
+                  {currentProductClient?.priceSale > 0 ? (
+                    <div className="flex items-center text-3xl mb-4">
+                      {currentProductClient.priceSale > 0 && (
+                        <span className="mr-8">
+                          {castToVND(currentProductClient.priceSale)}
+                        </span>
+                      )}
+                      <span className="text-root-price line-through">
+                        {castToVND(currentProductClient.price)}
+                      </span>
+                    </div>
+                  ) : (
+                    <div className="flex items-center text-3xl mb-4">
+                      <span className="text-black">
+                        {castToVND(currentProductClient.price)}
+                      </span>
+                    </div>
+                  )}
+                  {colors.length > 0 && (
+                    <div>
+                      <h3>Màu sắc:</h3>
+                      <div className="flex flex-wrap gap-4">
+                        {colors.map((color, index) => {
+                          return (
+                            <span
+                              key={index}
+                              onClick={() => {
+                                handleSelectedColor(color);
+                              }}
+                              className={
+                                selectedColor?.id === color.id
+                                  ? 'min-w-40px h-16 border border-solid flex text-center items-center justify-center cursor-pointer px-4'
+                                  : 'min-w-40px h-16 border border-solid border-border-variant flex text-center items-center justify-center cursor-pointer px-4'
+                              }
+                            >
+                              {color.name}
+                            </span>
+                          );
+                        })}
+                      </div>
+                    </div>
+                  )}
+                  {sizes.length > 0 && (
+                    <div>
+                      <h3 className="my-2">Kích thước:</h3>
+                      <div className="flex flex-wrap gap-4">
+                        {sizes.map((size, index) => {
+                          return (
+                            <span
+                              key={index}
+                              onClick={() => {
+                                handleSelectedSize(size);
+                              }}
+                              className={
+                                selectedSize?.id === size.id
+                                  ? 'min-w-40px h-16 border border-solid flex text-center items-center justify-center cursor-pointer px-4'
+                                  : 'min-w-40px h-16 border border-solid border-border-variant flex text-center items-center justify-center cursor-pointer px-4'
+                              }
+                            >
+                              {size.name}
+                            </span>
+                          );
+                        })}
+                      </div>
+                    </div>
+                  )}
+                  <div className="my-4">
+                    <span className="font-bold cursor-pointer">
+                      Hướng dẫn chọn size:
                     </span>
                   </div>
-                  <div>
-                    <h3>Màu sắc:</h3>
-                    <div className="flex flex-wrap">
-                      {colors.map((color, index) => {
-                        return (
-                          <span
-                            key={index}
-                            onClick={() => {
-                              setIndexColor(index);
-                            }}
-                            className="w-20 h-20 border-solid border border-slate-500 flex text-center items-center justify-center cursor-pointer mr-4 mb-4"
-                          >
-                            {color}
-                          </span>
-                        );
-                      })}
-                    </div>
-                  </div>
-                  <div>
-                    <h3>Kích thước:</h3>
-                    <div className="flex flex-wrap">
-                      {sizes.map((size, index) => {
-                        return (
-                          <span
-                            key={index}
-                            onClick={() => {
-                              setIndexSize(index);
-                            }}
-                            className="w-20 h-20 border-solid border border-slate-500 flex text-center items-center justify-center cursor-pointer mr-4 mb-4"
-                          >
-                            {size}
-                          </span>
-                        );
-                      })}
-                    </div>
-                  </div>
-                  <div className="mb-4">
-                    <span className="font-bold">Hướng dẫn chọn size:</span>
+                  <div className="my-4 flex items-center">
+                    <span
+                      className={`h-16 w-16 border border-solid border-border-variant inline-flex items-center justify-center ${
+                        quantity > 1 ? 'cursor-pointer' : 'cursor-not-allowed'
+                      } `}
+                      onClick={() => {
+                        setQuantity(quantity - 1);
+                      }}
+                    >
+                      <AiOutlineMinus />
+                    </span>
+                    <span className="h-16 min-w-40px border border-solid border-l-0 border-r-0 border-border-variant inline-flex items-center justify-center px-4">
+                      {quantity}
+                    </span>
+                    <span
+                      className="h-16 w-16 border border-solid border-border-variant inline-flex items-center justify-center cursor-pointer"
+                      onClick={() => {
+                        setQuantity(quantity + 1);
+                      }}
+                    >
+                      <AiOutlinePlus />
+                    </span>
                   </div>
                   <div className="mb-4">
                     <div className="flex items-center mb-2">
@@ -143,11 +363,14 @@ const ProductDetail: React.FC = () => {
                     </div>
                   </div>
                   <div className="my-8">
-                    <div className="">
-                      <button className="w-45 border-none outline-none bg-name-product cursor-pointer max-lg:w-96 max-sm:w-96">
-                        <span className="flex justify-center py-6 text-3xl uppercase text-white font-light">
-                          Thêm vào giỏ hàng
-                        </span>
+                    <div
+                      className="inline-block"
+                      onClick={() => {
+                        handleAddToCart();
+                      }}
+                    >
+                      <button className="bg-btn-order flex items-center justify-center uppercase py-6 px-20 text-white text-2xl border-none outline-none rounded-xl cursor-pointer hover:bg-hover-btn-order">
+                        Thêm vào giỏ hàng
                       </button>
                     </div>
                   </div>
@@ -173,13 +396,15 @@ const ProductDetail: React.FC = () => {
                     {isDes ? (
                       <div className="mb-4">
                         <span>
-                          Áo phông basic, cổ tròn, tay cộc, in chữ nhỏ. Chất
-                          liệu 100% cotton Áo phông basic, cổ tròn, tay cộc, in
-                          chữ nhỏ. Chất liệu 100% cotton
+                          {currentProductClient.description
+                            .split('\n')
+                            .map((description, index) => {
+                              return <p key={index}>{description}</p>;
+                            })}
                         </span>
                       </div>
                     ) : (
-                      ''
+                      <></>
                     )}
                     <div className="flex justify-between mb-4">
                       <span className="font-bold">Chất liệu</span>
@@ -201,10 +426,16 @@ const ProductDetail: React.FC = () => {
                     </div>
                     {isMaterial ? (
                       <div className="mb-4">
-                        <span>100% cotton</span>
+                        <span>
+                          {currentProductClient.material
+                            .split('\n')
+                            .map((material, index) => {
+                              return <p key={index}>{material}</p>;
+                            })}
+                        </span>
                       </div>
                     ) : (
-                      ''
+                      <></>
                     )}
                     <div className="flex justify-between mb-4">
                       <span className="font-bold">Hướng dẫn sử dụng</span>
@@ -225,22 +456,36 @@ const ProductDetail: React.FC = () => {
                       )}
                     </div>
                     {isGuide ? (
-                      <div className="mb-4">
+                      <div className="mb-4 an">
                         <span>
-                          Giặt máy ở chế độ nhẹ, nhiệt độ thường. Không sử dụng
-                          hóa chất tẩy có chứa Clo. Phơi trong bóng mát. Sấy
-                          thùng, chế độ nhẹ nhàng. Là ở nhiệt độ trung bình 150
-                          độ C. Giặt với sản phẩm cùng màu. Không là lên chi
-                          tiết trang trí.
+                          {currentProductClient.guide
+                            .split('\n')
+                            .map((guide, index) => {
+                              return <p key={index}>{guide}</p>;
+                            })}
                         </span>
                       </div>
                     ) : (
-                      ''
+                      <></>
                     )}
                   </div>
                 </div>
               </Col>
             </Row>
+          </section>
+          <section className="my-10">
+            <CommentProduct />
+          </section>
+          <section className="product-related">
+            {productsRelatedClient.length > 1 && <ProductRelated />}
+            <div className="view-all my-10">
+              <Link
+                to={`/product-category/${currentProductClient.productCategory.slug}`}
+                className="text"
+              >
+                Xem tất cả
+              </Link>
+            </div>
           </section>
         </div>
       </div>

@@ -1,5 +1,5 @@
-import React, { useEffect, useMemo } from 'react';
-import { Breadcrumb, Col, Row } from 'antd';
+import React, { useEffect, useMemo, useState } from 'react';
+import { Breadcrumb, Col, Row, Spin } from 'antd';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Pagination, Navigation } from 'swiper';
 import 'swiper/css';
@@ -12,57 +12,70 @@ import {
   categoryActions,
   categorySelector,
 } from '../../redux/slice/categorySlice';
-import { collection } from '../../types/collection';
+import {
+  productActions,
+  productSelector,
+} from '../../redux/slice/productSlice';
+import { ICollection } from '../../types/collection';
 import { useTitle } from '../../hooks/useTitle';
 import ProductCategoryPage from '../ProductCategoryPage';
 import { routes } from '../../config/routes';
 import { removeTextBetweenParentheses } from '../../utils';
+import { productCategoryActions } from '../../redux/slice/productCategorySlice';
+import { ICategory } from '../../types/category';
+import Loading from '../../components/Loading/Loading';
 
 const CategoryPage: React.FC = () => {
   const dispatch = useDispatch();
-  const { categorySlug } = useParams();
-  const { categories, currentCategory } = useSelector(categorySelector);
+  const { slug } = useParams();
+  const { currentCategoryClient } = useSelector(categorySelector);
+  const { productsByCategory, isLoadingClient } = useSelector(productSelector);
 
-  const checkCategoryPage = useMemo(() => {
-    return categories.rows.find((category) => categorySlug === category.slug);
-  }, [categories, categorySlug]);
+  // lấy banner
+  useEffect(() => {
+    dispatch(
+      categoryActions.getCategoryBySlug({
+        collections: true,
+        slug: slug,
+      })
+    );
+  }, [dispatch, slug]);
 
   useEffect(() => {
-    categorySlug &&
+    if (slug) {
       dispatch(
-        categoryActions.getCategoryBySlug({
-          collections: true,
-          slug: categorySlug,
+        productActions.getAllProductByCategoryClient({
+          slug,
+          limitProduct: 4,
+          limitCollection: 4,
         })
       );
-  }, [dispatch, categorySlug]);
-  useTitle(currentCategory?.name ? currentCategory?.name : '');
+    }
+  }, [dispatch, slug]);
 
-  const countProductCategory = useMemo(() => {
-    return currentCategory
-      ? currentCategory.collections.reduce((prev: any, current: any) => {
-          return prev + current.productCategories.length;
-        }, 0)
-      : 0;
-  }, [currentCategory]);
+  useTitle(currentCategoryClient?.name ? currentCategoryClient?.name : '');
 
-  if (!checkCategoryPage) return <ProductCategoryPage />;
   return (
-    <main className="px-20 max-sm:px-4">
-      <section className="my-8">
+    <main className="px-20 max-sm:px-4 max-sm:mt-24">
+      {isLoadingClient && <Loading />}
+      <section className="my-8 max-sm:my-4">
         <Breadcrumb>
           <Breadcrumb.Item>
             <Link to={routes.home}>Trang chủ</Link>
           </Breadcrumb.Item>
-          <Breadcrumb.Item>{currentCategory?.name}</Breadcrumb.Item>
+          <Breadcrumb.Item>{currentCategoryClient?.name}</Breadcrumb.Item>
         </Breadcrumb>
       </section>
       <section className="mb-16">
         <div>
-          <img className="common-img" src={currentCategory?.thumbnail} alt="" />
+          <img
+            className="common-img"
+            src={currentCategoryClient?.thumbnail}
+            alt=""
+          />
         </div>
       </section>
-      {countProductCategory > 0 && (
+      {/* {countProductCategory > 0 && (
         <section className="mb-16 border-solid border-0 border-b-2 border-border-product-page">
           <div>
             <h3 className="m-0 mb-8 font-bold text-4xl">Danh mục sản phẩm</h3>
@@ -74,7 +87,7 @@ const CategoryPage: React.FC = () => {
               slidesPerView={5}
               spaceBetween={35}
               breakpoints={{
-                375: {
+                340: {
                   slidesPerView: 2,
                   spaceBetween: 20,
                 },
@@ -93,138 +106,70 @@ const CategoryPage: React.FC = () => {
               }}
               className="mySwiper"
             >
-              {currentCategory &&
-                currentCategory.collections.length > 0 &&
-                currentCategory.collections.map((collection: collection) => {
-                  return collection.productCategories.map((item) => {
-                    return item.thumbnail ? (
-                      <SwiperSlide>
-                        <Link to={`/${item.slug}`}>
-                          <img
-                            className="common-img-slide"
-                            src={item.thumbnail}
-                            alt=""
-                          />
-                          <div className="mt-8">
-                            <span className="text-xl text-name-product">
-                              {removeTextBetweenParentheses(item.name)}
-                            </span>
-                          </div>
-                        </Link>
-                      </SwiperSlide>
-                    ) : (
-                      <></>
-                    );
-                  });
-                })}
+              {currentCategoryClient &&
+                currentCategoryClient.collections.length > 0 &&
+                currentCategoryClient.collections.map(
+                  (collection: collection) => {
+                    return collection.productCategories.map((item) => {
+                      return item.thumbnail ? (
+                        <SwiperSlide>
+                          <Link to={`/${item.slug}`}>
+                            <img
+                              className="common-img-slide"
+                              src={item.thumbnail}
+                              alt=""
+                            />
+                            <div className="mt-8">
+                              <span className="text-xl text-name-product">
+                                {removeTextBetweenParentheses(item.name)}
+                              </span>
+                            </div>
+                          </Link>
+                        </SwiperSlide>
+                      ) : (
+                        <></>
+                      );
+                    });
+                  }
+                )}
             </Swiper>
           </div>
         </section>
-      )}
-      <section className="mb-16 ">
-        <div>
-          <h3 className="m-0 mb-8 font-bold text-4xl">Áo phông</h3>
-        </div>
-        <div className="pb-6">
-          <Row gutter={[16, 16]}>
-            <Col xl={6} md={6} xs={12}>
-              <Product />
-            </Col>
-            <Col xl={6} md={6} xs={12}>
-              <Product />
-            </Col>
-            <Col xl={6} md={6} xs={12}>
-              <Product />
-            </Col>
-            <Col xl={6} md={6} xs={12}>
-              <Product />
-            </Col>
-          </Row>
-          <div className="view-all mt-10">
-            <Link to="" className="text">
-              Xem tất cả
-            </Link>
-          </div>
-        </div>
-      </section>
-      <section className="mb-16 ">
-        <div>
-          <h3 className="m-0 mb-8 font-bold text-4xl">Áo phông</h3>
-        </div>
-        <div className="pb-6">
-          <Row gutter={[16, 16]}>
-            <Col xl={6} md={6} xs={12}>
-              <Product />
-            </Col>
-            <Col xl={6} md={6} xs={12}>
-              <Product />
-            </Col>
-            <Col xl={6} md={6} xs={12}>
-              <Product />
-            </Col>
-            <Col xl={6} md={6} xs={12}>
-              <Product />
-            </Col>
-          </Row>
-          <div className="view-all mt-10">
-            <Link to="" className="text">
-              Xem tất cả
-            </Link>
-          </div>
-        </div>
-      </section>
-      <section className="mb-16 ">
-        <div>
-          <h3 className="m-0 mb-8 font-bold text-4xl">Áo phông</h3>
-        </div>
-        <div className="pb-6">
-          <Row gutter={[16, 16]}>
-            <Col xl={6} md={6} xs={12}>
-              <Product />
-            </Col>
-            <Col xl={6} md={6} xs={12}>
-              <Product />
-            </Col>
-            <Col xl={6} md={6} xs={12}>
-              <Product />
-            </Col>
-            <Col xl={6} md={6} xs={12}>
-              <Product />
-            </Col>
-          </Row>
-          <div className="view-all mt-10">
-            <Link to="" className="text">
-              Xem tất cả
-            </Link>
-          </div>
-        </div>
-      </section>
-      <section className="mb-16 ">
-        <div>
-          <h3 className="m-0 mb-8 font-bold text-4xl">Áo phông</h3>
-        </div>
-        <div className="pb-6">
-          <Row gutter={[16, 16]}>
-            <Col xl={6} md={6} xs={12}>
-              <Product />
-            </Col>
-            <Col xl={6} md={6} xs={12}>
-              <Product />
-            </Col>
-            <Col xl={6} md={6} xs={12}>
-              <Product />
-            </Col>
-            <Col xl={6} md={6} xs={12}>
-              <Product />
-            </Col>
-          </Row>
-          <div className="view-all mt-10">
-            <Link to="" className="text">
-              Xem tất cả
-            </Link>
-          </div>
-        </div>
-      </section>
+      )} */}
+      {productsByCategory.rows.map((item, index) => {
+        return (
+          item.products.length > 0 && (
+            <section className="mb-16" key={index}>
+              <div>
+                <h3 className="m-0 mb-8 font-bold text-4xl">
+                  {removeTextBetweenParentheses(item.productCategory?.name)}
+                </h3>
+              </div>
+              <div className="pb-6">
+                <Row gutter={[16, 16]}>
+                  {item.products.map((product) => {
+                    return (
+                      <Col xl={6} md={8} xs={12} key={product.id}>
+                        <Product product={product} />
+                      </Col>
+                    );
+                  })}
+                </Row>
+                {item.productCategory?.name != null && (
+                  <div className="view-all mt-10">
+                    <Link
+                      to={`/product-category/${item.productCategory?.slug}`}
+                      className="text"
+                    >
+                      Xem tất cả
+                    </Link>
+                  </div>
+                )}
+              </div>
+            </section>
+          )
+        );
+      })}
     </main>
   );
 };

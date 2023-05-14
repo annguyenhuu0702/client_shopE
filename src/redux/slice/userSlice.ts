@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { deleteParams, tokenPayloadData } from '../../types/common';
-import { createUser, getAllUser, updateUser, user } from '../../types/user';
+import { ICreateUser, IGetAllUser, IUpdateUser, IUser } from '../../types/user';
 import { RootState } from '../store';
 
 export interface userState {
@@ -9,11 +9,11 @@ export interface userState {
   pageSize: number;
   isLoading: boolean;
   isError: boolean;
-  currentUser: user | null;
+  currentUser: IUser | null;
 }
 
 export interface resUser {
-  rows: user[];
+  rows: IUser[];
   count: number;
 }
 
@@ -23,7 +23,7 @@ const initialState: userState = {
     count: 0,
   },
   page: 1,
-  pageSize: 7,
+  pageSize: 9,
   isLoading: false,
   isError: false,
   currentUser: null,
@@ -33,7 +33,7 @@ const userSlice = createSlice({
   name: 'user',
   initialState: initialState,
   reducers: {
-    getAllUser: (state, action: PayloadAction<getAllUser>) => {
+    getAllUser: (state, action: PayloadAction<IGetAllUser>) => {
       state.isLoading = true;
     },
     getAllUserSuccess: (state, action: PayloadAction<resUser>) => {
@@ -55,11 +55,11 @@ const userSlice = createSlice({
     },
     createUser: (
       state,
-      action: PayloadAction<tokenPayloadData<createUser>>
+      action: PayloadAction<tokenPayloadData<ICreateUser>>
     ) => {
       state.isLoading = true;
     },
-    createUserSuccess: (state, action: PayloadAction<user>) => {
+    createUserSuccess: (state, action: PayloadAction<IUser>) => {
       state.isLoading = false;
       state.isError = false;
       state.page = 1;
@@ -73,13 +73,13 @@ const userSlice = createSlice({
       state.isLoading = false;
       state.isError = true;
     },
-    setUser: (state, action: PayloadAction<user | null>) => {
+    setUser: (state, action: PayloadAction<IUser | null>) => {
       state.currentUser = action.payload;
     },
-    editUser: (state, action: PayloadAction<tokenPayloadData<updateUser>>) => {
+    editUser: (state, action: PayloadAction<tokenPayloadData<IUpdateUser>>) => {
       state.isLoading = true;
     },
-    editUserSuccess: (state, action: PayloadAction<user>) => {
+    editUserSuccess: (state, action: PayloadAction<IUser>) => {
       state.isLoading = false;
       state.isError = false;
       const index = state.users.rows.findIndex(

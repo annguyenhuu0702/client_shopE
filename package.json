@@ -17,11 +17,14 @@
     "@types/react": "^18.0.15",
     "@types/react-dom": "^18.0.6",
     "antd": "^5.2.3",
+    "chart.js": "^4.3.0",
     "classnames": "^2.3.1",
     "moment": "^2.29.4",
     "react": "^18.2.0",
+    "react-chartjs-2": "^5.2.0",
     "react-dom": "^18.2.0",
     "react-icons": "^4.4.0",
+    "react-quill": "^2.0.0",
     "react-scripts": "5.0.1",
     "sass": "^1.53.0",
     "slugify": "^1.6.5",
@@ -30,6 +33,7 @@
     "xlsx": "^0.18.5"
   },
   "scripts": {
+    "start": "set PORT=1603 && react-scripts start",
     "dev": "set PORT=1603 && react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",

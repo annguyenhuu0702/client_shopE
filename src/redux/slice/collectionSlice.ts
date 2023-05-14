@@ -1,37 +1,41 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import {
-  collection,
-  createCollection,
-  getAllCollectionParams,
-  updateCollection,
+  ICollection,
+  ICreateCollection,
+  IGetAllCollectionParams,
+  IUpdateCollection,
 } from '../../types/collection';
 import { deleteParams, tokenPayloadData } from '../../types/common';
 import { RootState } from '../store';
 
 export interface collectionState {
   collections: resCollection;
-  currentCollection: collection | null;
+  currentCollection: ICollection | null;
   page: number;
   pageSize: number;
   isLoading: boolean;
   isError: boolean;
+  currentCollectionClient: ICollection | null;
 }
 
 export interface resCollection {
-  rows: collection[];
+  rows: ICollection[];
   count: number;
 }
 
 const initialState: collectionState = {
+  // admin
   collections: {
     rows: [],
     count: 0,
   },
   page: 1,
-  pageSize: 7,
+  pageSize: 9,
   currentCollection: null,
   isLoading: false,
   isError: false,
+  // client
+  currentCollectionClient: null,
 };
 
 const CollectionSlice = createSlice({
@@ -45,12 +49,15 @@ const CollectionSlice = createSlice({
       state.page = action.payload.page;
       state.pageSize = action.payload.pageSize;
     },
-    setCollection: (state, action: PayloadAction<collection | null>) => {
+    setCollection: (state, action: PayloadAction<ICollection | null>) => {
       state.currentCollection = action.payload;
+    },
+    setCollectionClient: (state, action: PayloadAction<ICollection | null>) => {
+      state.currentCollectionClient = action.payload;
     },
     getAllCollection: (
       state,
-      action: PayloadAction<getAllCollectionParams>
+      action: PayloadAction<IGetAllCollectionParams>
     ) => {
       state.isLoading = true;
     },
@@ -64,36 +71,16 @@ const CollectionSlice = createSlice({
       state.isLoading = false;
       state.isError = true;
     },
-    getCollectionBySlug: (
-      state,
-      action: PayloadAction<getAllCollectionParams>
-    ) => {
-      state.isLoading = true;
-    },
-    getCollectionBySlugSuccess: (state, action: PayloadAction<collection>) => {
-      state.isLoading = false;
-      state.isError = false;
-      state.currentCollection = action.payload;
-    },
-    getCollectionBySlugFailed: (state) => {
-      state.isLoading = false;
-      state.isError = true;
-    },
+
     createCollection: (
       state,
-      action: PayloadAction<tokenPayloadData<createCollection>>
+      action: PayloadAction<tokenPayloadData<ICreateCollection>>
     ) => {
       state.isLoading = true;
     },
-    createCollectionSuccess: (state, action: PayloadAction<collection>) => {
+    createCollectionSuccess: (state) => {
       state.isLoading = false;
       state.isError = false;
-      state.collections.rows.unshift(action.payload);
-      state.collections.count += 1;
-      state.page = 1;
-      if (state.collections.rows.length > 7) {
-        state.collections.rows.splice(state.collections.rows.length - 1, 1);
-      }
     },
     createCollectionFailed: (state) => {
       state.isLoading = false;
@@ -101,39 +88,45 @@ const CollectionSlice = createSlice({
     },
     editCollection: (
       state,
-      action: PayloadAction<tokenPayloadData<updateCollection>>
+      action: PayloadAction<tokenPayloadData<IUpdateCollection>>
     ) => {
       state.isLoading = true;
     },
-    editCollectionSuccess: (state, action: PayloadAction<collection>) => {
+    editCollectionSuccess: (state) => {
       state.isLoading = false;
       state.isError = false;
-      const index = state.collections.rows.findIndex(
-        (item) => item.id === action.payload.id
-      );
-      if (index !== -1) {
-        state.collections.rows[index] = action.payload;
-      }
     },
     editCollectionFailed: (state) => {
       state.isLoading = false;
-      state.isError = false;
+      state.isError = true;
     },
     deleteCollection: (state, action: PayloadAction<deleteParams>) => {
       state.isLoading = true;
     },
-    deleteCollectionSuccess: (state, action: PayloadAction<number>) => {
+    deleteCollectionSuccess: (state) => {
       state.isError = false;
       state.isLoading = false;
-      state.collections.rows = state.collections.rows.filter(
-        (item) => item.id !== action.payload
-      );
-      state.collections.count -= 1;
-      if (state.collections.rows.length === 0) {
-        state.page = state.page - 1;
-      }
     },
     deleteCollectionFailed: (state) => {
+      state.isLoading = false;
+      state.isError = true;
+    },
+
+    getCollectionBySlugClient: (
+      state,
+      action: PayloadAction<IGetAllCollectionParams>
+    ) => {
+      state.isLoading = true;
+    },
+    getCollectionBySlugClientSuccess: (
+      state,
+      action: PayloadAction<ICollection>
+    ) => {
+      state.isLoading = false;
+      state.isError = false;
+      state.currentCollectionClient = action.payload;
+    },
+    getCollectionBySlugClientFailed: (state) => {
       state.isLoading = false;
       state.isError = true;
     },

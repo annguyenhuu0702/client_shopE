@@ -1,8 +1,9 @@
 import React from 'react';
-import { collection } from './collection';
+import { ICollection } from './collection';
 import { queryParams } from './common';
+import { IProduct } from './product';
 
-export interface productCategory {
+export interface IProductCategory {
   key?: React.Key | string | number;
   id: number;
   name: string;
@@ -10,14 +11,15 @@ export interface productCategory {
   thumbnail: string;
   description: string;
   collectionId: number;
-  collection: collection;
+  collection: ICollection;
+  products: IProduct[];
   deletedAt: Date;
   createdAt: string;
   updatedAt: string;
   resetValues?: Function;
 }
 
-export interface createProductCategory {
+export interface ICreateProductCategory {
   name: string;
   slug: string;
   thumbnail: string;
@@ -26,11 +28,11 @@ export interface createProductCategory {
   resetValues?: Function;
 }
 
-export interface updateProductCategory extends createProductCategory {
+export interface IUpdateProductCategory extends ICreateProductCategory {
   id: number;
 }
 
-export interface getAllProductCategoryParams extends queryParams {
+export interface IGetAllProductCategoryParams extends queryParams {
   collection?: boolean;
   slug?: string;
   name?: string;

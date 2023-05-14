@@ -1,4 +1,4 @@
-import type { RadioChangeEvent } from 'antd';
+import { RadioChangeEvent, message, notification } from 'antd';
 import {
   Badge,
   Button,
@@ -13,33 +13,65 @@ import {
 import React, { useState } from 'react';
 import { AiOutlineRollback } from 'react-icons/ai';
 import { FaMoneyBillAlt } from 'react-icons/fa';
-import { Link } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { Link, useNavigate } from 'react-router-dom';
 import { routes } from '../../config/routes';
 import { useTitle } from '../../hooks/useTitle';
 import province from '../../province.json';
-
-const { TextArea } = Input;
+import { authSelector } from '../../redux/slice/authSlice';
+import { cartSelector } from '../../redux/slice/cartSlice';
+import { castToVND } from '../../utils';
+import { paymentApi } from '../../apis/paymentApi';
 
 const CheckoutPage: React.FC = () => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const { user } = useSelector(authSelector);
   const [form] = Form.useForm();
+
   const [value, setValue] = useState(0);
+  const [point, setPoint] = useState<number>(0);
+  const [priceSale, setPriceSale] = useState<number>(0);
 
   const [districts, setDistricts] = useState([]);
   const [wards, setWards] = useState([]);
+  const { cart } = useSelector(cartSelector);
 
   const initialValue = {
-    fullname: '',
-    phone: '',
-    city: '',
-    ward: '',
-    district: '',
-    street: '',
-    coupon: '',
-    payment: 0,
+    fullname: user.user ? user.user.fullname : '',
+    phone: user.user ? user.user.phone : '',
+    city: user.user ? user.user.city : '',
+    ward: user.user ? user.user.ward : '',
+    district: user.user ? user.user.district : '',
+    street: user.user ? user.user.address : '',
+    accumulatedPoints: 0,
+    payment: 1,
   };
 
-  const onFinish = (values: any) => {
-    console.log('Success:', values);
+  const onFinish = async (values: any) => {
+    try {
+      if (user) {
+        const res = await paymentApi.create(user.accessToken, dispatch, {
+          ...values,
+          point: +point,
+          shippingCost,
+          totalPrice: totalPrice() + shippingCost - priceSale,
+        });
+        const { status } = res;
+        if (status === 201) {
+          navigate(routes.paymentSuccess);
+        } else {
+          notification.error({
+            message: 'Thất bại',
+            description: 'Có lỗi khi điền form dữ liệu!',
+            placement: 'bottomRight',
+            duration: 3,
+          });
+        }
+      }
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const onFinishFailed = (errorInfo: any) => {
@@ -53,7 +85,6 @@ const CheckoutPage: React.FC = () => {
     if (checkProvince) {
       setDistricts(checkProvince.districts);
     }
-    console.log(`selected ${value}`);
   };
 
   const handleChangeDistrict = (value: string) => {
@@ -63,21 +94,66 @@ const CheckoutPage: React.FC = () => {
     if (checkDistrict) {
       setWards(checkDistrict.wards);
     }
-    console.log(`selected ${value}`);
   };
 
   const handleChangeWard = (value: string) => {
-    console.log(`selected ${value}`);
+    // console.log(`selected ${value}`);
   };
 
   const onChange = (e: RadioChangeEvent) => {
-    console.log('radio checked', e.target.value);
     setValue(e.target.value);
   };
+
+  const totalPrice = () => {
+    let totalPrice =
+      cart &&
+      cart.cartItems.reduce(
+        (prev, currentValue) =>
+          currentValue.productVariant.product.priceSale > 0
+            ? prev +
+              currentValue.productVariant.product.priceSale *
+                currentValue.quantity
+            : prev +
+              currentValue.productVariant.product.price * currentValue.quantity,
+        0
+      );
+    return totalPrice || 0;
+  };
+
+  let shippingCost = totalPrice() > 499000 ? 0 : 30000;
+
+  const totalProduct = () => {
+    let totalProduct =
+      cart &&
+      cart.cartItems.reduce(
+        (prev, currentValue) => prev + currentValue.quantity,
+        0
+      );
+    return totalProduct || 0;
+  };
+
+  const handleCheckPoint = async () => {
+    try {
+      const res = await paymentApi.checkPoint(
+        user.accessToken,
+        dispatch,
+        point
+      );
+      const status = res.status;
+      if (status === 200) {
+        setPriceSale(point * 100);
+      }
+    } catch (error) {
+      setPoint(0);
+      message.error('Điểm tích lũy của bạn không đủ!');
+      console.log(error);
+    }
+  };
+
   useTitle('Thủ tục thanh toán');
 
   return (
-    <main className="p-50 my-20 max-lg:px-40 max-sm:px-6 max-sm:mt-24">
+    <main className="p-50 mt-20 max-lg:px-40 max-sm:px-6 max-sm:mt-24">
       <Form
         name="checkout"
         layout="vertical"
@@ -147,59 +223,9 @@ const CheckoutPage: React.FC = () => {
                     }
                   />
                 </Form.Item>
-                {districts.length > 0 && (
-                  <Form.Item
-                    label="Quận huyện"
-                    name="district"
-                    rules={[
-                      {
-                        required: true,
-                        message: 'Vui lòng không bỏ trống!',
-                      },
-                    ]}
-                  >
-                    <Select
-                      allowClear
-                      showSearch
-                      onChange={handleChangeDistrict}
-                      options={
-                        districts &&
-                        districts.map((item: any) => ({
-                          value: item.name,
-                          label: item.name,
-                        }))
-                      }
-                    />
-                  </Form.Item>
-                )}
-                {wards.length > 0 && (
-                  <Form.Item
-                    label="Phường xã"
-                    name="ward"
-                    rules={[
-                      {
-                        required: true,
-                        message: 'Vui lòng không bỏ trống!',
-                      },
-                    ]}
-                  >
-                    <Select
-                      allowClear
-                      showSearch
-                      onChange={handleChangeWard}
-                      options={
-                        wards &&
-                        wards.map((item: any) => ({
-                          value: item.name,
-                          label: item.name,
-                        }))
-                      }
-                    />
-                  </Form.Item>
-                )}
                 <Form.Item
-                  label="Địa chỉ"
-                  name="street"
+                  label="Quận huyện"
+                  name="district"
                   rules={[
                     {
                       required: true,
@@ -207,7 +233,44 @@ const CheckoutPage: React.FC = () => {
                     },
                   ]}
                 >
-                  <TextArea rows={3} />
+                  <Select
+                    allowClear
+                    showSearch
+                    onChange={handleChangeDistrict}
+                    options={
+                      districts &&
+                      districts.map((item: any) => ({
+                        value: item.name,
+                        label: item.name,
+                      }))
+                    }
+                  />
+                </Form.Item>
+                <Form.Item
+                  label="Phường xã"
+                  name="ward"
+                  rules={[
+                    {
+                      required: true,
+                      message: 'Vui lòng không bỏ trống!',
+                    },
+                  ]}
+                >
+                  <Select
+                    allowClear
+                    showSearch
+                    onChange={handleChangeWard}
+                    options={
+                      wards &&
+                      wards.map((item: any) => ({
+                        value: item.name,
+                        label: item.name,
+                      }))
+                    }
+                  />
+                </Form.Item>
+                <Form.Item label="Địa chỉ cụ thể" name="street">
+                  <Input />
                 </Form.Item>
               </Col>
               <Col xl={12} md={16} xs={24}>
@@ -221,9 +284,19 @@ const CheckoutPage: React.FC = () => {
                   <Radio.Group onChange={onChange} value={value}>
                     <Space direction="vertical">
                       <div className="flex items-center justify-between border-2 border-solid border-border-checkout px-4 py-4 mb-4">
-                        <Radio value={0}>
+                        <Radio value={1}>
                           <span className="text-3xl mr-20">
                             Thanh toán khi nhận hàng (Cod)
+                          </span>
+                        </Radio>
+                        <div className="flex items-center text-4xl text-yellow-500">
+                          <FaMoneyBillAlt />
+                        </div>
+                      </div>
+                      <div className="flex items-center justify-between border-2 border-solid border-border-checkout px-4 py-4 mb-4">
+                        <Radio value={2}>
+                          <span className="text-3xl mr-20">
+                            Thanh toán qua cổng PayPal
                           </span>
                         </Radio>
                         <div className="flex items-center text-4xl text-yellow-500">
@@ -239,69 +312,105 @@ const CheckoutPage: React.FC = () => {
           <Col xl={8} md={24} xs={24}>
             <div className="bg-bg-checkout p-8">
               <div className="pb-8 border-solid border-0 border-b-2 border-white">
-                <h2 className="m-0">Đơn hàng (1 sản phẩm)</h2>
+                <h2 className="m-0">Đơn hàng ({totalProduct()} sản phẩm)</h2>
               </div>
-              <div className="flex justify-between pt-8">
-                <div className="flex">
-                  <div className="mr-6">
-                    <Badge count={5}>
-                      <img
-                        src="https://bizweb.dktcdn.net/thumb/thumb/100/438/408/products/ao-ba-lo-nu-bln5072-xnh-8-yodyvn.jpg?v=1676609030590"
-                        alt=""
-                      />
-                    </Badge>
-                  </div>
-                  <div className="flex flex-col">
-                    <span className="text-2xl font-semibold">
-                      Áo 2 Dây Nữ Dáng Ôm Tôn Dáng
-                    </span>
-                    <span className="text-xl">Xanh nhạt / S</span>
-                  </div>
-                </div>
-                <div className="flex items-center">
-                  <span className="text-2xl font-semibold">1000</span>
-                </div>
-              </div>
-              <div className="flex items-center justify-between mt-8 pb-8 border-solid border-0 border-b-2 border-white">
+              {cart &&
+                cart.cartItems.map((cartItem) => {
+                  let images =
+                    cartItem.productVariant.product.productImages.filter(
+                      (item) =>
+                        cartItem.productVariant.variantValues.find(
+                          (variantValue) =>
+                            variantValue.id === item.variantValueId
+                        )
+                    );
+                  images.sort((a, b) => a.id - b.id);
+                  return (
+                    <div
+                      className="flex justify-between pt-8"
+                      key={cartItem.id}
+                    >
+                      <div className="flex">
+                        <div className="mr-6">
+                          <Badge count={cartItem.quantity}>
+                            <img
+                              className="w-28 h-20 object-contain"
+                              src={images[0].path}
+                              alt=""
+                            />
+                          </Badge>
+                        </div>
+                        <div className="flex flex-col">
+                          <span className="text-2xl font-semibold">
+                            {cartItem.productVariant.product.name}
+                          </span>
+                          <span className="text-xl">
+                            {cartItem.productVariant.name}
+                          </span>
+                        </div>
+                      </div>
+                      <div className="flex items-center">
+                        <span className="text-2xl font-semibold">
+                          {castToVND(
+                            cartItem.productVariant.product.priceSale > 0
+                              ? cartItem.productVariant.product.priceSale
+                              : cartItem.productVariant.product.price
+                          )}
+                        </span>
+                      </div>
+                    </div>
+                  );
+                })}
+              <div className="flex items-center justify-between mt-8 pb-4">
                 <div className="w-full mr-12">
-                  <Form.Item name="coupon" className="mb-0">
-                    <Input size="large" placeholder="Nhập mã giảm giá" />
+                  <Form.Item className="mb-0">
+                    <Input
+                      value={point}
+                      onChange={(e: any) => {
+                        setPoint(e.target.value);
+                      }}
+                      size="large"
+                      placeholder="Nhập điểm tích lũy của bạn"
+                    />
                   </Form.Item>
                 </div>
-                <Form.Item className="mb-0" shouldUpdate>
-                  {() => (
-                    <Button
-                      type="primary"
-                      size="large"
-                      className="flex items-center text-center justify-center w-44  text-white"
-                      disabled={
-                        !form.isFieldsTouched(false) ||
-                        !!form
-                          .getFieldsError()
-                          .filter(({ errors }: any) => errors.length).length
-                      }
-                    >
-                      Áp dụng
-                    </Button>
-                  )}
+                <Form.Item className="mb-0">
+                  <Button
+                    type="primary"
+                    size="large"
+                    className="flex items-center justify-center w-44 text-white"
+                    onClick={() => {
+                      handleCheckPoint();
+                    }}
+                  >
+                    Áp dụng
+                  </Button>
                 </Form.Item>
+              </div>
+              <div className="pb-8 border-solid border-0 border-b-2 border-white">
+                <span className="text-2xl font-semibold">
+                  Bạn hiện đang có <b>{user.user?.accumulatedPoints}</b> điểm
+                </span>
               </div>
               <div className="mt-8 pb-8 border-solid border-0 border-b-2 border-white">
                 <div className="flex justify-between items-center text-2xl font-semibold mb-4">
                   <span>Tạm tính</span>
-                  <span>1000000</span>
+                  <span>{castToVND(totalPrice())}</span>
+                </div>
+                <div className="flex justify-between items-center text-2xl font-semibold mb-4">
+                  <span>Phí vận chuyển</span>
+                  <span>{castToVND(shippingCost)}</span>
                 </div>
                 <div className="flex justify-between items-center text-2xl font-semibold">
-                  <span>Phí vận chuyển</span>
-                  <span>1000000</span>
+                  <span>Điểm tích lũy</span>
+                  <span>-{castToVND(priceSale)}</span>
                 </div>
-                <div></div>
               </div>
               <div className="mt-8 pb-8 border-solid border-0 border-b-2 border-white">
                 <div className="flex justify-between items-center ">
                   <span className="text-2xl font-semibold mb-4">Tổng cộng</span>
                   <span className="text-4xl font-semibold mb-4 text-amber-500">
-                    1631132323132
+                    {castToVND(totalPrice() + shippingCost - priceSale)}
                   </span>
                 </div>
               </div>

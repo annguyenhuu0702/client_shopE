@@ -1,6 +1,4 @@
 import {
-  AppstoreOutlined,
-  BarChartOutlined,
   MenuFoldOutlined,
   MenuUnfoldOutlined,
   UserOutlined,
@@ -10,9 +8,17 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Menu, MenuProps } from 'antd';
 import classNames from 'classnames/bind';
 import React, { useState } from 'react';
+import {
+  AiOutlineBarChart,
+  AiOutlineBook,
+  AiOutlineHome,
+} from 'react-icons/ai';
+import { BiCategory, BiCollection, BiComment, BiCube } from 'react-icons/bi';
+import { FaWarehouse } from 'react-icons/fa';
+import { TbNews } from 'react-icons/tb';
 import { useLocation, useNavigate } from 'react-router-dom';
+import { routes } from '../../../config/routes';
 import styles from './__sidebar.module.scss';
-import { BiCategory, BiCollection } from 'react-icons/bi';
 
 const cx = classNames.bind(styles);
 
@@ -35,23 +41,28 @@ function getItem(
 }
 
 const items: MenuItem[] = [
-  getItem('Thống kê', '/admin', <BarChartOutlined />),
-  getItem('Tài khoản', '/admin/user', <UserOutlined />),
-  getItem('Danh mục', '/admin/category', <BiCategory />),
-  getItem('Bộ sưu tập', '/admin/collection', <BiCollection />),
-  getItem('Quản lý sản phẩm', 'qlsanpham', <FontAwesomeIcon icon={faList} />, [
-    getItem('Danh mục sản phẩm', '/admin/product-category'),
-    getItem('Sản phẩm', '/admin/product'),
-  ]),
+  getItem('Trang chủ', routes.admin, <AiOutlineHome />),
+  getItem('Khách hàng', routes.userAdmin, <UserOutlined />),
+  getItem(
+    'Quản lý sản phẩm',
+    'product_management',
+    <FontAwesomeIcon icon={faList} />,
+    [
+      getItem('Danh mục', routes.categoryAdmin, <BiCategory />),
+      getItem('Bộ sưu tập', routes.collectionAdmin, <BiCollection />),
+      getItem('Danh mục sản phẩm', routes.productCategoryAdmin, <BiCube />),
+      getItem('Sản phẩm', routes.productAdmin, <BiCube />),
+      getItem('Kích thước', routes.sizeAdmin, <BiCube />),
+      getItem('Màu sắc', routes.colorAdmin, <BiCube />),
+      getItem('Khuyến mãi', routes.promotionAdmin, <BiCube />),
+    ]
+  ),
 
-  getItem('Navigation Two', 'sub2', <AppstoreOutlined />, [
-    getItem('Option 9', '9'),
-    getItem('Option 10', '10'),
-    getItem('Submenu', 'sub3', null, [
-      getItem('Option 11', '11'),
-      getItem('Option 12', '12'),
-    ]),
-  ]),
+  getItem('Tồn kho', routes.inventoryAdmin, <FaWarehouse />),
+  getItem('Đơn hàng', routes.orderAdmmin, <AiOutlineBook />),
+  getItem('Đánh giá', routes.commentAdmin, <BiComment />),
+  getItem('Tin tức', routes.newsAdmin, <TbNews />),
+  getItem('Thống kê', routes.statisticalAdmin, <AiOutlineBarChart />),
 ];
 
 const Sidebar: React.FC = () => {

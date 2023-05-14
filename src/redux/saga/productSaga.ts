@@ -5,15 +5,17 @@ import { productApi } from '../../apis/productApi';
 import { STATUS_CODE } from '../../constants';
 import { deleteParams, tokenPayloadData } from '../../types/common';
 import {
-  createProduct,
-  getAllProductParams,
-  product,
+  ICreateProduct,
+  IGetAllProductByCategory,
+  IGetAllProductParams,
+  IGetProductBySlug,
+  IProduct,
 } from '../../types/product';
 import { productActions } from '../slice/productSlice';
 
 function* getAllProductSaga({
   payload,
-}: PayloadAction<getAllProductParams>): any {
+}: PayloadAction<IGetAllProductParams>): any {
   try {
     const res = yield call(() => {
       return productApi.getAll(payload);
@@ -30,15 +32,15 @@ function* getAllProductSaga({
 
 function* createProductSaga({
   payload,
-}: PayloadAction<tokenPayloadData<createProduct>>): any {
+}: PayloadAction<tokenPayloadData<ICreateProduct>>): any {
   try {
     const { token, dispatch, data, navigate } = payload;
     const res = yield call(() => {
       return productApi.create(token, dispatch, data);
     });
-    const { data: newData, status } = res;
+    const { status } = res;
     if (status === STATUS_CODE.CREATED) {
-      yield put(productActions.createProductSuccess(newData.data));
+      yield put(productActions.createProductSuccess());
       if (data.resetValues) {
         data.resetValues();
       }
@@ -64,7 +66,7 @@ function* createProductSaga({
 
 function* editProductSaga({
   payload,
-}: PayloadAction<tokenPayloadData<product>>): any {
+}: PayloadAction<tokenPayloadData<IProduct>>): any {
   try {
     const { token, dispatch, data, navigate } = payload;
     const res = yield call(() => {
@@ -72,7 +74,8 @@ function* editProductSaga({
     });
     const { status } = res;
     if (status === STATUS_CODE.SUCCESS) {
-      yield put(productActions.editProductSuccess(data));
+      yield put(productActions.editProductSuccess());
+
       if (data.resetValues) {
         data.resetValues();
       }
@@ -104,7 +107,7 @@ function* deleteProductSaga({ payload }: PayloadAction<deleteParams>): any {
     });
     const { status } = res;
     if (status === STATUS_CODE.SUCCESS) {
-      yield put(productActions.deleteProductSuccess(id));
+      yield put(productActions.deleteProductSuccess());
       yield put(
         productActions.getAllProduct({ p: params?.p, limit: params?.limit })
       );
@@ -121,11 +124,69 @@ function* deleteProductSaga({ payload }: PayloadAction<deleteParams>): any {
   }
 }
 
+function* getAllProductClientSaga({
+  payload,
+}: PayloadAction<IGetAllProductParams>): any {
+  try {
+    const res = yield call(() => {
+      return productApi.getAll(payload);
+    });
+    const { data, status } = res;
+    if (status === STATUS_CODE.SUCCESS) {
+      yield put(productActions.getAllProductClientSuccess(data.data));
+    }
+  } catch (err) {
+    console.log(err);
+    yield put(productActions.getAllProductClientFailed());
+  }
+}
+
+function* getAllProductByCategoryClientSaga({
+  payload,
+}: PayloadAction<IGetAllProductByCategory>): any {
+  try {
+    const res = yield call(() => {
+      return productApi.getByCategory(payload);
+    });
+    const { data, status } = res;
+    if (status === STATUS_CODE.SUCCESS) {
+      yield put(productActions.getAllProductByCategoryClientSuccess(data.data));
+    }
+  } catch (err) {
+    console.log(err);
+    yield put(productActions.getAllProductByCategoryClientFailed());
+  }
+}
+
+function* getProductBySlugClient({
+  payload,
+}: PayloadAction<IGetProductBySlug>): any {
+  const { slug } = payload;
+  try {
+    const res = yield call(() => {
+      return productApi.getBySlug(slug);
+    });
+    const { data, status } = res;
+    if (status === STATUS_CODE.SUCCESS) {
+      yield put(productActions.getProductBySlugClientSuccess(data.data));
+    }
+  } catch (err) {
+    console.log(err);
+    yield put(productActions.getProductBySlugClientFailed());
+  }
+}
+
 function* productSaga() {
   yield takeEvery('product/createProduct', createProductSaga);
   yield takeEvery('product/getAllProduct', getAllProductSaga);
   yield takeEvery('product/editProduct', editProductSaga);
   yield takeEvery('product/deleteProduct', deleteProductSaga);
+  yield takeEvery('product/getAllProductClient', getAllProductClientSaga);
+  yield takeEvery(
+    'product/getAllProductByCategoryClient',
+    getAllProductByCategoryClientSaga
+  );
+  yield takeEvery('product/getProductBySlugClient', getProductBySlugClient);
 }
 
 export default productSaga;

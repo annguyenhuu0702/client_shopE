@@ -1,31 +1,28 @@
 import React from 'react';
 import { queryParams } from './common';
-import { product } from './product';
 
-export interface productImage {
+export interface IProductImage {
   key: React.Key | number | string;
   id: number;
   productId: number;
   variantValueId: number;
   path: string;
-  product: product;
   deletedAt: Date;
   createdAt: string;
   updatedAt: string;
-  resetValues?: Function;
 }
 
-export interface createProductImage {
+export interface ICreateProductImage {
   productId: number;
-  variantValueId: number;
-  path: string;
-  resetValues?: Function;
+  pathImgs: Array<{
+    variantValueId: number;
+    path: string;
+  }>;
+  listId: number[];
+  thumbnail: string;
+  updateImages: IProductImage[];
 }
 
-export interface updateProductImage extends createProductImage {
-  id: number;
-}
-
-export interface getAllProductImageParams extends queryParams {
-  name?: string;
+export interface IGetAllProductImageParams extends queryParams {
+  productId?: string;
 }

@@ -1,8 +1,22 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { routes } from '../../config/routes';
+import { authSelector } from '../../redux/slice/authSlice';
+import { cartActions } from '../../redux/slice/cartSlice';
 
 const Header: React.FC = () => {
+  const dispatch = useDispatch();
+  const { user } = useSelector(authSelector);
+
+  useEffect(() => {
+    dispatch(
+      cartActions.getByUser({
+        token: user.accessToken,
+        dispatch,
+      })
+    );
+  }, [dispatch, user.accessToken]);
   return (
     <section className="flex items-center justify-between px-20 py-10 border-solid border-0 border-b-2 border-border-layout-cart max-sm:px-6">
       <div className="flex items-center">

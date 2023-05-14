@@ -5,7 +5,6 @@ import { useTitle } from '../../../hooks/useTitle';
 import {
   collectionActions,
   collectionSelector,
-  collectionState,
 } from '../../../redux/slice/collectionSlice';
 import HeaderTitle from '../../components/HeaderTitle';
 import TableCollection from './TableCollection';
@@ -14,17 +13,16 @@ const { Content } = Layout;
 
 const Collection: React.FC = () => {
   const dispatch = useDispatch();
-  const { collections, page, pageSize }: collectionState =
-    useSelector(collectionSelector);
+  const { collections, page, pageSize } = useSelector(collectionSelector);
 
   useEffect(() => {
     dispatch(
       collectionActions.getAllCollection({
         p: page,
-        limit: 7,
+        limit: pageSize,
       })
     );
-  }, [dispatch, page]);
+  }, [dispatch, page, pageSize]);
 
   useTitle('Bộ sưu tập');
   return (
@@ -37,17 +35,16 @@ const Collection: React.FC = () => {
           </div>
         </div>
       </Content>
-      {collections.count > 0 && (
+      {collections.count > 9 && (
         <div className="common-pagination-cus">
           <Pagination
             pageSize={pageSize}
             current={page}
             total={collections.count}
+            showSizeChanger={false}
             onChange={(page: number, pageSize: number) => {
               dispatch(collectionActions.setPage({ page, pageSize }));
             }}
-            // showSizeChanger={true}
-            // pageSizeOptions={[7, 50, 100, 200]}
           />
         </div>
       )}

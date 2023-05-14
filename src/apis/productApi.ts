@@ -1,38 +1,54 @@
 import { AxiosResponse } from 'axios';
 import instance, { apiCallerWithToken } from '../config/configAxios';
-import { URL_API } from '../constants';
 import { AppDispatch } from '../redux/store';
-import { queryParams } from '../types/common';
-import { createProduct, updateProduct } from '../types/product';
+import {
+  ICreateProduct,
+  IGetAllProductByCategory,
+  IGetAllProductParams,
+  IUpdateProduct,
+} from '../types/product';
 
-const getAll = (params?: queryParams) => {
-  return instance.get(`${URL_API}/product/getAll`, {
+const getHomePage = () => {
+  return instance.get(`product/getHomePage`);
+};
+
+const getAll = (params?: IGetAllProductParams) => {
+  return instance.get(`product/getAll`, {
     params,
   });
 };
 
+const getByCategory = (params: IGetAllProductByCategory) => {
+  const { limitProduct, limitCollection, slug } = params;
+
+  return instance.get(`product/category/${slug}`, {
+    params: { limitProduct, limitCollection },
+  });
+};
+
 const getById = (id: string) => {
-  return instance.get(`${URL_API}/product/getById/${id}`);
+  return instance.get(`product/getById/${id}`);
+};
+
+const getBySlug = (slug: string) => {
+  return instance.get(`product/getBySlug/${slug}`);
 };
 
 const create = (
   token: string | null,
   dispatch: AppDispatch,
-  data: createProduct
+  data: ICreateProduct
 ): Promise<AxiosResponse> => {
-  return apiCallerWithToken(token, dispatch).post(
-    `${URL_API}/product/create`,
-    data
-  );
+  return apiCallerWithToken(token, dispatch).post(`product/create`, data);
 };
 
 const update = (
   token: string | null,
   dispatch: AppDispatch,
-  data: updateProduct
+  data: IUpdateProduct
 ): Promise<AxiosResponse> => {
   return apiCallerWithToken(token, dispatch).put(
-    `${URL_API}/product/update/${data.id}`,
+    `product/update/${data.id}`,
     data
   );
 };
@@ -42,15 +58,24 @@ const deleteProduct = (
   dispatch: AppDispatch,
   id: number
 ): Promise<AxiosResponse> => {
-  return apiCallerWithToken(token, dispatch).delete(
-    `${URL_API}/product/delete/${id}`
-  );
+  return apiCallerWithToken(token, dispatch).delete(`product/delete/${id}`);
+};
+
+const getHomeAdmin = (
+  token: string | null,
+  dispatch: AppDispatch
+): Promise<AxiosResponse> => {
+  return apiCallerWithToken(token, dispatch).get(`admin/getHomeAdmin`);
 };
 
 export const productApi = {
   create,
   getAll,
   getById,
+  getBySlug,
   update,
   deleteProduct,
+  getByCategory,
+  getHomePage,
+  getHomeAdmin,
 };

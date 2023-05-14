@@ -1,37 +1,41 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { deleteParams, tokenPayloadData } from '../../types/common';
 import {
-  createProductCategory,
-  getAllProductCategoryParams,
-  productCategory,
-  updateProductCategory,
+  IProductCategory,
+  ICreateProductCategory,
+  IUpdateProductCategory,
+  IGetAllProductCategoryParams,
 } from '../../types/productCategory';
 import { RootState } from '../store';
 
 export interface productCategoryState {
   productCategories: resProductCategory;
-  currentProductCategory: productCategory | null;
+  currentProductCategory: IProductCategory | null;
   page: number;
   pageSize: number;
   isLoading: boolean;
   isError: boolean;
+  currentProductCategoryClient: IProductCategory | null;
 }
 
 export interface resProductCategory {
-  rows: productCategory[];
+  rows: IProductCategory[];
   count: number;
 }
 
 const initialState: productCategoryState = {
+  // admin
   productCategories: {
     rows: [],
     count: 0,
   },
   page: 1,
-  pageSize: 7,
+  pageSize: 12,
   currentProductCategory: null,
   isLoading: false,
   isError: false,
+  // client
+  currentProductCategoryClient: null,
 };
 
 const ProductCategorySlice = createSlice({
@@ -47,13 +51,19 @@ const ProductCategorySlice = createSlice({
     },
     setProductCategory: (
       state,
-      action: PayloadAction<productCategory | null>
+      action: PayloadAction<IProductCategory | null>
     ) => {
       state.currentProductCategory = action.payload;
     },
+    setProductCategoryClient: (
+      state,
+      action: PayloadAction<IProductCategory | null>
+    ) => {
+      state.currentProductCategoryClient = action.payload;
+    },
     getAllProductCategory: (
       state,
-      action: PayloadAction<getAllProductCategoryParams>
+      action: PayloadAction<IGetAllProductCategoryParams>
     ) => {
       state.isLoading = true;
     },
@@ -70,45 +80,16 @@ const ProductCategorySlice = createSlice({
       state.isLoading = false;
       state.isError = true;
     },
-    getProductCategoryBySlug: (
-      state,
-      action: PayloadAction<getAllProductCategoryParams>
-    ) => {
-      state.isLoading = true;
-    },
-    getProductCategoryBySlugSuccess: (
-      state,
-      action: PayloadAction<productCategory>
-    ) => {
-      state.isLoading = false;
-      state.isError = false;
-      state.currentProductCategory = action.payload;
-    },
-    getProductCategoryBySlugFailed: (state) => {
-      state.isLoading = false;
-      state.isError = true;
-    },
+
     createProductCategory: (
       state,
-      action: PayloadAction<tokenPayloadData<createProductCategory>>
+      action: PayloadAction<tokenPayloadData<ICreateProductCategory>>
     ) => {
       state.isLoading = true;
     },
-    createProductCategorySuccess: (
-      state,
-      action: PayloadAction<productCategory>
-    ) => {
+    createProductCategorySuccess: (state) => {
       state.isLoading = false;
       state.isError = false;
-      state.productCategories.rows.unshift(action.payload);
-      state.productCategories.count += 1;
-      state.page = 1;
-      if (state.productCategories.rows.length > 7) {
-        state.productCategories.rows.splice(
-          state.productCategories.rows.length - 1,
-          1
-        );
-      }
     },
     createProductCategoryFailed: (state) => {
       state.isLoading = false;
@@ -116,42 +97,45 @@ const ProductCategorySlice = createSlice({
     },
     editProductCategory: (
       state,
-      action: PayloadAction<tokenPayloadData<updateProductCategory>>
+      action: PayloadAction<tokenPayloadData<IUpdateProductCategory>>
     ) => {
       state.isLoading = true;
     },
-    editProductCategorySuccess: (
-      state,
-      action: PayloadAction<productCategory>
-    ) => {
+    editProductCategorySuccess: (state) => {
       state.isLoading = false;
       state.isError = false;
-      const index = state.productCategories.rows.findIndex(
-        (item) => item.id === action.payload.id
-      );
-      if (index !== -1) {
-        state.productCategories.rows[index] = action.payload;
-      }
     },
     editProductCategoryFailed: (state) => {
       state.isLoading = false;
-      state.isError = false;
+      state.isError = true;
     },
     deleteProductCategory: (state, action: PayloadAction<deleteParams>) => {
       state.isLoading = true;
     },
-    deleteProductCategorySuccess: (state, action: PayloadAction<number>) => {
+    deleteProductCategorySuccess: (state) => {
       state.isError = false;
       state.isLoading = false;
-      state.productCategories.rows = state.productCategories.rows.filter(
-        (item) => item.id !== action.payload
-      );
-      state.productCategories.count -= 1;
-      if (state.productCategories.rows.length === 0) {
-        state.page = state.page - 1;
-      }
     },
     deleteProductCategoryFailed: (state) => {
+      state.isLoading = false;
+      state.isError = true;
+    },
+
+    getProductCategoryBySlugClient: (
+      state,
+      action: PayloadAction<IGetAllProductCategoryParams>
+    ) => {
+      state.isLoading = true;
+    },
+    getProductCategoryBySlugClientSuccess: (
+      state,
+      action: PayloadAction<IProductCategory>
+    ) => {
+      state.isLoading = false;
+      state.isError = false;
+      state.currentProductCategoryClient = action.payload;
+    },
+    getProductCategoryBySlugClientFailed: (state) => {
       state.isLoading = false;
       state.isError = true;
     },

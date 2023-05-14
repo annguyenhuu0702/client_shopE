@@ -13,9 +13,13 @@ import {
   Select,
   Space,
   Table,
+  Tag,
+  Typography,
 } from 'antd';
+import { AlignType } from 'rc-table/lib/interface';
+
 import moment from 'moment';
-import React from 'react';
+import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { utils, writeFileXLSX } from 'xlsx';
@@ -30,13 +34,19 @@ import {
   productSelector,
   productState,
 } from '../../../../redux/slice/productSlice';
-import { product } from '../../../../types/product';
+import { IProduct } from '../../../../types/product';
 import ModalProductImage from '../ProductImage/ProductImage';
+import ModalProductVariant from '../ProductVariant/ProductVariant';
+import { castToVND } from '../../../../utils';
+
+const { Text } = Typography;
 
 const TableProduct: React.FC = () => {
   const dispatch = useDispatch();
 
   const [form] = Form.useForm();
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const { products, isLoading, page, pageSize }: productState =
     useSelector(productSelector);
@@ -47,20 +57,37 @@ const TableProduct: React.FC = () => {
 
   const navigate = useNavigate();
 
-  const handleModal = (record: product) => {
+  const handleModal = (record: IProduct) => {
     dispatch(productActions.setProduct(record));
     dispatch(modalActions.showModal('Hình ảnh sản phẩm'));
   };
 
+  const handleModalAddVariant = (record: IProduct) => {
+    dispatch(productActions.setProduct(record));
+    setIsModalOpen(true);
+  };
+
   const columns = [
     {
+      title: 'ID',
+      dataIndex: 'id',
+      width: 50,
+    },
+    {
+      title: 'Mã sản phẩm',
+      render: (text: string, record: IProduct) => {
+        return <Text mark>{record?.code}</Text>;
+      },
+    },
+    {
       title: 'Hình ảnh',
-      width: '100px',
-      render: (text: string, record: product) => {
-        return record.thumbnail !== '' ? (
-          <div className="flex justify-center cursor-text">
+      width: 100,
+      align: 'center' as AlignType,
+      render: (text: string, record: IProduct) => {
+        return record?.thumbnail !== '' ? (
+          <div className="cursor-text">
             <img
-              src={record.thumbnail}
+              src={record?.thumbnail}
               alt=""
               className="w-20 h-14 object-cover"
             />
@@ -73,18 +100,40 @@ const TableProduct: React.FC = () => {
     {
       title: 'Tên sản phẩm',
       dataIndex: 'name',
+      render: (text: string, record: IProduct) => {
+        return (
+          <div>
+            <span
+              className="cursor-pointer text-blue-600 hover:text-blue-400"
+              onClick={() => {
+                handleEditProduct(record);
+              }}
+            >
+              {record?.name}
+            </span>
+          </div>
+        );
+      },
     },
 
     {
       title: 'Danh mục sản phẩm',
       dataIndex: 'productCategoryId',
-      render: (text: string, record: product) => {
-        return <div>{record?.productCategory?.name}</div>;
+      render: (text: string, record: IProduct) => {
+        return (
+          <div>
+            <Tag color="green" className="border-0 text-xl">
+              {record?.productCategory && record?.productCategory?.name}
+            </Tag>
+          </div>
+        );
       },
     },
     {
       title: 'Hình ảnh',
-      render: (text: string, record: product) => {
+      width: 100,
+      align: 'center' as AlignType,
+      render: (text: string, record: IProduct) => {
         return (
           <span
             className="cursor-pointer uppercase text-red-500"
@@ -99,27 +148,48 @@ const TableProduct: React.FC = () => {
     },
     {
       title: 'Biến thể',
-      // dataIndex: 'productVariant',
-      render: () => {
+      width: 100,
+      align: 'center' as AlignType,
+      render: (text: string, record: IProduct) => {
         return (
-          <span className="cursor-pointer uppercase text-red-500">
+          <span
+            className="cursor-pointer uppercase text-red-500"
+            onClick={() => {
+              handleModalAddVariant(record);
+            }}
+          >
             Thiết lập
           </span>
         );
       },
     },
     {
+      title: 'Giá',
+      align: 'center' as AlignType,
+      render: (text: string, record: IProduct) => {
+        return (
+          <div>
+            <Tag color="#108ee9" className="text-2xl">
+              {castToVND(record?.price)}
+            </Tag>
+          </div>
+        );
+      },
+    },
+    {
       title: 'Ngày tạo',
-      // dataIndex: 'createdAt',
-      render: (text: string, record: product) => {
-        let date = moment(record.createdAt).format('MM/DD/YYYY');
+      width: 100,
+      align: 'center' as AlignType,
+      render: (text: string, record: IProduct) => {
+        let date = moment(record?.createdAt).format('MM/DD/YYYY');
         return <div>{date}</div>;
       },
     },
     {
       title: 'Hành động',
-      // dataIndex: 'action',
-      render: (text: string, record: product) => {
+      width: 100,
+      align: 'center' as AlignType,
+      render: (text: string, record: IProduct) => {
         return (
           <Space size="middle">
             <EditOutlined
@@ -134,8 +204,8 @@ const TableProduct: React.FC = () => {
               onConfirm={() => {
                 confirm(record);
               }}
-              okText="Yes"
-              cancelText="No"
+              okText="Có"
+              cancelText="Không"
             >
               <DeleteOutlined className="common-icon-delete" />
             </Popconfirm>
@@ -189,7 +259,7 @@ const TableProduct: React.FC = () => {
         const data = await productApi.getAll();
         let wb = utils.book_new();
         let ws = utils.json_to_sheet(
-          data.data.data.rows.map((item: product) => ({
+          data.data.data.rows.map((item: IProduct) => ({
             name: item.name,
             productCategoryId: item.productCategoryId,
             price: item.price,
@@ -209,6 +279,12 @@ const TableProduct: React.FC = () => {
   return (
     <React.Fragment>
       {isModal && <ModalProductImage />}
+      {isModalOpen && (
+        <ModalProductVariant
+          isModalOpen={isModalOpen}
+          setIsModalOpen={setIsModalOpen}
+        />
+      )}
       <Row className="common-row-cus">
         <Col xl={18} style={{ paddingInline: '5px' }}>
           <Form
@@ -285,7 +361,7 @@ const TableProduct: React.FC = () => {
       <Row className="common-content-table">
         <Col xl={24} md={24} xs={24}>
           <Table
-            dataSource={products.rows.map((item: product) => {
+            dataSource={products.rows.map((item: IProduct) => {
               return {
                 ...item,
                 key: item.id,
@@ -295,7 +371,7 @@ const TableProduct: React.FC = () => {
             columns={columns}
             pagination={false}
             expandable={{ showExpandColumn: false }}
-            size="middle"
+            size="small"
           />
         </Col>
       </Row>

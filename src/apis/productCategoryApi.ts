@@ -1,30 +1,29 @@
 import { AxiosResponse } from 'axios';
 import instance, { apiCallerWithToken } from '../config/configAxios';
-import { URL_API } from '../constants';
 import { AppDispatch } from '../redux/store';
 import {
-  createProductCategory,
-  getAllProductCategoryParams,
-  updateProductCategory,
+  ICreateProductCategory,
+  IGetAllProductCategoryParams,
+  IUpdateProductCategory,
 } from '../types/productCategory';
 
-const getAll = (params?: getAllProductCategoryParams) => {
-  return instance.get(`${URL_API}/productCategory/getAll`, {
+const getAll = (params?: IGetAllProductCategoryParams) => {
+  return instance.get(`productCategory/getAll`, {
     params,
   });
 };
 
 const getById = (id: string) => {
-  return instance.get(`${URL_API}/productCategory/getById/${id}`);
+  return instance.get(`productCategory/getById/${id}`);
 };
 
 const create = (
   token: string | null,
   dispatch: AppDispatch,
-  data: createProductCategory
+  data: ICreateProductCategory
 ): Promise<AxiosResponse> => {
   return apiCallerWithToken(token, dispatch).post(
-    `${URL_API}/productCategory/create`,
+    `productCategory/create`,
     data
   );
 };
@@ -32,10 +31,10 @@ const create = (
 const update = (
   token: string | null,
   dispatch: AppDispatch,
-  data: updateProductCategory
+  data: IUpdateProductCategory
 ): Promise<AxiosResponse> => {
   return apiCallerWithToken(token, dispatch).put(
-    `${URL_API}/productCategory/update/${data.id}`,
+    `productCategory/update/${data.id}`,
     data
   );
 };
@@ -46,7 +45,7 @@ const deleteProductCategory = (
   id: number
 ): Promise<AxiosResponse> => {
   return apiCallerWithToken(token, dispatch).delete(
-    `${URL_API}/productCategory/delete/${id}`
+    `productCategory/delete/${id}`
   );
 };
 

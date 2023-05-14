@@ -1,25 +1,51 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import styles from './__product.module.scss';
 import { faHeart, faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Image, Modal, Tooltip } from 'antd';
 import classNames from 'classnames/bind';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { Pagination } from 'swiper';
 import 'swiper/css';
 import 'swiper/css/pagination';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { castToVND } from '../../utils';
+import { AiOutlineMinus, AiOutlinePlus } from 'react-icons/ai';
 
-import { MinusOutlined, PlusOutlined } from '@ant-design/icons';
+import { IProduct } from '../../types/product';
+import { IProductImage } from '../../types/productImage';
+import { IProductVariant } from '../../types/productVariant';
+import { IVariantValue } from '../../types/variantValue';
+import { useDispatch, useSelector } from 'react-redux';
+import {
+  favoriteProductActions,
+  favoriteProductSelector,
+} from '../../redux/slice/favoriteProductSlice';
+import { authSelector } from '../../redux/slice/authSlice';
+import { cartActions } from '../../redux/slice/cartSlice';
 
 const cx = classNames.bind(styles);
 
-const Product: React.FC = () => {
+interface Props {
+  product?: IProduct;
+}
+
+const Product: React.FC<Props> = ({ product }) => {
+  const dispatch = useDispatch();
+  const { products } = useSelector(favoriteProductSelector);
+  const { user } = useSelector(authSelector);
+  const navigate = useNavigate();
+
+  const checkFavoriteProduct = useMemo(() => {
+    return products.rows.some((item) => item.productId === product?.id);
+  }, [product?.id, products.rows]);
+
   const [isModalVisible, setIsModalVisible] = useState(false);
-  const [qtt, setQtt] = useState<number>(1);
-  const [isActiveSize, setIsActiveSize] = useState<boolean>(false);
-  const [isActiveColor, setIsActiveColor] = useState<boolean>(false);
+  const [selectedColor, setSelectedColor] = useState<IVariantValue>();
+  const [selectedSize, setSelectedSize] = useState<IVariantValue>();
+  const [colors, setColors] = useState<IVariantValue[]>([]);
+  const [sizes, setSizes] = useState<IVariantValue[]>([]);
+  const [quantity, setQuantity] = useState<number>(1);
 
   const showModal = () => {
     setIsModalVisible(true);
@@ -32,16 +58,98 @@ const Product: React.FC = () => {
   const handleCancel = () => {
     setIsModalVisible(false);
   };
+
+  const handleSelectedColor = (color: IVariantValue) => {
+    setSelectedColor(color);
+  };
+
+  const handleSelectedSize = (size: IVariantValue) => {
+    setSelectedSize(size);
+  };
+
+  const handleDeleteFavoriteProduct = (item: IProduct) => {
+    dispatch(
+      favoriteProductActions.deleteFavoriteProduct({
+        token: user.accessToken,
+        dispatch,
+        productId: item.id,
+      })
+    );
+  };
+
+  const handleAddToFavoriteProduct = (item: IProduct) => {
+    dispatch(
+      favoriteProductActions.createFavoriteProduct({
+        token: user.accessToken,
+        dispatch,
+        data: {
+          productId: item.id,
+        },
+      })
+    );
+  };
+
+  const handleAddToCart = (product: IProduct) => {
+    if (product && selectedColor && selectedSize) {
+      const productVariant = product.productVariants.find((item) =>
+        item.variantValues.every(
+          (variantValue) =>
+            variantValue.id === selectedColor.id ||
+            variantValue.id === selectedSize.id
+        )
+      );
+      let formData;
+      if (productVariant) {
+        formData = {
+          productVariantId: productVariant.id,
+          quantity: quantity,
+        };
+        dispatch(
+          cartActions.addToCart({
+            token: user.accessToken,
+            dispatch,
+            navigate,
+            data: formData,
+          })
+        );
+      }
+    }
+  };
+
+  // lấy size với color để render
+  useEffect(() => {
+    if (product && product.productVariants) {
+      const colors: IVariantValue[] = [];
+      const sizes: IVariantValue[] = [];
+      product.productVariants.forEach((data: IProductVariant) => {
+        data.variantValues.forEach((variantValue: IVariantValue) => {
+          if (variantValue.variantId === 1) {
+            let index = sizes.findIndex((size) => size.id === variantValue.id);
+            if (index === -1) {
+              sizes.push(variantValue);
+            }
+          } else if (variantValue.variantId === 2) {
+            let index = colors.findIndex((size) => size.id === variantValue.id);
+            if (index === -1) {
+              colors.push(variantValue);
+            }
+          }
+        });
+      });
+      sizes.sort((a, b) => a.id - b.id);
+      colors.sort((a, b) => a.id - b.id);
+      setColors(colors);
+      setSizes(sizes);
+    }
+  }, [product]);
+
+  if (!product) return <></>;
   return (
     <React.Fragment>
       <div className={cx('item')}>
         <div className={cx('img')}>
-          <Link to="">
-            <img
-              // className="common-img"
-              src="https://res.cloudinary.com/diot4imoq/image/upload/v1662016045/canifa/2ls22s018-sy038-2-thumb_n882ft.jpg"
-              alt=""
-            />
+          <Link to={`/${product.slug}`}>
+            <img className="common-img" src={product.thumbnail} alt="" />
           </Link>
         </div>
         <div className={cx('preview')} onClick={showModal}>
@@ -64,132 +172,179 @@ const Product: React.FC = () => {
                   className={cx('my-swiper')}
                   pagination={{ clickable: true }}
                 >
-                  <SwiperSlide className="max-sm:flex max-sm:items-center max-lg:flex max-lg:items-center">
-                    <div>
-                      <Image
-                        src="https://cdn.shopify.com/s/files/1/0456/5070/6581/products/UXC72WA-2_x450.jpg?v=1657686129"
-                        alt=""
-                      />
-                    </div>
-                  </SwiperSlide>
-                  <SwiperSlide className="max-sm:flex max-sm:items-center max-lg:flex max-lg:items-center">
-                    <div>
-                      <Image
-                        src="https://cdn.shopify.com/s/files/1/0456/5070/6581/products/UXC72WA-3_x450.jpg?v=1657686130"
-                        alt=""
-                      />
-                    </div>
-                  </SwiperSlide>
+                  {[...product.productImages]
+                    .sort((a, b) => a.variantValueId - b.variantValueId)
+                    .map((item: IProductImage) => {
+                      return (
+                        <SwiperSlide
+                          className="max-sm:flex max-sm:items-center max-lg:flex max-lg:items-center"
+                          key={item.id}
+                        >
+                          <div>
+                            <Image src={item.path} alt="" />
+                          </div>
+                        </SwiperSlide>
+                      );
+                    })}
                 </Swiper>
               </div>
               <div className={cx('right')}>
                 <div className={cx('name')}>
-                  <Link to="">
-                    Giày Thời Trang Nam New Balance XC-72 Shifted Lifestyle
-                  </Link>
+                  <Link to={`/${product.slug}`}>{product.name}</Link>
                 </div>
                 <div className={cx('price')}>
-                  <span className={cx('current')}>{castToVND(3295000)}</span>
-                  <span className={cx('sale')}>{castToVND(100000)}</span>
+                  <span className={cx('current')}>
+                    {castToVND(product.price)}
+                  </span>
+                  {product.priceSale > 0 && (
+                    <span className={cx('sale')}>
+                      {castToVND(product.priceSale)}
+                    </span>
+                  )}
                 </div>
-                <div className={cx('colors')}>
-                  <h3>Màu sắc:</h3>
-                  <div className={cx('wrap')}>
-                    <div
-                      className={cx('color', {
-                        active: isActiveColor,
+                {colors.length > 0 && (
+                  <div className={cx('colors')}>
+                    <h3>Màu sắc:</h3>
+                    <div className={cx('wrap')}>
+                      {colors.map((color) => {
+                        return (
+                          <div
+                            key={color.id}
+                            className={cx('color', {
+                              active: selectedColor?.id === color.id,
+                            })}
+                            onClick={() => {
+                              handleSelectedColor(color);
+                            }}
+                          >
+                            <span>{color.name}</span>
+                          </div>
+                        );
                       })}
-                      onClick={() => {
-                        setIsActiveColor(true);
-                      }}
-                    >
-                      <span>WA</span>
-                    </div>
-                    <div className={cx('color')}>
-                      <span>WA</span>
                     </div>
                   </div>
-                </div>
-                <div className={cx('sizes')}>
-                  <h3>Kích thước:</h3>
-                  <div className={cx('wrap')}>
-                    <div
-                      className={cx('size', {
-                        active: isActiveSize,
+                )}
+                {sizes.length > 0 && (
+                  <div className={cx('sizes')}>
+                    <h3>Kích thước:</h3>
+                    <div className={cx('wrap')}>
+                      {sizes.map((size) => {
+                        return (
+                          <div
+                            key={size.id}
+                            className={cx('size', {
+                              active: selectedSize?.id === size.id,
+                            })}
+                            onClick={() => {
+                              handleSelectedSize(size);
+                            }}
+                          >
+                            <span>{size.name}</span>
+                          </div>
+                        );
                       })}
-                      onClick={() => {
-                        setIsActiveSize(true);
-                      }}
-                    >
-                      <span>US5</span>
-                    </div>
-                    <div className={cx('size')}>
-                      <span>US6</span>
                     </div>
                   </div>
+                )}
+                <div className="my-4 flex items-center">
+                  <span
+                    className={`h-16 w-16 border border-solid border-border-variant inline-flex items-center justify-center ${
+                      quantity > 1 ? 'cursor-pointer' : 'cursor-not-allowed'
+                    } `}
+                    onClick={() => {
+                      setQuantity(quantity - 1);
+                    }}
+                  >
+                    <AiOutlineMinus />
+                  </span>
+                  <span className="h-16 min-w-40px border border-solid border-l-0 border-r-0 border-border-variant inline-flex items-center justify-center px-4">
+                    {quantity}
+                  </span>
+                  <span
+                    className="h-16 w-16 border border-solid border-border-variant inline-flex items-center justify-center cursor-pointer"
+                    onClick={() => {
+                      setQuantity(quantity + 1);
+                    }}
+                  >
+                    <AiOutlinePlus />
+                  </span>
                 </div>
-                <div className={cx('qtt-cart')}>
-                  <h3>Số lượng</h3>
-                  <div className={cx('content')}>
-                    <div className={cx('input-qtt')}>
-                      <input
-                        type="text"
-                        value={qtt}
-                        onChange={() => {}}
-                        className={cx('value-qtt')}
-                      />
-                      <div className={cx('btn-qtt')}>
-                        <MinusOutlined
-                          className={cx('icon')}
-                          onClick={() => {
-                            if (qtt > 1) {
-                              setQtt((prev) => prev - 1);
-                            } else {
-                              return 1;
-                            }
-                          }}
-                        />
-                        <PlusOutlined
-                          className={cx('icon')}
-                          onClick={() => {
-                            setQtt(qtt + 1);
-                          }}
-                        />
-                      </div>
-                    </div>
-                    <div className={cx('btn-add-to-cart')}>
-                      <button>Thêm vào giỏ hàng</button>
-                    </div>
+                <div>
+                  <div>
+                    <button
+                      className="bg-btn-order w-ful flex items-center justify-center uppercase py-6 px-24 text-white text-2xl border-none outline-none rounded-xl cursor-pointer hover:bg-hover-btn-order"
+                      onClick={() => {
+                        handleAddToCart(product);
+                      }}
+                    >
+                      Thêm vào giỏ hàng
+                    </button>
                   </div>
                 </div>
                 <div className={cx('more-detail')}>
-                  <Link to="">More Details</Link>
+                  <Link to={`/${product.slug}`}>Xem chi tiết sản phẩm</Link>
                 </div>
               </div>
             </div>
           </Modal>
         )}
         <div className={cx('name')}>
-          <Link to="">
+          <Link to={`/${product.slug}`}>
             <span className="hover:text-btn-order transition ease-in-out delay-75">
-              Giày chạy bộ nam hoka march
+              {product.name}
             </span>
           </Link>
         </div>
         <div className={cx('price')}>
-          <span>{castToVND(570000)}</span>
-          <span className={cx('price-old')}>{castToVND(123000000)}</span>
+          <span>{castToVND(product.price)}</span>
+          {product.priceSale > 0 && (
+            <span className={cx('price-old')}>
+              {castToVND(product.priceSale)}
+            </span>
+          )}
         </div>
-        <div className={cx('tags-name')}>
-          <div className={cx('wish-list')}>
-            <Tooltip placement="bottomRight" title="Yêu thích">
-              <FontAwesomeIcon icon={faHeart} />
-            </Tooltip>
+        {user.user && (
+          <div className={cx('tags-name')}>
+            <div
+              className={cx('wish-list', {
+                active: checkFavoriteProduct,
+              })}
+            >
+              {checkFavoriteProduct === true ? (
+                <Tooltip placement="bottomRight" title="Xóa khỏi yêu thích">
+                  <div
+                    onClick={() => {
+                      handleDeleteFavoriteProduct(product);
+                    }}
+                  >
+                    <FontAwesomeIcon icon={faHeart} />
+                  </div>
+                </Tooltip>
+              ) : (
+                <Tooltip placement="bottomRight" title="Yêu thích">
+                  <div
+                    onClick={() => {
+                      handleAddToFavoriteProduct(product);
+                    }}
+                  >
+                    <FontAwesomeIcon icon={faHeart} />
+                  </div>
+                </Tooltip>
+              )}
+            </div>
           </div>
-        </div>
-        <div className={cx('tags-percent')}>
-          <span>-10%</span>
-        </div>
+        )}
+        {product.priceSale > 0 && (
+          <div className={cx('tags-percent')}>
+            <span>
+              -
+              {Math.floor(
+                ((product.price - product.priceSale) / product.price) * 100
+              )}
+              %
+            </span>
+          </div>
+        )}
       </div>
     </React.Fragment>
   );

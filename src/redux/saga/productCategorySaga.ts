@@ -6,15 +6,15 @@ import { routes } from '../../config/routes';
 import { STATUS_CODE } from '../../constants';
 import { deleteParams, tokenPayloadData } from '../../types/common';
 import {
-  createProductCategory,
-  getAllProductCategoryParams,
-  productCategory,
+  IProductCategory,
+  ICreateProductCategory,
+  IGetAllProductCategoryParams,
 } from '../../types/productCategory';
 import { productCategoryActions } from '../slice/productCategorySlice';
 
 function* getAllProductCategorySaga({
   payload,
-}: PayloadAction<getAllProductCategoryParams>): any {
+}: PayloadAction<IGetAllProductCategoryParams>): any {
   try {
     const res = yield call(() => {
       return productCategoryApi.getAll(payload);
@@ -29,43 +29,18 @@ function* getAllProductCategorySaga({
   }
 }
 
-function* getProductCategoryBySlugSaga({
-  payload,
-}: PayloadAction<getAllProductCategoryParams>): any {
-  try {
-    const res = yield call(() => {
-      return productCategoryApi.getAll({
-        slug: payload.slug,
-        collection: true,
-      });
-    });
-    const { data, status } = res;
-    if (status === STATUS_CODE.SUCCESS) {
-      yield put(
-        productCategoryActions.getProductCategoryBySlugSuccess(
-          data.data.rows[0]
-        )
-      );
-    }
-  } catch (err) {
-    console.log(err);
-    yield put(productCategoryActions.getProductCategoryBySlugFailed());
-  }
-}
-
 function* createProductCategorySaga({
   payload,
-}: PayloadAction<tokenPayloadData<createProductCategory>>): any {
+}: PayloadAction<tokenPayloadData<ICreateProductCategory>>): any {
   try {
     const { token, dispatch, data, navigate } = payload;
     const res = yield call(() => {
       return productCategoryApi.create(token, dispatch, data);
     });
-    const { data: newData, status } = res;
+    const { status } = res;
     if (status === STATUS_CODE.CREATED) {
-      yield put(
-        productCategoryActions.createProductCategorySuccess(newData.data)
-      );
+      yield put(productCategoryActions.createProductCategorySuccess());
+
       if (data.resetValues) {
         data.resetValues();
       }
@@ -91,7 +66,7 @@ function* createProductCategorySaga({
 
 function* editProductCategorySaga({
   payload,
-}: PayloadAction<tokenPayloadData<productCategory>>): any {
+}: PayloadAction<tokenPayloadData<IProductCategory>>): any {
   try {
     const { token, dispatch, data, navigate } = payload;
     const res = yield call(() => {
@@ -99,7 +74,8 @@ function* editProductCategorySaga({
     });
     const { status } = res;
     if (status === STATUS_CODE.SUCCESS) {
-      yield put(productCategoryActions.editProductCategorySuccess(data));
+      yield put(productCategoryActions.editProductCategorySuccess());
+
       if (data.resetValues) {
         data.resetValues();
       }
@@ -133,7 +109,7 @@ function* deleteProductCategorySaga({
     });
     const { status } = res;
     if (status === STATUS_CODE.SUCCESS) {
-      yield put(productCategoryActions.deleteProductCategorySuccess(id));
+      yield put(productCategoryActions.deleteProductCategorySuccess());
       yield put(
         productCategoryActions.getAllProductCategory({
           p: params?.p,
@@ -153,6 +129,30 @@ function* deleteProductCategorySaga({
   }
 }
 
+function* getProductCategoryBySlugClientSaga({
+  payload,
+}: PayloadAction<IGetAllProductCategoryParams>): any {
+  try {
+    const res = yield call(() => {
+      return productCategoryApi.getAll({
+        slug: payload.slug,
+        collection: true,
+      });
+    });
+    const { data, status } = res;
+    if (status === STATUS_CODE.SUCCESS) {
+      yield put(
+        productCategoryActions.getProductCategoryBySlugClientSuccess(
+          data.data.rows[0]
+        )
+      );
+    }
+  } catch (err) {
+    console.log(err);
+    yield put(productCategoryActions.getProductCategoryBySlugClientFailed());
+  }
+}
+
 function* productCategorySaga() {
   yield takeEvery(
     'productCategory/createProductCategory',
@@ -163,8 +163,8 @@ function* productCategorySaga() {
     getAllProductCategorySaga
   );
   yield takeEvery(
-    'productCategory/getProductCategoryBySlug',
-    getProductCategoryBySlugSaga
+    'productCategory/getProductCategoryBySlugClient',
+    getProductCategoryBySlugClientSaga
   );
 
   yield takeEvery(

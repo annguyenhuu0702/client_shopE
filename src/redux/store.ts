@@ -10,13 +10,20 @@ import productCategoryReducer from './slice/productCategorySlice';
 import productReducer from './slice/productSlice';
 import productImageReducer from './slice/productImageSlice';
 import productVariantReducer from './slice/productVariantSlice';
+import variantValueReducer from './slice/variantValueSlice';
+import cartReducer from './slice/cartSlice';
+import favoriteProductReducer from './slice/favoriteProductSlice';
+import discountReducer from './slice/discountSlice';
+import newsReducer from './slice/newsSlice';
+import commentReducer from './slice/commentSlice';
+import paymentReducer from './slice/paymentSlice';
 
 const sagaMiddleware = createSagaMiddleware();
 
 export const store = configureStore({
   reducer: {
-    auth: authReducer,
     modal: modalReducer,
+    auth: authReducer,
     user: userReducer,
     category: categoryReducer,
     collection: collectionReducer,
@@ -24,6 +31,13 @@ export const store = configureStore({
     product: productReducer,
     productImage: productImageReducer,
     productVariant: productVariantReducer,
+    variantValue: variantValueReducer,
+    favoriteProduct: favoriteProductReducer,
+    cart: cartReducer,
+    discount: discountReducer,
+    news: newsReducer,
+    comment: commentReducer,
+    payment: paymentReducer,
   },
   middleware: [sagaMiddleware],
 });

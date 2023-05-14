@@ -1,11 +1,10 @@
-import React, { useEffect } from 'react';
 import { Layout, Pagination } from 'antd';
+import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useTitle } from '../../../hooks/useTitle';
 import {
   categoryActions,
   categorySelector,
-  categoryState,
 } from '../../../redux/slice/categorySlice';
 import HeaderTitle from '../../components/HeaderTitle';
 import TableCategory from './TableCategory';
@@ -14,17 +13,16 @@ const { Content } = Layout;
 
 const Category: React.FC = () => {
   const dispatch = useDispatch();
-  const { page, categories, pageSize }: categoryState =
-    useSelector(categorySelector);
+  const { page, pageSize, categories } = useSelector(categorySelector);
 
   useEffect(() => {
     dispatch(
       categoryActions.getAllCategory({
         p: page,
-        limit: 7,
+        limit: pageSize,
       })
     );
-  }, [dispatch, page]);
+  }, [dispatch, page, pageSize]);
 
   useTitle('Danh mục');
   return (
@@ -37,12 +35,13 @@ const Category: React.FC = () => {
           </div>
         </div>
       </Content>
-      {categories.count > 0 && (
+      {categories.count > 9 && (
         <div className="common-pagination-cus">
           <Pagination
             pageSize={pageSize}
             current={page}
             total={categories.count}
+            showSizeChanger={false}
             onChange={(page: number, pageSize: number) => {
               dispatch(categoryActions.setPage({ page, pageSize }));
             }}

@@ -11,11 +11,10 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
 import { categoryApi } from '../../../../apis/categoryApi';
 import { useTitle } from '../../../../hooks/useTitle';
-import { authSelector, authState } from '../../../../redux/slice/authSlice';
+import { authSelector } from '../../../../redux/slice/authSlice';
 import {
   categoryActions,
   categorySelector,
-  categoryState,
 } from '../../../../redux/slice/categorySlice';
 
 import { URL_API } from '../../../../constants';
@@ -45,9 +44,9 @@ const beforeUpload = (file: RcFile) => {
 const FormCategory: React.FC = () => {
   const navigate = useNavigate();
   const { id } = useParams();
-  const { user }: authState = useSelector(authSelector);
+  const { user } = useSelector(authSelector);
 
-  const { currentCategory }: categoryState = useSelector(categorySelector);
+  const { currentCategory } = useSelector(categorySelector);
 
   const initialValues = {
     name: currentCategory ? currentCategory.name : '',
@@ -208,21 +207,30 @@ const FormCategory: React.FC = () => {
                   </Upload>
                 </Form.Item>
                 <Form.Item
+                  shouldUpdate
                   style={{
                     textAlign: 'center',
                   }}
                   wrapperCol={{ span: 14 }}
                 >
-                  <Button
-                    type="primary"
-                    htmlType="submit"
-                    style={{
-                      width: '200px',
-                    }}
-                    size="large"
-                  >
-                    {currentCategory ? 'Sửa' : 'Thêm'}
-                  </Button>
+                  {() => (
+                    <Button
+                      type="primary"
+                      htmlType="submit"
+                      disabled={
+                        !form.isFieldsTouched(false) ||
+                        !!form
+                          .getFieldsError()
+                          .filter(({ errors }) => errors.length).length
+                      }
+                      style={{
+                        width: '200px',
+                      }}
+                      size="large"
+                    >
+                      {currentCategory ? 'Sửa' : 'Thêm'}
+                    </Button>
+                  )}
                 </Form.Item>
               </div>
             </Form>

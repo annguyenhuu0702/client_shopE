@@ -1,4 +1,3 @@
-import React from 'react';
 import {
   DeleteOutlined,
   DownloadOutlined,
@@ -14,35 +13,43 @@ import {
   Select,
   Space,
   Table,
+  Tag,
 } from 'antd';
 import moment from 'moment';
+import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { utils, writeFileXLSX } from 'xlsx';
-import { authSelector, authState } from '../../../../redux/slice/authSlice';
+import { collectionApi } from '../../../../apis/collectionApi';
+import { routes } from '../../../../config/routes';
+import { authSelector } from '../../../../redux/slice/authSlice';
 import {
   collectionActions,
   collectionSelector,
-  collectionState,
 } from '../../../../redux/slice/collectionSlice';
-import { collectionApi } from '../../../../apis/collectionApi';
-import { collection } from '../../../../types/collection';
+import { ICollection } from '../../../../types/collection';
 import { removeTextBetweenParentheses } from '../../../../utils';
 
 const TableCollection: React.FC = () => {
   const dispatch = useDispatch();
   const [form] = Form.useForm();
-  const { collections, isLoading, page, pageSize }: collectionState =
+  const { collections, isLoading, page, pageSize } =
     useSelector(collectionSelector);
-  const { user }: authState = useSelector(authSelector);
+  const { user } = useSelector(authSelector);
   const navigate = useNavigate();
+
   const columns = [
+    {
+      title: 'ID',
+      dataIndex: 'id',
+      width: 50,
+    },
     // {
     //   title: 'Hình ảnh',
-    //   width: '100px',
+    //   width: 100,
     //   render: (text: string, record: collection) => {
     //     return record.thumbnail !== '' ? (
-    //       <div className="flex justify-center cursor-text">
+    //       <div className="cursor-text">
     //         <img
     //           src={record.thumbnail}
     //           alt=""
@@ -56,27 +63,43 @@ const TableCollection: React.FC = () => {
     // },
     {
       title: 'Tên',
-      // dataIndex: 'name',
-      render: (text: string, record: any) => {
-        return <div>{removeTextBetweenParentheses(record?.name)}</div>;
+      render: (text: string, record: ICollection) => {
+        return (
+          <div>
+            <span
+              className="cursor-pointer text-blue-600 hover:text-blue-400"
+              onClick={() => {
+                handleEditCollection(record);
+              }}
+            >
+              {removeTextBetweenParentheses(record?.name)}
+            </span>
+          </div>
+        );
       },
     },
     {
       title: 'Danh mục',
-      render: (text: string, record: any) => {
-        return <div>{record?.category?.name}</div>;
+      render: (text: string, record: ICollection) => {
+        return (
+          <div>
+            <Tag color="green" className="border-0 text-xl">
+              {record?.category && record?.category?.name}
+            </Tag>
+          </div>
+        );
       },
     },
     {
       title: 'Ngày tạo',
-      render: (text: string, record: any) => {
-        let date = moment(record.createdAt).format('MM/DD/YYYY');
+      render: (text: string, record: ICollection) => {
+        let date = moment(record?.createdAt).format('MM/DD/YYYY');
         return <div>{date}</div>;
       },
     },
     {
       title: 'Hành động',
-      render: (text: string, record: any) => {
+      render: (text: string, record: ICollection) => {
         return (
           <Space size="middle">
             <EditOutlined
@@ -91,8 +114,8 @@ const TableCollection: React.FC = () => {
               onConfirm={() => {
                 confirm(record);
               }}
-              okText="Yes"
-              cancelText="No"
+              okText="Có"
+              cancelText="Không"
             >
               <DeleteOutlined className="common-icon-delete" />
             </Popconfirm>
@@ -132,7 +155,7 @@ const TableCollection: React.FC = () => {
 
   const handleAddNewCollection = () => {
     dispatch(collectionActions.setCollection(null));
-    navigate('/admin/collection/create');
+    navigate(routes.createCollectionAdmin);
   };
 
   const handleEditCollection = (record: any) => {
@@ -146,7 +169,7 @@ const TableCollection: React.FC = () => {
         const data = await collectionApi.getAll();
         let wb = utils.book_new();
         let ws = utils.json_to_sheet(
-          data.data.data.rows.map((item: collection) => ({
+          data.data.data.rows.map((item: ICollection) => ({
             name: item.name,
             category: item.category.name,
             createdAt: moment(item.createdAt).format('MM/DD/YYYY'),
@@ -238,7 +261,7 @@ const TableCollection: React.FC = () => {
       <Row className="common-content-table">
         <Col xl={24} md={24} xs={24}>
           <Table
-            dataSource={collections.rows.map((item: collection) => {
+            dataSource={collections.rows.map((item: ICollection) => {
               return {
                 ...item,
                 key: item.id,
@@ -248,7 +271,7 @@ const TableCollection: React.FC = () => {
             columns={columns}
             pagination={false}
             expandable={{ showExpandColumn: false }}
-            size="middle"
+            size="small"
           />
         </Col>
       </Row>

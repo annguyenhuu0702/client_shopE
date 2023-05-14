@@ -9,10 +9,27 @@ export interface loginDto {
   password: string;
 }
 
+export interface IFogotPassword {
+  navigate?: any;
+  email: string;
+}
+
+export interface IResetPassword {
+  id: string;
+  token: string;
+  password: string;
+}
+
 export interface changeProfileDto {
   fullname: string;
   birthday: Date;
   gender: boolean;
+  phone?: string;
+  email?: string;
+  city?: string;
+  district?: string;
+  ward?: string;
+  avatar?: string;
 }
 
 export interface changePasswordDto {

@@ -1,36 +1,52 @@
 import { AxiosResponse } from 'axios';
 import instance, { apiCallerWithToken } from '../config/configAxios';
-import { URL_API } from '../constants';
 import { AppDispatch } from '../redux/store';
 import {
   changeEmailDto,
   changePasswordDto,
   changeProfileDto,
+  IFogotPassword,
+  IResetPassword,
   loginDto,
   registerDto,
 } from '../types/auth';
 
 const register = (user: registerDto): Promise<AxiosResponse> => {
-  return instance.post(`${URL_API}/auth/register`, user);
+  return instance.post(`auth/register`, user);
 };
 
 const login = (user: loginDto): Promise<AxiosResponse> => {
-  return instance.post(`${URL_API}/auth/login`, user);
+  return instance.post(`auth/login`, user);
+};
+
+const fogotPassword = (data: IFogotPassword): Promise<AxiosResponse> => {
+  return instance.post(`auth/fogotPassword`, data);
+};
+
+const getEmailFogotPassword = (
+  id: string,
+  token: string
+): Promise<AxiosResponse> => {
+  return instance.get(`auth/resetPassword/${id}/${token}`);
+};
+
+const resetPassword = (data: IResetPassword): Promise<AxiosResponse> => {
+  return instance.post(`auth/resetPassword/${data.id}/${data.token}`, data);
 };
 
 const logout = (): Promise<AxiosResponse> => {
-  return instance.post(`${URL_API}/auth/logout`);
+  return instance.post(`auth/logout`);
 };
 
 const refreshToken = (): Promise<AxiosResponse> => {
-  return instance.post(`${URL_API}/auth/refreshToken`);
+  return instance.post(`auth/refreshToken`);
 };
 
 const getProfile = (
   token: string | null,
   dispatch: AppDispatch
 ): Promise<AxiosResponse> => {
-  return apiCallerWithToken(token, dispatch).get(`${URL_API}/auth/getProfile`);
+  return apiCallerWithToken(token, dispatch).get(`auth/getProfile`);
 };
 
 const changeProfile = (
@@ -38,10 +54,7 @@ const changeProfile = (
   dispatch: AppDispatch,
   data: changeProfileDto
 ): Promise<AxiosResponse> => {
-  return apiCallerWithToken(token, dispatch).put(
-    `${URL_API}/auth/changeProfile`,
-    data
-  );
+  return apiCallerWithToken(token, dispatch).put(`auth/changeProfile`, data);
 };
 
 const changePassword = (
@@ -49,10 +62,7 @@ const changePassword = (
   dispatch: AppDispatch,
   data: changePasswordDto
 ): Promise<AxiosResponse> => {
-  return apiCallerWithToken(token, dispatch).put(
-    `${URL_API}/auth/changePassword`,
-    data
-  );
+  return apiCallerWithToken(token, dispatch).put(`auth/changePassword`, data);
 };
 
 const changeEmail = (
@@ -60,10 +70,7 @@ const changeEmail = (
   dispatch: AppDispatch,
   data: changeEmailDto
 ): Promise<AxiosResponse> => {
-  return apiCallerWithToken(token, dispatch).put(
-    `${URL_API}/auth/changeEmail`,
-    data
-  );
+  return apiCallerWithToken(token, dispatch).put(`auth/changeEmail`, data);
 };
 
 export const authApi = {
@@ -75,4 +82,7 @@ export const authApi = {
   changeProfile,
   changePassword,
   changeEmail,
+  fogotPassword,
+  getEmailFogotPassword,
+  resetPassword,
 };

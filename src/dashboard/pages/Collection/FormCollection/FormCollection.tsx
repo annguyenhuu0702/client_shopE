@@ -1,5 +1,5 @@
 import { LoadingOutlined, PlusOutlined } from '@ant-design/icons';
-import { Button, Form, Input, Layout, message, Select } from 'antd';
+import { Button, Form, Input, Layout, Select, message } from 'antd';
 import Upload, {
   RcFile,
   UploadChangeParam,
@@ -10,14 +10,13 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useTitle } from '../../../../hooks/useTitle';
-import { authSelector, authState } from '../../../../redux/slice/authSlice';
+import { authSelector } from '../../../../redux/slice/authSlice';
 
 import { collectionApi } from '../../../../apis/collectionApi';
 import { URL_API } from '../../../../constants';
 import {
   categoryActions,
   categorySelector,
-  categoryState,
 } from '../../../../redux/slice/categorySlice';
 import {
   collectionActions,
@@ -26,6 +25,7 @@ import {
 } from '../../../../redux/slice/collectionSlice';
 import { configSlugify } from '../../../../utils';
 import HeaderTitle from '../../../components/HeaderTitle';
+import { ICategory } from '../../../../types/category';
 
 const { Content } = Layout;
 
@@ -50,12 +50,12 @@ const beforeUpload = (file: RcFile) => {
 const FormCollection: React.FC = () => {
   const navigate = useNavigate();
   const { id } = useParams();
-  const { user }: authState = useSelector(authSelector);
+  const { user } = useSelector(authSelector);
 
   const { currentCollection }: collectionState =
     useSelector(collectionSelector);
 
-  const { categories }: categoryState = useSelector(categorySelector);
+  const { categories } = useSelector(categorySelector);
 
   const initialValues = {
     name: currentCollection ? currentCollection.name : '',
@@ -151,7 +151,7 @@ const FormCollection: React.FC = () => {
           dispatch(collectionActions.setCollection(data));
           form.setFieldsValue({
             name: data.name,
-            categoryId: data.category.id,
+            categoryId: data && data.categoryId,
             description: data.description,
             thumbnail: data.thumbnail,
           });
@@ -214,7 +214,7 @@ const FormCollection: React.FC = () => {
                     onChange={handleChange}
                     options={
                       categories
-                        ? categories.rows.map((item: any) => {
+                        ? categories.rows.map((item: ICategory) => {
                             return {
                               value: item.id,
                               label: item.name,
@@ -223,6 +223,15 @@ const FormCollection: React.FC = () => {
                           })
                         : []
                     }
+                    showSearch
+                    filterOption={(input, option: any) => {
+                      return (
+                        option.label
+                          .toLowerCase()
+                          .indexOf(input.toLowerCase()) >= 0
+                      );
+                    }}
+                    allowClear
                   />
                 </Form.Item>
 
@@ -255,21 +264,30 @@ const FormCollection: React.FC = () => {
                   </Upload>
                 </Form.Item>
                 <Form.Item
+                  shouldUpdate
                   style={{
                     textAlign: 'center',
                   }}
                   wrapperCol={{ span: 14 }}
                 >
-                  <Button
-                    type="primary"
-                    htmlType="submit"
-                    style={{
-                      width: '200px',
-                    }}
-                    size="large"
-                  >
-                    {currentCollection ? 'Sửa' : 'Thêm'}
-                  </Button>
+                  {() => (
+                    <Button
+                      type="primary"
+                      htmlType="submit"
+                      disabled={
+                        !form.isFieldsTouched(false) ||
+                        !!form
+                          .getFieldsError()
+                          .filter(({ errors }) => errors.length).length
+                      }
+                      style={{
+                        width: '200px',
+                      }}
+                      size="large"
+                    >
+                      {currentCollection ? 'Sửa' : 'Thêm'}
+                    </Button>
+                  )}
                 </Form.Item>
               </div>
             </Form>

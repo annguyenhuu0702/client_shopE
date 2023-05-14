@@ -201,6 +201,10 @@ const ModalOrder: React.FC = () => {
                       label: 'Chờ xử lí',
                     },
                     {
+                      value: 'Đã xác nhận',
+                      label: 'Đã xác nhận',
+                    },
+                    {
                       value: 'Đang giao hàng',
                       label: 'Đang giao hàng',
                     },

@@ -30,7 +30,7 @@ const initialState: collectionState = {
     count: 0,
   },
   page: 1,
-  pageSize: 9,
+  pageSize: 12,
   currentCollection: null,
   isLoading: false,
   isError: false,

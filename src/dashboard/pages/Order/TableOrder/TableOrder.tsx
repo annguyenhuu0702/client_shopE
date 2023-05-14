@@ -124,8 +124,10 @@ const TableOrder: React.FC = () => {
           <div>
             <Tag
               color={`${record?.status === 'Chờ xử lí' ? 'red' : ''} ${
-                record?.status === 'Đang giao hàng' ? 'blue' : ''
-              } ${record?.status === 'Đã giao hàng' ? 'green' : ''}`}
+                record?.status === 'Đã xác nhận' ? 'blue' : ''
+              } ${record?.status === 'Đang giao hàng' ? 'orange' : ''} ${
+                record?.status === 'Đã giao hàng' ? 'green' : ''
+              }`}
               className="border-0 text-xl"
             >
               {record?.status}

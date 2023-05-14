@@ -1,4 +1,4 @@
-import { Breadcrumb, Col, Row } from 'antd';
+import { Breadcrumb, Col, Row, message } from 'antd';
 import React, { useEffect, useState } from 'react';
 import { AiOutlineCheck, AiOutlineMinus, AiOutlinePlus } from 'react-icons/ai';
 import { Link, useNavigate, useParams } from 'react-router-dom';
@@ -65,6 +65,24 @@ const ProductDetail: React.FC = ({ children }: any) => {
   };
 
   const handleAddToCart = () => {
+    if (!selectedSize && selectedColor) {
+      message.open({
+        type: 'warning',
+        content: 'Vui lòng chọn kích thước sản phẩm',
+      });
+    }
+    if (selectedSize && !selectedColor) {
+      message.open({
+        type: 'warning',
+        content: 'Vui lòng chọn màu sắc sản phẩm',
+      });
+    }
+    if (!selectedSize && !selectedColor) {
+      message.open({
+        type: 'warning',
+        content: 'Vui lòng chọn kích thước và màu sắc sản phẩm',
+      });
+    }
     if (currentProductClient && selectedColor && selectedSize) {
       const productVariant = currentProductClient.productVariants.find((item) =>
         item.variantValues.every(
@@ -129,12 +147,14 @@ const ProductDetail: React.FC = ({ children }: any) => {
     }
   }, [currentProductClient]);
 
+  // set hình ảnh mặc định
   useEffect(() => {
     if (currentProductClient) {
       setSelectedImage(currentProductClient.thumbnail);
     }
   }, [currentProductClient]);
 
+  // bình luận
   useEffect(() => {
     if (currentProductClient) {
       dispatch(

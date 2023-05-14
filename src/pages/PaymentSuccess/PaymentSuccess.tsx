@@ -21,7 +21,7 @@ const PaymentSuccess: React.FC = () => {
             d="M5 13l4 4L19 7"
           />
         </svg>
-        <span className="text-4xl font-semibold">Thanh toán thành công</span>
+        <span className="text-4xl font-semibold">Đặt hàng thành công</span>
         <p className="text-center">
           Cảm ơn bạn đã mua sản phẩm ở cửa hàng chúng tôi. Chúng tôi sẽ cố gắng
           ngày càng hoàn thiện để mang lại những sản phẩm tuyệt vời nhất.

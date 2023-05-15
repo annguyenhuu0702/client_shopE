@@ -54,6 +54,7 @@ const ProductCategoryPage: React.FC = () => {
   const { productsClient, pageClient, pageSizeClient, isLoadingClient } =
     useSelector(productSelector);
 
+  // sắp xếp
   const handleSort = () => {
     const params = {
       sortBy: 'price',

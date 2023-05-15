@@ -369,7 +369,7 @@ const ProductDetail: React.FC = ({ children }: any) => {
                     <input
                       value={quantity}
                       onChange={(e: any) => {
-                        setQuantity(e.target.value);
+                        setQuantity(+e.target.value);
                       }}
                       className="flex text-center h-16 w-32 border border-solid border-l-0 border-r-0 border-border-variant px-4 outline-none"
                     />

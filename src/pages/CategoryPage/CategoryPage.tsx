@@ -1,13 +1,14 @@
-import React, { useEffect, useMemo, useState } from 'react';
-import { Breadcrumb, Col, Row, Spin } from 'antd';
-import { Swiper, SwiperSlide } from 'swiper/react';
-import { Pagination, Navigation } from 'swiper';
-import 'swiper/css';
-import 'swiper/css/pagination';
-import 'swiper/css/navigation';
-import { Link, useParams } from 'react-router-dom';
-import Product from '../../components/Product';
+import { Breadcrumb, Col, Row } from 'antd';
+import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { Link, useParams } from 'react-router-dom';
+import 'swiper/css';
+import 'swiper/css/navigation';
+import 'swiper/css/pagination';
+import Loading from '../../components/Loading/Loading';
+import Product from '../../components/Product';
+import { routes } from '../../config/routes';
+import { useTitle } from '../../hooks/useTitle';
 import {
   categoryActions,
   categorySelector,
@@ -16,14 +17,7 @@ import {
   productActions,
   productSelector,
 } from '../../redux/slice/productSlice';
-import { ICollection } from '../../types/collection';
-import { useTitle } from '../../hooks/useTitle';
-import ProductCategoryPage from '../ProductCategoryPage';
-import { routes } from '../../config/routes';
 import { removeTextBetweenParentheses } from '../../utils';
-import { productCategoryActions } from '../../redux/slice/productCategorySlice';
-import { ICategory } from '../../types/category';
-import Loading from '../../components/Loading/Loading';
 
 const CategoryPage: React.FC = () => {
   const dispatch = useDispatch();
@@ -41,6 +35,7 @@ const CategoryPage: React.FC = () => {
     );
   }, [dispatch, slug]);
 
+  // lấy sản phẩm
   useEffect(() => {
     if (slug) {
       dispatch(
@@ -75,67 +70,6 @@ const CategoryPage: React.FC = () => {
           />
         </div>
       </section>
-      {/* {countProductCategory > 0 && (
-        <section className="mb-16 border-solid border-0 border-b-2 border-border-product-page">
-          <div>
-            <h3 className="m-0 mb-8 font-bold text-4xl">Danh mục sản phẩm</h3>
-          </div>
-          <div className="pb-6">
-            <Swiper
-              navigation={true}
-              modules={[Pagination, Navigation]}
-              slidesPerView={5}
-              spaceBetween={35}
-              breakpoints={{
-                340: {
-                  slidesPerView: 2,
-                  spaceBetween: 20,
-                },
-                640: {
-                  slidesPerView: 2,
-                  spaceBetween: 20,
-                },
-                768: {
-                  slidesPerView: 3,
-                  spaceBetween: 40,
-                },
-                1024: {
-                  slidesPerView: 5,
-                  spaceBetween: 40,
-                },
-              }}
-              className="mySwiper"
-            >
-              {currentCategoryClient &&
-                currentCategoryClient.collections.length > 0 &&
-                currentCategoryClient.collections.map(
-                  (collection: collection) => {
-                    return collection.productCategories.map((item) => {
-                      return item.thumbnail ? (
-                        <SwiperSlide>
-                          <Link to={`/${item.slug}`}>
-                            <img
-                              className="common-img-slide"
-                              src={item.thumbnail}
-                              alt=""
-                            />
-                            <div className="mt-8">
-                              <span className="text-xl text-name-product">
-                                {removeTextBetweenParentheses(item.name)}
-                              </span>
-                            </div>
-                          </Link>
-                        </SwiperSlide>
-                      ) : (
-                        <></>
-                      );
-                    });
-                  }
-                )}
-            </Swiper>
-          </div>
-        </section>
-      )} */}
       {productsByCategory.rows.map((item, index) => {
         return (
           item.products.length > 0 && (

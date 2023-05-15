@@ -110,17 +110,17 @@ const TableColor: React.FC = () => {
   };
 
   const onFinish = (values: any) => {
-    // dispatch(
-    //   userActions.getAllUser({
-    //     token: user.accessToken,
-    //     dispatch,
-    //     params: {
-    //       p: page,
-    //       limit: pageSize,
-    //       [values.option]: values.search,
-    //     },
-    //   })
-    // );
+    dispatch(
+      variantValueActions.getAllColor({
+        token: user.accessToken,
+        dispatch,
+        params: {
+          p: pageColor,
+          limit: pageSizeColor,
+          [values.option]: values.search,
+        },
+      })
+    );
   };
 
   const onFinishFailed = (errorInfo: any) => {

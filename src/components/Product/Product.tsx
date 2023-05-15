@@ -90,31 +90,6 @@ const Product: React.FC<Props> = ({ product }) => {
   };
 
   const handleAddToCart = (product: IProduct) => {
-    // if (product && selectedColor && selectedSize) {
-    //   const productVariant = product.productVariants.find((item) =>
-    //     item.variantValues.every(
-    //       (variantValue) =>
-    //         variantValue.id === selectedColor.id ||
-    //         variantValue.id === selectedSize.id
-    //     )
-    //   );
-    //   let formData;
-    //   if (productVariant) {
-    //     formData = {
-    //       productVariantId: productVariant.id,
-    //       quantity: quantity,
-    //     };
-    //     dispatch(
-    //       cartActions.addToCart({
-    //         token: user.accessToken,
-    //         dispatch,
-    //         navigate,
-    //         data: formData,
-    //       })
-    //     );
-    //   }
-    // }
-
     if (!selectedSize && selectedColor) {
       message.open({
         type: 'warning',
@@ -311,7 +286,7 @@ const Product: React.FC<Props> = ({ product }) => {
                     className="flex text-center h-16 w-32 border border-solid border-l-0 border-r-0 border-border-variant px-4 outline-none"
                     value={quantity}
                     onChange={(e: any) => {
-                      setQuantity(e.target.value);
+                      setQuantity(+e.target.value);
                     }}
                   />
 

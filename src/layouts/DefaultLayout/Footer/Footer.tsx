@@ -1,22 +1,60 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import styles from './__footer.module.scss';
 
-import classNames from 'classnames/bind';
-import { Col, Row } from 'antd';
-import { Link } from 'react-router-dom';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faCcAmex,
   faCcJcb,
   faCcMastercard,
   faCcVisa,
 } from '@fortawesome/free-brands-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Col, Row } from 'antd';
+import classNames from 'classnames/bind';
+import { AiOutlineArrowUp } from 'react-icons/ai';
+import { Link } from 'react-router-dom';
 
 const cx = classNames.bind(styles);
 
 const Footer: React.FC = () => {
+  // button back to top
+  const [showButton, setShowButton] = useState<boolean>(false);
+
+  const scrollUp = () => {
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth',
+    });
+  };
+
+  // lấy kích thước height để hiển thị button
+  useEffect(() => {
+    const handleScroll = () => {
+      if (window.scrollY > 500) {
+        setShowButton(true);
+      } else {
+        setShowButton(false);
+      }
+    };
+    window.addEventListener('scroll', handleScroll);
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, []);
+
   return (
     <footer className={cx('footer')}>
+      <>
+        {showButton && (
+          <div className="z-10 fixed bottom-16 right-16">
+            <button
+              className="border-0 w-20 h-20 rounded-full drop-shadow-md bg-indigo-500 text-white text-4xl font-bold  cursor-pointer "
+              onClick={scrollUp}
+            >
+              <AiOutlineArrowUp />
+            </button>
+          </div>
+        )}
+      </>
       <section className={cx('footer-center')}>
         <div className={cx('content')}>
           <Row gutter={[12, 12]}>

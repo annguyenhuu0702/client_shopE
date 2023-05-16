@@ -50,23 +50,40 @@ const CheckoutPage: React.FC = () => {
 
   const onFinish = async (values: any) => {
     try {
-      if (user) {
-        const res = await paymentApi.create(user.accessToken, dispatch, {
-          ...values,
-          point: +point,
-          shippingCost,
-          totalPrice: totalPrice() + shippingCost - priceSale,
+      if (value === 2) {
+        const res = await paymentApi.create_url({
+          amount: totalPrice() + shippingCost - priceSale,
         });
-        const { status } = res;
-        if (status === 201) {
-          navigate(routes.paymentSuccess);
-        } else {
-          notification.error({
-            message: 'Thất bại',
-            description: 'Có lỗi khi điền form dữ liệu!',
-            placement: 'bottomRight',
-            duration: 3,
+        if (res.status === 200) {
+          window.location.href = res.data;
+          if (user) {
+            await paymentApi.create(user.accessToken, dispatch, {
+              ...values,
+              point: +point,
+              shippingCost,
+              totalPrice: totalPrice() + shippingCost - priceSale,
+            });
+          }
+        }
+      } else {
+        if (user) {
+          const res = await paymentApi.create(user.accessToken, dispatch, {
+            ...values,
+            point: +point,
+            shippingCost,
+            totalPrice: totalPrice() + shippingCost - priceSale,
           });
+          const { status } = res;
+          if (status === 201) {
+            navigate(routes.paymentSuccess);
+          } else {
+            notification.error({
+              message: 'Thất bại',
+              description: 'Có lỗi khi điền form dữ liệu!',
+              placement: 'bottomRight',
+              duration: 3,
+            });
+          }
         }
       }
     } catch (error) {
@@ -304,7 +321,7 @@ const CheckoutPage: React.FC = () => {
                       <div className="flex items-center justify-between border-2 border-solid border-border-checkout px-4 py-4 mb-4">
                         <Radio value={2}>
                           <span className="text-3xl mr-20">
-                            Thanh toán qua cổng PayPal
+                            Thanh toán online bằng VNPay
                           </span>
                         </Radio>
                         <div className="flex items-center text-4xl text-yellow-500">

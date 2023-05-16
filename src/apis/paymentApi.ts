@@ -1,5 +1,5 @@
 import { AxiosResponse } from 'axios';
-import { apiCallerWithToken } from '../config/configAxios';
+import instance, { apiCallerWithToken } from '../config/configAxios';
 import { AppDispatch } from '../redux/store';
 import { createPayment, updatePayment } from '../types/payment';
 import { queryParams } from '../types/common';
@@ -81,6 +81,12 @@ const getRevenueYear = (
   });
 };
 
+const create_url = (params: any) => {
+  return instance.get(`payment/create_url`, {
+    params,
+  });
+};
+
 export const paymentApi = {
   create,
   update,
@@ -90,4 +96,5 @@ export const paymentApi = {
   checkPoint,
   getRevenueMonth,
   getRevenueYear,
+  create_url,
 };

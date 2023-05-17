@@ -59,6 +59,7 @@ const CheckoutPage: React.FC = () => {
           if (user) {
             await paymentApi.create(user.accessToken, dispatch, {
               ...values,
+              isPaid: true,
               point: +point,
               shippingCost,
               totalPrice: totalPrice() + shippingCost - priceSale,
@@ -69,6 +70,7 @@ const CheckoutPage: React.FC = () => {
         if (user) {
           const res = await paymentApi.create(user.accessToken, dispatch, {
             ...values,
+            isPaid: false,
             point: +point,
             shippingCost,
             totalPrice: totalPrice() + shippingCost - priceSale,

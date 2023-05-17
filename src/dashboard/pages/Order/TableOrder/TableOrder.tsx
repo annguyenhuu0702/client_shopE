@@ -30,7 +30,6 @@ import {
   paymentActions,
   paymentSelector,
 } from '../../../../redux/slice/paymentSlice';
-import { userActions } from '../../../../redux/slice/userSlice';
 import { Payment } from '../../../../types/payment';
 import { castToVND } from '../../../../utils';
 import ModalOrder from '../ModalOrder/ModalOrder';
@@ -132,6 +131,24 @@ const TableOrder: React.FC = () => {
             >
               {record?.status}
             </Tag>
+          </div>
+        );
+      },
+    },
+    {
+      title: 'Thanh toán',
+      render: (text: string, record: Payment) => {
+        return (
+          <div>
+            {record?.isPaid ? (
+              <Tag color="blue" className="border-0 text-xl">
+                Đã thanh toán
+              </Tag>
+            ) : (
+              <Tag color="red" className="border-0 text-xl">
+                Chưa thanh toán
+              </Tag>
+            )}
           </div>
         );
       },

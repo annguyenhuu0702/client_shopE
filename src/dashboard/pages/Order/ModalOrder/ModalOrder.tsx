@@ -64,12 +64,17 @@ const ModalOrder: React.FC = () => {
         payment: values.payment,
         point: currentPayment.point,
         street: currentPayment.street,
+        isPaid: values.status === 'Đã giao hàng' ? true : false,
       };
       dispatch(
         paymentActions.editPayment({
           token: user.accessToken,
           dispatch,
-          data: { ...formData, id: currentPayment.id, resetValues },
+          data: {
+            ...formData,
+            id: currentPayment.id,
+            resetValues,
+          },
         })
       );
     }

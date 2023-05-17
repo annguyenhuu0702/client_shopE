@@ -1,4 +1,4 @@
-import { queryParams, tokenPayload } from './common';
+import { queryParams, tokenPayload, tokenPayloadData } from './common';
 
 type Payment = {
   key: number;
@@ -11,6 +11,7 @@ type Payment = {
   street: string;
   payment: number;
   status: string;
+  isPaid: boolean;
   userId: number;
   point: number;
   shippingCost: number;
@@ -30,6 +31,7 @@ type createPayment = {
   ward: string;
   street: string;
   payment: number;
+  isPaid?: boolean;
   point: number;
   shippingCost: number;
   totalPrice: number;
@@ -39,6 +41,7 @@ type createPayment = {
 type updatePayment = createPayment & {
   id: number;
   resetValues?: Function;
+  params?: queryParams;
 };
 
 type getAllPaymentParams = queryParams & {};
@@ -47,4 +50,15 @@ type getAllPayment = tokenPayload & {
   params?: getAllPaymentParams;
 };
 
-export type { createPayment, Payment, updatePayment, getAllPayment };
+type updatePaymentClient = tokenPayload & {
+  data: any;
+  params?: queryParams;
+};
+
+export type {
+  createPayment,
+  Payment,
+  updatePayment,
+  getAllPayment,
+  updatePaymentClient,
+};

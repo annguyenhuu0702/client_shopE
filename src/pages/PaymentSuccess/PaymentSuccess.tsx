@@ -1,9 +1,11 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { routes } from '../../config/routes';
+import { useTitle } from '../../hooks/useTitle';
 
 const PaymentSuccess: React.FC = () => {
   const navigate = useNavigate();
+  useTitle('Thanh toán thành công');
   return (
     <div className="w-full h-full flex justify-center px-20 py-10 max-sm:px-4 max-sm:mt-24">
       <div className="sm:w-[385px] sm:min-w-[40vw] min-w-[80vw] min-h-[50vh] flex flex-col items-center justify-center gap-2 -translate-y-1/2 p-6 bg-[#FFFFEB] rounded-lg top-1/2 left-1/2 -translate-x-1/2">

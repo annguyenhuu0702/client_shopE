@@ -15,11 +15,13 @@ import {
 const ModalOrder: React.FC = () => {
   const dispatch = useDispatch();
 
-  const { currentPayment } = useSelector(paymentSelector);
+  const { currentPayment, page, pageSize } = useSelector(paymentSelector);
 
   const { user } = useSelector(authSelector);
 
   const { isModal, title } = useSelector(modalSelector);
+
+  console.log(currentPayment);
 
   const initialValues = {
     fullName: currentPayment ? currentPayment.fullname : '',
@@ -74,6 +76,10 @@ const ModalOrder: React.FC = () => {
             ...formData,
             id: currentPayment.id,
             resetValues,
+          },
+          params: {
+            p: page,
+            limit: pageSize,
           },
         })
       );

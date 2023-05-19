@@ -46,13 +46,20 @@ function* editPaymentSaga({
   payload,
 }: PayloadAction<tokenPayloadData<Payment>>): any {
   try {
-    const { token, dispatch, data } = payload;
+    const { token, dispatch, data, params } = payload;
     const res = yield call(() => {
       return paymentApi.update(token, dispatch, data);
     });
     const { status } = res;
     if (status === STATUS_CODE.SUCCESS) {
-      yield put(paymentActions.editPaymentSuccess(data));
+      yield put(paymentActions.editPaymentSuccess());
+      yield put(
+        paymentActions.getAllPayment({
+          token,
+          dispatch,
+          params,
+        })
+      );
       if (data.resetValues) {
         data.resetValues();
       }

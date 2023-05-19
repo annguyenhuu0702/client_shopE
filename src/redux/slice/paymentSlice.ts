@@ -68,15 +68,9 @@ const PaymentSlice = createSlice({
     ) => {
       state.isLoading = true;
     },
-    editPaymentSuccess: (state, action: PayloadAction<Payment>) => {
+    editPaymentSuccess: (state) => {
       state.isLoading = false;
       state.isError = false;
-      const index = state.payments.rows.findIndex(
-        (item) => item.id === action.payload.id
-      );
-      if (index !== -1) {
-        state.payments.rows[index] = action.payload;
-      }
     },
     editPaymentFailed: (state) => {
       state.isLoading = false;

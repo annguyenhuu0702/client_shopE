@@ -31,8 +31,30 @@ import {
   paymentSelector,
 } from '../../../../redux/slice/paymentSlice';
 import { Payment } from '../../../../types/payment';
+import { IPaymentItem } from '../../../../types/paymentItem';
+
 import { castToVND } from '../../../../utils';
 import ModalOrder from '../ModalOrder/ModalOrder';
+import { ColumnsType } from 'antd/es/table';
+
+const filterStatus = [
+  {
+    text: 'Chờ xử lí',
+    value: 'Chờ xử lí',
+  },
+  {
+    text: 'Đã xác nhận',
+    value: 'Đã xác nhận',
+  },
+  {
+    text: 'Đang giao hàng',
+    value: 'Đang giao hàng',
+  },
+  {
+    text: 'Đã giao hàng',
+    value: 'Đã giao hàng',
+  },
+];
 
 const TableOrder: React.FC = () => {
   const dispatch = useDispatch();
@@ -44,12 +66,12 @@ const TableOrder: React.FC = () => {
 
   const [form] = Form.useForm();
 
-  const columns = [
-    {
-      title: 'ID',
-      dataIndex: 'id',
-      width: 50,
-    },
+  const columns: ColumnsType<Payment> = [
+    // {
+    //   title: 'ID',
+    //   dataIndex: 'id',
+    //   width: 50,
+    // },
     {
       title: 'Họ tên',
       render: (text: string, record: Payment) => {
@@ -68,6 +90,38 @@ const TableOrder: React.FC = () => {
         );
       },
     },
+
+    {
+      title: 'Sản phẩm',
+      render: (text: string, record: Payment) => {
+        return (
+          <div className="flex gap-1">
+            {record?.paymentItems?.map((item: IPaymentItem) => {
+              return (
+                <Tag color="green" key={item.id}>
+                  {item?.productVariant?.product?.name}
+                </Tag>
+              );
+            })}
+          </div>
+        );
+      },
+    },
+    {
+      title: 'Số lượng',
+      render: (text: string, record: Payment) => {
+        return (
+          <div>
+            <span>
+              {record?.paymentItems?.map(
+                (item: IPaymentItem) => item?.quantity
+              )}
+            </span>
+          </div>
+        );
+      },
+      align: 'center' as AlignType,
+    },
     {
       title: 'Số điện thoại',
       render: (text: string, record: Payment) => {
@@ -78,16 +132,16 @@ const TableOrder: React.FC = () => {
         );
       },
     },
-    {
-      title: 'Phí vận chuyển',
-      render: (text: string, record: Payment) => {
-        return (
-          <div>
-            <span>{castToVND(record?.shippingCost)}</span>
-          </div>
-        );
-      },
-    },
+    // {
+    //   title: 'Phí vận chuyển',
+    //   render: (text: string, record: Payment) => {
+    //     return (
+    //       <div>
+    //         <span>{castToVND(record?.shippingCost)}</span>
+    //       </div>
+    //     );
+    //   },
+    // },
     {
       title: 'Tổng tiền',
       render: (text: string, record: Payment) => {
@@ -98,24 +152,24 @@ const TableOrder: React.FC = () => {
         );
       },
     },
-    {
-      title: 'Hình thức thanh toán',
-      render: (text: string, record: Payment) => {
-        return (
-          <div>
-            {record?.payment === 1 ? (
-              <Tag color="blue" className="border-0 text-xl">
-                Thanh toán tiền mặt
-              </Tag>
-            ) : (
-              <Tag color="cyan" className="border-0 text-xl">
-                Thanh toán qua cổng điện tử
-              </Tag>
-            )}
-          </div>
-        );
-      },
-    },
+    // {
+    //   title: 'Hình thức thanh toán',
+    //   render: (text: string, record: Payment) => {
+    //     return (
+    //       <div>
+    //         {record?.payment === 1 ? (
+    //           <Tag color="blue" className="border-0 text-xl">
+    //             Thanh toán tiền mặt
+    //           </Tag>
+    //         ) : (
+    //           <Tag color="cyan" className="border-0 text-xl">
+    //             Thanh toán qua cổng điện tử
+    //           </Tag>
+    //         )}
+    //       </div>
+    //     );
+    //   },
+    // },
     {
       title: 'Trạng thái',
       render: (text: string, record: Payment) => {
@@ -134,6 +188,15 @@ const TableOrder: React.FC = () => {
           </div>
         );
       },
+      // filters: filterStatus.map((item: any) => {
+      //   return {
+      //     text: item.text,
+      //     value: item.value,
+      //   };
+      // }),
+      // onFilter: (value: string | number | boolean, record: Payment) => {
+      //   return record.status.startsWith(`${value}`);
+      // },
     },
     {
       title: 'Thanh toán',
@@ -153,14 +216,14 @@ const TableOrder: React.FC = () => {
         );
       },
     },
-    {
-      title: 'Ngày tạo',
-      dataIndex: 'createdAt',
-      render: (text: string, record: Payment) => {
-        let date = moment(record?.createdAt).format('MM/DD/YYYY');
-        return <div>{date}</div>;
-      },
-    },
+    // {
+    //   title: 'Ngày tạo',
+    //   dataIndex: 'createdAt',
+    //   render: (text: string, record: Payment) => {
+    //     let date = moment(record?.createdAt).format('MM/DD/YYYY');
+    //     return <div>{date}</div>;
+    //   },
+    // },
     {
       title: 'Hành động',
       dataIndex: 'action',
@@ -169,15 +232,15 @@ const TableOrder: React.FC = () => {
       render: (text: string, record: Payment) => {
         return (
           <Space size="middle">
-            {record.status !== 'Đã giao hàng' && (
-              <EditOutlined
-                className="common-icon-edit"
-                onClick={() => {
-                  handleEditPayment(record);
-                }}
-              />
-            )}
-            {record.status === 'Đã giao hàng' && (
+            {/* {record.status !== 'Đã giao hàng' && ( */}
+            <EditOutlined
+              className="common-icon-edit"
+              onClick={() => {
+                handleEditPayment(record);
+              }}
+            />
+            {/* )} */}
+            {/* {record.status === 'Đã giao hàng' && (
               <Popconfirm
                 placement="topLeft"
                 title={`Bạn có muốn xóa??`}
@@ -189,7 +252,7 @@ const TableOrder: React.FC = () => {
               >
                 <DeleteOutlined className="common-icon-delete" />
               </Popconfirm>
-            )}
+            )} */}
           </Space>
         );
       },

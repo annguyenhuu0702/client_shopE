@@ -1,7 +1,6 @@
-import { Payment } from './payment';
 import { IProductVariant } from './productVariant';
 
-type PaymentItem = {
+type IPaymentItem = {
   key: string | number | React.Key;
   id: number;
   paymentId: number;
@@ -11,8 +10,8 @@ type PaymentItem = {
   createdAt: Date;
   updatedAt: Date;
   deletedAt: Date;
-  payment: Payment;
+  // payment: Payment;
   productVariant: IProductVariant;
 };
 
-export type { PaymentItem };
+export type { IPaymentItem };

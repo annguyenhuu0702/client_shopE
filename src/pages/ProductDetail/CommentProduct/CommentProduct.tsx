@@ -1,4 +1,4 @@
-import { Col, Popconfirm, Row, Space } from 'antd';
+import { Col, Popconfirm, Rate, Row, Space, message } from 'antd';
 import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -23,22 +23,30 @@ const CommentProduct: React.FC = () => {
   const { user } = useSelector(authSelector);
 
   const [contentComment, setContentComment] = useState<string>('');
+  const [rating, setRating] = useState<number>(5);
 
   const handleAddComment = () => {
+    if (contentComment === '') {
+      message.warning('Bạn chưa nhập đánh giá');
+      setRating(5);
+    }
     if (currentProductClient) {
-      const formData = {
-        productId: currentProductClient.id,
-        content: contentComment,
-      };
-
-      dispatch(
-        commentActions.createCommentByUser({
-          token: user.accessToken,
-          dispatch,
-          data: formData,
-        })
-      );
-      setContentComment('');
+      if (contentComment !== '') {
+        const formData = {
+          productId: currentProductClient.id,
+          content: contentComment,
+          rating,
+        };
+        dispatch(
+          commentActions.createCommentByUser({
+            token: user.accessToken,
+            dispatch,
+            data: formData,
+          })
+        );
+        setContentComment('');
+        setRating(5);
+      }
     }
   };
 
@@ -81,15 +89,24 @@ const CommentProduct: React.FC = () => {
                 }}
               ></textarea>
             </div>
-            <button
-              onClick={() => {
-                handleAddComment();
-              }}
-              type="submit"
-              className="inline-flex items-center py-2.5 px-4 font-medium text-center text-white bg-primary-700 rounded-lg focus:ring-4 focus:ring-primary-200 dark:focus:ring-primary-900 hover:bg-primary-800 border-none outline-none cursor-pointer"
-            >
-              Đánh giá
-            </button>
+            <div className="flex justify-between">
+              <Rate
+                value={rating}
+                onChange={(value) => {
+                  setRating(value);
+                }}
+                count={5}
+              />
+              <button
+                onClick={() => {
+                  handleAddComment();
+                }}
+                // type="submit"
+                className="inline-flex items-center py-2.5 px-4 font-medium text-center text-white bg-primary-700 rounded-lg focus:ring-4 focus:ring-primary-200 dark:focus:ring-primary-900 hover:bg-primary-800 border-none outline-none cursor-pointer"
+              >
+                Đánh giá
+              </button>
+            </div>
           </div>
         )}
         <div className="flex flex-col gap-8 mt-6">
@@ -100,28 +117,30 @@ const CommentProduct: React.FC = () => {
                   className="border border-solid border-gray-200 py-4 px-6 rounded-md"
                   key={comment.id}
                 >
-                  <div className="flex items-center justify-between gap-4 mb-4">
-                    <div className="flex items-center gap-4">
-                      <span>
-                        <img
-                          src={
-                            comment.user.avatar !== ''
-                              ? comment.user.avatar
-                              : 'https://res.cloudinary.com/diot4imoq/image/upload/v1677655323/canifa/user_jmlojj.jpg'
-                          }
-                          alt=""
-                          className="w-14 h-14 rounded-full"
-                        />
-                      </span>
-                      <span className="text-[#212b35] font-semibold">
-                        {comment.user.fullname}
-                      </span>
-                      <span className="text-[#212b35] font-semibold text-right">
-                        {moment(comment.createdAt).format('MM/DD/YYYY')}
-                      </span>
+                  <div className="flex items-center justify-between mb-4 gap-4 w-full">
+                    <div className="flex items-center">
+                      <div className="flex items-center gap-4">
+                        <span>
+                          <img
+                            src={
+                              comment.user.avatar !== ''
+                                ? comment.user.avatar
+                                : 'https://res.cloudinary.com/diot4imoq/image/upload/v1677655323/canifa/user_jmlojj.jpg'
+                            }
+                            alt=""
+                            className="w-14 h-14 rounded-full"
+                          />
+                        </span>
+                        <span className="text-[#212b35] font-semibold">
+                          {comment.user.fullname}
+                        </span>
+                        <span className="text-[#212b35] font-semibold text-right">
+                          {moment(comment.createdAt).format('MM/DD/YYYY')}
+                        </span>
+                      </div>
                     </div>
                     {user.user?.id === comment.user.id && (
-                      <div>
+                      <div className="flex items-center">
                         <Space size="middle">
                           <EditOutlined
                             className="common-icon-edit cursor-pointer text-blue-500"
@@ -148,6 +167,9 @@ const CommentProduct: React.FC = () => {
                     <span className="text-2xl font-medium">
                       {comment.content}
                     </span>
+                    <div>
+                      <Rate value={comment.rating} disabled />
+                    </div>
                   </div>
                 </div>
               );

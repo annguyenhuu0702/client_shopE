@@ -22,9 +22,13 @@ const Comment: React.FC = () => {
       commentActions.getAllComment({
         token: user.accessToken,
         dispatch,
+        params: {
+          p: page,
+          limit: pageSize,
+        },
       })
     );
-  }, [dispatch, user.accessToken]);
+  }, [dispatch, page, pageSize, user.accessToken]);
 
   useTitle('Đánh giá');
 

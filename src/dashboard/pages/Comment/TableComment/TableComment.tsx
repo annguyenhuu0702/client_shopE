@@ -71,6 +71,11 @@ const TableComment: React.FC = () => {
       },
     },
     {
+      title: 'Số sao',
+      dataIndex: 'rating',
+      align: 'center' as AlignType,
+    },
+    {
       title: 'Ngày tạo',
       dataIndex: 'createdAt',
       render: (text: string, record: Comment) => {

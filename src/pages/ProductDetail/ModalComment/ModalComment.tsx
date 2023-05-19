@@ -1,4 +1,4 @@
-import { Form, Modal } from 'antd';
+import { Form, Modal, Rate } from 'antd';
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { modalActions, modalSelector } from '../../../redux/slice/modalSlice';
@@ -28,6 +28,7 @@ const ModalComment: React.FC = () => {
 
   const initialValues = {
     content: currentComment ? currentComment.content : '',
+    rating: currentComment ? currentComment.rating : 5,
   };
 
   const onFinish = (values: any) => {
@@ -78,6 +79,14 @@ const ModalComment: React.FC = () => {
       >
         <Form.Item name="content">
           <TextArea rows={4} className="w-full" />
+        </Form.Item>
+        <Form.Item name="rating">
+          <Rate
+            // onChange={(value) => {
+            //   setRating(value);
+            // }}
+            count={5}
+          />
         </Form.Item>
       </Form>
     </Modal>

@@ -64,8 +64,8 @@ const CommentSlice = createSlice({
       state,
       action: PayloadAction<{ page: number; pageSize: number }>
     ) => {
-      state.pageClient = action.payload.page;
-      state.pageSizeClient = action.payload.pageSize;
+      state.page = action.payload.page;
+      state.pageSize = action.payload.pageSize;
     },
 
     setComment: (state, action: PayloadAction<Comment | null>) => {

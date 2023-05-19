@@ -7,6 +7,7 @@ type Comment = {
   userId: number;
   content: string;
   productId: number;
+  rating: number;
   user: IUser;
   createdAt: Date;
   updatedAt: Date;
@@ -21,6 +22,7 @@ type getCommentByProduct = {
 type createComment = queryParams & {
   content: string;
   productId: number;
+  rating: number;
 };
 
 type updateComment = createComment & {

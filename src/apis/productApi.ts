@@ -8,6 +8,14 @@ import {
   IUpdateProduct,
 } from '../types/product';
 
+const getProductStar = () => {
+  return instance.get(`product/getProductStar`);
+};
+
+const getProductSale = () => {
+  return instance.get(`product/getProductSale`);
+};
+
 const getHomePage = () => {
   return instance.get(`product/getHomePage`);
 };
@@ -78,4 +86,6 @@ export const productApi = {
   getByCategory,
   getHomePage,
   getHomeAdmin,
+  getProductSale,
+  getProductStar,
 };

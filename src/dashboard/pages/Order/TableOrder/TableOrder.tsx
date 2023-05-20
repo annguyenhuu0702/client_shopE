@@ -326,7 +326,7 @@ const TableOrder: React.FC = () => {
         <Col xl={22} style={{ paddingInline: '5px' }}>
           <Form
             form={form}
-            initialValues={{ option: 'fullname', search: '' }}
+            initialValues={{ option: 'status', search: '' }}
             onFinish={onFinish}
             onFinishFailed={onFinishFailed}
             autoComplete="off"
@@ -340,6 +340,7 @@ const TableOrder: React.FC = () => {
                 }}
               >
                 <Select style={{ width: 120, borderRadius: '5px' }}>
+                  <Select.Option value="status">Trạng thái</Select.Option>
                   <Select.Option value="fullname">Họ tên</Select.Option>
                   <Select.Option value="phone">SĐT</Select.Option>
                 </Select>

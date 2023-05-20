@@ -11,50 +11,54 @@
 //   font-size: 18px;
 // }
 
-// .swiper-button-prev {
-//   top: 44% !important;
-//   border-radius: 50%;
-//   background: $white-color;
-//   width: 46px !important;
-//   height: 46px !important;
-//   transform: rotate(180deg);
-//   background-image: url("https://res.cloudinary.com/diot4imoq/image/upload/v1676777019/canifa/download_u883yz.svg");
-//   background-repeat: no-repeat;
-//   // background-size: 100% auto;
-//   background-position: center;
+.product-sale {
+  .swiper-button-prev {
+    top: 44% !important;
+    border-radius: 50%;
+    background: $white-color;
+    width: 46px !important;
+    height: 46px !important;
+    transform: rotate(180deg);
+    background-image: url("https://res.cloudinary.com/diot4imoq/image/upload/v1676777019/canifa/download_u883yz.svg");
+    background-repeat: no-repeat;
+    // background-size: 100% auto;
+    background-position: center;
 
-//   @include tablet {
-//     top: 40% !important;
-//   }
+    @include tablet {
+      top: 40% !important;
+    }
 
-//   @include mobile {
-//     top: 40% !important;
-//   }
-// }
+    @include mobile {
+      // top: 40% !important;
+      display: none;
+    }
+  }
 
-// .swiper-button-next {
-//   top: 44% !important;
-//   border-radius: 50%;
-//   background: $white-color;
-//   width: 46px !important;
-//   height: 46px !important;
-//   background-image: url("https://res.cloudinary.com/diot4imoq/image/upload/v1676777019/canifa/download_u883yz.svg");
-//   background-repeat: no-repeat;
-//   // background-size: 100% auto;
-//   background-position: center;
+  .swiper-button-next {
+    top: 44% !important;
+    border-radius: 50%;
+    background: $white-color;
+    width: 46px !important;
+    height: 46px !important;
+    background-image: url("https://res.cloudinary.com/diot4imoq/image/upload/v1676777019/canifa/download_u883yz.svg");
+    background-repeat: no-repeat;
+    // background-size: 100% auto;
+    background-position: center;
 
-//   @include tablet {
-//     top: 40% !important;
-//   }
+    @include tablet {
+      top: 40% !important;
+    }
 
-//   @include mobile {
-//     top: 40% !important;
-//   }
-// }
+    @include mobile {
+      // top: 40% !important;
+      display: none;
+    }
+  }
 
-// .swiper-button-next::after {
-//   display: none;
-// }
+  .swiper-button-next::after {
+    display: none;
+  }
+}
 
 .p-50 {
   padding: 0 50px;

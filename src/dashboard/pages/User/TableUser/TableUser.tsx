@@ -144,7 +144,7 @@ const TableUser: React.FC = () => {
                 handleEditUser(record);
               }}
             />
-            <Popconfirm
+            {/* <Popconfirm
               placement="topLeft"
               title={`Bạn có muốn xóa??`}
               onConfirm={() => {
@@ -154,7 +154,7 @@ const TableUser: React.FC = () => {
               cancelText="Không"
             >
               <DeleteOutlined className="common-icon-delete" />
-            </Popconfirm>
+            </Popconfirm> */}
           </Space>
         );
       },

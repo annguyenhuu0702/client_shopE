@@ -325,14 +325,18 @@ const Product: React.FC<Props> = ({ product }) => {
             </span>
           </Link>
         </div>
-        <div className={cx('price')}>
-          <span>{castToVND(product.price)}</span>
-          {product.priceSale > 0 && (
-            <span className={cx('price-old')}>
-              {castToVND(product.priceSale)}
-            </span>
-          )}
-        </div>
+        {product?.priceSale > 0 ? (
+          <div className={cx('price')}>
+            <span>{castToVND(product.priceSale)}</span>
+            {product.priceSale > 0 && (
+              <span className={cx('price-old')}>
+                {castToVND(product.price)}
+              </span>
+            )}
+          </div>
+        ) : (
+          <span className={cx('price')}>{castToVND(product.price)}</span>
+        )}
         {user.user && (
           <div className={cx('tags-name')}>
             <div
@@ -368,7 +372,7 @@ const Product: React.FC<Props> = ({ product }) => {
           <div className={cx('tags-percent')}>
             <span>
               -
-              {Math.floor(
+              {Math.round(
                 ((product.price - product.priceSale) / product.price) * 100
               )}
               %

@@ -1,6 +1,6 @@
 import { Col, Row } from 'antd';
 import { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { productApi } from '../../apis/productApi';
 import Product from '../../components/Product';
 import { useTitle } from '../../hooks/useTitle';
@@ -9,22 +9,57 @@ import { Pagination, Navigation, Autoplay } from 'swiper';
 import 'swiper/css';
 import 'swiper/css/pagination';
 import 'swiper/css/navigation';
+import { IProduct } from '../../types/product';
+import { useDispatch, useSelector } from 'react-redux';
+import { newsActions, newsSelector } from '../../redux/slice/newsSlice';
+import moment from 'moment';
+import { News } from '../../types/news';
 
 const HomePage = () => {
-  const [data, setData] = useState<any>();
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  // sản phẩm khuyến mãi
+  const [productSale, setProductSale] = useState<IProduct[]>([]);
+
+  // sản phẩm nhiều sao
+  const [productStar, setProductStar] = useState<IProduct[]>([]);
+
+  const { newsClient } = useSelector(newsSelector);
 
   useEffect(() => {
     try {
-      const getAllData = async () => {
-        const res = await productApi.getHomePage();
-        const { data } = res.data;
-        setData(data);
+      const getAllProductSale = async () => {
+        const res = await productApi.getProductSale();
+        const { data, status } = res;
+        if (status === 200) {
+          setProductSale(data.data.rows);
+        }
       };
-      getAllData();
+      getAllProductSale();
     } catch (error) {
       console.log(error);
     }
   }, []);
+
+  useEffect(() => {
+    try {
+      const getAllProductStar = async () => {
+        const res = await productApi.getProductStar();
+        const { data, status } = res;
+        if (status === 200) {
+          setProductStar(data.data.rows);
+        }
+      };
+      getAllProductStar();
+    } catch (error) {
+      console.log(error);
+    }
+  }, []);
+
+  useEffect(() => {
+    dispatch(newsActions.getAllNewsClient({}));
+  }, [dispatch]);
 
   useTitle('CANIFA');
   return (
@@ -68,63 +103,134 @@ const HomePage = () => {
           </SwiperSlide>
         </Swiper>
       </section>
-      <section className="banner">
-        <Link to={`/category/nu`}>
-          <img
-            className="common-img"
-            src="https://res.cloudinary.com/diot4imoq/image/upload/v1677223182/canifa/banner_name_tablet1675168225_r1kmqn.webp"
-            alt=""
-          />
-        </Link>
-      </section>
-      <section className="bst-family">
-        <div className="p-50">
-          <h2 className="common-title">Áo phông</h2>
-          <Row gutter={[12, 12]} className="list-product">
-            {data?.tshirt.map((item: any) => {
-              return (
-                <Col xl={6} md={6} xs={12} key={item.id}>
-                  <Product product={item} />
-                </Col>
-              );
-            })}
-          </Row>
-          <div className="view-all my-10">
-            <Link
-              to={`/product-category/${data?.tshirt[0]?.productCategory?.slug}`}
-              className="text"
+      {productStar && productStar.length > 0 && (
+        <section className="product-sale">
+          <div className="p-50">
+            <h2 className="common-title">Sản phẩm nổi bật</h2>
+            <Swiper
+              navigation={true}
+              modules={[Autoplay, Navigation]}
+              slidesPerView={4}
+              spaceBetween={10}
+              className="mySwiper"
+              breakpoints={{
+                340: {
+                  slidesPerView: 2,
+                  spaceBetween: 20,
+                },
+                640: {
+                  slidesPerView: 2,
+                  spaceBetween: 20,
+                },
+                768: {
+                  slidesPerView: 3,
+                  spaceBetween: 20,
+                },
+                1024: {
+                  slidesPerView: 4,
+                  spaceBetween: 20,
+                },
+              }}
             >
-              Xem tất cả
-            </Link>
+              {productStar?.map((item: IProduct, index: number) => {
+                return (
+                  <Col key={index}>
+                    <SwiperSlide key={index}>
+                      <Product product={item} />
+                    </SwiperSlide>
+                  </Col>
+                );
+              })}
+            </Swiper>
           </div>
-        </div>
-      </section>
-      <section className="banner max-sm:mt-24">
-        <Link to={`/category/nu`}>
-          <img
-            className="common-img"
-            src="https://res.cloudinary.com/diot4imoq/image/upload/v1677223203/canifa/banner_name_tablet1675168324_ze8v9u.webp"
-            alt=""
-          />
-        </Link>
-      </section>
-      <section className="bst-family">
+        </section>
+      )}
+      {productSale && productSale.length > 0 && (
+        <section className="product-sale">
+          <div className="p-50">
+            <h2 className="common-title">Sản phẩm giá tốt</h2>
+            <Swiper
+              navigation={true}
+              modules={[Autoplay, Navigation]}
+              slidesPerView={4}
+              spaceBetween={10}
+              className="mySwiper"
+              breakpoints={{
+                340: {
+                  slidesPerView: 2,
+                  spaceBetween: 20,
+                },
+                640: {
+                  slidesPerView: 2,
+                  spaceBetween: 20,
+                },
+                768: {
+                  slidesPerView: 3,
+                  spaceBetween: 20,
+                },
+                1024: {
+                  slidesPerView: 4,
+                  spaceBetween: 20,
+                },
+              }}
+            >
+              {productSale?.map((item: IProduct, index: number) => {
+                return (
+                  <Col key={index}>
+                    <SwiperSlide key={index}>
+                      <Product product={item} />
+                    </SwiperSlide>
+                  </Col>
+                );
+              })}
+            </Swiper>
+          </div>
+        </section>
+      )}
+      <section className="my-8">
         <div className="p-50">
-          <h2 className="common-title">Quần short</h2>
-          <Row gutter={[12, 12]} className="list-product">
-            {data?.short.map((item: any) => {
-              return (
-                <Col xl={6} md={6} xs={12} key={item.id}>
-                  <Product product={item} />
-                </Col>
-              );
-            })}
+          <h2 className="common-title">Tin tức</h2>
+          <Row gutter={[16, 16]}>
+            {newsClient &&
+              newsClient.rows.slice(0, 3).map((item: News) => {
+                return (
+                  <Col xl={8} md={12} xs={24} key={item.id}>
+                    <div>
+                      <div
+                        className="cursor-pointer"
+                        onClick={() => {
+                          navigate(`/news/${item.slug}`);
+                        }}
+                      >
+                        <img
+                          src={item.thumbnail}
+                          alt=""
+                          className="w-full h-96"
+                        />
+                      </div>
+                      <div>
+                        <Link
+                          to={`/news/${item.slug}`}
+                          className="inline-block text-3xl font-medium mt-4"
+                        >
+                          {item.title}
+                        </Link>
+                      </div>
+                      <div className="flex justify-between mt-4 text-gray-600">
+                        <span className="inline-block text-2xl ">
+                          {item.creator}
+                        </span>
+                        <span>
+                          {moment(item.createdAt).format('MM/DD/YYYY hh:mm:ss')}
+                        </span>
+                      </div>
+                    </div>
+                  </Col>
+                );
+              })}
           </Row>
           <div className="view-all my-10">
-            <Link
-              to={`/product-category/${data?.short[0]?.productCategory?.slug}`}
-              className="text"
-            >
+            <Link to={`/news`} className="text">
               Xem tất cả
             </Link>
           </div>

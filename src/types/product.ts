@@ -11,6 +11,7 @@ export interface IProduct {
   name: string;
   code: string;
   slug: string;
+  totalStar: number;
   thumbnail: string;
   description: string;
   material: string;

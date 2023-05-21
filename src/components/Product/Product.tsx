@@ -286,7 +286,8 @@ const Product: React.FC<Props> = ({ product }) => {
                     className="flex text-center h-16 w-32 border border-solid border-l-0 border-r-0 border-border-variant px-4 outline-none"
                     value={quantity}
                     onChange={(e: any) => {
-                      setQuantity(+e.target.value);
+                      const value = e.target.value.replace(/\D/g, '');
+                      setQuantity(+value);
                     }}
                   />
 

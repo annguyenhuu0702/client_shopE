@@ -113,8 +113,9 @@ const TableOrder: React.FC = () => {
         return (
           <div>
             <span>
-              {record?.paymentItems?.map(
-                (item: IPaymentItem) => item?.quantity
+              {record?.paymentItems?.reduce(
+                (prev, acc) => prev + acc.quantity,
+                0
               )}
             </span>
           </div>

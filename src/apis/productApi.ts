@@ -8,6 +8,10 @@ import {
   IUpdateProduct,
 } from '../types/product';
 
+const getProductSelling = () => {
+  return instance.get(`product/getProductSelling`);
+};
+
 const getProductStar = () => {
   return instance.get(`product/getProductStar`);
 };
@@ -88,4 +92,5 @@ export const productApi = {
   getHomeAdmin,
   getProductSale,
   getProductStar,
+  getProductSelling,
 };

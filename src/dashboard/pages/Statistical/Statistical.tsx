@@ -9,11 +9,12 @@ import {
   Title,
   Tooltip,
 } from 'chart.js';
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { Line } from 'react-chartjs-2';
 import { useDispatch, useSelector } from 'react-redux';
 import { paymentApi } from '../../../apis/paymentApi';
 import { authSelector } from '../../../redux/slice/authSlice';
+import { castToVND } from '../../../utils';
 
 ChartJS.register(
   CategoryScale,
@@ -84,26 +85,39 @@ const Statistical: React.FC = () => {
     }
   };
 
+  const totalRevenue = useMemo(() => {
+    const totalPrice = data.reduce(
+      (prev, acc: any) => prev + parseInt(acc.total),
+      0
+    );
+    return totalPrice;
+  }, [data]);
+
   return (
     <div className="p-10 w-full">
-      <div className="w-[400px] flex gap-4">
-        <Select
-          placeholder="Chọn kiểu thống kê"
-          style={{ width: 300 }}
-          onChange={handleChange}
-          options={[
-            { value: 'month', label: 'Chọn tháng' },
-            { value: 'year', label: 'Chọn năm' },
-          ]}
-        />
-        <Button
-          className="px-10"
-          onClick={() => {
-            handleGetrevenue();
-          }}
-        >
-          Xem
-        </Button>
+      <div className="flex justify-between">
+        <div className="flex w-[400px] justify-between">
+          <Select
+            placeholder="Chọn kiểu thống kê"
+            style={{ width: 300 }}
+            onChange={handleChange}
+            options={[
+              { value: 'month', label: 'Chọn tháng' },
+              { value: 'year', label: 'Chọn năm' },
+            ]}
+          />
+          <Button
+            className="px-10"
+            onClick={() => {
+              handleGetrevenue();
+            }}
+          >
+            Xem
+          </Button>
+        </div>
+        <div className="flex items-center">
+          <span>Tổng doanh thu : {castToVND(totalRevenue)} </span>
+        </div>
       </div>
       {action !== '' && (
         <div className="w-[400px]  mt-4">

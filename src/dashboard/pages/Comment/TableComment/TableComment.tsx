@@ -83,29 +83,29 @@ const TableComment: React.FC = () => {
         return <div>{date}</div>;
       },
     },
-    {
-      title: 'Hành động',
-      dataIndex: 'action',
-      width: 100,
-      align: 'center' as AlignType,
-      render: (text: string, record: Comment) => {
-        return (
-          <Space size="middle">
-            <Popconfirm
-              placement="topLeft"
-              title={`Bạn có muốn xóa??`}
-              onConfirm={() => {
-                confirm(record);
-              }}
-              okText="Có"
-              cancelText="Không"
-            >
-              <DeleteOutlined className="common-icon-delete" />
-            </Popconfirm>
-          </Space>
-        );
-      },
-    },
+    // {
+    //   title: 'Hành động',
+    //   dataIndex: 'action',
+    //   width: 100,
+    //   align: 'center' as AlignType,
+    //   render: (text: string, record: Comment) => {
+    //     return (
+    //       <Space size="middle">
+    //         <Popconfirm
+    //           placement="topLeft"
+    //           title={`Bạn có muốn xóa??`}
+    //           onConfirm={() => {
+    //             confirm(record);
+    //           }}
+    //           okText="Có"
+    //           cancelText="Không"
+    //         >
+    //           <DeleteOutlined className="common-icon-delete" />
+    //         </Popconfirm>
+    //       </Space>
+    //     );
+    //   },
+    // },
   ];
 
   const onFinish = (values: any) => {

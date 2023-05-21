@@ -25,6 +25,9 @@ const HomePage = () => {
   // sản phẩm nhiều sao
   const [productStar, setProductStar] = useState<IProduct[]>([]);
 
+  // sản phẩm bán chạy
+  const [productSeller, setProductSeller] = useState<IProduct[]>([]);
+
   const { newsClient } = useSelector(newsSelector);
 
   useEffect(() => {
@@ -52,6 +55,21 @@ const HomePage = () => {
         }
       };
       getAllProductStar();
+    } catch (error) {
+      console.log(error);
+    }
+  }, []);
+
+  useEffect(() => {
+    try {
+      const getAllProductSelling = async () => {
+        const res = await productApi.getProductSelling();
+        const { data, status } = res;
+        if (status === 200) {
+          setProductSeller(data.data.rows);
+        }
+      };
+      getAllProductSelling();
     } catch (error) {
       console.log(error);
     }
@@ -103,6 +121,48 @@ const HomePage = () => {
           </SwiperSlide>
         </Swiper>
       </section>
+      {productSeller && productSeller.length > 0 && (
+        <section className="product-sale">
+          <div className="p-50">
+            <h2 className="common-title">Sản phẩm bán chạy</h2>
+            <Swiper
+              navigation={true}
+              modules={[Autoplay, Navigation]}
+              slidesPerView={4}
+              spaceBetween={10}
+              className="mySwiper"
+              breakpoints={{
+                340: {
+                  slidesPerView: 2,
+                  spaceBetween: 20,
+                },
+                640: {
+                  slidesPerView: 2,
+                  spaceBetween: 20,
+                },
+                768: {
+                  slidesPerView: 3,
+                  spaceBetween: 20,
+                },
+                1024: {
+                  slidesPerView: 4,
+                  spaceBetween: 20,
+                },
+              }}
+            >
+              {productSeller?.map((item: IProduct, index: number) => {
+                return (
+                  <Col key={index}>
+                    <SwiperSlide key={index}>
+                      <Product product={item} />
+                    </SwiperSlide>
+                  </Col>
+                );
+              })}
+            </Swiper>
+          </div>
+        </section>
+      )}
       {productStar && productStar.length > 0 && (
         <section className="product-sale">
           <div className="p-50">

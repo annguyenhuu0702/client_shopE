@@ -185,46 +185,46 @@ const TablePromotion: React.FC = () => {
         );
       },
     },
-    {
-      title: 'Hành động',
-      render: (text: string, record: Discount) => {
-        return (
-          <Space size="middle">
-            {/* <EditOutlined
-              className="common-icon-edit"
-              onClick={() => {
-                handleEditPromotion(record);
-              }}
-            /> */}
-            <Popconfirm
-              placement="topRight"
-              title={`Bạn có muốn xóa??`}
-              onConfirm={() => {
-                confirm(record);
-              }}
-              okText="Có"
-              cancelText="Không"
-              disabled={
-                date > moment(record?.endday).format('MM/DD/YYYY')
-                  ? false
-                  : true
-              }
-            >
-              {date > moment(record?.endday).format('MM/DD/YYYY') ? (
-                <DeleteOutlined className="common-icon-delete" />
-              ) : (
-                <Tooltip
-                  placement="topLeft"
-                  title="Sản phẩm đang trong chương trình khuyến mãi nên bạn không thể xóa"
-                >
-                  <DeleteOutlined className="common-icon-delete" />
-                </Tooltip>
-              )}
-            </Popconfirm>
-          </Space>
-        );
-      },
-    },
+    // {
+    //   title: 'Hành động',
+    //   render: (text: string, record: Discount) => {
+    //     return (
+    //       <Space size="middle">
+    //         {/* <EditOutlined
+    //           className="common-icon-edit"
+    //           onClick={() => {
+    //             handleEditPromotion(record);
+    //           }}
+    //         /> */}
+    //         <Popconfirm
+    //           placement="topRight"
+    //           title={`Bạn có muốn xóa??`}
+    //           onConfirm={() => {
+    //             confirm(record);
+    //           }}
+    //           okText="Có"
+    //           cancelText="Không"
+    //           disabled={
+    //             date > moment(record?.endday).format('MM/DD/YYYY')
+    //               ? false
+    //               : true
+    //           }
+    //         >
+    //           {date > moment(record?.endday).format('MM/DD/YYYY') ? (
+    //             <DeleteOutlined className="common-icon-delete" />
+    //           ) : (
+    //             <Tooltip
+    //               placement="topLeft"
+    //               title="Sản phẩm đang trong chương trình khuyến mãi nên bạn không thể xóa"
+    //             >
+    //               <DeleteOutlined className="common-icon-delete" />
+    //             </Tooltip>
+    //           )}
+    //         </Popconfirm>
+    //       </Space>
+    //     );
+    //   },
+    // },
   ];
 
   return (

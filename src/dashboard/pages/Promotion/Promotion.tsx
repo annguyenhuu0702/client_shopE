@@ -15,6 +15,7 @@ const Promotion: React.FC = () => {
   const dispatch = useDispatch();
   const { discount, page, pageSize } = useSelector(discountSelector);
   const { user } = useSelector(authSelector);
+
   useEffect(() => {
     dispatch(
       discountActions.getAllDiscount({

@@ -217,16 +217,20 @@ const Product: React.FC<Props> = ({ product }) => {
                 <div className={cx('name')}>
                   <Link to={`/${product.slug}`}>{product.name}</Link>
                 </div>
-                <div className={cx('price')}>
-                  <span className={cx('current')}>
-                    {castToVND(product.price)}
-                  </span>
-                  {product.priceSale > 0 && (
-                    <span className={cx('sale')}>
-                      {castToVND(product.priceSale)}
-                    </span>
-                  )}
-                </div>
+                {product?.priceSale > 0 ? (
+                  <div className={cx('price')}>
+                    <span className="">{castToVND(product.priceSale)}</span>
+                    {product.priceSale > 0 && (
+                      <span className={cx('sale')}>
+                        {castToVND(product.price)}
+                      </span>
+                    )}
+                  </div>
+                ) : (
+                  <div className={cx('price')}>
+                    <span>{castToVND(product.price)}</span>
+                  </div>
+                )}
                 {colors.length > 0 && (
                   <div className={cx('colors')}>
                     <h3>Màu sắc:</h3>

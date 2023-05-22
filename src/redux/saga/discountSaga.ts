@@ -36,6 +36,16 @@ function* createDiscountSaga({
     const { data: newData, status } = res;
     if (status === STATUS_CODE.CREATED) {
       yield put(discountActions.createDiscountSuccess(newData.data));
+      yield put(
+        discountActions.getAllDiscount({
+          token,
+          dispatch,
+          params: {
+            p: 1,
+            limit: 12,
+          },
+        })
+      );
       if (data.resetValues) {
         data.resetValues();
       }

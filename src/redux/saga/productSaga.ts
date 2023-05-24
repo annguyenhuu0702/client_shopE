@@ -5,6 +5,7 @@ import { productApi } from '../../apis/productApi';
 import { STATUS_CODE } from '../../constants';
 import { deleteParams, tokenPayloadData } from '../../types/common';
 import {
+  IActiveProduct,
   ICreateProduct,
   IGetAllProductByCategory,
   IGetAllProductParams,
@@ -18,7 +19,7 @@ function* getAllProductSaga({
 }: PayloadAction<IGetAllProductParams>): any {
   try {
     const res = yield call(() => {
-      return productApi.getAll(payload);
+      return productApi.getAllAdmin(payload);
     });
     const { data, status } = res;
     if (status === STATUS_CODE.SUCCESS) {
@@ -90,6 +91,42 @@ function* editProductSaga({
   } catch (err) {
     console.log(err);
     yield put(productActions.editProductFailed());
+    notification.error({
+      message: 'Thất bại',
+      description: 'Lỗi rồi!',
+      placement: 'bottomRight',
+      duration: 3,
+    });
+  }
+}
+
+function* activeProductSaga({
+  payload,
+}: PayloadAction<tokenPayloadData<IActiveProduct>>): any {
+  try {
+    const { token, dispatch, data, params } = payload;
+    const res = yield call(() => {
+      return productApi.activeProduct(token, dispatch, data);
+    });
+    const { status } = res;
+    if (status === STATUS_CODE.SUCCESS) {
+      yield put(productActions.activeProductSuccess());
+      yield put(
+        productActions.getAllProduct({
+          p: params?.p,
+          limit: params?.limit,
+        })
+      );
+      notification.success({
+        message: 'Thành công',
+        description: 'Sửa thành công',
+        placement: 'bottomRight',
+        duration: 3,
+      });
+    }
+  } catch (err) {
+    console.log(err);
+    yield put(productActions.activeProductFailed());
     notification.error({
       message: 'Thất bại',
       description: 'Lỗi rồi!',
@@ -187,6 +224,7 @@ function* productSaga() {
     getAllProductByCategoryClientSaga
   );
   yield takeEvery('product/getProductBySlugClient', getProductBySlugClient);
+  yield takeEvery('product/activeProduct', activeProductSaga);
 }
 
 export default productSaga;

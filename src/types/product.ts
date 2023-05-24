@@ -1,5 +1,5 @@
 import React from 'react';
-import { queryParams } from './common';
+import { queryParams, tokenPayload } from './common';
 import { IProductCategory } from './productCategory';
 import { IProductImage } from './productImage';
 import { IProductVariant } from './productVariant';
@@ -12,6 +12,7 @@ export interface IProduct {
   code: string;
   slug: string;
   totalStar: number;
+  isActive: boolean;
   thumbnail: string;
   description: string;
   material: string;
@@ -40,6 +41,11 @@ export interface ICreateProduct {
 }
 
 export interface IUpdateProduct extends ICreateProduct {
+  id: number;
+}
+
+export interface IActiveProduct {
+  isActive: boolean;
   id: number;
 }
 

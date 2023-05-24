@@ -19,7 +19,7 @@ import {
 import { AlignType } from 'rc-table/lib/interface';
 
 import moment from 'moment';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { utils, writeFileXLSX } from 'xlsx';
@@ -38,6 +38,9 @@ import { IProduct } from '../../../../types/product';
 import ModalProductImage from '../ProductImage/ProductImage';
 import ModalProductVariant from '../ProductVariant/ProductVariant';
 import { castToVND } from '../../../../utils';
+import { paymentApi } from '../../../../apis/paymentApi';
+import { Payment } from '../../../../types/payment';
+import { AiOutlineCheckSquare } from 'react-icons/ai';
 
 const { Text } = Typography;
 
@@ -47,6 +50,8 @@ const TableProduct: React.FC = () => {
   const [form] = Form.useForm();
 
   const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const [payment, setPayment] = useState<Payment[]>([]);
 
   const { products, isLoading, page, pageSize }: productState =
     useSelector(productSelector);
@@ -68,11 +73,11 @@ const TableProduct: React.FC = () => {
   };
 
   const columns = [
-    {
-      title: 'ID',
-      dataIndex: 'id',
-      width: 50,
-    },
+    // {
+    //   title: 'ID',
+    //   dataIndex: 'id',
+    //   width: 50,
+    // },
     {
       title: 'Mã sản phẩm',
       render: (text: string, record: IProduct) => {
@@ -105,9 +110,9 @@ const TableProduct: React.FC = () => {
           <div>
             <span
               className="cursor-pointer text-blue-600 hover:text-blue-400"
-              onClick={() => {
-                handleEditProduct(record);
-              }}
+              // onClick={() => {
+              //   handleEditProduct(record);
+              // }}
             >
               {record?.name}
             </span>
@@ -176,13 +181,24 @@ const TableProduct: React.FC = () => {
         );
       },
     },
+    // {
+    //   title: 'Ngày tạo',
+    //   width: 100,
+    //   align: 'center' as AlignType,
+    //   render: (text: string, record: IProduct) => {
+    //     let date = moment(record?.createdAt).format('MM/DD/YYYY');
+    //     return <div>{date}</div>;
+    //   },
+    // },
     {
-      title: 'Ngày tạo',
-      width: 100,
+      title: 'Trạng thái',
       align: 'center' as AlignType,
       render: (text: string, record: IProduct) => {
-        let date = moment(record?.createdAt).format('MM/DD/YYYY');
-        return <div>{date}</div>;
+        return record.isActive ? (
+          <Tag color="red">Ngừng kinh doanh</Tag>
+        ) : (
+          <Tag color="blue">Đang kinh doanh</Tag>
+        );
       },
     },
     {
@@ -190,14 +206,35 @@ const TableProduct: React.FC = () => {
       width: 100,
       align: 'center' as AlignType,
       render: (text: string, record: IProduct) => {
+        const check = payment.find((item: Payment) =>
+          item.paymentItems.some(
+            (p: any) => p.productVariant.product.id === record.id
+          )
+        );
         return (
           <Space size="middle">
-            <EditOutlined
-              className="common-icon-edit"
-              onClick={() => {
-                handleEditProduct(record);
-              }}
-            />
+            {!check && record.isActive === false && (
+              <EditOutlined
+                className="common-icon-edit"
+                onClick={() => {
+                  handleEditProduct(record);
+                }}
+              />
+            )}
+            {!check && record.isActive === false && (
+              <Popconfirm
+                placement="topRight"
+                title={`Bạn có muốn ngừng kinh doanh sản phẩm này!`}
+                onConfirm={() => {
+                  // confirm(record);
+                  handleActive(record);
+                }}
+                okText="Có"
+                cancelText="Không"
+              >
+                <AiOutlineCheckSquare className="common-icon-delete cursor-pointer" />
+              </Popconfirm>
+            )}
             {/* <Popconfirm
               placement="topRight"
               title={`Bạn có muốn xóa??`}
@@ -214,6 +251,25 @@ const TableProduct: React.FC = () => {
       },
     },
   ];
+
+  const handleActive = (record: IProduct) => {
+    if (user) {
+      dispatch(
+        productActions.activeProduct({
+          token: user.accessToken,
+          dispatch,
+          data: {
+            id: record.id,
+            isActive: true,
+          },
+          params: {
+            p: page,
+            limit: pageSize,
+          },
+        })
+      );
+    }
+  };
 
   const onFinish = (values: any) => {
     dispatch(
@@ -276,6 +332,24 @@ const TableProduct: React.FC = () => {
       console.log(error);
     }
   };
+
+  useEffect(() => {
+    (async () => {
+      const res = await paymentApi.getAllPaymentItem(
+        user.accessToken,
+        dispatch
+      );
+      const { data, status } = res;
+      if (status === 200) {
+        setPayment(data.data.rows);
+      }
+    })();
+    try {
+    } catch (error) {
+      console.log(error);
+    }
+  }, [dispatch, user.accessToken]);
+
   return (
     <React.Fragment>
       {isModal && <ModalProductImage />}

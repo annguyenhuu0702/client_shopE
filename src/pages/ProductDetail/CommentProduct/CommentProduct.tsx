@@ -176,7 +176,7 @@ const CommentProduct: React.FC = () => {
             })
           ) : (
             <div className="my-6 border border-solid border-gray-400 rounded-md">
-              <span className="flex justify-center text-3xl py-12">
+              <span className="flex justify-center text-3xl py-12 max-sm:px-4">
                 Hiện chưa có bình luận nào cho sản phẩm này!
               </span>
             </div>

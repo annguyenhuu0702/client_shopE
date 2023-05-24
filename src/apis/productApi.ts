@@ -2,6 +2,7 @@ import { AxiosResponse } from 'axios';
 import instance, { apiCallerWithToken } from '../config/configAxios';
 import { AppDispatch } from '../redux/store';
 import {
+  IActiveProduct,
   ICreateProduct,
   IGetAllProductByCategory,
   IGetAllProductParams,
@@ -26,6 +27,12 @@ const getHomePage = () => {
 
 const getAll = (params?: IGetAllProductParams) => {
   return instance.get(`product/getAll`, {
+    params,
+  });
+};
+
+const getAllAdmin = (params?: IGetAllProductParams) => {
+  return instance.get(`product/getAllAdmin`, {
     params,
   });
 };
@@ -65,6 +72,17 @@ const update = (
   );
 };
 
+const activeProduct = (
+  token: string | null,
+  dispatch: AppDispatch,
+  data: IActiveProduct
+): Promise<AxiosResponse> => {
+  return apiCallerWithToken(token, dispatch).put(
+    `product/activeProduct/${data.id}`,
+    data
+  );
+};
+
 const deleteProduct = (
   token: string | null,
   dispatch: AppDispatch,
@@ -93,4 +111,6 @@ export const productApi = {
   getProductSale,
   getProductStar,
   getProductSelling,
+  activeProduct,
+  getAllAdmin,
 };

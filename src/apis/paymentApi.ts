@@ -4,6 +4,13 @@ import { AppDispatch } from '../redux/store';
 import { createPayment, updatePayment } from '../types/payment';
 import { queryParams } from '../types/common';
 
+const getAllPaymentItem = (
+  token: string | null,
+  dispatch: AppDispatch
+): Promise<AxiosResponse> => {
+  return apiCallerWithToken(token, dispatch).get('/payment/getAllPaymentItem');
+};
+
 const getAll = (
   token: string | null,
   dispatch: AppDispatch,
@@ -97,4 +104,5 @@ export const paymentApi = {
   getRevenueMonth,
   getRevenueYear,
   create_url,
+  getAllPaymentItem,
 };

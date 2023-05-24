@@ -11,6 +11,7 @@ import {
   IGetAllProductParams,
   IGetAllProductByCategory,
   IGetProductBySlug,
+  IActiveProduct,
 } from '../../types/product';
 import { IProductCategory } from '../../types/productCategory';
 
@@ -233,6 +234,21 @@ const ProductSlice = createSlice({
     getFavoriteProductByUserFailed: (state) => {
       state.isLoadingClient = false;
       state.isErrorClient = true;
+    },
+
+    activeProduct: (
+      state,
+      action: PayloadAction<tokenPayloadData<IActiveProduct>>
+    ) => {
+      state.isLoading = true;
+    },
+    activeProductSuccess: (state) => {
+      state.isLoading = false;
+      state.isError = false;
+    },
+    activeProductFailed: (state) => {
+      state.isLoading = false;
+      state.isError = true;
     },
   },
 });

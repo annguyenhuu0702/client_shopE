@@ -55,9 +55,10 @@ export const apiCallerWithToken = (token: string | null, dispatch: any) => {
       }
       return config;
     },
-    (err) => {}
+    (err) => {
+      console.log(err);
+    }
   );
-
   return instance;
 };
 

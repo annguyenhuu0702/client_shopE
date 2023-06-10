@@ -108,6 +108,7 @@ const Sidebar: React.FC = () => {
         items={items}
         onClick={handleContent}
         selectedKeys={[location.pathname]}
+        defaultOpenKeys={items.map((item: any) => item.key as string)}
       />
     </section>
   );

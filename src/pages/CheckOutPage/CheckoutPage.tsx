@@ -41,8 +41,6 @@ const CheckoutPage: React.FC = () => {
   const itemOrder = JSON.parse(localStorage.getItem('order') || 'null');
   const isLogin = user.user ? true : false;
 
-  console.log(itemOrder);
-
   const initialValue = {
     fullname: user.user ? user.user.fullname : '',
     phone: user.user ? user.user.phone : '',

@@ -159,21 +159,23 @@ const HeaderTop: React.FC = () => {
             </div>
           </div>
 
-          <div
-            className={cx('cart')}
-            onClick={() => {
-              redirectCart();
-            }}
-          >
-            <Badge count={totalProduct} className="w-full h-full">
-              <BsBag
-                className="w-10 h-8 text-white"
-                onClick={() => {
-                  navigate(routes.cart);
-                }}
-              />
-            </Badge>
-          </div>
+          {user.user && (
+            <div
+              className={cx('cart')}
+              onClick={() => {
+                redirectCart();
+              }}
+            >
+              <Badge count={totalProduct} className="w-full h-full">
+                <BsBag
+                  className="w-10 h-8 text-white"
+                  onClick={() => {
+                    navigate(routes.cart);
+                  }}
+                />
+              </Badge>
+            </div>
+          )}
         </div>
       </div>
     </section>

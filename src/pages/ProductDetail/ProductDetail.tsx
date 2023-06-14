@@ -24,6 +24,7 @@ import { IProductVariant } from '../../types/productVariant';
 import { IVariantValue } from '../../types/variantValue';
 import CommentProduct from './CommentProduct/CommentProduct';
 import ProductRelated from './ProductRelated/ProductRelated';
+import { json } from 'stream/consumers';
 
 const ProductDetail: React.FC = ({ children }: any) => {
   const { user } = useSelector(authSelector);
@@ -112,6 +113,53 @@ const ProductDetail: React.FC = ({ children }: any) => {
               data: formData,
             })
           );
+        }
+      }
+    }
+  };
+
+  // khách chưa đăng nhập
+  const handleByNow = () => {
+    if (!selectedSize && selectedColor) {
+      message.open({
+        type: 'warning',
+        content: 'Vui lòng chọn kích thước sản phẩm',
+      });
+    }
+    if (selectedSize && !selectedColor) {
+      message.open({
+        type: 'warning',
+        content: 'Vui lòng chọn màu sắc sản phẩm',
+      });
+    }
+    if (!selectedSize && !selectedColor) {
+      message.open({
+        type: 'warning',
+        content: 'Vui lòng chọn kích thước và màu sắc sản phẩm',
+      });
+    }
+    if (currentProductClient && selectedColor && selectedSize) {
+      const productVariant = currentProductClient.productVariants.find((item) =>
+        item.variantValues.every(
+          (variantValue) =>
+            variantValue.id === selectedColor.id ||
+            variantValue.id === selectedSize.id
+        )
+      );
+      let formData;
+      if (productVariant) {
+        if (productVariant.inventory < quantity) {
+          message.warning({
+            type: 'warning',
+            content: 'Số lượng tồn không đủ!',
+          });
+        } else {
+          formData = {
+            productVariant,
+            quantity: quantity,
+          };
+          localStorage.setItem('order', JSON.stringify(formData));
+          navigate('/checkout');
         }
       }
     }
@@ -399,18 +447,33 @@ const ProductDetail: React.FC = ({ children }: any) => {
                       </p>
                     </div>
                   </div>
-                  <div className="my-8">
-                    <div
-                      className="inline-block"
-                      onClick={() => {
-                        handleAddToCart();
-                      }}
-                    >
-                      <button className="bg-btn-order flex items-center justify-center uppercase py-6 px-20 text-white text-2xl border-none outline-none rounded-xl cursor-pointer hover:bg-hover-btn-order">
-                        Thêm vào giỏ hàng
-                      </button>
+                  {user.user ? (
+                    <div className="my-8">
+                      <div
+                        className="inline-block"
+                        onClick={() => {
+                          handleAddToCart();
+                        }}
+                      >
+                        <button className="bg-btn-order flex items-center justify-center uppercase py-6 px-20 text-white text-2xl border-none outline-none rounded-xl cursor-pointer hover:bg-hover-btn-order">
+                          Thêm vào giỏ hàng
+                        </button>
+                      </div>
                     </div>
-                  </div>
+                  ) : (
+                    <div className="my-8">
+                      <div
+                        className="inline-block"
+                        onClick={() => {
+                          handleByNow();
+                        }}
+                      >
+                        <button className="bg-btn-order flex items-center justify-center uppercase py-6 px-20 text-white text-2xl border-none outline-none rounded-xl cursor-pointer hover:bg-hover-btn-order">
+                          Mua ngay
+                        </button>
+                      </div>
+                    </div>
+                  )}
                   <div>
                     <div className="flex justify-between mb-4">
                       <span className="font-bold">Mô tả</span>
@@ -510,9 +573,10 @@ const ProductDetail: React.FC = ({ children }: any) => {
               </Col>
             </Row>
           </section>
-          <section className="my-10">
+          {/* bình luận sản phẩm */}
+          {/* <section className="my-10">
             <CommentProduct />
-          </section>
+          </section> */}
           <section className="product-related">
             {productsRelatedClient.length > 1 && <ProductRelated />}
             <div className="view-all my-10">

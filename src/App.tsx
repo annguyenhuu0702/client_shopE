@@ -17,11 +17,13 @@ const App = () => {
 
   useEffect(() => {
     try {
-      const getProfile = async () => {
-        const data = await authApi.getProfile(user.accessToken, dispatch);
-        dispatch(authActions.getProfile(data.data.data));
-      };
-      getProfile();
+      if (user.accessToken) {
+        const getProfile = async () => {
+          const data = await authApi.getProfile(user.accessToken, dispatch);
+          dispatch(authActions.getProfile(data.data.data));
+        };
+        getProfile();
+      }
     } catch (error) {
       console.log(error);
     }

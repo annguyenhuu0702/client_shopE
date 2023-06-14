@@ -39,6 +39,10 @@ const create = (
   return apiCallerWithToken(token, dispatch).post('/payment/create', data);
 };
 
+const createNologin = (data: any): Promise<AxiosResponse> => {
+  return instance.post('/payment/create-nologin', data);
+};
+
 const update = (
   token: string | null,
   dispatch: AppDispatch,
@@ -105,4 +109,5 @@ export const paymentApi = {
   getRevenueYear,
   create_url,
   getAllPaymentItem,
+  createNologin,
 };

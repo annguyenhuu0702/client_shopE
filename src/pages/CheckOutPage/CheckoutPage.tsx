@@ -27,6 +27,7 @@ const CheckoutPage: React.FC = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { user } = useSelector(authSelector);
+
   const [form] = Form.useForm();
 
   const [value, setValue] = useState(0);
@@ -36,6 +37,11 @@ const CheckoutPage: React.FC = () => {
   const [districts, setDistricts] = useState([]);
   const [wards, setWards] = useState([]);
   const { cart } = useSelector(cartSelector);
+
+  const itemOrder = JSON.parse(localStorage.getItem('order') || 'null');
+  const isLogin = user.user ? true : false;
+
+  console.log(itemOrder);
 
   const initialValue = {
     fullname: user.user ? user.user.fullname : '',
@@ -67,7 +73,7 @@ const CheckoutPage: React.FC = () => {
           }
         }
       } else {
-        if (user) {
+        if (isLogin) {
           const res = await paymentApi.create(user.accessToken, dispatch, {
             ...values,
             isPaid: false,
@@ -78,6 +84,26 @@ const CheckoutPage: React.FC = () => {
           const { status } = res;
           if (status === 201) {
             navigate(routes.paymentSuccess);
+          } else {
+            notification.error({
+              message: 'Thất bại',
+              description: 'Có lỗi khi điền form dữ liệu!',
+              placement: 'bottomRight',
+              duration: 3,
+            });
+          }
+        } else {
+          const res = await paymentApi.createNologin({
+            ...values,
+            isPaid: true,
+            shippingCost,
+            totalPrice: totalPrice() + shippingCost - priceSale,
+            ...itemOrder,
+          });
+          const { status } = res;
+          if (status === 201) {
+            navigate(routes.paymentSuccess);
+            localStorage.removeItem('order');
           } else {
             notification.error({
               message: 'Thất bại',
@@ -124,6 +150,11 @@ const CheckoutPage: React.FC = () => {
   };
 
   const totalPrice = () => {
+    if (!isLogin) {
+      return itemOrder?.productVariant?.product?.priceSale > 0
+        ? itemOrder?.productVariant?.product?.priceSale * itemOrder.quantity
+        : itemOrder?.productVariant?.product?.price * itemOrder.quantity;
+    }
     let totalPrice =
       cart &&
       cart.cartItems.reduce(
@@ -341,7 +372,8 @@ const CheckoutPage: React.FC = () => {
               <div className="pb-8 border-solid border-0 border-b-2 border-white">
                 <h2 className="m-0">Đơn hàng ({totalProduct()} sản phẩm)</h2>
               </div>
-              {cart &&
+              {isLogin ? (
+                cart &&
                 cart.cartItems.map((cartItem) => {
                   let images =
                     cartItem.productVariant.product.productImages.filter(
@@ -387,43 +419,81 @@ const CheckoutPage: React.FC = () => {
                       </div>
                     </div>
                   );
-                })}
-              <div className="flex items-center justify-between mt-8 pb-4">
-                <div className="w-full mr-12">
-                  <Form.Item className="mb-0">
-                    <Input
-                      value={point}
-                      onChange={(e: any) => {
-                        setPoint(e.target.value);
-                      }}
-                      size="large"
-                      placeholder="Nhập điểm tích lũy của bạn"
-                    />
-                  </Form.Item>
+                })
+              ) : (
+                <div className="flex justify-between pt-8">
+                  <div className="flex">
+                    <div className="mr-6">
+                      <Badge count={itemOrder.quantity}>
+                        <img
+                          className="w-28 h-20 object-contain"
+                          src={itemOrder?.productVariant?.product?.thumbnail}
+                          alt=""
+                        />
+                      </Badge>
+                    </div>
+                    <div className="flex flex-col">
+                      <span className="text-2xl font-semibold">
+                        {itemOrder.productVariant.product.name}
+                      </span>
+                      <span className="text-xl">
+                        {itemOrder.productVariant.name}
+                      </span>
+                    </div>
+                  </div>
+                  <div className="flex items-center">
+                    <span className="text-2xl font-semibold">
+                      {castToVND(
+                        itemOrder.productVariant.product.priceSale > 0
+                          ? itemOrder.productVariant.product.priceSale
+                          : itemOrder.productVariant.product.price
+                      )}
+                    </span>
+                  </div>
                 </div>
-                <Form.Item className="mb-0">
-                  <Button
-                    type="primary"
-                    size="large"
-                    className="flex items-center justify-center w-44 text-white"
-                    onClick={() => {
-                      handleCheckPoint();
-                    }}
-                  >
-                    Áp dụng
-                  </Button>
-                </Form.Item>
-              </div>
-              <div className="flex flex-col pb-8 border-solid border-0 border-b-2 border-white">
-                <span className="text-2xl">
-                  Bạn hiện đang có <b>{user.user?.accumulatedPoints}</b> điểm.
-                </span>
-                {user.user && user.user?.accumulatedPoints > 0 && (
-                  <span className="text-2xl">
-                    Lưu ý: Chỉ có thể sử dụng tối đa 1000 điểm.
-                  </span>
-                )}
-              </div>
+              )}
+              {isLogin && (
+                <>
+                  <div className="flex items-center justify-between mt-8 pb-4">
+                    <div className="w-full mr-12">
+                      <Form.Item className="mb-0">
+                        <Input
+                          value={point}
+                          onChange={(e: any) => {
+                            setPoint(e.target.value);
+                          }}
+                          size="large"
+                          placeholder="Nhập điểm tích lũy của bạn"
+                        />
+                      </Form.Item>
+                    </div>
+                    <Form.Item className="mb-0">
+                      <Button
+                        type="primary"
+                        size="large"
+                        className="flex items-center justify-center w-44 text-white"
+                        onClick={() => {
+                          handleCheckPoint();
+                        }}
+                      >
+                        Áp dụng
+                      </Button>
+                    </Form.Item>
+                  </div>
+                  <div className="flex flex-col pb-8 border-solid border-0 border-b-2 border-white">
+                    <span className="text-2xl">
+                      Bạn hiện đang có <b>{user.user?.accumulatedPoints}</b>{' '}
+                      điểm.
+                    </span>
+                    {user.user && user.user?.accumulatedPoints > 0 && (
+                      <span className="text-2xl">
+                        Lưu ý: Chỉ có thể sử dụng tối đa 1000 điểm.
+                      </span>
+                    )}
+                  </div>
+                </>
+              )}
+
               <div className="mt-8 pb-8 border-solid border-0 border-b-2 border-white">
                 <div className="flex justify-between items-center text-2xl font-semibold mb-4">
                   <span>Tạm tính</span>
@@ -433,10 +503,12 @@ const CheckoutPage: React.FC = () => {
                   <span>Phí vận chuyển</span>
                   <span>{castToVND(shippingCost)}</span>
                 </div>
-                <div className="flex justify-between items-center text-2xl font-semibold">
-                  <span>Điểm tích lũy</span>
-                  <span>-{castToVND(priceSale)}</span>
-                </div>
+                {isLogin && (
+                  <div className="flex justify-between items-center text-2xl font-semibold">
+                    <span>Điểm tích lũy</span>
+                    <span>-{castToVND(priceSale)}</span>
+                  </div>
+                )}
               </div>
               <div className="mt-8 pb-8 border-solid border-0 border-b-2 border-white">
                 <div className="flex justify-between items-center ">

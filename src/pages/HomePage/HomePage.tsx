@@ -163,7 +163,7 @@ const HomePage = () => {
           </div>
         </section>
       )}
-      {productStar && productStar.length > 0 && (
+      {/* {productStar && productStar.length > 0 && (
         <section className="product-sale">
           <div className="p-50">
             <h2 className="common-title">Sản phẩm nổi bật</h2>
@@ -204,7 +204,7 @@ const HomePage = () => {
             </Swiper>
           </div>
         </section>
-      )}
+      )} */}
       {productSale && productSale.length > 0 && (
         <section className="product-sale">
           <div className="p-50">

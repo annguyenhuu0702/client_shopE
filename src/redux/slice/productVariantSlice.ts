@@ -4,6 +4,7 @@ import {
   ICreateProductVariant,
   IGetAllProductVariantParams,
   IProductVariant,
+  IupdateProductOutStock,
   IUpdateProductVariant,
 } from '../../types/productVariant';
 
@@ -96,6 +97,41 @@ const productVariantSlice = createSlice({
       state.isError = false;
     },
     editProductVariantFailed: (state) => {
+      state.isLoading = false;
+      state.isError = true;
+    },
+
+    getAllProductVariantOutStock: (
+      state,
+      action: PayloadAction<IGetAllProductVariantParams>
+    ) => {
+      state.isLoading = true;
+    },
+    getAllProductVariantOutStockSuccess: (
+      state,
+      action: PayloadAction<resProductVariant>
+    ) => {
+      state.isLoading = false;
+      state.isError = false;
+      state.productVariants.rows = action.payload.rows;
+      state.productVariants.count = action.payload.count;
+    },
+    getAllProductVariantOutStockFailed: (state) => {
+      state.isLoading = false;
+      state.isError = true;
+    },
+
+    editProductOutStock: (
+      state,
+      action: PayloadAction<tokenPayloadData<IupdateProductOutStock>>
+    ) => {
+      state.isLoading = true;
+    },
+    editProductOutStockSuccess: (state) => {
+      state.isLoading = false;
+      state.isError = false;
+    },
+    editProductOutStockFailed: (state) => {
       state.isLoading = false;
       state.isError = true;
     },

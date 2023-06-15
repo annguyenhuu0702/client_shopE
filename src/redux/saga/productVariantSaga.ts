@@ -8,8 +8,10 @@ import {
   ICreateProductVariant,
   IGetAllProductVariantParams,
   IUpdateProductVariant,
+  IupdateProductOutStock,
 } from '../../types/productVariant';
 import { productVariantActions } from '../slice/productVariantSlice';
+import { modalActions } from '../slice/modalSlice';
 
 function* getAllProductVariantSaga({
   payload,
@@ -25,6 +27,25 @@ function* getAllProductVariantSaga({
   } catch (err) {
     console.log(err);
     yield put(productVariantActions.getAllProductVariantFailed());
+  }
+}
+
+function* getAllProductVariantOutStockSaga({
+  payload,
+}: PayloadAction<IGetAllProductVariantParams>): any {
+  try {
+    const res = yield call(() => {
+      return productVariantApi.getAllProductOutStock(payload);
+    });
+    const { data, status } = res;
+    if (status === STATUS_CODE.SUCCESS) {
+      yield put(
+        productVariantActions.getAllProductVariantOutStockSuccess(data.data)
+      );
+    }
+  } catch (err) {
+    console.log(err);
+    yield put(productVariantActions.getAllProductVariantOutStockFailed());
   }
 }
 
@@ -69,6 +90,7 @@ function* editProductVariantSaga({
     const { status } = res;
     if (status === STATUS_CODE.SUCCESS) {
       yield put(productVariantActions.editProductVariantSuccess());
+
       notification.success({
         message: 'Thành công',
         description: 'Sửa thành công',
@@ -88,6 +110,46 @@ function* editProductVariantSaga({
   }
 }
 
+function* editProductOutStockSaga({
+  payload,
+}: PayloadAction<tokenPayloadData<IupdateProductOutStock>>): any {
+  try {
+    const { token, dispatch, data, params } = payload;
+    const res = yield call(() => {
+      return productVariantApi.updateInventory(token, dispatch, data);
+    });
+    const { status } = res;
+    if (status === STATUS_CODE.SUCCESS) {
+      yield put(productVariantActions.editProductOutStockSuccess());
+      if (data.resetValues) {
+        data.resetValues();
+      }
+      yield put(modalActions.hideModal());
+      yield put(
+        productVariantActions.getAllProductVariantOutStock({
+          p: params?.p,
+          limit: params?.limit,
+        })
+      );
+      notification.success({
+        message: 'Thành công',
+        description: 'Sửa thành công',
+        placement: 'bottomRight',
+        duration: 3,
+      });
+    }
+  } catch (err) {
+    console.log(err);
+    yield put(productVariantActions.editProductOutStockFailed());
+    notification.error({
+      message: 'Thất bại',
+      description: 'Lỗi rồi!',
+      placement: 'bottomRight',
+      duration: 3,
+    });
+  }
+}
+
 function* productVariantSaga() {
   yield takeEvery(
     'productVariant/createProductVariant',
@@ -98,6 +160,14 @@ function* productVariantSaga() {
     getAllProductVariantSaga
   );
   yield takeEvery('productVariant/editProductVariant', editProductVariantSaga);
+  yield takeEvery(
+    'productVariant/getAllProductVariantOutStock',
+    getAllProductVariantOutStockSaga
+  );
+  yield takeEvery(
+    'productVariant/editProductOutStock',
+    editProductOutStockSaga
+  );
 }
 
 export default productVariantSaga;

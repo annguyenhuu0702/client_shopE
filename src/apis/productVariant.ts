@@ -5,10 +5,17 @@ import {
   ICreateProductVariant,
   IGetAllProductVariantParams,
   IUpdateProductVariant,
+  IupdateProductOutStock,
 } from '../types/productVariant';
 
 const getAll = (params?: IGetAllProductVariantParams) => {
   return instance.get(`productVariant/getAll`, {
+    params,
+  });
+};
+
+const getAllProductOutStock = (params?: IGetAllProductVariantParams) => {
+  return instance.get(`productVariant/getAllProductOutOfStock`, {
     params,
   });
 };
@@ -32,8 +39,21 @@ const update = (
   return apiCallerWithToken(token, dispatch).put(`productVariant/update`, data);
 };
 
+const updateInventory = (
+  token: string | null,
+  dispatch: AppDispatch,
+  data: IupdateProductOutStock
+): Promise<AxiosResponse> => {
+  return apiCallerWithToken(token, dispatch).put(
+    `productVariant/updateInventory/${data.id}`,
+    data
+  );
+};
+
 export const productVariantApi = {
   create,
   getAll,
   update,
+  getAllProductOutStock,
+  updateInventory,
 };

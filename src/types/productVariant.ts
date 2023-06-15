@@ -31,3 +31,9 @@ export interface IUpdateProductVariant {
 export interface IGetAllProductVariantParams extends queryParams {
   productId?: number;
 }
+
+export interface IupdateProductOutStock {
+  id: number;
+  inventory: number;
+  resetValues?: Function;
+}

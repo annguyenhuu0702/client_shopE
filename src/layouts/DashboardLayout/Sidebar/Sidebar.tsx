@@ -58,7 +58,14 @@ const items: MenuItem[] = [
     ]
   ),
 
-  getItem('Tồn kho', routes.inventoryAdmin, <FaWarehouse />),
+  getItem('Tồn kho', 'inventory', <FaWarehouse />, [
+    getItem('Danh sách sản phẩm', routes.inventoryAdmin, <BiCategory />),
+    getItem(
+      'Sản phẩm sắp hết hàng',
+      '/inventory/product-out-stock',
+      <BiCategory />
+    ),
+  ]),
   getItem('Đơn hàng', routes.orderAdmmin, <AiOutlineBook />),
   getItem('Đánh giá', routes.commentAdmin, <BiComment />),
   getItem('Tin tức', routes.newsAdmin, <TbNews />),

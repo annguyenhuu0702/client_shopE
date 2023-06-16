@@ -57,6 +57,7 @@ export interface IGetAllProductParams extends queryParams {
   max?: string;
   sizesId?: string;
   colorsId?: string;
+  keyword?: string;
 }
 
 export interface IGetAllProductByCategory {

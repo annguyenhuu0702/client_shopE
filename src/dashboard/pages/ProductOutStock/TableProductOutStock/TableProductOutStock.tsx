@@ -147,8 +147,8 @@ const TableProductOutStock: React.FC = () => {
             createdAt: moment(item.createdAt).format('MM/DD/YYYY'),
           }))
         );
-        utils.book_append_sheet(wb, ws, 'Inventory');
-        writeFileXLSX(wb, 'Inventory.xlsx');
+        utils.book_append_sheet(wb, ws, 'InventoryProductStock');
+        writeFileXLSX(wb, 'InventoryProductStock.xlsx');
       };
       getAllProductVariant();
     } catch (error) {

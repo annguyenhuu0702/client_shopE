@@ -234,7 +234,7 @@ const HomePage = () => {
                 },
               }}
             >
-              {productSale?.map((item: IProduct, index: number) => {
+              {/* {productSale?.map((item: IProduct, index: number) => {
                 return (
                   <Col key={index}>
                     <SwiperSlide key={index}>
@@ -242,7 +242,35 @@ const HomePage = () => {
                     </SwiperSlide>
                   </Col>
                 );
-              })}
+              })} */}
+              {productSale
+                ?.slice()
+                ?.sort((a: IProduct, b: IProduct) => {
+                  const discountPercentA = (1 - a.priceSale / a.price) * 100;
+                  const discountPercentB = (1 - b.priceSale / b.price) * 100;
+
+                  // Sắp xếp theo giảm dần của phần trăm khuyến mãi
+                  if (discountPercentB !== discountPercentA) {
+                    return discountPercentB - discountPercentA;
+                  }
+
+                  // Nếu hai sản phẩm có cùng phần trăm khuyến mãi, ưu tiên sản phẩm có giá thấp hơn
+                  if (a.priceSale !== b.priceSale) {
+                    return a.priceSale - b.priceSale;
+                  }
+
+                  // Nếu cả phần trăm khuyến mãi và giá bằng nhau, sắp xếp theo thứ tự xuất hiện trong danh sách
+                  return 0;
+                })
+                ?.map((item: IProduct, index: number) => {
+                  return (
+                    <Col key={index}>
+                      <SwiperSlide key={index}>
+                        <Product product={item} />
+                      </SwiperSlide>
+                    </Col>
+                  );
+                })}
             </Swiper>
           </div>
         </section>

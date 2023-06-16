@@ -9,6 +9,12 @@ import {
   IUpdateProduct,
 } from '../types/product';
 
+const searchProduct = (params: IGetAllProductParams) => {
+  return instance.get(`product/search-product`, {
+    params,
+  });
+};
+
 const getProductSelling = () => {
   return instance.get(`product/getProductSelling`);
 };
@@ -113,4 +119,5 @@ export const productApi = {
   getProductSelling,
   activeProduct,
   getAllAdmin,
+  searchProduct,
 };

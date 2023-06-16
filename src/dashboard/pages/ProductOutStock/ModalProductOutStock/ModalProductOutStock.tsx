@@ -30,12 +30,15 @@ const ModalProductOutStock: React.FC = () => {
           (item) => item?.variantId === 1
         )?.name
       : '',
+
     inventory: currentProductVariant ? currentProductVariant.inventory : '',
     color: currentProductVariant
       ? currentProductVariant?.variantValues?.find(
           (item) => item?.variantId === 2
         )?.name
       : '',
+
+    addInventory: 1,
   };
 
   const [form] = Form.useForm();
@@ -58,8 +61,9 @@ const ModalProductOutStock: React.FC = () => {
 
   const onFinish = (values: any) => {
     const formData = {
-      inventory: values.inventory,
+      inventory: +values.inventory + +values.addInventory,
     };
+
     if (currentProductVariant) {
       dispatch(
         productVariantActions.editProductOutStock({
@@ -148,6 +152,22 @@ const ModalProductOutStock: React.FC = () => {
             </Col>
             <Col xl={12} md={12}>
               <Form.Item
+                label="Nhập thêm"
+                name="addInventory"
+                rules={[
+                  {
+                    pattern: /^(?:\d*)$/,
+                    message: 'Chỉ được nhập số',
+                  },
+                  {
+                    required: true,
+                    message: 'Vui lòng không bỏ trống!',
+                  },
+                ]}
+              >
+                <Input />
+              </Form.Item>
+              <Form.Item
                 label="Số lượng"
                 name="inventory"
                 rules={[
@@ -157,8 +177,9 @@ const ModalProductOutStock: React.FC = () => {
                   },
                 ]}
               >
-                <Input />
+                <Input disabled />
               </Form.Item>
+
               <Form.Item
                 label="Màu sắc"
                 name="color"

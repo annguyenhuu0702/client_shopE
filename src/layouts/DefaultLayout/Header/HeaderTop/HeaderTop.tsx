@@ -1,8 +1,7 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import styles from './__headerTop.module.scss';
-
 import { SearchOutlined } from '@ant-design/icons';
-import { Badge, Input } from 'antd';
+import { AutoComplete, Badge, Input } from 'antd';
 import classNames from 'classnames/bind';
 import { BiUserCircle } from 'react-icons/bi';
 import { BsBag } from 'react-icons/bs';
@@ -14,14 +13,21 @@ import { authActions, authSelector } from '../../../../redux/slice/authSlice';
 import { cartActions, cartSelector } from '../../../../redux/slice/cartSlice';
 import { favoriteProductActions } from '../../../../redux/slice/favoriteProductSlice';
 import Navigation from '../HeaderNavigation';
+import { productApi } from '../../../../apis/productApi';
+import unidecode from 'unidecode';
 
 const cx = classNames.bind(styles);
 
 const HeaderTop: React.FC = () => {
+  const [productName, setProductName] = useState<string[]>([]);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { cart } = useSelector(cartSelector);
   const { user } = useSelector(authSelector);
+
+  const normalizeString = (str: any) => {
+    return unidecode(str);
+  };
 
   const [serachProduct, setSearchProduct] = useState<string>('');
 
@@ -80,6 +86,21 @@ const HeaderTop: React.FC = () => {
     }
   }, [dispatch, user, user.accessToken]);
 
+  useEffect(() => {
+    try {
+      const fetchData = async () => {
+        const res = await productApi.getAllProductName();
+        const { data, status } = res;
+        if (status === 200) {
+          setProductName(data.data.rows);
+        }
+      };
+      fetchData();
+    } catch (error) {
+      console.log(error);
+    }
+  }, []);
+
   return (
     <section className={cx('header-top')}>
       <div className={cx('left')}>
@@ -94,7 +115,7 @@ const HeaderTop: React.FC = () => {
       </div>
       <div className={cx('right')}>
         <div className="custom-input">
-          <Input
+          {/* <Input
             value={serachProduct}
             onChange={(e) => {
               setSearchProduct(e.target.value);
@@ -111,7 +132,31 @@ const HeaderTop: React.FC = () => {
             }
             onPressEnter={handleSearchProduct}
             allowClear
-          />
+          /> */}
+
+          <AutoComplete
+            options={productName.map((name) => ({ value: name }))}
+            value={serachProduct}
+            onChange={(value) => setSearchProduct(value)}
+            placeholder="Bạn cần tìm gì..."
+            filterOption={(inputValue, option) =>
+              normalizeString(option!.value)
+                .toUpperCase()
+                .indexOf(normalizeString(inputValue).toUpperCase()) !== -1
+            }
+          >
+            <Input
+              size="large"
+              suffix={
+                <SearchOutlined
+                  className="cursor-pointer"
+                  onClick={handleSearchProduct}
+                />
+              }
+              onPressEnter={handleSearchProduct}
+              allowClear
+            />
+          </AutoComplete>
         </div>
         <div className={cx('group-icon')}>
           <div className={cx('account')}>

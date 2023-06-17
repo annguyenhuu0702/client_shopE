@@ -46,7 +46,10 @@ const SearchProductPage: React.FC = () => {
           const { data, status } = res;
           if (status === 200) {
             setIsLoading(false);
-            setData(data.data.rows);
+            const filteredData = data.data.rows.filter(
+              (item: IProduct) => item.isActive !== true
+            );
+            setData(filteredData);
           }
         }
       };

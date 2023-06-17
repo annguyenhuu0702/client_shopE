@@ -1,7 +1,7 @@
 import slugify from 'slugify';
 
-export const castToVND = (price: string | number) => {
-  price = price.toLocaleString('vi', { style: 'currency', currency: 'VND' });
+export const castToVND = (price?: string | number) => {
+  price = price?.toLocaleString('vi', { style: 'currency', currency: 'VND' });
   return price;
 };
 

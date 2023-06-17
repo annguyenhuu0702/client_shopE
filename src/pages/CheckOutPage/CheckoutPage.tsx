@@ -10,7 +10,7 @@ import {
   Select,
   Space,
 } from 'antd';
-import React, { useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { AiOutlineRollback } from 'react-icons/ai';
 import { FaMoneyBillAlt } from 'react-icons/fa';
 import { useDispatch, useSelector } from 'react-redux';
@@ -22,11 +22,17 @@ import { authSelector } from '../../redux/slice/authSlice';
 import { cartSelector } from '../../redux/slice/cartSlice';
 import { castToVND } from '../../utils';
 import { paymentApi } from '../../apis/paymentApi';
+import { TCoupon } from '../../types/coupon';
+import { coupontApi } from '../../apis/coupon';
 
 const CheckoutPage: React.FC = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { user } = useSelector(authSelector);
+
+  const [coupons, setCoupons] = useState<TCoupon[]>([]);
+
+  const [couponId, setCouponId] = useState<number>();
 
   const [form] = Form.useForm();
 
@@ -50,9 +56,37 @@ const CheckoutPage: React.FC = () => {
     street: user.user ? user.user.address : '',
     accumulatedPoints: 0,
     payment: 1,
+    couponId,
+  };
+
+  const handleChangeCity = (value: string) => {
+    const checkProvince: any = province.find(
+      (item: any) => item.name === value
+    );
+    if (checkProvince) {
+      setDistricts(checkProvince.districts);
+    }
+  };
+
+  const handleChangeDistrict = (value: string) => {
+    const checkDistrict: any = districts.find(
+      (item: any) => item.name === value
+    );
+    if (checkDistrict) {
+      setWards(checkDistrict.wards);
+    }
+  };
+
+  const handleChangeWard = (value: string) => {
+    // console.log(`selected ${value}`);
+  };
+
+  const onChange = (e: RadioChangeEvent) => {
+    setValue(e.target.value);
   };
 
   const onFinish = async (values: any) => {
+    console.log(couponId);
     try {
       if (value === 2) {
         const res = await paymentApi.create_url({
@@ -78,6 +112,7 @@ const CheckoutPage: React.FC = () => {
             point: +point,
             shippingCost,
             totalPrice: totalPrice() + shippingCost - priceSale,
+            couponId,
           });
           const { status } = res;
           if (status === 201) {
@@ -121,37 +156,11 @@ const CheckoutPage: React.FC = () => {
     console.log('Failed:', errorInfo);
   };
 
-  const handleChangeCity = (value: string) => {
-    const checkProvince: any = province.find(
-      (item: any) => item.name === value
-    );
-    if (checkProvince) {
-      setDistricts(checkProvince.districts);
-    }
-  };
-
-  const handleChangeDistrict = (value: string) => {
-    const checkDistrict: any = districts.find(
-      (item: any) => item.name === value
-    );
-    if (checkDistrict) {
-      setWards(checkDistrict.wards);
-    }
-  };
-
-  const handleChangeWard = (value: string) => {
-    // console.log(`selected ${value}`);
-  };
-
-  const onChange = (e: RadioChangeEvent) => {
-    setValue(e.target.value);
-  };
-
   const totalPrice = () => {
     if (!isLogin) {
       return itemOrder?.productVariant?.product?.priceSale > 0
-        ? itemOrder?.productVariant?.product?.priceSale * itemOrder.quantity
-        : itemOrder?.productVariant?.product?.price * itemOrder.quantity;
+        ? itemOrder?.productVariant?.product?.priceSale * itemOrder?.quantity
+        : itemOrder?.productVariant?.product?.price * itemOrder?.quantity;
     }
     let totalPrice =
       cart &&
@@ -168,7 +177,9 @@ const CheckoutPage: React.FC = () => {
     return totalPrice || 0;
   };
 
-  let shippingCost = totalPrice() > 499000 ? 0 : 30000;
+  // let shippingCost = totalPrice() > 499000 ? 0 : 30000;
+  // let shippingCost = 30000;
+  const [shippingCost, setShippingCost] = useState<number>(30000);
 
   const totalProduct = () => {
     let totalProduct =
@@ -205,6 +216,46 @@ const CheckoutPage: React.FC = () => {
       console.log(error);
     }
   };
+
+  const handleCheckCoupon = useCallback(() => {
+    // setCouponId(couponId);
+    try {
+      if (couponId) {
+        const checkCoupon = async () => {
+          const res = await coupontApi.checkCoupon(user.accessToken, dispatch, {
+            couponId,
+          });
+          const { data, status } = res;
+          if (status === 200 && data.message === 'freeship') {
+            setShippingCost(0);
+          }
+        };
+        checkCoupon();
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }, [couponId]);
+
+  useEffect(() => {
+    if (user.accessToken) {
+      try {
+        const fetchData = async () => {
+          const res = await coupontApi.getCouponByUser(
+            user.accessToken,
+            dispatch
+          );
+          const { data, status } = res;
+          if (status === 200) {
+            setCoupons(data.data.rows);
+          }
+        };
+        fetchData();
+      } catch (error) {
+        console.log(error);
+      }
+    }
+  }, []);
 
   useTitle('Thủ tục thanh toán');
 
@@ -422,7 +473,7 @@ const CheckoutPage: React.FC = () => {
                 <div className="flex justify-between pt-8">
                   <div className="flex">
                     <div className="mr-6">
-                      <Badge count={itemOrder.quantity}>
+                      <Badge count={itemOrder?.quantity}>
                         <img
                           className="w-28 h-20 object-contain"
                           src={itemOrder?.productVariant?.product?.thumbnail}
@@ -432,19 +483,19 @@ const CheckoutPage: React.FC = () => {
                     </div>
                     <div className="flex flex-col">
                       <span className="text-2xl font-semibold">
-                        {itemOrder.productVariant.product.name}
+                        {itemOrder?.productVariant?.product?.name}
                       </span>
                       <span className="text-xl">
-                        {itemOrder.productVariant.name}
+                        {itemOrder?.productVariant?.name}
                       </span>
                     </div>
                   </div>
                   <div className="flex items-center">
                     <span className="text-2xl font-semibold">
                       {castToVND(
-                        itemOrder.productVariant.product.priceSale > 0
-                          ? itemOrder.productVariant.product.priceSale
-                          : itemOrder.productVariant.product.price
+                        itemOrder?.productVariant?.product?.priceSale > 0
+                          ? itemOrder?.productVariant?.product?.priceSale
+                          : itemOrder?.productVariant?.product?.price
                       )}
                     </span>
                   </div>
@@ -489,6 +540,54 @@ const CheckoutPage: React.FC = () => {
                       </span>
                     )}
                   </div>
+
+                  {isLogin && (
+                    <div className="flex flex-col pb-8 mt-8 border-solid border-0 border-b-2 border-white">
+                      <Radio.Group
+                      // value={couponId}
+                      // onChange={(e) => {
+                      //   setCouponId(e.target.value);
+                      // }}
+                      >
+                        <Space direction="vertical">
+                          {coupons &&
+                            coupons.length > 0 &&
+                            coupons.map((item) => {
+                              return (
+                                <div
+                                  className="flex items-center justify-between  px-4 py-4 mb-4"
+                                  key={item?.id}
+                                  onClick={() => {
+                                    setCouponId(item.id);
+                                  }}
+                                >
+                                  <Radio value={item?.id}>
+                                    <div className="flex flex-col gap-4">
+                                      <span className="text-2xl">
+                                        {item?.name}
+                                      </span>
+                                      <span className="text-xl">
+                                        {item?.description}
+                                      </span>
+                                    </div>
+                                  </Radio>
+                                </div>
+                              );
+                            })}
+                        </Space>
+                      </Radio.Group>
+                      <div>
+                        <Button
+                          type="default"
+                          onClick={() => {
+                            handleCheckCoupon();
+                          }}
+                        >
+                          Xác nhận
+                        </Button>
+                      </div>
+                    </div>
+                  )}
                 </>
               )}
 

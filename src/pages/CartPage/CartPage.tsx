@@ -10,7 +10,6 @@ import { authSelector } from '../../redux/slice/authSlice';
 import { cartActions, cartSelector } from '../../redux/slice/cartSlice';
 import { CartItem } from '../../types/cartItem';
 import { castToVND } from '../../utils';
-import Loading from '../../components/Loading/Loading';
 
 const CartPage: React.FC = () => {
   const { cart, isLoading } = useSelector(cartSelector);
@@ -85,7 +84,7 @@ const CartPage: React.FC = () => {
       <Row className="lg:mb-20 ">
         <Col xl={18} md={17} xs={24}>
           <div className="px-16 py-32 bg-bg-cart max-lg:p-10 max-sm:p-8">
-            {totalPrice() >= 499000 && (
+            {/* {totalPrice() >= 499000 && (
               <div className="bg-white inline-flex text-lg font-sans rounded-xl mb-10 ">
                 <h2 className="m-0 font-normal flex items-center p-5 ">
                   <span className="p-4 rounded-full bg-teal-300 flex items-center justify-center mr-4">
@@ -94,7 +93,7 @@ const CartPage: React.FC = () => {
                   Bạn đủ điều kiện để nhận miễn phí vận chuyển
                 </h2>
               </div>
-            )}
+            )} */}
             <div className="pb-8">
               <h2 className="m-0 text-4xl ">({totalProduct()}) sản phẩm</h2>
             </div>

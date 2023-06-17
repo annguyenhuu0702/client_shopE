@@ -14,6 +14,20 @@ const getAll = (
   });
 };
 
+const getCouponByUser = (token: string | null, dispatch: AppDispatch) => {
+  return apiCallerWithToken(token, dispatch).get(`coupon/getCouponByUser`);
+};
+
+const checkCoupon = (
+  token: string | null,
+  dispatch: AppDispatch,
+  data: {
+    couponId: number;
+  }
+) => {
+  return apiCallerWithToken(token, dispatch).post(`coupon/check-coupon`, data);
+};
+
 const create = (
   token: string | null,
   dispatch: AppDispatch,
@@ -25,4 +39,6 @@ const create = (
 export const coupontApi = {
   getAll,
   create,
+  getCouponByUser,
+  checkCoupon,
 };

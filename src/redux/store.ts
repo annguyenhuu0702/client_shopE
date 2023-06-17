@@ -17,6 +17,7 @@ import discountReducer from './slice/discountSlice';
 import newsReducer from './slice/newsSlice';
 import commentReducer from './slice/commentSlice';
 import paymentReducer from './slice/paymentSlice';
+import couponReducer from './slice/couponSlice';
 
 const sagaMiddleware = createSagaMiddleware();
 
@@ -38,6 +39,7 @@ export const store = configureStore({
     news: newsReducer,
     comment: commentReducer,
     payment: paymentReducer,
+    coupon: couponReducer,
   },
   middleware: [sagaMiddleware],
 });

@@ -14,6 +14,7 @@ import discountSaga from './saga/discountSaga';
 import newsSaga from './saga/newsSaga';
 import commentSaga from './saga/commentSaga';
 import paymentSaga from './saga/PaymentSaga';
+import couponSaga from './saga/couponSaga';
 
 function* rootSaga() {
   yield all([
@@ -32,6 +33,7 @@ function* rootSaga() {
     newsSaga(),
     commentSaga(),
     paymentSaga(),
+    couponSaga(),
   ]);
 }
 

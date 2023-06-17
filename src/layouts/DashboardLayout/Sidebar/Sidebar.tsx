@@ -54,7 +54,7 @@ const items: MenuItem[] = [
       getItem('Sản phẩm', routes.productAdmin, <BiCube />),
       getItem('Kích thước', routes.sizeAdmin, <BiCube />),
       getItem('Màu sắc', routes.colorAdmin, <BiCube />),
-      getItem('Khuyến mãi', routes.promotionAdmin, <BiCube />),
+      // getItem('Khuyến mãi', routes.promotionAdmin, <BiCube />),
     ]
   ),
 
@@ -65,6 +65,10 @@ const items: MenuItem[] = [
       '/inventory/product-out-stock',
       <BiCategory />
     ),
+  ]),
+  getItem('Khuyến mãi', 'promotion', <FaWarehouse />, [
+    getItem('Khuyến mãi', routes.promotionAdmin, <BiCube />),
+    getItem('Coupon', '/admin/coupon', <BiCube />),
   ]),
   getItem('Đơn hàng', routes.orderAdmmin, <AiOutlineBook />),
   getItem('Đánh giá', routes.commentAdmin, <BiComment />),

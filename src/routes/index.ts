@@ -8,6 +8,7 @@ import {
 } from '../layouts';
 import { IRoute } from '../types/route';
 
+const Coupon = lazy(() => import('../dashboard/pages/Coupon/Coupon'));
 const ProductOutStock = lazy(
   () => import('../dashboard/pages/ProductOutStock/ProductOutStock')
 );
@@ -312,6 +313,12 @@ export const privateRoute: IRoute[] = [
   {
     path: '/inventory/product-out-stock',
     element: ProductOutStock,
+    layout: DashboardLayout,
+  },
+
+  {
+    path: '/admin/coupon',
+    element: Coupon,
     layout: DashboardLayout,
   },
 ];

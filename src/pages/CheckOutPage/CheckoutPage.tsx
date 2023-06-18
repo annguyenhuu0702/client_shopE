@@ -30,6 +30,10 @@ const CheckoutPage: React.FC = () => {
   const navigate = useNavigate();
   const { user } = useSelector(authSelector);
 
+  const [percent, setPercent] = useState<number>(1);
+
+  const [hideCoupon, setHideCoupon] = useState<boolean>(true);
+
   const [coupons, setCoupons] = useState<TCoupon[]>([]);
 
   const [couponId, setCouponId] = useState<number>();
@@ -86,8 +90,10 @@ const CheckoutPage: React.FC = () => {
   };
 
   const onFinish = async (values: any) => {
-    console.log(couponId);
     try {
+      const newTotal = totalPrice() + shippingCost - priceSale;
+      const totalFinish =
+        totalPrice() + shippingCost - priceSale - (newTotal * percent) / 100;
       if (value === 2) {
         const res = await paymentApi.create_url({
           amount: totalPrice() + shippingCost - priceSale,
@@ -100,7 +106,8 @@ const CheckoutPage: React.FC = () => {
               isPaid: true,
               point: +point,
               shippingCost,
-              totalPrice: totalPrice() + shippingCost - priceSale,
+              // totalPrice: totalPrice() + shippingCost - priceSale,
+              totalPrice: Math.ceil(totalFinish / 1000) * 1000,
             });
           }
         }
@@ -111,7 +118,8 @@ const CheckoutPage: React.FC = () => {
             isPaid: false,
             point: +point,
             shippingCost,
-            totalPrice: totalPrice() + shippingCost - priceSale,
+            // totalPrice: totalPrice() + shippingCost - priceSale,
+            totalPrice: Math.ceil(totalFinish / 1000) * 1000,
             couponId,
           });
           const { status } = res;
@@ -207,7 +215,9 @@ const CheckoutPage: React.FC = () => {
         );
         const status = res.status;
         if (status === 200) {
+          message.success('Dùng điểm thành công');
           setPriceSale(point * 100);
+          setHideCoupon(false);
         }
       }
     } catch (error) {
@@ -218,7 +228,6 @@ const CheckoutPage: React.FC = () => {
   };
 
   const handleCheckCoupon = useCallback(() => {
-    // setCouponId(couponId);
     try {
       if (couponId) {
         const checkCoupon = async () => {
@@ -227,7 +236,13 @@ const CheckoutPage: React.FC = () => {
           });
           const { data, status } = res;
           if (status === 200 && data.message === 'freeship') {
+            message.info('Thành công');
             setShippingCost(0);
+            setHideCoupon(false);
+          } else {
+            message.info('Thành công');
+            setPercent(data.data.percent);
+            setHideCoupon(false);
           }
         };
         checkCoupon();
@@ -503,52 +518,51 @@ const CheckoutPage: React.FC = () => {
               )}
               {isLogin && (
                 <>
-                  <div className="flex items-center justify-between mt-8 pb-4">
-                    <div className="w-full mr-12">
-                      <Form.Item className="mb-0">
-                        <Input
-                          value={point}
-                          onChange={(e: any) => {
-                            setPoint(e.target.value);
-                          }}
-                          size="large"
-                          placeholder="Nhập điểm tích lũy của bạn"
-                        />
-                      </Form.Item>
-                    </div>
-                    <Form.Item className="mb-0">
-                      <Button
-                        type="primary"
-                        size="large"
-                        className="flex items-center justify-center w-44 text-white"
-                        onClick={() => {
-                          handleCheckPoint();
-                        }}
-                      >
-                        Áp dụng
-                      </Button>
-                    </Form.Item>
-                  </div>
-                  <div className="flex flex-col pb-8 border-solid border-0 border-b-2 border-white">
-                    <span className="text-2xl">
-                      Bạn hiện đang có <b>{user.user?.accumulatedPoints}</b>{' '}
-                      điểm.
-                    </span>
-                    {user.user && user.user?.accumulatedPoints > 0 && (
-                      <span className="text-2xl">
-                        Lưu ý: Chỉ có thể sử dụng tối đa 1000 điểm.
-                      </span>
-                    )}
-                  </div>
+                  {hideCoupon && (
+                    <>
+                      <div className="flex items-center justify-between mt-8 pb-4">
+                        <div className="w-full mr-12">
+                          <Form.Item className="mb-0">
+                            <Input
+                              value={point}
+                              onChange={(e: any) => {
+                                setPoint(e.target.value);
+                              }}
+                              size="large"
+                              placeholder="Nhập điểm tích lũy của bạn"
+                            />
+                          </Form.Item>
+                        </div>
+                        <Form.Item className="mb-0">
+                          <Button
+                            type="primary"
+                            size="large"
+                            className="flex items-center justify-center w-44 text-white"
+                            onClick={() => {
+                              handleCheckPoint();
+                            }}
+                          >
+                            Áp dụng
+                          </Button>
+                        </Form.Item>
+                      </div>
+                      <div className="flex flex-col pb-8 border-solid border-0 border-b-2 border-white">
+                        <span className="text-2xl">
+                          Bạn hiện đang có <b>{user.user?.accumulatedPoints}</b>{' '}
+                          điểm.
+                        </span>
+                        {user.user && user.user?.accumulatedPoints > 0 && (
+                          <span className="text-2xl">
+                            Lưu ý: Chỉ có thể sử dụng tối đa 1000 điểm.
+                          </span>
+                        )}
+                      </div>
+                    </>
+                  )}
 
-                  {isLogin && (
+                  {isLogin && hideCoupon && (
                     <div className="flex flex-col pb-8 mt-8 border-solid border-0 border-b-2 border-white">
-                      <Radio.Group
-                      // value={couponId}
-                      // onChange={(e) => {
-                      //   setCouponId(e.target.value);
-                      // }}
-                      >
+                      <Radio.Group>
                         <Space direction="vertical">
                           {coupons &&
                             coupons.length > 0 &&
@@ -576,16 +590,18 @@ const CheckoutPage: React.FC = () => {
                             })}
                         </Space>
                       </Radio.Group>
-                      <div>
-                        <Button
-                          type="default"
-                          onClick={() => {
-                            handleCheckCoupon();
-                          }}
-                        >
-                          Xác nhận
-                        </Button>
-                      </div>
+                      {coupons.length > 0 && (
+                        <div>
+                          <Button
+                            type="default"
+                            onClick={() => {
+                              handleCheckCoupon();
+                            }}
+                          >
+                            Xác nhận
+                          </Button>
+                        </div>
+                      )}
                     </div>
                   )}
                 </>
@@ -611,7 +627,14 @@ const CheckoutPage: React.FC = () => {
                 <div className="flex justify-between items-center ">
                   <span className="text-2xl font-semibold mb-4">Tổng cộng</span>
                   <span className="text-4xl font-semibold mb-4 text-amber-500">
-                    {castToVND(totalPrice() + shippingCost - priceSale)}
+                    {isLogin && percent > 1
+                      ? castToVND(
+                          totalPrice() +
+                            shippingCost -
+                            priceSale -
+                            ((totalPrice() + shippingCost) * percent) / 100
+                        )
+                      : castToVND(totalPrice() + shippingCost - priceSale)}
                   </span>
                 </div>
               </div>

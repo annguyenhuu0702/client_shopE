@@ -68,6 +68,7 @@ function* editPaymentSaga({
   } catch (err) {
     console.log(err);
     yield put(paymentActions.editPaymentFailed());
+    // yield put(modalActions.hideModal());
     notification.error({
       message: 'Thất bại',
       description: 'Lỗi rồi!',

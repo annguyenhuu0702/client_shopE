@@ -63,12 +63,15 @@ const SearchProductPage: React.FC = () => {
   return (
     <main className="px-20 py-10 max-sm:px-4 max-sm:mt-24">
       {isLoading && <Loading />}
-      <section className="mb-4">
-        <span className="text-4xl">
-          <b>Kết quả tìm kiếm: {keyword}</b>
-        </span>
-      </section>
-      {data.length > 0 ? (
+      {isLoading && <span>Đang tìm kiếm, vui lòng đợi trong giây lát!</span>}
+      {!isLoading && (
+        <section className="mb-4">
+          <span className="text-4xl">
+            <b>Kết quả tìm kiếm: {keyword}</b>
+          </span>
+        </section>
+      )}
+      {!isLoading && data.length > 0 ? (
         <>
           <section>
             <Row gutter={[16, 16]}>
@@ -107,11 +110,13 @@ const SearchProductPage: React.FC = () => {
           )} */}
         </>
       ) : (
-        <div className="text-center my-8">
-          <span className="text-3xl font-semibold">
-            Không tìm thấy sản phẩm
-          </span>
-        </div>
+        !isLoading && (
+          <div className="text-center my-8">
+            <span className="text-3xl font-semibold">
+              Không tìm thấy sản phẩm
+            </span>
+          </div>
+        )
       )}
     </main>
   );

@@ -96,13 +96,13 @@ const CheckoutPage: React.FC = () => {
         totalPrice() + shippingCost - priceSale - (newTotal * percent) / 100;
       if (value === 2) {
         const res = await paymentApi.create_url({
-          amount: totalPrice() + shippingCost - priceSale,
+          amount: Math.ceil(totalFinish / 1000) * 1000,
         });
         if (res.status === 200) {
-          window.location.href = res.data;
           if (user) {
             await paymentApi.create(user.accessToken, dispatch, {
               ...values,
+              couponId,
               isPaid: true,
               point: +point,
               shippingCost,
@@ -110,6 +110,7 @@ const CheckoutPage: React.FC = () => {
               totalPrice: Math.ceil(totalFinish / 1000) * 1000,
             });
           }
+          window.location.href = res.data;
         }
       } else {
         if (isLogin) {

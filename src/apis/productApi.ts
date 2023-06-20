@@ -9,6 +9,19 @@ import {
   IUpdateProduct,
 } from '../types/product';
 
+const productRecommendationsbyUser = (
+  token: string | null,
+  dispatch: AppDispatch
+) => {
+  return apiCallerWithToken(token, dispatch).get(
+    `product/productRecommendationsbyUser`
+  );
+};
+
+const getAllProductCategoryId = () => {
+  return instance.get(`product/getAllProductCategoryId`);
+};
+
 const getAllProductName = () => {
   return instance.get(`product/getAllProductName`);
 };
@@ -125,4 +138,6 @@ export const productApi = {
   getAllAdmin,
   searchProduct,
   getAllProductName,
+  getAllProductCategoryId,
+  productRecommendationsbyUser,
 };

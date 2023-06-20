@@ -96,7 +96,7 @@ const Inventory: React.FC = () => {
             >
               đây
             </Link>{' '}
-            đi trang nhập thêm sản phẩm tồn kho
+            để đi đến trang nhập thêm sản phẩm tồn kho
           </span>
         </Modal>
       </>

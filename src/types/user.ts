@@ -19,6 +19,7 @@ export interface IUser {
   accumulatedPoints: number;
   role: string;
   key?: React.Key | string | number;
+  suggestion: number[];
   resetValues?: Function;
 }
 
@@ -42,6 +43,11 @@ export interface IUpdateUser {
   gender: boolean;
   accumulatedPoints: number;
   resetValues?: Function;
+}
+
+export interface IUpdateSuggestion {
+  id: number;
+  suggestion: number[];
 }
 
 export interface IGetAllUser extends tokenPayload {

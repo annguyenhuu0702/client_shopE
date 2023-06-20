@@ -2,7 +2,18 @@ import { AxiosResponse } from 'axios';
 import { apiCallerWithToken } from '../config/configAxios';
 import { AppDispatch } from '../redux/store';
 import { queryParams } from '../types/common';
-import { ICreateUser, IUpdateUser } from '../types/user';
+import { ICreateUser, IUpdateSuggestion, IUpdateUser } from '../types/user';
+
+const updateSuggestion = (
+  token: string | null,
+  dispatch: AppDispatch,
+  user: IUpdateSuggestion
+): Promise<AxiosResponse> => {
+  return apiCallerWithToken(token, dispatch).put(
+    `user/updateSuggestion/${user.id}`,
+    user
+  );
+};
 
 const getAll = (
   token: string | null,
@@ -46,4 +57,5 @@ export const userApi = {
   create,
   update,
   deleteUser,
+  updateSuggestion,
 };

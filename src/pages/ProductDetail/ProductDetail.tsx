@@ -579,14 +579,16 @@ const ProductDetail: React.FC = ({ children }: any) => {
           </section> */}
           <section className="product-related">
             {productsRelatedClient.length > 1 && <ProductRelated />}
-            <div className="view-all my-10">
-              <Link
-                to={`/product-category/${currentProductClient.productCategory.slug}`}
-                className="text"
-              >
-                Xem tất cả
-              </Link>
-            </div>
+            {productsRelatedClient.length > 1 && (
+              <div className="view-all my-10">
+                <Link
+                  to={`/product-category/${currentProductClient.productCategory.slug}`}
+                  className="text"
+                >
+                  Xem tất cả
+                </Link>
+              </div>
+            )}
           </section>
         </div>
       </div>

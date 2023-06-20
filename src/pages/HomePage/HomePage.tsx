@@ -14,21 +14,36 @@ import { useDispatch, useSelector } from 'react-redux';
 import { newsActions, newsSelector } from '../../redux/slice/newsSlice';
 import moment from 'moment';
 import { News } from '../../types/news';
+import { authSelector } from '../../redux/slice/authSlice';
+import ModalRecommen from './ModalRecommen/ModalRecommen';
 
 const HomePage = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
+  const { user } = useSelector(authSelector);
+
+  const [isOpenModal, setIsOpenModal] = useState<boolean>(false);
+
   // sản phẩm khuyến mãi
   const [productSale, setProductSale] = useState<IProduct[]>([]);
-
-  // sản phẩm nhiều sao
-  const [productStar, setProductStar] = useState<IProduct[]>([]);
 
   // sản phẩm bán chạy
   const [productSeller, setProductSeller] = useState<IProduct[]>([]);
 
+  // gợi ý sản phẩm theo user
+
+  const [productUser, setProductUser] = useState<IProduct[]>([]);
+
   const { newsClient } = useSelector(newsSelector);
+
+  const onCloseModal = () => {
+    setIsOpenModal(false);
+  };
+
+  const onOkModal = () => {
+    setIsOpenModal(false);
+  };
 
   useEffect(() => {
     try {
@@ -40,21 +55,6 @@ const HomePage = () => {
         }
       };
       getAllProductSale();
-    } catch (error) {
-      console.log(error);
-    }
-  }, []);
-
-  useEffect(() => {
-    try {
-      const getAllProductStar = async () => {
-        const res = await productApi.getProductStar();
-        const { data, status } = res;
-        if (status === 200) {
-          setProductStar(data.data.rows);
-        }
-      };
-      getAllProductStar();
     } catch (error) {
       console.log(error);
     }
@@ -76,12 +76,50 @@ const HomePage = () => {
   }, []);
 
   useEffect(() => {
+    if (user) {
+      if (user.user !== null && user.user.suggestion.length === 0) {
+        setIsOpenModal(true);
+      }
+    }
+  }, [user]);
+
+  useEffect(() => {
+    try {
+      const getAllProductUser = async () => {
+        const res = await productApi.productRecommendationsbyUser(
+          user.accessToken,
+          dispatch
+        );
+        const { data, status } = res;
+        if (status === 200) {
+          setProductUser(data.data.rows);
+        }
+      };
+      getAllProductUser();
+    } catch (error) {
+      console.log(error);
+    }
+  }, [user, user?.user?.suggestion]);
+
+  // tin tức
+  useEffect(() => {
     dispatch(newsActions.getAllNewsClient({}));
   }, [dispatch]);
 
   useTitle('CANIFA');
   return (
     <main className="home-page">
+      {isOpenModal && (
+        <ModalRecommen
+          isModalOpen={isOpenModal}
+          handleOk={() => {
+            onOkModal();
+          }}
+          handleCancel={() => {
+            onCloseModal();
+          }}
+        />
+      )}
       <section className="max-sm:mt-24">
         <Swiper
           navigation={true}
@@ -121,6 +159,50 @@ const HomePage = () => {
           </SwiperSlide>
         </Swiper>
       </section>
+
+      {productUser && productUser.length > 0 && (
+        <section className="product-sale">
+          <div className="p-50">
+            <h2 className="common-title">Có thể bạn quan tâm</h2>
+            <Swiper
+              navigation={true}
+              modules={[Autoplay, Navigation]}
+              slidesPerView={4}
+              spaceBetween={10}
+              className="mySwiper"
+              breakpoints={{
+                340: {
+                  slidesPerView: 2,
+                  spaceBetween: 20,
+                },
+                640: {
+                  slidesPerView: 2,
+                  spaceBetween: 20,
+                },
+                768: {
+                  slidesPerView: 3,
+                  spaceBetween: 20,
+                },
+                1024: {
+                  slidesPerView: 4,
+                  spaceBetween: 20,
+                },
+              }}
+            >
+              {productUser?.map((item: IProduct, index: number) => {
+                return (
+                  <Col key={index}>
+                    <SwiperSlide key={index}>
+                      <Product product={item} />
+                    </SwiperSlide>
+                  </Col>
+                );
+              })}
+            </Swiper>
+          </div>
+        </section>
+      )}
+
       {productSeller && productSeller.length > 0 && (
         <section className="product-sale">
           <div className="p-50">
@@ -163,48 +245,7 @@ const HomePage = () => {
           </div>
         </section>
       )}
-      {/* {productStar && productStar.length > 0 && (
-        <section className="product-sale">
-          <div className="p-50">
-            <h2 className="common-title">Sản phẩm nổi bật</h2>
-            <Swiper
-              navigation={true}
-              modules={[Autoplay, Navigation]}
-              slidesPerView={4}
-              spaceBetween={10}
-              className="mySwiper"
-              breakpoints={{
-                340: {
-                  slidesPerView: 2,
-                  spaceBetween: 20,
-                },
-                640: {
-                  slidesPerView: 2,
-                  spaceBetween: 20,
-                },
-                768: {
-                  slidesPerView: 3,
-                  spaceBetween: 20,
-                },
-                1024: {
-                  slidesPerView: 4,
-                  spaceBetween: 20,
-                },
-              }}
-            >
-              {productStar?.map((item: IProduct, index: number) => {
-                return (
-                  <Col key={index}>
-                    <SwiperSlide key={index}>
-                      <Product product={item} />
-                    </SwiperSlide>
-                  </Col>
-                );
-              })}
-            </Swiper>
-          </div>
-        </section>
-      )} */}
+
       {productSale && productSale.length > 0 && (
         <section className="product-sale">
           <div className="p-50">

@@ -347,13 +347,15 @@ const ProductCategoryPage: React.FC = () => {
               )}
             </Col>
           ) : (
-            <Col xl={20} md={18} xs={24}>
-              <div className="flex items-center justify-center">
-                <span className="text-3xl font-semibold">
-                  Sản phẩm này tạm thời hết hàng!
-                </span>
-              </div>
-            </Col>
+            !isLoadingClient && (
+              <Col xl={20} md={18} xs={24}>
+                <div className="flex items-center justify-center">
+                  <span className="text-3xl font-semibold">
+                    Sản phẩm này tạm thời hết hàng!
+                  </span>
+                </div>
+              </Col>
+            )
           )}
         </Row>
       </section>

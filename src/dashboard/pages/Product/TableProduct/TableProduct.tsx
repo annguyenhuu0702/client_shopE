@@ -378,6 +378,7 @@ const TableProduct: React.FC = () => {
               >
                 <Select style={{ width: 120, borderRadius: '5px' }}>
                   <Select.Option value="name">Tên</Select.Option>
+                  <Select.Option value="code">Mã sản phẩm</Select.Option>
                 </Select>
               </Form.Item>
               <Form.Item name="search">

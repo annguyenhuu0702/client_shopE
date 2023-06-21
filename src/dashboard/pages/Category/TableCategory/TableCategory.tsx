@@ -96,7 +96,7 @@ const TableCategory: React.FC = () => {
                 handleEditCategory(record);
               }}
             />
-            <Popconfirm
+            {/* <Popconfirm
               placement="topRight"
               title={`Bạn có muốn xóa??`}
               onConfirm={() => {
@@ -106,7 +106,7 @@ const TableCategory: React.FC = () => {
               cancelText="Không"
             >
               <DeleteOutlined className="common-icon-delete" />
-            </Popconfirm>
+            </Popconfirm> */}
           </Space>
         );
       },

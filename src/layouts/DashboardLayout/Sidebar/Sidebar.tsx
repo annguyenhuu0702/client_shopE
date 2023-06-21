@@ -71,7 +71,7 @@ const items: MenuItem[] = [
     getItem('Coupon', '/admin/coupon', <BiCube />),
   ]),
   getItem('Đơn hàng', routes.orderAdmmin, <AiOutlineBook />),
-  getItem('Đánh giá', routes.commentAdmin, <BiComment />),
+  // getItem('Đánh giá', routes.commentAdmin, <BiComment />),
   getItem('Tin tức', routes.newsAdmin, <TbNews />),
   getItem('Thống kê', routes.statisticalAdmin, <AiOutlineBarChart />),
 ];

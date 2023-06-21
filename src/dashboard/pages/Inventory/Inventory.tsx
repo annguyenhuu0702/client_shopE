@@ -41,8 +41,6 @@ const Inventory: React.FC = () => {
     }
   };
 
-  console.log(hasLowInventory());
-
   useEffect(() => {
     dispatch(
       productVariantActions.getAllProductVariant({

@@ -24,7 +24,6 @@ import { IProductVariant } from '../../types/productVariant';
 import { IVariantValue } from '../../types/variantValue';
 import CommentProduct from './CommentProduct/CommentProduct';
 import ProductRelated from './ProductRelated/ProductRelated';
-import { json } from 'stream/consumers';
 
 const ProductDetail: React.FC = ({ children }: any) => {
   const { user } = useSelector(authSelector);

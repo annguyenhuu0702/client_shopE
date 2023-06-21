@@ -87,7 +87,7 @@ const TableSize: React.FC = () => {
                 handleEditSize(record);
               }}
             />
-            <Popconfirm
+            {/* <Popconfirm
               placement="topLeft"
               title={`Bạn có muốn xóa??`}
               onConfirm={() => {
@@ -97,7 +97,7 @@ const TableSize: React.FC = () => {
               cancelText="Không"
             >
               <DeleteOutlined className="common-icon-delete" />
-            </Popconfirm>
+            </Popconfirm> */}
           </Space>
         );
       },

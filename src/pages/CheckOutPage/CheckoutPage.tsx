@@ -95,20 +95,50 @@ const CheckoutPage: React.FC = () => {
       const totalFinish =
         totalPrice() + shippingCost - priceSale - (newTotal * percent) / 100;
       if (value === 2) {
-        const res = await paymentApi.create_url({
-          amount: Math.ceil(totalFinish / 1000) * 1000,
-        });
-        if (res.status === 200) {
-          if (user) {
-            await paymentApi.create(user.accessToken, dispatch, {
+        if (isLogin) {
+          const res = await paymentApi.create_url({
+            amount: Math.ceil(totalFinish / 1000) * 1000,
+          });
+          if (res.status === 200) {
+            if (user) {
+              await paymentApi.create(user.accessToken, dispatch, {
+                ...values,
+                couponId,
+                isPaid: true,
+                point: +point,
+                shippingCost,
+                // totalPrice: totalPrice() + shippingCost - priceSale,
+                totalPrice: Math.ceil(totalFinish / 1000) * 1000,
+              });
+            }
+            window.location.href = res.data;
+          }
+        } else {
+          const res = await paymentApi.create_url({
+            amount:
+              Math.ceil((totalPrice() + shippingCost - priceSale) / 1000) *
+              1000,
+          });
+          if (res.status === 200) {
+            const res = await paymentApi.createNologin({
               ...values,
-              couponId,
               isPaid: true,
-              point: +point,
               shippingCost,
-              // totalPrice: totalPrice() + shippingCost - priceSale,
-              totalPrice: Math.ceil(totalFinish / 1000) * 1000,
+              totalPrice: totalPrice() + shippingCost - priceSale,
+              ...itemOrder,
             });
+            const { status } = res;
+            if (status === 201) {
+              navigate(routes.paymentSuccess);
+              localStorage.removeItem('order');
+            } else {
+              notification.error({
+                message: 'Thất bại',
+                description: 'Có lỗi khi điền form dữ liệu!',
+                placement: 'bottomRight',
+                duration: 3,
+              });
+            }
           }
           window.location.href = res.data;
         }

@@ -113,7 +113,7 @@ const TableProductCategory: React.FC = () => {
                 handleEditProductCategory(record);
               }}
             />
-            <Popconfirm
+            {/* <Popconfirm
               placement="topRight"
               title={`Bạn có muốn xóa??`}
               onConfirm={() => {
@@ -123,7 +123,7 @@ const TableProductCategory: React.FC = () => {
               cancelText="Không"
             >
               <DeleteOutlined className="common-icon-delete" />
-            </Popconfirm>
+            </Popconfirm> */}
           </Space>
         );
       },

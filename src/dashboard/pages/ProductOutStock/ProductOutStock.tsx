@@ -29,7 +29,7 @@ const ProductOutStock: React.FC = () => {
   useTitle('Tồn kho');
   return (
     <main className="section-common">
-      <HeaderTitle title="Tồn kho" />
+      <HeaderTitle title="Tồn kho (Các sản phẩm có số lượng dưới 40)" />
       <Content className="common-layout-content-cus">
         <div className="common-content-wrap">
           <div className="common-content">

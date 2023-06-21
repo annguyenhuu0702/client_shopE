@@ -108,7 +108,7 @@ const TableCollection: React.FC = () => {
                 handleEditCollection(record);
               }}
             />
-            <Popconfirm
+            {/* <Popconfirm
               placement="topRight"
               title={`Bạn có muốn xóa??`}
               onConfirm={() => {
@@ -118,7 +118,7 @@ const TableCollection: React.FC = () => {
               cancelText="Không"
             >
               <DeleteOutlined className="common-icon-delete" />
-            </Popconfirm>
+            </Popconfirm> */}
           </Space>
         );
       },

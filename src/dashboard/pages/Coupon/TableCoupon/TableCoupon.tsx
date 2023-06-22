@@ -1,5 +1,5 @@
 import { DownloadOutlined } from '@ant-design/icons';
-import { Button, Col, Form, Input, Row, Select, Table } from 'antd';
+import { Button, Col, Form, Input, Row, Select, Table, Tag } from 'antd';
 import moment from 'moment';
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -26,6 +26,8 @@ const TableCoupon: React.FC = () => {
   const { coupon, isLoading, page, pageSize } = useSelector(couponSelector);
   const { user } = useSelector(authSelector);
 
+  let date = moment(Date.now()).format('MM/DD/YYYY');
+
   const [form] = Form.useForm();
 
   const columns = [
@@ -51,7 +53,7 @@ const TableCoupon: React.FC = () => {
       render: (text: string, record: TCoupon) => {
         return (
           <div>
-            <span>{record?.name}</span>
+            <span>{record?.type}</span>
           </div>
         );
       },
@@ -88,6 +90,21 @@ const TableCoupon: React.FC = () => {
       render: (text: string, record: TCoupon) => {
         let date = moment(record?.endday).format('MM/DD/YYYY');
         return <div>{date}</div>;
+      },
+    },
+
+    {
+      title: 'Trạng thái',
+      render: (text: string, record: TCoupon) => {
+        return (
+          <div>
+            {date > moment(record?.endday).format('MM/DD/YYYY') ? (
+              <Tag color="red">Kết thúc</Tag>
+            ) : (
+              <Tag color="green">Đang chạy</Tag>
+            )}
+          </div>
+        );
       },
     },
 

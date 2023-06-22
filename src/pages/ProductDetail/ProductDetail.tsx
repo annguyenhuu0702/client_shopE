@@ -435,7 +435,8 @@ const ProductDetail: React.FC = ({ children }: any) => {
                     <div className="flex items-center mb-2">
                       <AiOutlineCheck />
                       <p className="m-0 pl-4">
-                        Miễn phí giao hàng Cho đơn hàng từ <b>499.000đ</b>
+                        {/* Miễn phí giao hàng cho đơn hàng từ <b>499.000đ</b> */}
+                        Khi mua hàng với tài khoản bạn sẽ được <b>tích điểm</b>.
                       </p>
                     </div>
                     <div className="flex items-center mb-2">

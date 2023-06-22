@@ -97,7 +97,13 @@ const CheckoutPage: React.FC = () => {
       if (value === 2) {
         if (isLogin) {
           const res = await paymentApi.create_url({
-            amount: Math.ceil(totalFinish / 1000) * 1000,
+            // amount: Math.ceil(totalFinish / 1000) * 1000,
+            amount:
+              percent > 1
+                ? Math.ceil(totalFinish / 1000) * 1000
+                : totalPrice() +
+                  shippingCost -
+                  (percent >= 1 && priceSale === 0 ? 30000 : priceSale),
           });
           if (res.status === 200) {
             if (user) {
@@ -108,7 +114,13 @@ const CheckoutPage: React.FC = () => {
                 point: +point,
                 shippingCost,
                 // totalPrice: totalPrice() + shippingCost - priceSale,
-                totalPrice: Math.ceil(totalFinish / 1000) * 1000,
+                // totalPrice: Math.ceil(totalFinish / 1000) * 1000,
+                totalPrice:
+                  percent > 1
+                    ? Math.ceil(totalFinish / 1000) * 1000
+                    : totalPrice() +
+                      shippingCost -
+                      (percent >= 1 && priceSale === 0 ? 30000 : priceSale),
               });
             }
             window.location.href = res.data;
@@ -150,7 +162,12 @@ const CheckoutPage: React.FC = () => {
             point: +point,
             shippingCost,
             // totalPrice: totalPrice() + shippingCost - priceSale,
-            totalPrice: Math.ceil(totalFinish / 1000) * 1000,
+            totalPrice:
+              percent > 1
+                ? Math.ceil(totalFinish / 1000) * 1000
+                : totalPrice() +
+                  shippingCost -
+                  (percent >= 1 && priceSale === 0 ? 30000 : priceSale),
             couponId,
           });
           const { status } = res;
@@ -665,7 +682,13 @@ const CheckoutPage: React.FC = () => {
                             priceSale -
                             ((totalPrice() + shippingCost) * percent) / 100
                         )
-                      : castToVND(totalPrice() + shippingCost - priceSale)}
+                      : castToVND(
+                          totalPrice() +
+                            shippingCost -
+                            (percent >= 1 && priceSale === 0
+                              ? 30000
+                              : priceSale)
+                        )}
                   </span>
                 </div>
               </div>

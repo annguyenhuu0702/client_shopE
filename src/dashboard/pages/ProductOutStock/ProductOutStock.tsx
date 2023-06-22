@@ -13,18 +13,18 @@ const { Content } = Layout;
 
 const ProductOutStock: React.FC = () => {
   const dispatch = useDispatch();
-  const { page, pageSize, productVariants } = useSelector(
+  const { pageOut, pageSizeOut, productVariantsOutStock } = useSelector(
     productVariantSelector
   );
 
   useEffect(() => {
     dispatch(
       productVariantActions.getAllProductVariantOutStock({
-        p: page,
-        limit: pageSize,
+        p: pageOut,
+        limit: pageSizeOut,
       })
     );
-  }, [dispatch, page, pageSize]);
+  }, [dispatch, pageOut, pageSizeOut]);
 
   useTitle('Tồn kho');
   return (
@@ -37,15 +37,17 @@ const ProductOutStock: React.FC = () => {
           </div>
         </div>
       </Content>
-      {productVariants.count > 12 && (
+      {productVariantsOutStock.count > 12 && (
         <div className="common-pagination-cus">
           <Pagination
-            pageSize={pageSize}
-            current={page}
-            total={productVariants.count}
+            pageSize={pageSizeOut}
+            current={pageOut}
+            total={productVariantsOutStock.count}
             showSizeChanger={false}
-            onChange={(page: number, pageSize: number) => {
-              dispatch(productVariantActions.setPage({ page, pageSize }));
+            onChange={(pageOut: number, pageSizeOut: number) => {
+              dispatch(
+                productVariantActions.setPageOut({ pageOut, pageSizeOut })
+              );
             }}
           />
         </div>

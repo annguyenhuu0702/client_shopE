@@ -1,15 +1,5 @@
 import { DownloadOutlined, EditOutlined } from '@ant-design/icons';
-import {
-  Button,
-  Col,
-  Form,
-  Input,
-  Row,
-  Select,
-  Space,
-  Table,
-  Typography,
-} from 'antd';
+import { Button, Col, Form, Row, Space, Table, Typography } from 'antd';
 import moment from 'moment';
 import { AlignType } from 'rc-table/lib/interface';
 import React from 'react';
@@ -17,14 +7,14 @@ import { useDispatch, useSelector } from 'react-redux';
 import { utils, writeFileXLSX } from 'xlsx';
 import { productVariantApi } from '../../../../apis/productVariant';
 import {
+  modalActions,
+  modalSelector,
+} from '../../../../redux/slice/modalSlice';
+import {
   productVariantActions,
   productVariantSelector,
 } from '../../../../redux/slice/productVariantSlice';
 import { IProductVariant } from '../../../../types/productVariant';
-import {
-  modalActions,
-  modalSelector,
-} from '../../../../redux/slice/modalSlice';
 import ModalProductOutStock from '../ModalProductOutStock/ModalProductOutStock';
 
 const { Text } = Typography;
@@ -34,9 +24,8 @@ const TableProductOutStock: React.FC = () => {
   const { isModal } = useSelector(modalSelector);
 
   const [form] = Form.useForm();
-  const { productVariants, isLoading, page, pageSize } = useSelector(
-    productVariantSelector
-  );
+  const { pageOut, pageSizeOut, productVariantsOutStock, isLoading } =
+    useSelector(productVariantSelector);
   const columns = [
     {
       title: 'Mã sản phẩm',
@@ -121,11 +110,10 @@ const TableProductOutStock: React.FC = () => {
   };
 
   const onFinish = (values: any) => {
-    console.log(values.search);
     dispatch(
-      productVariantActions.getAllProductVariant({
-        p: page,
-        limit: pageSize,
+      productVariantActions.getAllProductVariantOutStock({
+        p: pageOut,
+        limit: pageSizeOut,
         [values.option]: values.search,
       })
     );
@@ -183,12 +171,14 @@ const TableProductOutStock: React.FC = () => {
       <Row className="common-content-table">
         <Col xl={24} md={24} xs={24}>
           <Table
-            dataSource={productVariants.rows.map((item: IProductVariant) => {
-              return {
-                ...item,
-                key: item.id,
-              };
-            })}
+            dataSource={productVariantsOutStock.rows.map(
+              (item: IProductVariant) => {
+                return {
+                  ...item,
+                  key: item.id,
+                };
+              }
+            )}
             loading={isLoading}
             columns={columns}
             pagination={false}

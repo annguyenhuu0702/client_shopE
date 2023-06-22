@@ -12,11 +12,15 @@ import { RootState } from '../store';
 
 export interface productVariantState {
   productVariants: resProductVariant;
+  productVariantsOutStock: resProductVariant;
   currentProductVariant: IProductVariant | null;
   page: number;
   pageSize: number;
   isLoading: boolean;
   isError: boolean;
+
+  pageOut: number;
+  pageSizeOut: number;
 }
 
 export interface resProductVariant {
@@ -29,11 +33,18 @@ const initialState: productVariantState = {
     rows: [],
     count: 0,
   },
+  productVariantsOutStock: {
+    rows: [],
+    count: 0,
+  },
   page: 1,
   pageSize: 12,
   currentProductVariant: null,
   isLoading: false,
   isError: false,
+
+  pageOut: 1,
+  pageSizeOut: 12,
 };
 
 const productVariantSlice = createSlice({
@@ -46,6 +57,14 @@ const productVariantSlice = createSlice({
     ) => {
       state.page = action.payload.page;
       state.pageSize = action.payload.pageSize;
+    },
+
+    setPageOut: (
+      state,
+      action: PayloadAction<{ pageOut: number; pageSizeOut: number }>
+    ) => {
+      state.pageOut = action.payload.pageOut;
+      state.pageSizeOut = action.payload.pageSizeOut;
     },
     setProductVariant: (
       state,
@@ -113,8 +132,8 @@ const productVariantSlice = createSlice({
     ) => {
       state.isLoading = false;
       state.isError = false;
-      state.productVariants.rows = action.payload.rows;
-      state.productVariants.count = action.payload.count;
+      state.productVariantsOutStock.rows = action.payload.rows;
+      state.productVariantsOutStock.count = action.payload.count;
     },
     getAllProductVariantOutStockFailed: (state) => {
       state.isLoading = false;
